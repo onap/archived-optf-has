@@ -1,7 +1,7 @@
 .. This work is licensed under a Creative Commons Attribution 4.0 International License.
 
-Release Notes
-=============
+Release notes
+-------------
 
 .. toctree::
     :maxdepth: 2
