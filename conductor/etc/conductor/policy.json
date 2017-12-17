@@ -1,0 +1,18 @@
+{
+    "context_is_admin": "role:admin",
+    "segregation": "rule:context_is_admin",
+
+    "homing:get_samples": "",
+    "homing:get_sample": "",
+    "homing:query_sample": "",
+    "homing:create_samples": "",
+
+    "homing:compute_statistics": "",
+    "homing:get_meters": "",
+
+    "homing:get_resource": "",
+    "homing:get_resources": "",
+
+    "homing:events:index": "",
+    "homing:events:show": ""
+}

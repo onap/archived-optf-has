@@ -1,0 +1,7 @@
+/var/log/conductor/conductor-controller.log {
+    daily
+    missingok
+    compress
+    delaycompress
+    notifempty
+}

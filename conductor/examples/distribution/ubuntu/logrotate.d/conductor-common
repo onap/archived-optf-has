@@ -1,0 +1,7 @@
+/var/log/conductor/*.log {
+    daily
+    missingok
+    compress
+    delaycompress
+    copytruncate
+}
