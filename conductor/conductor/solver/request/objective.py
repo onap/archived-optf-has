@@ -1,0 +1,111 @@
+#!/usr/bin/env python
+#
+# -------------------------------------------------------------------------
+#   Copyright (c) 2015-2017 AT&T Intellectual Property
+#
+#   Licensed under the Apache License, Version 2.0 (the "License");
+#   you may not use this file except in compliance with the License.
+#   You may obtain a copy of the License at
+#
+#       http://www.apache.org/licenses/LICENSE-2.0
+#
+#   Unless required by applicable law or agreed to in writing, software
+#   distributed under the License is distributed on an "AS IS" BASIS,
+#   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+#   See the License for the specific language governing permissions and
+#   limitations under the License.
+#
+# -------------------------------------------------------------------------
+#
+
+
+from conductor.solver.request import demand
+# from conductor.solver.resource import region
+# from conductor.solver.resource import service
+
+
+class Objective(object):
+
+    def __init__(self):
+        self.goal = None
+        self.operation = None
+        self.operand_list = []
+
+    def compute(self, _decision_path, _request):
+        value = 0.0
+
+        for op in self.operand_list:
+            if self.operation == "sum":
+                value += op.compute(_decision_path, _request)
+
+        _decision_path.cumulated_value = value
+        _decision_path.total_value = \
+            _decision_path.cumulated_value + \
+            _decision_path.heuristic_to_go_value
+
+
+class Operand(object):
+
+    def __init__(self):
+        self.operation = None
+        self.weight = 0
+        self.function = None
+
+    def compute(self, _decision_path, _request):
+        value = 0.0
+        cei = _request.cei
+        if self.function.func_type == "distance_between":
+            if isinstance(self.function.loc_a, demand.Location):
+                if self.function.loc_z.name in \
+                        _decision_path.decisions.keys():
+                    resource = \
+                        _decision_path.decisions[self.function.loc_z.name]
+                    loc = None
+                    # if isinstance(resource, region.Region):
+                    #     loc = resource.location
+                    # elif isinstance(resource, service.Service):
+                    #     loc = resource.region.location
+                    loc = cei.get_candidate_location(resource)
+                    value = \
+                        self.function.compute(self.function.loc_a.value, loc)
+            elif isinstance(self.function.loc_z, demand.Location):
+                if self.function.loc_a.name in \
+                        _decision_path.decisions.keys():
+                    resource = \
+                        _decision_path.decisions[self.function.loc_a.name]
+                    loc = None
+                    # if isinstance(resource, region.Region):
+                    #    loc = resource.location
+                    # elif isinstance(resource, service.Service):
+                    #    loc = resource.region.location
+                    loc = cei.get_candidate_location(resource)
+                    value = \
+                        self.function.compute(self.function.loc_z.value, loc)
+            else:
+                if self.function.loc_a.name in \
+                        _decision_path.decisions.keys() and \
+                   self.function.loc_z.name in \
+                        _decision_path.decisions.keys():
+                    resource_a = \
+                        _decision_path.decisions[self.function.loc_a.name]
+                    loc_a = None
+                    # if isinstance(resource_a, region.Region):
+                    #     loc_a = resource_a.location
+                    # elif isinstance(resource_a, service.Service):
+                    #     loc_a = resource_a.region.location
+                    loc_a = cei.get_candidate_location(resource_a)
+                    resource_z = \
+                        _decision_path.decisions[self.function.loc_z.name]
+                    loc_z = None
+                    # if isinstance(resource_z, region.Region):
+                    #     loc_z = resource_z.location
+                    # elif isinstance(resource_z, service.Service):
+                    #     loc_z = resource_z.region.location
+                    loc_z = cei.get_candidate_location(resource_z)
+
+                    value = self.function.compute(loc_a, loc_z)
+
+        if self.operation == "product":
+            value *= self.weight
+
+        return value
