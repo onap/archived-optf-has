@@ -141,7 +141,7 @@ trusted-host =
 Once the configuration is in place, installation is simple:
 
 ```bash
-$ pip install ecomp-conductor
+$ pip install of-has
 ```
 
 To upgrade or downgrade, simply re-run ``pip install`` using the appropriate ``pip`` command line options.
