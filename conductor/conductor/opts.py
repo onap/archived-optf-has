@@ -43,17 +43,13 @@ def list_opts():
             conductor.controller.service.CONTROLLER_OPTS,
             conductor.controller.translator_svc.CONTROLLER_OPTS)),
         # ('data', conductor.data.plugins.inventory_provider.aai.DATA_OPTS),
-        ('inventory_provider',
-         itertools.chain(
-             conductor.conf.inventory_provider.
-             INV_PROVIDER_EXT_MANAGER_OPTS)
-         ),
+        ('inventory_provider', itertools.chain(
+            conductor.conf.inventory_provider.
+            INV_PROVIDER_EXT_MANAGER_OPTS)),
         ('aai', conductor.data.plugins.inventory_provider.aai.AAI_OPTS),
-        ('service_controller',
-         itertools.chain(
-             conductor.conf.service_controller.
-             SVC_CONTROLLER_EXT_MANAGER_OPTS)
-         ),
+        ('service_controller', itertools.chain(
+            conductor.conf.service_controller.
+            SVC_CONTROLLER_EXT_MANAGER_OPTS)),
         ('sdnc', conductor.data.plugins.service_controller.sdnc.SDNC_OPTS),
         ('messaging_server',
          conductor.common.music.messaging.component.MESSAGING_SERVER_OPTS),
