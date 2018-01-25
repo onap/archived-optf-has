@@ -17,22 +17,15 @@
 # -------------------------------------------------------------------------
 #
 
-# import json
-# import os
-
 import cotyledon
 from oslo_config import cfg
 from oslo_log import log
-# from stevedore import driver
 
-# from conductor import __file__ as conductor_root
 from conductor.common.music import messaging as music_messaging
 from conductor.data.plugins.inventory_provider import extensions as ip_ext
 from conductor.data.plugins.service_controller import extensions as sc_ext
 from conductor.i18n import _LE, _LI, _LW
 from conductor import messaging
-# from conductor.solver.resource import region
-# from conductor.solver.resource import service
 
 LOG = log.getLogger(__name__)
 
@@ -142,7 +135,7 @@ class DataEndpoint(object):
         # call service and fetch candidates
         # TODO(jdandrea): Get rid of the SDN-C reference (outside of plugin!)
         if controller == "SDN-C":
-            service_model = request.get("service_model")
+            # service_model = request.get("service_model")
             results = self.sc_ext_manager.map_method(
                 'filter_candidates',
                 request=request,
