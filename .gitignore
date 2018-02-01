@@ -3,6 +3,9 @@
 
 # IDEA / IDE
 .idea/
+*.iml
+*.ipr
+*.iws
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
