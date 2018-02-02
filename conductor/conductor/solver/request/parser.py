@@ -237,4 +237,3 @@ class Parser(object):
             for d in constraint.demand_list:
                 if d in self.demands.keys():
                     self.demands[d].constraint_list.append(constraint)
-
