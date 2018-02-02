@@ -89,8 +89,8 @@ class FitFirst(search.Search):
                         .get("cloud_region_version").encode('utf-8')
                     if _decision_path.total_value < bound_value or \
                        (_decision_path.total_value == bound_value and
-                       self._compare_version(candidate_version,
-                                             version_value) > 0):
+                        self._compare_version(candidate_version,
+                                              version_value) > 0):
                         bound_value = _decision_path.total_value
                         version_value = candidate_version
                         best_resource = candidate
