@@ -405,7 +405,8 @@ class AAI(base.InventoryProviderBase):
         path = self._aai_versioned_path(network_role_uri)
         network_role_id = network_role_id
 
-        # This UUID is usually reserved by A&AI for a Conductor-specific named query.
+        # This UUID is usually reserved by A&AI for a Conductor-specific named
+        # query.
         named_query_uid = ""
 
         data = {
@@ -452,7 +453,7 @@ class AAI(base.InventoryProviderBase):
     def resolve_host_location(self, host_name):
         path = self._aai_versioned_path('/query?format=id')
         data = {"start": ["network/pnfs/pnf/" + host_name,
-                "cloud-infrastructure/pservers/pserver/" + host_name],
+                          "cloud-infrastructure/pservers/pserver/" + host_name],
                 "query": "query/ucpe-instance"
                 }
         response = self._request('put', path=path, data=data,
@@ -558,7 +559,6 @@ class AAI(base.InventoryProviderBase):
             LOG.debug("{} details: {}".format(context, value))
 
     def check_sriov_automation(self, aic_version, demand_name, candidate_name):
-
         """Check if specific candidate has SRIOV automation available or not
 
         Used by resolve_demands
@@ -573,8 +573,8 @@ class AAI(base.InventoryProviderBase):
                 return True
         return False
 
-    def check_orchestration_status(self, orchestration_status, demand_name, candidate_name):
-
+    def check_orchestration_status(
+            self, orchestration_status, demand_name, candidate_name):
         """Check if the orchestration-status of a candidate is activated
 
         Used by resolve_demands
@@ -775,7 +775,8 @@ class AAI(base.InventoryProviderBase):
                         # start populating the candidate
                         candidate['host_id'] = vnf.get("vnf-name")
 
-                        # check orchestration-status attribute, only keep Activated candidate
+                        # check orchestration-status attribute, only keep
+                        # Activated candidate
                         if (not self.check_orchestration_status(
                                 vnf.get("orchestration-status"), name, candidate['host_id'])):
                             continue
@@ -897,7 +898,8 @@ class AAI(base.InventoryProviderBase):
                             if not vs_link:
                                 LOG.error(_LE("{} VSERVER link information not "
                                               "available from A&AI").format(name))
-                                LOG.debug("Related link data: {}".format(rl_data))
+                                LOG.debug(
+                                    "Related link data: {}".format(rl_data))
                                 continue  # move ahead with the next vnf
 
                             vs_path = self._get_aai_path_from_link(vs_link)
@@ -928,7 +930,8 @@ class AAI(base.InventoryProviderBase):
                             rl_data = rl_data_list[0]
                             ps_link = rl_data.get('link')
 
-                            # Third level query to get cloud region from pserver
+                            # Third level query to get cloud region from
+                            # pserver
                             if not ps_link:
                                 LOG.error(_LE("{} pserver related link "
                                               "not found in A&AI: {}").
@@ -955,7 +958,8 @@ class AAI(base.InventoryProviderBase):
                                 search_key=search_key
                             )
                             if len(rl_data_list) > 1:
-                                if not self.match_vserver_attribute(rl_data_list):
+                                if not self.match_vserver_attribute(
+                                        rl_data_list):
                                     self._log_multiple_item_error(
                                         name, service_type, related_to, search_key,
                                         "PSERVER", body)
@@ -964,9 +968,9 @@ class AAI(base.InventoryProviderBase):
                             complex_list.append(rl_data)
 
                         if not complex_list or \
-                            len(complex_list) < 1:
+                                len(complex_list) < 1:
                             LOG.error("Complex information not "
-                                          "available from A&AI")
+                                      "available from A&AI")
                             continue
 
                         if len(complex_list) > 1:

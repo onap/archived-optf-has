@@ -67,6 +67,7 @@ CONF.register_opts(OPTS)
 
 class ControllerServiceLauncher(object):
     """Launcher for the controller service."""
+
     def __init__(self, conf):
         self.conf = conf
 

@@ -143,7 +143,7 @@ class Translator(object):
         self._optmization = self._template.get("optimization", {})
         self._reservations = self._template.get("reservation", {})
 
-        if type(self._version) is datetime.date:
+        if isinstance(self._version, datetime.date):
             self._version = str(self._version)
 
     def validate_components(self):
@@ -193,7 +193,7 @@ class Translator(object):
             keys = component.get('keys', None)
             content = component.get('content')
 
-            if type(content) is not dict:
+            if not isinstance(content, dict):
                 raise TranslatorException(
                     "{} section must be a dictionary".format(name))
             for content_name, content_def in content.items():
@@ -248,7 +248,7 @@ class Translator(object):
             path = [path]
 
         # Traverse a list
-        if type(obj) is list:
+        if isinstance(obj, list):
             for idx, val in enumerate(obj, start=0):
                 # Add path to the breadcrumb trail
                 new_path = list(path)
@@ -258,7 +258,7 @@ class Translator(object):
                 obj[idx] = self._parse_parameters(val, new_path)
 
         # Traverse a dict
-        elif type(obj) is dict:
+        elif isinstance(obj, dict):
             # Did we find a "{get_param: ...}" intrinsic?
             if obj.keys() == ['get_param']:
                 param_name = obj['get_param']
@@ -328,7 +328,7 @@ class Translator(object):
 
     def parse_demands(self, demands):
         """Validate/prepare demands for use by the solver."""
-        if type(demands) is not dict:
+        if not isinstance(demands, dict):
             raise TranslatorException("Demands must be provided in "
                                       "dictionary form")
 
@@ -357,7 +357,7 @@ class Translator(object):
                     # Check each candidate
                     for candidate in requirement.get('candidates'):
                         # Must be a dictionary
-                        if type(candidate) is not dict:
+                        if not isinstance(candidate, dict):
                             raise TranslatorException(
                                 "Candidate found in demand {} that is "
                                 "not a dictionary".format(name))
@@ -468,9 +468,9 @@ class Translator(object):
                 if (required_candidates and
                     excluded_candidates and
                     set(map(lambda entry: entry['candidate_id'],
-                        required_candidates))
+                            required_candidates))
                     & set(map(lambda entry: entry['candidate_id'],
-                          excluded_candidates))):
+                              excluded_candidates))):
                     raise TranslatorException(
                         "Required candidate list and excluded candidate"
                         " list are not mutually exclusive for demand"
@@ -516,7 +516,7 @@ class Translator(object):
 
     def parse_constraints(self, constraints):
         """Validate/prepare constraints for use by the solver."""
-        if type(constraints) is not dict:
+        if not isinstance(constraints, dict):
             raise TranslatorException("Constraints must be provided in "
                                       "dictionary form")
 
@@ -637,7 +637,7 @@ class Translator(object):
             "operands": [],
         }
 
-        if type(optimization_copy) is not dict:
+        if not isinstance(optimization_copy, dict):
             raise TranslatorException("Optimization must be a dictionary.")
 
         goals = optimization_copy.keys()
@@ -652,7 +652,7 @@ class Translator(object):
                 "contain a single function of 'sum'.")
 
         operands = optimization_copy['minimize']['sum']
-        if type(operands) is not list:
+        if not isinstance(operands, list):
             # or len(operands) != 2:
             raise TranslatorException(
                 "Optimization goal 'minimize', function 'sum' "
@@ -660,7 +660,7 @@ class Translator(object):
 
         def get_distance_between_args(operand):
             args = operand.get('distance_between')
-            if type(args) is not list and len(args) != 2:
+            if not isinstance(args, list) and len(args) != 2:
                 raise TranslatorException(
                     "Optimization 'distance_between' arguments must "
                     "be a list of length two.")
@@ -693,7 +693,7 @@ class Translator(object):
                 for product_op in operand['product']:
                     if threshold.is_number(product_op):
                         weight = product_op
-                    elif type(product_op) is dict:
+                    elif isinstance(product_op, dict):
                         if product_op.keys() == ['distance_between']:
                             function = 'distance_between'
                             args = get_distance_between_args(product_op)
@@ -720,7 +720,7 @@ class Translator(object):
 
     def parse_reservations(self, reservations):
         demands = self._demands
-        if type(reservations) is not dict:
+        if not isinstance(reservations, dict):
             raise TranslatorException("Reservations must be provided in "
                                       "dictionary form")
 
@@ -817,6 +817,7 @@ def main():
         print(json.dumps(trns.translation, indent=2))
     else:
         print("TESTING - Translator Error: {}".format(trns.error_message))
+
 
 if __name__ == '__main__':
     main()

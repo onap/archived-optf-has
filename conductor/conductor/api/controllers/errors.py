@@ -30,6 +30,7 @@ LOG = log.getLogger(__name__)
 
 def error_wrapper(func):
     """Error decorator."""
+
     def func_wrapper(self, **kw):
         """Wrapper."""
 

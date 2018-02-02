@@ -65,10 +65,12 @@ class Region(object):
         self.last_update = 0
 
     '''update resource capacity after allocating demand'''
+
     def update_capacity(self):
         pass
 
     '''for logging'''
+
     def get_json_summary(self):
         pass
 
