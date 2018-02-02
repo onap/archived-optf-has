@@ -19,7 +19,6 @@
 #
 
 
-
 class Demand(object):
 
     def __init__(self, _name=None):

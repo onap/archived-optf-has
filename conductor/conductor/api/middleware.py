@@ -88,7 +88,7 @@ class ParsableErrorMiddleware(object):
             error = environ.get('translatable_error')
             user_locale = self.best_match_language(req.accept_language)
             if (req.accept.best_match(['application/json', 'application/xml'])
-               == 'application/xml'):
+                    == 'application/xml'):
                 content_type = 'application/xml'
                 try:
                     # simple check xml is valid

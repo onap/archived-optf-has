@@ -98,6 +98,7 @@ CONF.register_opts(OPTS)
 
 class SolverServiceLauncher(object):
     """Launcher for the solver service."""
+
     def __init__(self, conf):
         self.conf = conf
 
