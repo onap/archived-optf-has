@@ -19,11 +19,10 @@
 
 import re
 import time
-import uuid
-
 
 from oslo_config import cfg
 from oslo_log import log
+import uuid
 
 from conductor.common import rest
 from conductor.data.plugins.inventory_provider import base
@@ -173,7 +172,7 @@ class AAI(base.InventoryProviderBase):
     def _refresh_cache(self):
         """Refresh the A&AI cache."""
         if not self.last_refresh_time or \
-            (time.time() - self.last_refresh_time) > \
+                (time.time() - self.last_refresh_time) > \
                 self.cache_refresh_interval * 60:
             # TODO(snarayanan):
             # The cache is not persisted to Music currently.
@@ -343,8 +342,8 @@ class AAI(base.InventoryProviderBase):
 
     def _get_complex(self, complex_link, complex_id=None):
         if not self.complex_last_refresh_time or \
-           (time.time() - self.complex_last_refresh_time) > \
-           self.complex_cache_refresh_interval * 60:
+                (time.time() - self.complex_last_refresh_time) > \
+                self.complex_cache_refresh_interval * 60:
             self._aai_complex_cache.clear()
         if complex_id and complex_id in self._aai_complex_cache:
             return self._aai_complex_cache[complex_id]
@@ -405,7 +404,8 @@ class AAI(base.InventoryProviderBase):
         path = self._aai_versioned_path(network_role_uri)
         network_role_id = network_role_id
 
-        # This UUID is usually reserved by A&AI for a Conductor-specific named query.
+        # This UUID is usually reserved by A&AI
+        # for a Conductor-specific named query.
         named_query_uid = ""
 
         data = {
@@ -573,7 +573,8 @@ class AAI(base.InventoryProviderBase):
                 return True
         return False
 
-    def check_orchestration_status(self, orchestration_status, demand_name, candidate_name):
+    def check_orchestration_status(self, orchestration_status, demand_name,
+                                   candidate_name):
 
         """Check if the orchestration-status of a candidate is activated
 
@@ -750,7 +751,8 @@ class AAI(base.InventoryProviderBase):
                     # First level query to get the list of generic vnfs
                     path = self._aai_versioned_path(
                         '/network/generic-vnfs/'
-                        '?prov-status=PROV&equipment-role={}&depth=0'.format(service_type))
+                        '?prov-status=PROV&equipment-role={}&depth=0'.format(
+                            service_type))
                     response = self._request(
                         path=path, context="demand, GENERIC-VNF role",
                         value="{}, {}".format(name, service_type))
@@ -775,9 +777,11 @@ class AAI(base.InventoryProviderBase):
                         # start populating the candidate
                         candidate['host_id'] = vnf.get("vnf-name")
 
-                        # check orchestration-status attribute, only keep Activated candidate
+                        # check orchestration-status attribute,
+                        # only keep Activated candidate
                         if (not self.check_orchestration_status(
-                                vnf.get("orchestration-status"), name, candidate['host_id'])):
+                                vnf.get("orchestration-status"), name,
+                                candidate['host_id'])):
                             continue
 
                         related_to = "vserver"
@@ -895,16 +899,19 @@ class AAI(base.InventoryProviderBase):
                         for vs_link in vs_link_list:
 
                             if not vs_link:
-                                LOG.error(_LE("{} VSERVER link information not "
-                                              "available from A&AI").format(name))
-                                LOG.debug("Related link data: {}".format(rl_data))
+                                LOG.error(
+                                    _LE("{} VSERVER link information not "
+                                        "available from A&AI").format(name))
+                                LOG.debug(
+                                    "Related link data: {}".format(rl_data))
                                 continue  # move ahead with the next vnf
 
                             vs_path = self._get_aai_path_from_link(vs_link)
                             if not vs_path:
-                                LOG.error(_LE("{} VSERVER path information not "
-                                              "available from A&AI - {}").
-                                          format(name, vs_path))
+                                LOG.error(_LE(
+                                    "{} VSERVER path information "
+                                    "not available from A&AI - {}").format(
+                                    name, vs_path))
                                 continue  # move ahead with the next vnf
                             path = self._aai_versioned_path(vs_path)
                             response = self._request(
@@ -928,7 +935,8 @@ class AAI(base.InventoryProviderBase):
                             rl_data = rl_data_list[0]
                             ps_link = rl_data.get('link')
 
-                            # Third level query to get cloud region from pserver
+                            # Third level query to get cloud region
+                            # from pserver
                             if not ps_link:
                                 LOG.error(_LE("{} pserver related link "
                                               "not found in A&AI: {}").
@@ -955,18 +963,19 @@ class AAI(base.InventoryProviderBase):
                                 search_key=search_key
                             )
                             if len(rl_data_list) > 1:
-                                if not self.match_vserver_attribute(rl_data_list):
+                                if not self.match_vserver_attribute(
+                                        rl_data_list):
                                     self._log_multiple_item_error(
-                                        name, service_type, related_to, search_key,
+                                        name, service_type, related_to,
+                                        search_key,
                                         "PSERVER", body)
                                     continue
                             rl_data = rl_data_list[0]
                             complex_list.append(rl_data)
 
-                        if not complex_list or \
-                            len(complex_list) < 1:
-                            LOG.error("Complex information not "
-                                          "available from A&AI")
+                        if not complex_list or len(complex_list) < 1:
+                            LOG.error(
+                                "Complex information not available from A&AI")
                             continue
 
                         if len(complex_list) > 1:
