@@ -19,7 +19,6 @@
 #
 
 
-
 class CloudVersion(object):
 
     def __init__(self, _type):

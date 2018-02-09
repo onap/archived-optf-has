@@ -267,7 +267,8 @@ class SolverService(cotyledon.Service):
                             "sriov_automation":
                                 resource.get("sriov_automation"),
                             "cloud_owner": resource.get("cloud_owner"),
-                            'cloud_version': resource.get("cloud_region_version")},
+                            'cloud_version':
+                                resource.get("cloud_region_version")},
                     }
                     if rec["candidate"]["inventory_type"] == "service":
                         rec["attributes"]["host_id"] = resource.get("host_id")
