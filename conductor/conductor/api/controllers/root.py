@@ -50,7 +50,8 @@ def version_descriptor(base_url, version, released_on):
         'id': version,
         'links': [
             {'href': url, 'rel': 'self', },
-            {'href': 'https://wiki.onap.org/pages/viewpage.action?pageId=16005528',
+            {'href': 'https://wiki.onap.org/pages'
+                     '/viewpage.action?pageId=16005528',
              'rel': 'describedby', 'type': 'text/html', }],
         'media-types': [
             {'base': 'application/json', 'type': MEDIA_TYPE_JSON % version, }],

@@ -21,16 +21,15 @@
 
 # import json
 import operator
+
 from oslo_log import log
-import random
-# import sys
 
 from conductor.solver.optimizer.constraints \
     import access_distance as access_dist
 from conductor.solver.optimizer.constraints \
-    import cloud_distance as cloud_dist
-from conductor.solver.optimizer.constraints \
     import attribute as attribute_constraint
+from conductor.solver.optimizer.constraints \
+    import cloud_distance as cloud_dist
 # from conductor.solver.optimizer.constraints import constraint
 from conductor.solver.optimizer.constraints \
     import inventory_group
@@ -41,6 +40,8 @@ from conductor.solver.request import demand
 from conductor.solver.request.functions import cloud_version
 from conductor.solver.request.functions import distance_between
 from conductor.solver.request import objective
+
+# import sys
 
 # from conductor.solver.request.functions import distance_between
 # from conductor.solver.request import objective
