@@ -24,7 +24,10 @@ import pecan
 import pecan.testing
 from oslo_config import cfg
 from oslo_config import fixture as config_fixture
+from oslo_serialization import jsonutils
 from oslotest import base as oslo_test_base
+
+from conductor import service
 
 
 class BaseApiTest(oslo_test_base.BaseTestCase):
@@ -79,3 +82,8 @@ class BaseApiTest(oslo_test_base.BaseTestCase):
         self.cfg_fixture = self.useFixture(config_fixture.Config(cfg.CONF))
         self.cfg_fixture.config(keyspace='conductor_rpc',
                                 group='messaging_server')
+
+    def assertJsonEqual(self, expected, observed):
+        """Asserts that 2 complex data structures are json equivalent."""
+        self.assertEqual(jsonutils.dumps(expected, sort_keys=True),
+                         jsonutils.dumps(observed, sort_keys=True))

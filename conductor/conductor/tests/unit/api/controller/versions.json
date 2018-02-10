@@ -1,0 +1,26 @@
+{
+  "versions": [
+    {
+      "id": "v1",
+      "media-types": [
+        {
+          "type": "application/vnd.onap.has-v1+json",
+          "base": "application/json"
+        }
+      ],
+      "updated": "2016-11-01T00:00:00Z",
+      "links": [
+        {
+          "rel": "self",
+          "href": "http://localhost/v1"
+        },
+        {
+          "type": "text/html",
+          "rel": "describedby",
+          "href": "https://wiki.onap.org/pages/viewpage.action?pageId=16005528"
+        }
+      ],
+      "status": "EXPERIMENTAL"
+    }
+  ]
+}
