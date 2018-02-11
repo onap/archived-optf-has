@@ -39,6 +39,29 @@
       "revId": "4f58c4461a09adbaff082b0ef3f48688cc59bfd1",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a93c517_b9a32aff",
+        "filename": "conductor/conductor/tests/unit/test_aai.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 2977
+      },
+      "writtenOn": "2018-02-11T06:54:52Z",
+      "side": 1,
+      "message": "Indentation should be a multiple of four",
+      "range": {
+        "startLine": 27,
+        "startChar": 6,
+        "endLine": 38,
+        "endChar": 29
+      },
+      "revId": "4f58c4461a09adbaff082b0ef3f48688cc59bfd1",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
     }
   ]
 }
