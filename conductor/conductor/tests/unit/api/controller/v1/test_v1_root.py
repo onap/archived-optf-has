@@ -25,5 +25,5 @@ class TestV1Root(base_api.BaseApiTest):
 
     def test_get_v1_root(self):
         actual_response = self.app.get('/v1', expect_errors=True)
-        print('GOT:%s' % actual_response)
+        # print('GOT:%s' % actual_response)
         self.assertEqual(actual_response.status_int, 405)

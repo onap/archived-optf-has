@@ -1,0 +1,6 @@
+{
+  "name": "demo3",
+  "template": {"key": "value"},
+  "timeout": 5,
+  "limit": 3
+}

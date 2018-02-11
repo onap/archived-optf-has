@@ -20,6 +20,9 @@
 
 import os
 
+import eventlet
+eventlet.monkey_patch(os=False)
+
 import pecan
 import pecan.testing
 from oslo_config import cfg
@@ -28,6 +31,7 @@ from oslo_serialization import jsonutils
 from oslotest import base as oslo_test_base
 
 from conductor import service
+from conductor import controller
 
 
 class BaseApiTest(oslo_test_base.BaseTestCase):
