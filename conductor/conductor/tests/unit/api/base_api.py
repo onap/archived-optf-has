@@ -21,6 +21,8 @@
 import os
 
 import eventlet
+import mock
+
 eventlet.monkey_patch(os=False)
 
 import pecan
@@ -29,9 +31,6 @@ from oslo_config import cfg
 from oslo_config import fixture as config_fixture
 from oslo_serialization import jsonutils
 from oslotest import base as oslo_test_base
-
-from conductor import service
-from conductor import controller
 
 
 class BaseApiTest(oslo_test_base.BaseTestCase):
@@ -56,7 +55,6 @@ class BaseApiTest(oslo_test_base.BaseTestCase):
 
     def _make_app(self):
         # Determine where we are so we can set up paths in the config
-        root_dir = self.path_get()
 
         self.app_config = {
             'app': {

@@ -30,6 +30,6 @@ class TestRoot(base_api.BaseApiTest):
         req_json_file = './conductor/tests/unit/api/controller/versions.json'
         expected_response = json.loads(open(req_json_file).read())
         # print('GOT:%s' % actual_response)
-        self.assertJsonEqual(actual_response.status_int, 200)
+        self.assertEqual(200, actual_response.status_int)
         self.assertJsonEqual(expected_response,
                              json.loads(actual_response.body))
