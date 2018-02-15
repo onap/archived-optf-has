@@ -1,0 +1,377 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a93c517_2af1ed01",
+        "filename": "conductor/docker/api/Dockerfile",
+        "patchSetId": 1
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1361
+      },
+      "writtenOn": "2018-02-15T05:16:03Z",
+      "side": 1,
+      "message": "whitespace",
+      "range": {
+        "startLine": 1,
+        "startChar": 15,
+        "endLine": 1,
+        "endChar": 16
+      },
+      "revId": "601bec029087f09f3a8579de16aaa5ec6aa14b14",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a93c517_caf16902",
+        "filename": "conductor/docker/api/Dockerfile",
+        "patchSetId": 1
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 1361
+      },
+      "writtenOn": "2018-02-15T05:16:03Z",
+      "side": 1,
+      "message": "whitespace",
+      "range": {
+        "startLine": 3,
+        "startChar": 50,
+        "endLine": 3,
+        "endChar": 51
+      },
+      "revId": "601bec029087f09f3a8579de16aaa5ec6aa14b14",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a93c517_8adfe168",
+        "filename": "conductor/docker/api/Dockerfile",
+        "patchSetId": 1
+      },
+      "lineNbr": 4,
+      "author": {
+        "id": 1361
+      },
+      "writtenOn": "2018-02-15T05:16:03Z",
+      "side": 1,
+      "message": "I believe this url should be from ONAP repository.",
+      "range": {
+        "startLine": 4,
+        "startChar": 14,
+        "endLine": 4,
+        "endChar": 80
+      },
+      "revId": "601bec029087f09f3a8579de16aaa5ec6aa14b14",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a93c517_eaf6a5f8",
+        "filename": "conductor/docker/api/Dockerfile",
+        "patchSetId": 1
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1361
+      },
+      "writtenOn": "2018-02-15T05:16:03Z",
+      "side": 1,
+      "message": "whitespace",
+      "range": {
+        "startLine": 6,
+        "startChar": 17,
+        "endLine": 6,
+        "endChar": 18
+      },
+      "revId": "601bec029087f09f3a8579de16aaa5ec6aa14b14",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a93c517_2ad80d7a",
+        "filename": "conductor/docker/conductor.conf",
+        "patchSetId": 1
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1361
+      },
+      "writtenOn": "2018-02-15T05:16:03Z",
+      "side": 1,
+      "message": "Is this intended here? or used for testing. Can we use a generic name?",
+      "range": {
+        "startLine": 12,
+        "startChar": 10,
+        "endLine": 12,
+        "endChar": 28
+      },
+      "revId": "601bec029087f09f3a8579de16aaa5ec6aa14b14",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a93c517_cac889aa",
+        "filename": "conductor/docker/conductor.conf",
+        "patchSetId": 1
+      },
+      "lineNbr": 145,
+      "author": {
+        "id": 1361
+      },
+      "writtenOn": "2018-02-15T05:16:03Z",
+      "side": 1,
+      "message": "Do we need to change this?",
+      "range": {
+        "startLine": 145,
+        "startChar": 12,
+        "endLine": 145,
+        "endChar": 52
+      },
+      "revId": "601bec029087f09f3a8579de16aaa5ec6aa14b14",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a93c517_eacd45b8",
+        "filename": "conductor/docker/conductor.conf",
+        "patchSetId": 1
+      },
+      "lineNbr": 216,
+      "author": {
+        "id": 1361
+      },
+      "writtenOn": "2018-02-15T05:16:03Z",
+      "side": 1,
+      "message": "same as aboce",
+      "range": {
+        "startLine": 216,
+        "startChar": 11,
+        "endLine": 216,
+        "endChar": 32
+      },
+      "revId": "601bec029087f09f3a8579de16aaa5ec6aa14b14",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a93c517_8ac60199",
+        "filename": "conductor/docker/conductor.conf",
+        "patchSetId": 1
+      },
+      "lineNbr": 247,
+      "author": {
+        "id": 1361
+      },
+      "writtenOn": "2018-02-15T05:16:03Z",
+      "side": 1,
+      "message": "Do we need to change this?",
+      "range": {
+        "startLine": 247,
+        "startChar": 12,
+        "endLine": 247,
+        "endChar": 50
+      },
+      "revId": "601bec029087f09f3a8579de16aaa5ec6aa14b14",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a93c517_aac3bd87",
+        "filename": "conductor/docker/conductor.conf",
+        "patchSetId": 1
+      },
+      "lineNbr": 309,
+      "author": {
+        "id": 1361
+      },
+      "writtenOn": "2018-02-15T05:16:03Z",
+      "side": 1,
+      "message": "same as above.",
+      "range": {
+        "startLine": 309,
+        "startChar": 13,
+        "endLine": 309,
+        "endChar": 73
+      },
+      "revId": "601bec029087f09f3a8579de16aaa5ec6aa14b14",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a93c517_4ae55936",
+        "filename": "conductor/docker/controller/Dockerfile",
+        "patchSetId": 1
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1361
+      },
+      "writtenOn": "2018-02-15T05:16:03Z",
+      "side": 1,
+      "message": "whitespace",
+      "range": {
+        "startLine": 1,
+        "startChar": 15,
+        "endLine": 1,
+        "endChar": 16
+      },
+      "revId": "601bec029087f09f3a8579de16aaa5ec6aa14b14",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a93c517_6ae29530",
+        "filename": "conductor/docker/controller/Dockerfile",
+        "patchSetId": 1
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 1361
+      },
+      "writtenOn": "2018-02-15T05:16:03Z",
+      "side": 1,
+      "message": "whitespace",
+      "range": {
+        "startLine": 3,
+        "startChar": 50,
+        "endLine": 3,
+        "endChar": 51
+      },
+      "revId": "601bec029087f09f3a8579de16aaa5ec6aa14b14",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a93c517_aadc1d74",
+        "filename": "conductor/docker/controller/Dockerfile",
+        "patchSetId": 1
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1361
+      },
+      "writtenOn": "2018-02-15T05:16:03Z",
+      "side": 1,
+      "message": "Repo URL should be ONAP repository?",
+      "range": {
+        "startLine": 5,
+        "startChar": 15,
+        "endLine": 5,
+        "endChar": 80
+      },
+      "revId": "601bec029087f09f3a8579de16aaa5ec6aa14b14",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a93c517_0ad3d160",
+        "filename": "conductor/docker/controller/Dockerfile",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1361
+      },
+      "writtenOn": "2018-02-15T05:16:03Z",
+      "side": 1,
+      "message": "whitespace",
+      "range": {
+        "startLine": 7,
+        "startChar": 17,
+        "endLine": 7,
+        "endChar": 18
+      },
+      "revId": "601bec029087f09f3a8579de16aaa5ec6aa14b14",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a93c517_4abc7906",
+        "filename": "conductor/docker/data/Dockerfile",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1361
+      },
+      "writtenOn": "2018-02-15T05:16:03Z",
+      "side": 1,
+      "message": "Same comments as in other Dockerfile.",
+      "revId": "601bec029087f09f3a8579de16aaa5ec6aa14b14",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a93c517_6ab93514",
+        "filename": "conductor/docker/reservation/Dockerfile",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1361
+      },
+      "writtenOn": "2018-02-15T05:16:03Z",
+      "side": 1,
+      "message": "Ditto",
+      "revId": "601bec029087f09f3a8579de16aaa5ec6aa14b14",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a93c517_0aec3129",
+        "filename": "conductor/docker/run-dockers.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 1361
+      },
+      "writtenOn": "2018-02-15T05:16:03Z",
+      "side": 1,
+      "message": "whitespace",
+      "range": {
+        "startLine": 3,
+        "startChar": 52,
+        "endLine": 3,
+        "endChar": 53
+      },
+      "revId": "601bec029087f09f3a8579de16aaa5ec6aa14b14",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a93c517_0a3af198",
+        "filename": "conductor/docker/solver/Dockerfile",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1361
+      },
+      "writtenOn": "2018-02-15T05:16:03Z",
+      "side": 1,
+      "message": "Ditto",
+      "revId": "601bec029087f09f3a8579de16aaa5ec6aa14b14",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
