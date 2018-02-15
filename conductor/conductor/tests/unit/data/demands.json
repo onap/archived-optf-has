@@ -1,0 +1,30 @@
+{
+  "demands": {
+    "vGMuxInfra": [
+      {
+        "inventory_provider": "aai",
+        "inventory_type": "service",
+        "service_type": "vG_Mux",
+        "attributes": {
+          "customer-id": "some_company",
+          "orchestration-status": "Activated"
+        }
+      }
+    ],
+    "vG": [
+      {
+        "inventory_provider": "aai",
+        "inventory_type": "service",
+        "service_type": "vG",
+        "attributes": {
+          "customer-id": "some_company",
+          "provisioning-status": "provisioned"
+        }
+      },
+      {
+        "inventory_provider": "aai",
+        "inventory_type": "cloud"
+      }
+    ]
+  }
+}

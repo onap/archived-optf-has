@@ -167,6 +167,9 @@ class DataEndpoint(object):
         discard_set = set()
         value_dict = value
         value_condition = ''
+        print(value)
+        print(candidate_list)
+        print(value_attrib)
         if value_dict:
             if "all" in value_dict:
                 value_list = value_dict.get("all")
@@ -352,6 +355,9 @@ class DataEndpoint(object):
             "Available candidates after attribute checks: {}, "
             "inventory provider: {}".format(
                 candidate_list, self.ip_ext_manager.names()[0]))
+        print('##########################################')
+        print(candidate_list)
+        print(discard_set)
         return {'response': candidate_list, 'error': False}
 
     def resolve_demands(self, ctx, arg):

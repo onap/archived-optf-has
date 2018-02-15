@@ -1,0 +1,24 @@
+{
+  "candidate_list": [
+    {
+      "candidate_id": "1ac71fb8-ad43-4e16-9459-c3f372b8236d",
+      "candidate_type": "service",
+      "inventory_type": "service",
+      "inventory_provider": "aai",
+      "host_id": "vnf_123456",
+      "cost": "100",
+      "location_id": "DLLSTX55",
+      "location_type": "azure",
+      "latitude": "32.897480",
+      "longitude": "-97.040443",
+      "city": "Dallas",
+      "state": "TX",
+      "country": "USA",
+      "region": "US",
+      "complex_name": "dalls_one",
+      "cloud_owner": "att-aic",
+      "cloud_region_version": "1.1",
+      "physical_location_id": "DLLSTX55"
+    }
+  ]
+}
