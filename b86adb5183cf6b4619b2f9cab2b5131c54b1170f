@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a93c517_e973fc7d",
+        "filename": "conductor/conductor/tests/unit/data/candidate.json",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 2041
+      },
+      "writtenOn": "2018-02-25T01:44:25Z",
+      "side": 1,
+      "message": "We should also create a cloud candidate, candidate_type \u003d \"cloud\"",
+      "revId": "b86adb5183cf6b4619b2f9cab2b5131c54b1170f",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
