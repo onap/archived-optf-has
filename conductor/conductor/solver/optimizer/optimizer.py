@@ -30,6 +30,7 @@ from conductor import service
 from conductor.solver.optimizer import fit_first
 from conductor.solver.optimizer import random_pick
 from conductor.solver.request import demand
+from conductor.solver.request import request_simulator  # for simulation
 
 LOG = log.getLogger(__name__)
 
@@ -45,8 +46,12 @@ CONF.register_opts(SOLVER_OPTS, group='solver')
 class Optimizer(object):
 
     # FIXME(gjung): _requests should be request (no underscore, one item)
-    def __init__(self, conf, _requests=None):
+    def __init__(self, conf, _requests=None, _begin_time=None):
         self.conf = conf
+
+        # start time of solving the plan
+        if _begin_time is not None:
+            self._begin_time = _begin_time
 
         # self.search = greedy.Greedy(self.conf)
         self.search = None
@@ -54,6 +59,11 @@ class Optimizer(object):
 
         if _requests is not None:
             self.requests = _requests
+        else:
+            ''' for simulation '''
+            req_sim = request_simulator.RequestSimulator(self.conf)
+            req_sim.generate_requests()
+            self.requests = req_sim.requests
 
     def get_solution(self):
         LOG.debug("search start")
@@ -80,7 +90,8 @@ class Optimizer(object):
                 LOG.debug("Fit first algorithm is used")
                 self.search = fit_first.FitFirst(self.conf)
                 best_path = self.search.search(demand_list,
-                                               request.objective, request)
+                                               request.objective, request,
+                                               self._begin_time)
 
             if best_path is not None:
                 self.search.print_decisions(best_path)

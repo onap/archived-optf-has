@@ -53,12 +53,19 @@ class Plan(base.Base):
     timeout = None
     recommend_max = None
     message = None
+    translation_owner = None
+    translation_counter = None
+    solver_owner = None
+    solver_counter = None
+    reservation_owner = None
+    reservation_counter = None
     template = None
     translation = None
     solution = None
 
     # Status
     TEMPLATE = "template"  # Template ready for translation
+    TRANSLATING = "translating"  # Translating the template
     TRANSLATED = "translated"  # Translation ready for solving
     SOLVING = "solving"  # Search for solutions in progress
     # Search complete, solution with n>0 recommendations found
@@ -70,10 +77,10 @@ class Plan(base.Base):
     RESERVING = "reserving"
     # Final state, Solved and Reserved resources (if required)
     DONE = "done"
-    STATUS = [TEMPLATE, TRANSLATED, SOLVING, SOLVED, NOT_FOUND,
+    STATUS = [TEMPLATE, TRANSLATING, TRANSLATED, SOLVING, SOLVED, NOT_FOUND,
               ERROR, RESERVING, DONE, ]
-    WORKING = [TEMPLATE, TRANSLATED, SOLVING, RESERVING, ]
-    FINISHED = [SOLVED, NOT_FOUND, ERROR, DONE, ]
+    WORKING = [TEMPLATE, TRANSLATING, TRANSLATED, SOLVING, RESERVING, ]
+    FINISHED = [TRANSLATED, SOLVED, NOT_FOUND, ERROR, DONE, ]
 
     @classmethod
     def schema(cls):
@@ -90,6 +97,12 @@ class Plan(base.Base):
             'template': 'text',  # Plan template
             'translation': 'text',  # Translated template for the solver
             'solution': 'text',  # The (ocean is the ultimate) solution (FZ)
+            'translation_owner': 'text',
+            'solver_owner': 'text',
+            'reservation_owner': 'text',
+            'translation_counter': 'int',
+            'solver_counter': 'int',
+            'reservation_counter': 'int',
             'PRIMARY KEY': '(id)',
         }
         return schema
@@ -134,13 +147,13 @@ class Plan(base.Base):
     def working(self):
         return self.status in self.WORKING
 
-    def update(self):
+    def update(self, condition=None):
         """Update plan
 
         Side-effect: Sets the updated field to the current time.
         """
         self.updated = current_time_millis()
-        super(Plan, self).update()
+        return super(Plan, self).update(condition)
 
     def values(self):
         """Values"""
@@ -155,6 +168,12 @@ class Plan(base.Base):
             'template': json.dumps(self.template),
             'translation': json.dumps(self.translation),
             'solution': json.dumps(self.solution),
+            'translation_owner': self.translation_owner,
+            'translation_counter': self.translation_counter,
+            'solver_owner': self.solver_owner,
+            'solver_counter': self.solver_counter,
+            'reservation_owner': self.reservation_owner,
+            'reservation_counter': self.reservation_counter,
         }
         if self.id:
             value_dict['id'] = self.id
@@ -162,7 +181,11 @@ class Plan(base.Base):
 
     def __init__(self, name, timeout, recommend_max, template,
                  id=None, created=None, updated=None, status=None,
-                 message=None, translation=None, solution=None, _insert=True):
+                 message=None, translation=None, solution=None,
+                 translation_owner=None, solver_owner=None,
+                 reservation_owner=None, translation_counter = None,
+                 solver_counter = None, reservation_counter = None,
+                 _insert=True):
         """Initializer"""
         super(Plan, self).__init__()
         self.status = status or self.TEMPLATE
@@ -172,6 +195,15 @@ class Plan(base.Base):
         self.timeout = timeout
         self.recommend_max = recommend_max
         self.message = message or ""
+        # owners should be empty when the plan is created
+        self.translation_owner = translation_owner or {}
+        self.solver_owner = solver_owner or {}
+        self.reservation_owner = reservation_owner or {}
+        # maximum reties for each of the component
+        self.translation_counter = translation_counter or 0
+        self.solver_counter = solver_counter or 0
+        self.reservation_counter = reservation_counter or 0
+
         if _insert:
             if validate_uuid4(id):
                 self.id = id
@@ -202,4 +234,16 @@ class Plan(base.Base):
         json_['template'] = self.template
         json_['translation'] = self.translation
         json_['solution'] = self.solution
+        json_['translation_owner'] = self.translation_owner
+        json_['translation_counter'] = self.translation_counter
+        json_['solver_owner'] = self.solver_owner
+        json_['solver_counter'] = self.solver_counter
+        json_['reservation_owner'] = self.reservation_owner
+        json_['reservation_counter'] = self.reservation_counter
+        json_['translation_owner'] = self.translation_owner
+        json_['translation_counter'] = self.translation_counter
+        json_['solver_owner'] = self.solver_owner
+        json_['solver_counter'] = self.solver_counter
+        json_['reservation_owner'] = self.reservation_owner
+        json_['reservation_counter'] = self.reservation_counter
         return json_

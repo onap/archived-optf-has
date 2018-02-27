@@ -111,18 +111,21 @@ class Base(object):
             kwargs['pk_value'] = kwargs['values'][pk_name]
         api.MUSIC_API.row_create(**kwargs)
 
-    def update(self):
+    def update(self, condition=None):
         """Update row"""
         kwargs = self.__kwargs()
         kwargs['pk_name'] = self.pk_name()
         kwargs['pk_value'] = self.pk_value()
         kwargs['values'] = self.values()
-        kwargs['atomic'] = self.atomic()
+
+        # In active-active, all update operations should be atomic
+        kwargs['atomic'] = True
+        kwargs['condition'] = condition
         # FIXME(jdandrea): Do we need this test/pop clause?
         pk_name = kwargs['pk_name']
         if pk_name in kwargs['values']:
             kwargs['values'].pop(pk_name)
-        api.MUSIC_API.row_update(**kwargs)
+        return api.MUSIC_API.row_update(**kwargs)
 
     def delete(self):
         """Delete row"""
