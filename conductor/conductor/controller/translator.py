@@ -41,7 +41,7 @@ CONF = cfg.CONF
 VERSIONS = ["2016-11-01", "2017-10-10"]
 LOCATION_KEYS = ['latitude', 'longitude', 'host_name', 'clli_code']
 INVENTORY_PROVIDERS = ['aai']
-INVENTORY_TYPES = ['cloud', 'service']
+INVENTORY_TYPES = ['cloud', 'service', 'transport']
 DEFAULT_INVENTORY_PROVIDER = INVENTORY_PROVIDERS[0]
 CANDIDATE_KEYS = ['inventory_type', 'candidate_id', 'location_id',
                   'location_type', 'cost']
@@ -49,7 +49,7 @@ DEMAND_KEYS = ['inventory_provider', 'inventory_type', 'service_type',
                'service_id', 'service_resource_id', 'customer_id',
                'default_cost', 'candidates', 'region', 'complex',
                'required_candidates', 'excluded_candidates',
-               'subdivision', 'flavor']
+               'existing_placement', 'subdivision', 'flavor', 'attributes']
 CONSTRAINT_KEYS = ['type', 'demands', 'properties']
 CONSTRAINTS = {
     # constraint_type: {
@@ -90,8 +90,9 @@ CONSTRAINTS = {
     },
     'zone': {
         'required': ['qualifier', 'category'],
+        'optional': ['location'],
         'allowed': {'qualifier': ['same', 'different'],
-                    'category': ['disaster', 'region', 'complex',
+                    'category': ['disaster', 'region', 'complex', 'country',
                                  'time', 'maintenance']},
     },
 }
@@ -193,7 +194,7 @@ class Translator(object):
             keys = component.get('keys', None)
             content = component.get('content')
 
-            if not isinstance(content, dict):
+            if type(content) is not dict:
                 raise TranslatorException(
                     "{} section must be a dictionary".format(name))
             for content_name, content_def in content.items():
@@ -219,7 +220,7 @@ class Translator(object):
                     "Demand list for Constraint {} must be "
                     "a list of names or a string with one name".format(
                         constraint_name))
-            if not set(demands).issubset(demand_keys):
+            if not set(demands).issubset(demand_keys + location_keys):
                 raise TranslatorException(
                     "Undefined Demand(s) {} in Constraint '{}'".format(
                         list(set(demands).difference(demand_keys)),
@@ -248,7 +249,7 @@ class Translator(object):
             path = [path]
 
         # Traverse a list
-        if isinstance(obj, list):
+        if type(obj) is list:
             for idx, val in enumerate(obj, start=0):
                 # Add path to the breadcrumb trail
                 new_path = list(path)
@@ -258,7 +259,7 @@ class Translator(object):
                 obj[idx] = self._parse_parameters(val, new_path)
 
         # Traverse a dict
-        elif isinstance(obj, dict):
+        elif type(obj) is dict:
             # Did we find a "{get_param: ...}" intrinsic?
             if obj.keys() == ['get_param']:
                 param_name = obj['get_param']
@@ -311,14 +312,25 @@ class Translator(object):
         """Prepare the locations for use by the solver."""
         parsed = {}
         for location, args in locations.items():
-            ctxt = {}
-            response = self.data_service.call(
-                ctxt=ctxt,
-                method="resolve_location",
-                args=args)
+            ctxt = {
+                'plan_id': self._plan_id,
+                'keyspace': self.conf.keyspace
+            }
 
-            resolved_location = \
-                response and response.get('resolved_location')
+            latitude = args.get("latitude")
+            longitude = args.get("longitude")
+
+            if latitude and longitude:
+                resolved_location = {"latitude": latitude, "longitude": longitude}
+            else:
+                # ctxt = {}
+                response = self.data_service.call(
+                    ctxt=ctxt,
+                    method="resolve_location",
+                    args=args)
+
+                resolved_location = \
+                    response and response.get('resolved_location')
             if not resolved_location:
                 raise TranslatorException(
                     "Unable to resolve location {}".format(location)
@@ -328,7 +340,7 @@ class Translator(object):
 
     def parse_demands(self, demands):
         """Validate/prepare demands for use by the solver."""
-        if not isinstance(demands, dict):
+        if type(demands) is not dict:
             raise TranslatorException("Demands must be provided in "
                                       "dictionary form")
 
@@ -357,7 +369,7 @@ class Translator(object):
                     # Check each candidate
                     for candidate in requirement.get('candidates'):
                         # Must be a dictionary
-                        if not isinstance(candidate, dict):
+                        if type(candidate) is not dict:
                             raise TranslatorException(
                                 "Candidate found in demand {} that is "
                                 "not a dictionary".format(name))
@@ -418,14 +430,24 @@ class Translator(object):
                     # For service inventories, customer_id and
                     # service_type MUST be specified
                     if inventory_type == 'service':
-                        customer_id = requirement.get('customer_id')
+                        attributes = requirement.get('attributes')
+
+                        if attributes:
+                            customer_id = attributes.get('customer-id')
+                            global_customer_id = attributes.get('global-customer-id')
+                            if global_customer_id:
+                                customer_id = global_customer_id
+                        else:
+                            # for backward compatibility
+                            customer_id = requirement.get('customer_id')
+                            service_type = requirement.get('service_type')
+
                         if not customer_id:
                             raise TranslatorException(
                                 "Customer ID not specified for "
                                 "demand {}".format(name)
                             )
-                        service_type = requirement.get('service_type')
-                        if not service_type:
+                        if not attributes and not service_type:
                             raise TranslatorException(
                                 "Service Type not specified for "
                                 "demand {}".format(name)
@@ -622,8 +644,10 @@ class Translator(object):
         # goal, functions, and operands. Therefore, for the time being,
         # we are choosing to be highly conservative in what we accept
         # at the template level. Once the solver can handle the more
-        # general form, we can make the translation pass using standard
-        # compiler techniques and tools like antlr (antlr4-python2-runtime).
+        # general form, we can make the translation pass in this
+        # essentially pre-parsed formula unchanged, or we may allow
+        # optimizations to be written in algebraic form and pre-parsed
+        # with antlr4-python2-runtime. (jdandrea 1 Dec 2016)
 
         if not optimization:
             LOG.debug("No objective function or "
@@ -637,7 +661,7 @@ class Translator(object):
             "operands": [],
         }
 
-        if not isinstance(optimization_copy, dict):
+        if type(optimization_copy) is not dict:
             raise TranslatorException("Optimization must be a dictionary.")
 
         goals = optimization_copy.keys()
@@ -652,7 +676,7 @@ class Translator(object):
                 "contain a single function of 'sum'.")
 
         operands = optimization_copy['minimize']['sum']
-        if not isinstance(operands, list):
+        if type(operands) is not list:
             # or len(operands) != 2:
             raise TranslatorException(
                 "Optimization goal 'minimize', function 'sum' "
@@ -660,7 +684,7 @@ class Translator(object):
 
         def get_distance_between_args(operand):
             args = operand.get('distance_between')
-            if not isinstance(args, list) and len(args) != 2:
+            if type(args) is not list and len(args) != 2:
                 raise TranslatorException(
                     "Optimization 'distance_between' arguments must "
                     "be a list of length two.")
@@ -693,13 +717,44 @@ class Translator(object):
                 for product_op in operand['product']:
                     if threshold.is_number(product_op):
                         weight = product_op
-                    elif isinstance(product_op, dict):
+                    elif type(product_op) is dict:
                         if product_op.keys() == ['distance_between']:
                             function = 'distance_between'
                             args = get_distance_between_args(product_op)
-                        elif product_op.keys() == ['cloud_version']:
-                            function = 'cloud_version'
-                            args = product_op.get('cloud_version')
+                        elif product_op.keys() == ['aic_version']:
+                            function = 'aic_version'
+                            args = product_op.get('aic_version')
+                        elif product_op.keys() == ['sum']:
+                            nested = True
+                            nested_operands = product_op.get('sum')
+                            for nested_operand in nested_operands:
+                                if nested_operand.keys() == ['product']:
+                                    nested_weight = weight
+                                    for nested_product_op in nested_operand['product']:
+                                        if threshold.is_number(nested_product_op):
+                                            nested_weight = nested_weight * int(nested_product_op)
+                                        elif type(nested_product_op) is dict:
+                                            if nested_product_op.keys() == ['distance_between']:
+                                                function = 'distance_between'
+                                                args = get_distance_between_args(nested_product_op)
+                                    parsed['operands'].append(
+                                        {
+                                            "operation": "product",
+                                            "weight": nested_weight,
+                                            "function": function,
+                                            "function_param": args,
+                                        }
+                                    )
+
+                    elif type(product_op) is unicode:
+                        if product_op == 'W1':
+                            # get this weight from configuration file
+                            weight = self.conf.controller.weight1
+                        elif product_op == 'W2':
+                            # get this weight from configuration file
+                            weight = self.conf.controller.weight2
+                        elif product_op == 'cost':
+                            function = 'cost'
 
                 if not args:
                     raise TranslatorException(
@@ -708,19 +763,20 @@ class Translator(object):
                         "one optional number to be used as a weight.")
 
             # We now have our weight/function_param.
-            parsed['operands'].append(
-                {
-                    "operation": "product",
-                    "weight": weight,
-                    "function": function,
-                    "function_param": args,
-                }
-            )
+            if not nested:
+                parsed['operands'].append(
+                    {
+                        "operation": "product",
+                        "weight": weight,
+                        "function": function,
+                        "function_param": args,
+                    }
+                )
         return parsed
 
     def parse_reservations(self, reservations):
         demands = self._demands
-        if not isinstance(reservations, dict):
+        if type(reservations) is not dict:
             raise TranslatorException("Reservations must be provided in "
                                       "dictionary form")
 
@@ -734,8 +790,7 @@ class Translator(object):
                 if demand in demands.keys():
                     constraint_demand = name + '_' + demand
                     parsed['demands'] = {}
-                    parsed['demands'][constraint_demand] = \
-                        copy.deepcopy(reservation)
+                    parsed['demands'][constraint_demand] = copy.deepcopy(reservation)
                     parsed['demands'][constraint_demand]['name'] = name
                     parsed['demands'][constraint_demand]['demand'] = demand
 
@@ -745,12 +800,17 @@ class Translator(object):
         """Perform the translation."""
         if not self.valid:
             raise TranslatorException("Can't translate an invalid template.")
+
+        request_type = self._parameters.get("request_type") or ""
+
         self._translation = {
             "conductor_solver": {
                 "version": self._version,
                 "plan_id": self._plan_id,
+                "request_type": request_type,
                 "locations": self.parse_locations(self._locations),
                 "demands": self.parse_demands(self._demands),
+                "objective": self.parse_optimization(self._optmization),
                 "constraints": self.parse_constraints(self._constraints),
                 "objective": self.parse_optimization(self._optmization),
                 "reservations": self.parse_reservations(self._reservations),

@@ -59,10 +59,11 @@ class Service(constraint.Constraint):
         # call conductor data with request parameters
         if len(candidates_to_check) > 0:
             cei = _request.cei
+            request_type = _request.request_type
             filtered_list = cei.get_candidates_from_service(
                 self.name, self.constraint_type, candidates_to_check,
                 self.controller, self.inventory_type, self.request,
-                self.cost, demand_name)
+                self.cost, demand_name, request_type)
             for c in filtered_list:
                 select_list.append(c)
         else:
