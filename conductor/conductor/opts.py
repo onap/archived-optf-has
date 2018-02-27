@@ -42,6 +42,12 @@ def list_opts():
         ('controller', itertools.chain(
             conductor.controller.service.CONTROLLER_OPTS,
             conductor.controller.translator_svc.CONTROLLER_OPTS)),
+        ('data', conductor.data.service.DATA_OPTS),
+        ('inventory_provider',
+         itertools.chain(
+             conductor.conf.inventory_provider.
+                 INV_PROVIDER_EXT_MANAGER_OPTS)
+         ),
         # ('data', conductor.data.plugins.inventory_provider.aai.DATA_OPTS),
         ('inventory_provider', itertools.chain(
             conductor.conf.inventory_provider.

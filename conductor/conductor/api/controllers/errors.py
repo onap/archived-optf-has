@@ -30,7 +30,6 @@ LOG = log.getLogger(__name__)
 
 def error_wrapper(func):
     """Error decorator."""
-
     def func_wrapper(self, **kw):
         """Wrapper."""
 
@@ -94,6 +93,20 @@ class ErrorsController(object):
         pecan.response.body = _('Authentication required')
         LOG.error(pecan.response.body)
         return pecan.response
+
+    @pecan.expose('json')
+    @error_wrapper
+    def authentication_error(self, **kw):
+        """401"""
+        pecan.response.status = 401
+        return pecan.request.context.get('kwargs')
+
+    @pecan.expose('json')
+    @error_wrapper
+    def basic_auth_error(self, **kw):
+        """417"""
+        pecan.response.status = 417
+        return pecan.request.context.get('kwargs')
 
     @pecan.expose('json')
     @error_wrapper

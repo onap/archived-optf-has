@@ -18,6 +18,7 @@
 #
 
 import time
+import socket
 
 import cotyledon
 import futurist
@@ -29,6 +30,7 @@ from conductor.common.music import messaging as music_messaging
 from conductor.controller import translator
 from conductor.i18n import _LE, _LI
 from conductor import messaging
+from conductor.common.utils import conductor_logging_util as log_util
 
 LOG = log.getLogger(__name__)
 
@@ -40,6 +42,9 @@ CONTROLLER_OPTS = [
                min=1,
                help='Time between checking for new plans. '
                     'Default value is 1.'),
+    cfg.IntOpt('max_translation_counter',
+               default=1,
+               min=1)
 ]
 
 CONF.register_opts(CONTROLLER_OPTS, group='controller')
@@ -73,13 +78,48 @@ class TranslatorService(cotyledon.Service):
         # Set up Music access.
         self.music = api.API()
 
+        self.translation_owner_condition = {
+            "translation_owner": socket.gethostname()
+        }
+
+        self.template_status_condition = {
+            "status": self.Plan.TEMPLATE
+        }
+
+        self.translating_status_condition = {
+            "status": self.Plan.TRANSLATING
+        }
+
+        if not self.conf.controller.concurrent:
+            self._reset_template_status()
+
     def _gracefully_stop(self):
         """Gracefully stop working on things"""
         pass
 
+    def millisec_to_sec(self, millisec):
+        """Convert milliseconds to seconds"""
+        return millisec / 1000
+
+    def _reset_template_status(self):
+        """Reset plans being templated so they are translated again.
+
+        Use this only when the translator service is not running concurrently.
+        """
+        plans = self.Plan.query.all()
+        for the_plan in plans:
+            if the_plan.status == self.Plan.TRANSLATING:
+                the_plan.status = self.Plan.TEMPLATE
+                # Use only in active-passive mode, so don't have to be atomic
+                the_plan.update()
+
     def _restart(self):
         """Prepare to restart the service"""
         pass
+
+    def current_time_seconds(self):
+        """Current time in milliseconds."""
+        return int(round(time.time()))
 
     def setup_rpc(self, conf, topic):
         """Set up the RPC Client"""
@@ -106,18 +146,24 @@ class TranslatorService(cotyledon.Service):
                 LOG.info(_LI(
                     "Plan {} translated. Ready for solving").format(
                     plan.id))
+                LOG.info(_LI(
+                    "Plan name: {}").format(
+                    plan.name))
             else:
                 plan.message = trns.error_message
                 plan.status = self.Plan.ERROR
                 LOG.error(_LE(
                     "Plan {} translation error encountered").format(
                     plan.id))
+
         except Exception as ex:
             template = "An exception of type {0} occurred, arguments:\n{1!r}"
             plan.message = template.format(type(ex).__name__, ex.args)
             plan.status = self.Plan.ERROR
 
-        plan.update()
+        _is_success = 'FAILURE | Could not acquire lock'
+        while 'FAILURE | Could not acquire lock' in _is_success:
+            _is_success = plan.update(condition=self.translation_owner_condition)
 
     def __check_for_templates(self):
         """Wait for the polling interval, then do the real template check."""
@@ -131,8 +177,35 @@ class TranslatorService(cotyledon.Service):
         for plan in plans:
             # If there's a template to be translated, do it!
             if plan.status == self.Plan.TEMPLATE:
-                self.translate(plan)
+                if plan.translation_counter >= self.conf.controller.max_translation_counter:
+                    message = _LE("Tried {} times. Plan {} is unable to translate") \
+                        .format(self.conf.controller.max_translation_counter, plan.id)
+                    plan.message = message
+                    plan.status = self.Plan.ERROR
+                    plan.update(condition=self.template_status_condition)
+                    LOG.error(message)
+                    break
+                else:
+                    # change the plan status to "translating" and assign the current machine as translation owner
+                    plan.status = self.Plan.TRANSLATING
+                    plan.translation_counter += 1
+                    plan.translation_owner = socket.gethostname()
+                    _is_updated = plan.update(condition=self.template_status_condition)
+                    LOG.info(_LE("Plan {} is trying to update the status from 'template' to 'translating',"
+                                 " get {} response from MUSIC") \
+                             .format(plan.id, _is_updated))
+                    if 'SUCCESS' in _is_updated:
+                        log_util.setLoggerFilter(LOG, self.conf.keyspace, plan.id)
+                        self.translate(plan)
                 break
+
+            # TODO(larry): sychronized clock among Conducotr VMs, or use an offset
+            elif plan.status == self.Plan.TRANSLATING and \
+                (self.current_time_seconds() - self.millisec_to_sec(plan.updated)) > self.conf.messaging_server.timeout:
+                plan.status = self.Plan.TEMPLATE
+                plan.update(condition=self.translating_status_condition)
+                break
+
             elif plan.timedout:
                 # Move plan to error status? Create a new timed-out status?
                 # todo(snarayanan)
@@ -145,6 +218,9 @@ class TranslatorService(cotyledon.Service):
         # Look for templates to translate from within a thread
         executor = futurist.ThreadPoolExecutor()
         while self.running:
+            # Delay time (Seconds) for MUSIC requests.
+            time.sleep(self.conf.delay_time)
+
             fut = executor.submit(self.__check_for_templates)
             fut.result()
         executor.shutdown()
