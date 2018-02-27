@@ -56,6 +56,10 @@ CONTROLLER_OPTS = [
                      'mode. When set to False, controller will flush any '
                      'abandoned messages at startup. The controller always '
                      'restarts abandoned template translations at startup.'),
+    cfg.IntOpt('weight1',
+               default=1),
+    cfg.IntOpt('weight2',
+               default=1),
 ]
 
 CONF.register_opts(CONTROLLER_OPTS, group='controller')

@@ -46,6 +46,9 @@ class BaseApiTest(oslo_test_base.BaseTestCase):
         # self._set_config()
         # TODO(dileep.ranganathan): Move common mock and configs to BaseTest
         cfg.CONF.set_override('mock', True, 'music_api')
+        cfg.CONF.conductor_api.username="admin"
+        cfg.CONF.conductor_api.password="default"
+
         self.app = self._make_app()
 
         def reset_pecan():

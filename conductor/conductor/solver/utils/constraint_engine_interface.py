@@ -57,6 +57,8 @@ class ConstraintEngineInterface(object):
             response = candidate['location_id']
         elif _category == 'complex':
             response = candidate['complex_name']
+        elif _category == 'country':
+            response = candidate['country']
         else:
             ctxt = {}
             args = {"candidate": candidate, "category": _category}
@@ -69,7 +71,8 @@ class ConstraintEngineInterface(object):
     def get_candidates_from_service(self, constraint_name,
                                     constraint_type, candidate_list,
                                     controller, inventory_type,
-                                    request, cost, demand_name):
+                                    request, cost, demand_name,
+                                    request_type):
         ctxt = {}
         args = {"constraint_name": constraint_name,
                 "constraint_type": constraint_type,
@@ -78,7 +81,8 @@ class ConstraintEngineInterface(object):
                 "inventory_type": inventory_type,
                 "request": request,
                 "cost": cost,
-                "demand_name": demand_name}
+                "demand_name": demand_name,
+                "request_type": request_type}
         response = self.client.call(ctxt=ctxt,
                                     method="get_candidates_from_service",
                                     args=args)

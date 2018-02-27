@@ -54,6 +54,7 @@ class Message(base.Base):
     method = None
     args = None
     status = None
+    owner = None
     response = None
     failure = None
 
@@ -64,9 +65,10 @@ class Message(base.Base):
 
     # Status
     ENQUEUED = "enqueued"
+    WORKING = "working"
     COMPLETED = "completed"
     ERROR = "error"
-    STATUS = [ENQUEUED, COMPLETED, ERROR, ]
+    STATUS = [ENQUEUED, WORKING, COMPLETED, ERROR, ]
     FINISHED = [COMPLETED, ERROR, ]
 
     @classmethod
@@ -81,6 +83,7 @@ class Message(base.Base):
             'method': 'text',  # RPC method name
             'args': 'text',  # JSON argument dictionary
             'status': 'text',  # Status (enqueued, complete, error)
+            'owner': 'text',
             'response': 'text',  # Response JSON
             'failure': 'text',  # Failure JSON (used for exceptions)
             'PRIMARY KEY': '(id)',
@@ -106,6 +109,10 @@ class Message(base.Base):
         return self.status == self.ENQUEUED
 
     @property
+    def working(self):
+        return self.status == self.WORKING
+
+    @property
     def finished(self):
         return self.status in self.FINISHED
 
@@ -113,13 +120,13 @@ class Message(base.Base):
     def ok(self):
         return self.status == self.COMPLETED
 
-    def update(self):
+    def update(self, condition=None):
         """Update message
 
         Side-effect: Sets the updated field to the current time.
         """
         self.updated = current_time_millis()
-        super(Message, self).update()
+        return super(Message, self).update(condition)
 
     def values(self):
         """Values"""
@@ -131,19 +138,21 @@ class Message(base.Base):
             'method': self.method,
             'args': json.dumps(self.args),
             'status': self.status,
+            'owner': self.owner,
             'response': json.dumps(self.response),
             'failure': self.failure,  # already serialized by oslo_messaging
         }
 
     def __init__(self, action, ctxt, method, args,
                  created=None, updated=None, status=None,
-                 response=None, failure=None, _insert=True):
+                 response=None, owner=None, failure=None, _insert=True):
         """Initializer"""
         super(Message, self).__init__()
         self.action = action
         self.created = created or current_time_millis()
         self.updated = updated or current_time_millis()
         self.method = method
+        self.owner = owner or {}
         self.status = status or self.ENQUEUED
         if _insert:
             self.ctxt = ctxt or {}
@@ -173,6 +182,7 @@ class Message(base.Base):
         json_['method'] = self.method
         json_['args'] = self.args
         json_['status'] = self.status
+        json_['owner'] = self.owner
         json_['response'] = self.response
         json_['failure'] = self.failure
         return json_
