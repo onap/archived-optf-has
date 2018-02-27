@@ -46,6 +46,10 @@ OPTS = [
     cfg.StrOpt('keyspace',
                default='conductor',
                help='Music keyspace for content'),
+    cfg.IntOpt('delay_time',
+               default=2,
+               help='Delay time (Seconds) for MUSIC requests. Set it to 2 seconds '
+                    'by default.'),
 ]
 cfg.CONF.register_opts(OPTS)
 

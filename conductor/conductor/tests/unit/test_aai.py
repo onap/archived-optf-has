@@ -18,6 +18,7 @@ class TestConstaintAccessDistance(unittest.TestCase, AccessDistance):
                                "cei": "null",
                                "region_gen": "null",
                                "request_id": "null",
+                               "request_type": "null",
                                "objective": "null",
                                "constraints": {}
                               }

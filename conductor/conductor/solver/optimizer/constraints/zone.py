@@ -29,7 +29,7 @@ LOG = log.getLogger(__name__)
 
 class Zone(Constraint):
     def __init__(self, _name, _type, _demand_list, _priority=0,
-                 _qualifier=None, _category=None):
+                 _qualifier=None, _category=None,  _location=None):
         Constraint.__init__(self, _name, _type, _demand_list, _priority)
 
         self.qualifier = _qualifier  # different or same
@@ -57,8 +57,15 @@ class Zone(Constraint):
             # check if candidate satisfies constraint
             # for all relevant decisions thus far
             is_candidate = True
+            cei = _request.cei
+
+            # TODO(larry): think of an other way to handle this special case
+            if self.location and self.category == 'country':
+                if not self.comparison_operator(
+                        cei.get_candidate_zone(candidate, self.category),
+                        self.location.country):
+                    is_candidate = False
             for filtered_candidate in decision_list:
-                cei = _request.cei
                 if not self.comparison_operator(
                         cei.get_candidate_zone(candidate, self.category),
                         cei.get_candidate_zone(filtered_candidate,
