@@ -21,14 +21,34 @@
 import copy
 import json
 import uuid
+import base64
 
 import mock
 from conductor.api.controllers.v1 import plans
 from conductor.tests.unit.api import base_api
 from oslo_serialization import jsonutils
-
+import pecan
+from oslo_config import cfg
 
 class TestPlansController(base_api.BaseApiTest):
+
+    def setUp(self):
+        super(TestPlansController, self).setUp()
+        # self._set_config()
+        # TODO(dileep.ranganathan): Move common mock and configs to BaseTest
+        cfg.CONF.conductor_api.username = "admin"
+        cfg.CONF.conductor_api.password = "default"
+
+        self.app = self._make_app()
+
+        def reset_pecan():
+            pecan.set_config({}, overwrite=True)
+
+        self.addCleanup(reset_pecan)
+
+    extra_environment = {
+        'AUTH_TYPE': 'Basic',
+        'HTTP_AUTHORIZATION': 'Basic {}'.format(base64.encodestring('admin:default').strip())}
 
     def test_index_options(self):
         actual_response = self.app.options('/v1/plans', expect_errors=True)
@@ -47,7 +67,9 @@ class TestPlansController(base_api.BaseApiTest):
         plan_id = str(uuid.uuid4())
         params['id'] = plan_id
         rpc_mock.return_value = {'plans': [params]}
-        actual_response = self.app.get('/v1/plans')
+        actual_response = self.app.get('/v1/plans', extra_environ=self.extra_environment)
+        print ("App is {}".format(self.app))
+
         self.assertEqual(200, actual_response.status_int)
 
     @mock.patch.object(plans.LOG, 'error')
@@ -62,7 +84,7 @@ class TestPlansController(base_api.BaseApiTest):
         params = jsonutils.dumps(json.loads(open(req_json_file).read()))
         rpc_mock.return_value = {}
         response = self.app.post('/v1/plans', params=params,
-                                 expect_errors=True)
+                                 expect_errors=True, extra_environ=self.extra_environment)
         self.assertEqual(500, response.status_int)
 
     @mock.patch.object(plans.LOG, 'error')
@@ -82,7 +104,7 @@ class TestPlansController(base_api.BaseApiTest):
         rpc_mock.return_value = {'plan': mock_params}
         params = json.dumps(params)
         response = self.app.post('/v1/plans', params=params,
-                                 expect_errors=True)
+                                 expect_errors=True, extra_environ=self.extra_environment)
         self.assertEqual(201, response.status_int)
 
     def test_index_httpmethod_notallowed(self):
@@ -94,6 +116,10 @@ class TestPlansController(base_api.BaseApiTest):
 
 class TestPlansItemController(base_api.BaseApiTest):
 
+    extra_environment = {
+        'AUTH_TYPE': 'Basic',
+        'HTTP_AUTHORIZATION': 'Basic {}'.format(base64.encodestring('admin:default').strip())}
+
     @mock.patch('conductor.common.music.messaging.component.RPCClient.call')
     def test_index_options(self, rpc_mock):
         req_json_file = './conductor/tests/unit/api/controller/v1/plans.json'
@@ -103,7 +129,7 @@ class TestPlansItemController(base_api.BaseApiTest):
         rpc_mock.return_value = {'plans': [params]}
         url = '/v1/plans/' + plan_id
         print(url)
-        actual_response = self.app.options(url=url, expect_errors=True)
+        actual_response = self.app.options(url=url, expect_errors=True, extra_environ=self.extra_environment)
         self.assertEqual(204, actual_response.status_int)
         self.assertEqual("GET,DELETE", actual_response.headers['Allow'])
 
@@ -115,11 +141,11 @@ class TestPlansItemController(base_api.BaseApiTest):
         params['id'] = plan_id
         rpc_mock.return_value = {'plans': [params]}
         url = '/v1/plans/' + plan_id
-        actual_response = self.app.put(url=url, expect_errors=True)
+        actual_response = self.app.put(url=url, expect_errors=True, extra_environ=self.extra_environment)
         self.assertEqual(405, actual_response.status_int)
-        actual_response = self.app.patch(url=url, expect_errors=True)
+        actual_response = self.app.patch(url=url, expect_errors=True, extra_environ=self.extra_environment)
         self.assertEqual(405, actual_response.status_int)
-        actual_response = self.app.post(url=url, expect_errors=True)
+        actual_response = self.app.post(url=url, expect_errors=True, extra_environ=self.extra_environment)
         self.assertEqual(405, actual_response.status_int)
 
     @mock.patch('conductor.common.music.messaging.component.RPCClient.call')
@@ -131,7 +157,7 @@ class TestPlansItemController(base_api.BaseApiTest):
         expected_response = {'plans': [params]}
         rpc_mock.return_value = {'plans': [params]}
         url = '/v1/plans/' + plan_id
-        actual_response = self.app.get(url=url, expect_errors=True)
+        actual_response = self.app.get(url=url, expect_errors=True, extra_environ=self.extra_environment)
         self.assertEqual(200, actual_response.status_int)
         self.assertJsonEqual(expected_response,
                              json.loads(actual_response.body))
@@ -141,7 +167,7 @@ class TestPlansItemController(base_api.BaseApiTest):
         rpc_mock.return_value = {'plans': []}
         plan_id = str(uuid.uuid4())
         url = '/v1/plans/' + plan_id
-        actual_response = self.app.get(url=url, expect_errors=True)
+        actual_response = self.app.get(url=url, expect_errors=True, extra_environ=self.extra_environment)
         self.assertEqual(404, actual_response.status_int)
 
     @mock.patch('conductor.common.music.messaging.component.RPCClient.call')
@@ -152,5 +178,5 @@ class TestPlansItemController(base_api.BaseApiTest):
         params['id'] = plan_id
         rpc_mock.return_value = {'plans': [params]}
         url = '/v1/plans/' + plan_id
-        actual_response = self.app.delete(url=url, expect_errors=True)
+        actual_response = self.app.delete(url=url, expect_errors=True, extra_environ=self.extra_environment)
         self.assertEqual(204, actual_response.status_int)

@@ -17,15 +17,23 @@
 # -------------------------------------------------------------------------
 #
 
+# import json
+# import os
+
 import cotyledon
 from oslo_config import cfg
 from oslo_log import log
+# from stevedore import driver
 
+# from conductor import __file__ as conductor_root
 from conductor.common.music import messaging as music_messaging
 from conductor.data.plugins.inventory_provider import extensions as ip_ext
 from conductor.data.plugins.service_controller import extensions as sc_ext
 from conductor.i18n import _LE, _LI, _LW
 from conductor import messaging
+from conductor.common.utils import conductor_logging_util as log_util
+# from conductor.solver.resource import region
+# from conductor.solver.resource import service
 
 LOG = log.getLogger(__name__)
 
@@ -42,6 +50,14 @@ DATA_OPTS = [
                 help='Set to True when data will run in active-active '
                      'mode. When set to False, data will flush any abandoned '
                      'messages at startup.'),
+    cfg.FloatOpt('existing_placement_cost',
+               default=-8000.0,
+               help='Default value is -8000, which is the diameter of the earth. '
+                    'The distance cannot larger than this value'),
+    cfg.FloatOpt('cloud_candidate_cost',
+               default=2.0),
+    cfg.FloatOpt('service_candidate_cost',
+               default=1.0),
 ]
 
 CONF.register_opts(DATA_OPTS, group='data')
@@ -52,6 +68,7 @@ class DataServiceLauncher(object):
 
     def __init__(self, conf):
         """Initializer."""
+
         self.conf = conf
         self.init_extension_managers(conf)
 
@@ -113,6 +130,8 @@ class DataEndpoint(object):
             zone = candidate['location_id']
         elif category == 'complex':
             zone = candidate['complex_name']
+        elif category == 'country':
+            zone = candidate['country']
         else:
             error = True
 
@@ -123,26 +142,30 @@ class DataEndpoint(object):
         return {'response': zone, 'error': error}
 
     def get_candidates_from_service(self, ctx, arg):
+
         candidate_list = arg["candidate_list"]
         constraint_name = arg["constraint_name"]
         constraint_type = arg["constraint_type"]
-        # inventory_type = arg["inventory_type"]
         controller = arg["controller"]
         request = arg["request"]
-        # cost = arg["cost"]
+        request_type = arg["request_type"]
+
         error = False
         filtered_candidates = []
         # call service and fetch candidates
         # TODO(jdandrea): Get rid of the SDN-C reference (outside of plugin!)
         if controller == "SDN-C":
-            # service_model = request.get("service_model")
+            service_model = request.get("service_model")
+
             results = self.sc_ext_manager.map_method(
                 'filter_candidates',
                 request=request,
                 candidate_list=candidate_list,
                 constraint_name=constraint_name,
-                constraint_type=constraint_type
+                constraint_type=constraint_type,
+                request_type=request_type
             )
+
             if results and len(results) > 0:
                 filtered_candidates = results[0]
             else:
@@ -154,8 +177,9 @@ class DataEndpoint(object):
             LOG.error(_LE("Unknown service controller: {}").format(controller))
         # if response from service controller is empty
         if filtered_candidates is None:
-            LOG.error("No capacity found from SDN-GC for candidates: "
-                      "{}".format(candidate_list))
+            if service_model == "ADIOD":
+                LOG.error("No capacity found from SDN-GC for candidates: "
+                          "{}".format(candidate_list))
             return {'response': [], 'error': error}
         else:
             LOG.debug("Filtered candidates: {}".format(filtered_candidates))
@@ -167,6 +191,7 @@ class DataEndpoint(object):
         discard_set = set()
         value_dict = value
         value_condition = ''
+        value_list = None
         if value_dict:
             if "all" in value_dict:
                 value_list = value_dict.get("all")
@@ -191,6 +216,26 @@ class DataEndpoint(object):
                 elif value_condition == 'all' and not c_all:
                     discard_set.add(candidate.get("candidate_id"))
         return discard_set
+
+    #(TODO:Larry) merge this function with the "get_candidate_discard_set"
+    def get_candidate_discard_set_by_cloud_region(self, value, candidate_list, value_attrib):
+        discard_set = set()
+
+        cloud_requests = value.get("cloud-requests")
+        service_requests = value.get("service-requests")
+
+        for candidate in candidate_list:
+            if candidate.get("inventory_type") == "cloud" and \
+                    (candidate.get(value_attrib) not in cloud_requests):
+                discard_set.add(candidate.get("candidate_id"))
+
+            elif candidate.get("inventory_type") == "service" and \
+                    (candidate.get(value_attrib) not in service_requests):
+                discard_set.add(candidate.get("candidate_id"))
+
+
+        return discard_set
+
 
     def get_inventory_group_candidates(self, ctx, arg):
         candidate_list = arg["candidate_list"]
@@ -316,6 +361,27 @@ class DataEndpoint(object):
                         elif role_condition == 'all' and not c_all:
                             discard_set.add(candidate.get("candidate_id"))
 
+            elif attrib == 'replication_role':
+
+                for candidate in candidate_list:
+
+                    host_id = candidate.get("host_id")
+                    if host_id:
+                        results = self.ip_ext_manager.map_method(
+                            'check_candidate_role',
+                            host_id = host_id
+                        )
+
+                        if not results or len(results) < 1:
+                            LOG.error(
+                                _LE("Empty response for replication roles {}").format(role))
+                            discard_set.add(candidate.get("candidate_id"))
+                            continue
+
+                        # compare results from A&AI with the value in attribute constraint
+                        if value and results[0] != value.upper():
+                            discard_set.add(candidate.get("candidate_id"))
+
             elif attrib == 'complex':
                 v_discard_set = \
                     self.get_candidate_discard_set(
@@ -344,6 +410,13 @@ class DataEndpoint(object):
                         candidate_list=candidate_list,
                         value_attrib="region")
                 discard_set.update(v_discard_set)
+            elif attrib == "cloud-region":
+                v_discard_set = \
+                    self.get_candidate_discard_set_by_cloud_region(
+                        value=value,
+                        candidate_list=candidate_list,
+                        value_attrib="location_id")
+                discard_set.update(v_discard_set)
 
         # return candidates not in discard set
         candidate_list[:] = [c for c in candidate_list
@@ -355,6 +428,9 @@ class DataEndpoint(object):
         return {'response': candidate_list, 'error': False}
 
     def resolve_demands(self, ctx, arg):
+
+        log_util.setLoggerFilter(LOG, ctx.get('keyspace'), ctx.get('plan_id'))
+
         error = False
         demands = arg.get('demands')
         resolved_demands = None
@@ -371,6 +447,8 @@ class DataEndpoint(object):
                 'error': error}
 
     def resolve_location(self, ctx, arg):
+
+        log_util.setLoggerFilter(LOG, ctx.get('keyspace'), ctx.get('plan_id'))
 
         error = False
         resolved_location = None

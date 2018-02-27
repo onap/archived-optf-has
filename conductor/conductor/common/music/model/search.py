@@ -80,6 +80,14 @@ class Query(object):
         rows = api.MUSIC_API.row_read(**kwargs)
         return self.__rows_to_objects(rows)
 
+    def get_plan_by_id(self, plan_id):
+        """Return the plan with specific id"""
+        plan = self.one(plan_id)
+
+        items = Results([])
+        items.append(plan)
+        return items
+
     def filter_by(self, **kwargs):
         """Filter objects"""
         # Music doesn't allow filtering on anything but the primary key.

@@ -19,11 +19,25 @@
 """Test case for RootController /"""
 
 import json
-
+import pecan
 from conductor.tests.unit.api import base_api
-
+from oslo_config import cfg
 
 class TestRoot(base_api.BaseApiTest):
+
+    def setUp(self):
+        super(TestRoot, self).setUp()
+        # self._set_config()
+        # TODO(dileep.ranganathan): Move common mock and configs to BaseTest
+        cfg.CONF.conductor_api.username = "admin"
+        cfg.CONF.conductor_api.password = "default"
+
+        self.app = self._make_app()
+
+        def reset_pecan():
+            pecan.set_config({}, overwrite=True)
+
+        self.addCleanup(reset_pecan)
 
     def test_get_index(self):
         actual_response = self.app.get('/')

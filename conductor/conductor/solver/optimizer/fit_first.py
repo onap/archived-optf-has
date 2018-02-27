@@ -21,6 +21,7 @@
 
 from oslo_log import log
 import sys
+import time
 
 from conductor.solver.optimizer import decision_path as dpath
 from conductor.solver.optimizer import search
@@ -33,16 +34,21 @@ class FitFirst(search.Search):
     def __init__(self, conf):
         search.Search.__init__(self, conf)
 
-    def search(self, _demand_list, _objective, _request):
+    def search(self, _demand_list, _objective, _request, _begin_time):
         decision_path = dpath.DecisionPath()
         decision_path.set_decisions({})
 
         # Begin the recursive serarch
         return self._find_current_best(
-            _demand_list, _objective, decision_path, _request)
+            _demand_list, _objective, decision_path, _request, _begin_time)
 
     def _find_current_best(self, _demand_list, _objective,
-                           _decision_path, _request):
+                           _decision_path, _request, _begin_time):
+
+        _current_time = int(round(time.time()))
+        if (_current_time - _begin_time) > self.conf.solver.solver_timeout:
+            return None
+
         # _demand_list is common across all recursions
         if len(_demand_list) == 0:
             LOG.debug("search done")
@@ -83,7 +89,10 @@ class FitFirst(search.Search):
                 if _objective.goal is None:
                     best_resource = candidate
 
-                elif _objective.goal == "min_cloud_version":
+                # @Shankar, the following string value was renamed to 'min_cloud_version' in ONAP version (probably to
+                # ignore the word 'aic' like in other places). Looks like this will break things up in ECOMP.
+                # Renamed to older value 'min_aic'.
+                elif _objective.goal == "min_aic":
                     # convert the unicode to string
                     candidate_version = candidate \
                         .get("cloud_region_version").encode('utf-8')
@@ -123,7 +132,7 @@ class FitFirst(search.Search):
                 # Begin the next recursive call to find candidate
                 # for the next demand in the list
                 decision_path = self._find_current_best(
-                    _demand_list, _objective, _decision_path, _request)
+                    _demand_list, _objective, _decision_path, _request, _begin_time)
 
                 # The point of return from the previous recursion.
                 # If the call returns no candidates, no solution exists
@@ -139,8 +148,9 @@ class FitFirst(search.Search):
                     # bound_value (proof by contradiction:
                     # it cannot have a smaller value, if it wasn't
                     # the best_resource.
-                    if _objective.goal == "min":
+                    if "min" in _objective.goal:
                         bound_value = sys.float_info.max
+                        version_value = "0.0"
                 else:
                     # A candidate was found for the demand, and
                     # was added to the decision path. Return current

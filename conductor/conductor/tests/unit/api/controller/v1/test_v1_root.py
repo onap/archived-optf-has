@@ -19,9 +19,25 @@
 """Test case for V1Controller /"""
 
 from conductor.tests.unit.api import base_api
-
+from oslo_config import cfg
+import pecan
 
 class TestV1Root(base_api.BaseApiTest):
+
+    def setUp(self):
+        super(TestV1Root, self).setUp()
+        # self._set_config()
+        # TODO(dileep.ranganathan): Move common mock and configs to BaseTest
+        cfg.CONF.conductor_api.username = "admin"
+        cfg.CONF.conductor_api.password = "default"
+
+        self.app = self._make_app()
+
+        def reset_pecan():
+            pecan.set_config({}, overwrite=True)
+
+        self.addCleanup(reset_pecan)
+
 
     def test_get_v1_root(self):
         actual_response = self.app.get('/v1', expect_errors=True)
