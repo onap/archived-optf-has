@@ -23,13 +23,14 @@
 import operator
 
 from oslo_log import log
+import random
 
 from conductor.solver.optimizer.constraints \
     import access_distance as access_dist
 from conductor.solver.optimizer.constraints \
     import attribute as attribute_constraint
+import aic_distance as aic_dist
 from conductor.solver.optimizer.constraints \
-    import cloud_distance as cloud_dist
 # from conductor.solver.optimizer.constraints import constraint
 from conductor.solver.optimizer.constraints \
     import inventory_group
@@ -37,11 +38,10 @@ from conductor.solver.optimizer.constraints \
     import service as service_constraint
 from conductor.solver.optimizer.constraints import zone
 from conductor.solver.request import demand
-from conductor.solver.request.functions import cloud_version
+from conductor.solver.request.functions import aic_version
+from conductor.solver.request.functions import cost
 from conductor.solver.request.functions import distance_between
 from conductor.solver.request import objective
-
-# import sys
 
 # from conductor.solver.request.functions import distance_between
 # from conductor.solver.request import objective
@@ -64,6 +64,7 @@ class Parser(object):
         self.objective = None
         self.cei = None
         self.request_id = None
+        self.request_type = None
 
     # def get_data_engine_interface(self):
     #    self.cei = cei.ConstraintEngineInterface()
@@ -73,6 +74,14 @@ class Parser(object):
         if json_template is None:
             LOG.error("No template specified")
             return "Error"
+        # fd = open(self.region_gen.data_path + \
+        #     "/../dhv/dhv_test_template.json", "r")
+        # fd = open(template, "r")
+        # parse_template = json.load(fd)
+        # fd.close()
+
+        # get request type
+        self.request_type = json_template['conductor_solver']['request_type']
 
         # get demands
         demand_list = json_template["conductor_solver"]["demands"]
@@ -92,6 +101,7 @@ class Parser(object):
             loc.loc_type = "coordinates"
             loc.value = (float(location_info["latitude"]),
                          float(location_info["longitude"]))
+            loc.country = location_info['country'] if 'country' in location_info else None
             self.locations[location_id] = loc
 
         # get constraints
@@ -142,11 +152,11 @@ class Parser(object):
                 elif c_op == "=":
                     op = operator.eq
                 dist_value = c_property.get("distance").get("value")
-                my_cloud_distance_constraint = cloud_dist.CloudDistance(
+                my_aic_distance_constraint = aic_dist.AICDistance(
                     constraint_id, constraint_type, constraint_demands,
                     _comparison_operator=op, _threshold=dist_value)
-                self.constraints[my_cloud_distance_constraint.name] = \
-                    my_cloud_distance_constraint
+                self.constraints[my_aic_distance_constraint.name] = \
+                    my_aic_distance_constraint
             elif constraint_type == "inventory_group":
                 my_inventory_group_constraint = \
                     inventory_group.InventoryGroup(
@@ -179,11 +189,13 @@ class Parser(object):
                     my_service_constraint
             elif constraint_type == "zone":
                 c_property = constraint_info.get("properties")
+                location_id = c_property.get("location")
                 qualifier = c_property.get("qualifier")
                 category = c_property.get("category")
+                location = self.locations[location_id] if location_id else None
                 my_zone_constraint = zone.Zone(
                     constraint_id, constraint_type, constraint_demands,
-                    _qualifier=qualifier, _category=category)
+                    _qualifier=qualifier, _category=category, _location=location)
                 self.constraints[my_zone_constraint.name] = my_zone_constraint
             elif constraint_type == "attribute":
                 c_property = constraint_info.get("properties")
@@ -224,17 +236,110 @@ class Parser(object):
                     elif param in self.demands:
                         func.loc_z = self.demands[param]
                     operand.function = func
-                elif operand_data["function"] == "cloud_version":
-                    self.objective.goal = "min_cloud_version"
-                    func = cloud_version.CloudVersion("cloud_version")
+                elif operand_data["function"] == "aic_version":
+                    self.objective.goal = "min_aic"
+                    func = aic_version.AICVersion("aic_version")
+                    func.loc = operand_data["function_param"]
+                    operand.function = func
+                elif operand_data["function"] == "cost":
+                    func = cost.Cost("cost")
                     func.loc = operand_data["function_param"]
                     operand.function = func
 
                 self.objective.operand_list.append(operand)
 
-    def map_constraints_to_demands(self):
+    def get_data_from_aai_simulator(self):
+        loc = demand.Location("uCPE")
+        loc.loc_type = "coordinates"
+        latitude = random.uniform(self.region_gen.least_latitude,
+                                  self.region_gen.most_latitude)
+        longitude = random.uniform(self.region_gen.least_longitude,
+                                   self.region_gen.most_longitude)
+        loc.value = (latitude, longitude)
+        self.locations[loc.name] = loc
+
+        demand1 = demand.Demand("vVIG")
+        demand1.resources = self.region_gen.regions
+        demand1.sort_base = 0  # this is only for testing
+        self.demands[demand1.name] = demand1
+
+        demand2 = demand.Demand("vGW")
+        demand2.resources = self.region_gen.regions
+        demand2.sort_base = 2  # this is only for testing
+        self.demands[demand2.name] = demand2
+
+        demand3 = demand.Demand("vVIG2")
+        demand3.resources = self.region_gen.regions
+        demand3.sort_base = 1  # this is only for testing
+        self.demands[demand3.name] = demand3
+
+        demand4 = demand.Demand("vGW2")
+        demand4.resources = self.region_gen.regions
+        demand4.sort_base = 3  # this is only for testing
+        self.demands[demand4.name] = demand4
+
+        constraint_list = []
+
+        access_distance = access_dist.AccessDistance(
+            "uCPE-all", "access_distance",
+            [demand1.name, demand2.name, demand3.name, demand4.name],
+            _comparison_operator=operator.le, _threshold=50000,
+            _location=loc)
+        constraint_list.append(access_distance)
+
+        '''
+        access_distance = access_dist.AccessDistance(
+            "uCPE-all", "access_distance", [demand1.name, demand2.name],
+            _comparison_operator=operator.le, _threshold=5000, _location=loc)
+        constraint_list.append(access_distance)
+
+        aic_distance = aic_dist.AICDistance(
+            "vVIG-vGW", "aic_distance", [demand1.name, demand2.name],
+            _comparison_operator=operator.le, _threshold=50)
+        constraint_list.append(aic_distance)
+
+        same_zone = zone.Zone(
+            "same-zone", "zone", [demand1.name, demand2.name],
+            _qualifier="same", _category="zone1")
+        constraint_list.append(same_zone)
+        '''
+    def reorder_constraint(self):
+        # added manual ranking to the constraint type for optimizing purpose the last 2 are costly interaction
+        for constraint_name, constraint in self.constraints.items():
+            if constraint.constraint_type == "distance_to_location":
+                constraint.rank = 1
+            elif constraint.constraint_type == "zone":
+                constraint.rank = 2
+            elif constraint.constraint_type == "attribute":
+                constraint.rank = 3
+            elif constraint.constraint_type == "inventory_group":
+                constraint.rank = 4
+            elif constraint.constraint_type == "instance_fit":
+                constraint.rank = 5
+            elif constraint.constraint_type == "region_fit":
+                constraint.rank = 6
+            else:
+                constraint.rank = 7
+
+    def attr_sort(self, attrs=['rank']):
+        #this helper for sorting the rank
+        return lambda k: [getattr(k, attr) for attr in attrs]
+
+    def sort_constraint_by_rank(self):
+        # this sorts as rank
+        for d_name, cl in self.demands.items():
+            cl_list = cl.constraint_list
+            cl_list.sort(key=self.attr_sort(attrs=['rank']))
+
+
+    def assgin_constraints_to_demands(self):
+        # self.parse_dhv_template() # get data from DHV template
+        # self.get_data_from_aai_simulator() # get data from aai simulation
+        # renaming simulate to assgin_constraints_to_demands
         # spread the constraints over the demands
+        self.reorder_constraint()
         for constraint_name, constraint in self.constraints.items():
             for d in constraint.demand_list:
                 if d in self.demands.keys():
                     self.demands[d].constraint_list.append(constraint)
+        self.sort_constraint_by_rank()
