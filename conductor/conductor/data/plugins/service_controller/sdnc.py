@@ -46,7 +46,7 @@ SDNC_OPTS = [
     cfg.StrOpt('password',
                help='Basic Authentication Password'),
     cfg.StrOpt('sdnc_rest_timeout',
-               default=60,
+               default=30,
                help='Timeout for SDNC Rest Call'),
     cfg.StrOpt('sdnc_retries',
                default=3,
@@ -78,6 +78,7 @@ class SDNC(base.ServiceControllerBase):
             "username": self.username,
             "password": self.password,
             "log_debug": self.conf.debug,
+            "read_timeout": self.timeout,
         }
         self.rest = rest.REST(**kwargs)
 
@@ -86,6 +87,7 @@ class SDNC(base.ServiceControllerBase):
 
     def initialize(self):
         """Perform any late initialization."""
+        # self.filter_candidates([])
         pass
 
     def name(self):
@@ -120,7 +122,187 @@ class SDNC(base.ServiceControllerBase):
         return response
 
     def filter_candidates(self, request, candidate_list,
-                          constraint_name, constraint_type):
+                          constraint_name, constraint_type, request_type):
         """Reduce candidate list based on SDN-C intelligence"""
-        selected_candidates = candidate_list
+        selected_candidates = []
+        path = '/operations/DHVCAPACITY-API:service-capacity-check-operation'
+        action_type = ""
+        if constraint_type == "instance_fit":
+            action_type = "CAPCHECK-SERVICE"
+        elif constraint_type == "region_fit":
+            action_type = "CAPCHECK-NEWVNF"
+        else:
+            LOG.error(_LE("Constraint {} has an unknown type {}").
+                      format(constraint_name, constraint_type))
+
+        change_type = ""
+        if request_type == "speed-changed":
+            change_type = "Change-Speed"
+        elif request_type == "initial" or request_type == "":
+            change_type = "New-Start"
+        else:
+            LOG.error(_LE("Constraint {} has an unknown request type {}").
+                      format(constraint_name, request_type))
+
+        # VNF input params common to all services
+        service_type = request.get('service_type')
+        e2evpnkey = request.get('e2evpnkey')
+
+        vnf_input = {}
+        # VNF inputs specific to service_types
+        if service_type.lower() == "vvig":
+            # get input parameters
+            bw_down = request.get('bw_down')
+            bw_up = request.get('bw_up')
+            dhv_site_effective_bandwidth = request.get('dhv_site_effective_bandwidth')
+            dhv_service_instance = request.get('dhv_service_instance')
+            if not dhv_site_effective_bandwidth or not bw_down or not bw_up:
+                LOG.error(_LE("Constraint {} vVIG capacity check is "
+                "missing up/down/effective bandwidth").
+                format(constraint_name))
+                return
+            # add instance_fit specific input parameters
+            if constraint_type == "instance_fit":
+                if not dhv_service_instance:
+                    LOG.error(_LE("Constraint {} vVIG capacity check is "
+                                  "missing DHV service instance").
+                              format(constraint_name))
+                    return
+                vnf_input["infra-service-instance-id"] = dhv_service_instance
+            # input params common to both instance_fit & region_fit
+            vnf_input["upstream-bandwidth"] = bw_up
+            vnf_input["downstream-bandwidth"] = bw_down
+            vnf_input["dhv-site-effective-bandwidth"] = dhv_site_effective_bandwidth
+
+        elif service_type.lower() == "vhngw":
+            # get input parameters
+            dhv_site_effective_bandwidth = \
+                request.get('dhv_site_effective_bandwidth')
+            if not dhv_site_effective_bandwidth:
+                LOG.error(_LE("Constraint {} vHNGW capacity check is "
+                              "missing DHV site effective bandwidth").
+                          format(constraint_name))
+                return
+            vnf_input["dhv-site-effective-bandwidth"] = \
+                dhv_site_effective_bandwidth
+        elif service_type.lower() == "vhnportal":
+            dhv_service_instance = request.get('dhv_service_instance')
+            # add instance_fit specific input parameters
+            if constraint_type == "instance_fit":
+                if not dhv_service_instance:
+                    LOG.error(_LE("Constraint {} vHNPortal capacity check is "
+                                  "missing DHV service instance").
+                              format(constraint_name))
+                    return
+                vnf_input["infra-service-instance-id"] = dhv_service_instance
+
+        for candidate in candidate_list:
+            # VNF input parameters common to all service_type
+            vnf_input["device-type"] = service_type
+            # If the candidate region id is AAIAIC25 and region_fit constraint
+            # then ignore that candidate since SDNC may fall over if it
+            # receives a capacity check for these candidates.
+            # If candidate region id is AAIAIC25 and instance constraint
+            # then set the region id to empty string in the input to SDNC.
+            # If neither of these conditions, then send the candidate's
+            # location id as the region id input to SDNC
+            if constraint_type == "region_fit" \
+                    and candidate.get("inventory_type") == "cloud" \
+                    and candidate.get('location_id') == "AAIAIC25":
+                continue
+            elif constraint_type == "instance_fit" \
+                    and candidate.get("inventory_type") == "service" \
+                    and candidate.get('location_id') == "AAIAIC25":
+                vnf_input["cloud-region-id"] = ""
+            else:
+                vnf_input["cloud-region-id"] = candidate.get('location_id')
+
+            if constraint_type == "instance_fit":
+                vnf_input["vnf-host-name"] = candidate.get('host_id')
+                '''
+                ONLY for service candidates:
+                For candidates with AIC version 2.5, SDN-GC uses 'infra-service-instance-id' to identify vvig.
+                'infra-service-instance-id' is 'candidate_id' in Conductor candidate structure
+                '''
+                vnf_input["infra-service-instance-id"] = candidate.get('candidate_id')
+
+            if "service_resource_id" in candidate:
+                vnf_input["cust-service-instance-id"] = candidate.get('service_resource_id')
+
+            data = {
+                "input": {
+                    "service-capacity-check-operation": {
+                        "sdnc-request-header": {
+                            "request-id":
+                                "59c36776-249b-4966-b911-9a89a63d1676"
+                        },
+                        "capacity-check-information": {
+                            "service-instance-id": "ssb-0001",
+                            "service": "DHV SD-WAN",
+                            "action-type": action_type,
+                            "change-type": change_type,
+                            "e2e-vpn-key": e2evpnkey,
+                            "vnf-list": {
+                                "vnf": [vnf_input]
+                            }
+                        }
+                    }
+                }
+            }
+
+            try:
+                device = None
+                cloud_region_id = None
+                available_capacity = None
+                context = "constraint, type, service type"
+                value = "{}, {}, {}".format(
+                    constraint_name, constraint_type, service_type)
+                LOG.debug("Json sent to SDNC: {}".format(data))
+                response = self._request('post', path=path, data=data,
+                                         context=context, value=value)
+                if response is None or response.status_code != 200:
+                    return
+                body = response.json()
+                vnf_list = body.get("output").\
+                    get("service-capacity-check-response").\
+                    get("vnf-list").get("vnf")
+                if not vnf_list or len(vnf_list) < 1:
+                    LOG.error(_LE("VNF is missing in SDNC response "
+                                  "for constraint {}, type: {}, "
+                                  "service type: {}").
+                              format(constraint_name, constraint_type,
+                                     service_type))
+                elif len(vnf_list) > 1:
+                    LOG.error(_LE("More than one VNF received in response"
+                                  "for constraint {}, type: {}, "
+                                  "service type: {}").
+                              format(constraint_name, constraint_type,
+                                     service_type))
+                    LOG.debug("VNF List: {}".format(vnf_list))
+                else:
+                    for vnf in vnf_list:
+                        device = vnf.get("device-type")
+                        cloud_region_id = vnf.get("cloud-region-id")
+                        available_capacity = vnf.get("available-capacity")
+                        break  # only one response expected for one candidate
+                if available_capacity == "N":
+                    LOG.error(_LE("insufficient capacity for {} in region {} "
+                                  "for constraint {}, type: {}, "
+                                  "service type: {}").
+                              format(device, cloud_region_id, constraint_name,
+                                     constraint_type, service_type))
+                    LOG.debug("VNF List: {}".format(vnf_list))
+                elif available_capacity == "Y":
+                    selected_candidates.append(candidate)
+                    LOG.debug("Candidate found for {} in region {} "
+                              "for constraint {}, type: {}, "
+                              "service type: {}"
+                              .format(device, cloud_region_id, constraint_name,
+                                      constraint_type, service_type))
+            except Exception as exc:
+                # TODO(shankar): Make more specific once we know SDNC errors
+                LOG.error("Constraint {}, type: {}, SDNC unknown error: {}".
+                          format(constraint_name, constraint_type, exc))
+                return
+
         return selected_candidates

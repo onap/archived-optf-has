@@ -18,6 +18,8 @@
 #
 
 import uuid
+from oslo_log import log
+LOG = log.getLogger(__name__)
 
 
 class ControllerRPCEndpoint(object):
@@ -30,6 +32,7 @@ class ControllerRPCEndpoint(object):
     def plan_create(self, ctx, arg):
         """Create a plan"""
         name = arg.get('name', str(uuid.uuid4()))
+        LOG.info('Plan name: {}'.format(name))
         timeout = arg.get('timeout', self.conf.controller.timeout)
         recommend_max = arg.get('limit', self.conf.controller.limit)
         template = arg.get('template', None)
@@ -59,7 +62,7 @@ class ControllerRPCEndpoint(object):
         """Delete one or more plans"""
         plan_id = arg.get('plan_id')
         if plan_id:
-            plans = self.Plan.query.filter_by(id=plan_id)
+            plans = self.Plan.query.get_plan_by_id(plan_id)
         else:
             plans = self.Plan.query.all()
         for the_plan in plans:
@@ -74,7 +77,7 @@ class ControllerRPCEndpoint(object):
         """Get one or more plans"""
         plan_id = arg.get('plan_id')
         if plan_id:
-            plans = self.Plan.query.filter_by(id=plan_id)
+            plans = self.Plan.query.get_plan_by_id(plan_id)
         else:
             plans = self.Plan.query.all()
 

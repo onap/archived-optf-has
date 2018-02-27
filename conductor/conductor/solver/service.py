@@ -18,6 +18,8 @@
 #
 
 import cotyledon
+import time
+import socket
 from oslo_config import cfg
 from oslo_log import log
 
@@ -82,11 +84,25 @@ SOLVER_OPTS = [
                min=1,
                help='Number of workers for solver service. '
                     'Default value is 1.'),
+    cfg.IntOpt('solver_timeout',
+               default=480,
+               min=1,
+               help='The timeout value for solver service. '
+                    'Default value is 480 seconds.'),
     cfg.BoolOpt('concurrent',
                 default=False,
                 help='Set to True when solver will run in active-active '
                      'mode. When set to False, solver will restart any '
                      'orphaned solving requests at startup.'),
+    cfg.IntOpt('timeout',
+               default=600,
+               min=1,
+               help='Timeout for detecting a VM is down, and other VMs can pick the plan up. '
+                    'This value should be larger than solver_timeout'
+                    'Default value is 10 minutes. (integer value)'),
+    cfg.IntOpt('max_solver_counter',
+               default=1,
+               min=1)
 ]
 
 CONF.register_opts(SOLVER_OPTS, group='solver')
@@ -152,12 +168,26 @@ class SolverService(cotyledon.Service):
         # Set up Music access.
         self.music = api.API()
 
+        self.solver_owner_condition = {
+            "solver_owner": socket.gethostname()
+        }
+        self.translated_status_condition = {
+            "status": self.Plan.TRANSLATED
+        }
+        self.solving_status_condition = {
+            "status": self.Plan.SOLVING
+        }
+
         if not self.conf.solver.concurrent:
             self._reset_solving_status()
 
     def _gracefully_stop(self):
         """Gracefully stop working on things"""
         pass
+
+    def current_time_seconds(self):
+        """Current time in milliseconds."""
+        return int(round(time.time()))
 
     def _reset_solving_status(self):
         """Reset plans being solved so they are solved again.
@@ -168,11 +198,16 @@ class SolverService(cotyledon.Service):
         for the_plan in plans:
             if the_plan.status == self.Plan.SOLVING:
                 the_plan.status = self.Plan.TRANSLATED
+                # Use only in active-passive mode, so don't have to be atomic
                 the_plan.update()
 
     def _restart(self):
         """Prepare to restart the service"""
         pass
+
+    def millisec_to_sec(self, millisec):
+        """Convert milliseconds to seconds"""
+        return millisec/1000
 
     def setup_rpc(self, conf, topic):
         """Set up the RPC Client"""
@@ -190,11 +225,14 @@ class SolverService(cotyledon.Service):
         # TODO(snarayanan): This is really meant to be a control loop
         # As long as self.running is true, we process another request.
         while self.running:
+            # Delay time (Seconds) for MUSIC requests.
+            time.sleep(self.conf.delay_time)
             # plans = Plan.query().all()
             # Find the first plan with a status of TRANSLATED.
             # Change its status to SOLVING.
             # Then, read the "translated" field as "template".
             json_template = None
+            p = None
             requests_to_solve = dict()
             plans = self.Plan.query.all()
             found_translated_template = False
@@ -203,51 +241,86 @@ class SolverService(cotyledon.Service):
                     json_template = p.translation
                     found_translated_template = True
                     break
+                elif p.status == self.Plan.SOLVING and \
+                                (self.current_time_seconds() - self.millisec_to_sec(
+                                    p.updated)) > self.conf.solver.timeout:
+                    p.status = self.Plan.TRANSLATED
+                    p.update(condition=self.solving_status_condition)
+                    break
             if found_translated_template and not json_template:
                 message = _LE("Plan {} status is translated, yet "
                               "the translation wasn't found").format(p.id)
                 LOG.error(message)
                 p.status = self.Plan.ERROR
                 p.message = message
-                p.update()
+                p.update(condition=self.translated_status_condition)
+                continue
+            elif found_translated_template and p and p.solver_counter >= self.conf.solver.max_solver_counter:
+                message = _LE("Tried {} times. Plan {} is unable to solve") \
+                    .format(self.conf.solver.max_solver_counter, p.id)
+                LOG.error(message)
+                p.status = self.Plan.ERROR
+                p.message = message
+                p.update(condition=self.translated_status_condition)
                 continue
             elif not json_template:
                 continue
 
             p.status = self.Plan.SOLVING
-            p.update()
+
+            p.solver_counter += 1
+            p.solver_owner = socket.gethostname()
+
+            _is_updated = p.update(condition=self.translated_status_condition)
+            # other VMs have updated the status and start solving the plan
+            if 'FAILURE' in _is_updated:
+                continue
+
+            LOG.info(_LI("Plan {} with request id {} is solving by machine {}. Tried to solve it for {} times.").
+                     format(p.id, p.name, p.solver_owner, p.solver_counter))
+
+            _is_success = 'FAILURE | Could not acquire lock'
 
             request = parser.Parser()
             request.cei = self.cei
             try:
                 request.parse_template(json_template)
+                request.assgin_constraints_to_demands()
+                requests_to_solve[p.id] = request
+                opt = optimizer.Optimizer(self.conf, _requests=requests_to_solve, _begin_time=self.millisec_to_sec(p.updated))
+                solution = opt.get_solution()
+
             except Exception as err:
                 message = _LE("Plan {} status encountered a "
                               "parsing error: {}").format(p.id, err.message)
                 LOG.error(message)
                 p.status = self.Plan.ERROR
                 p.message = message
-                p.update()
+                while 'FAILURE | Could not acquire lock' in _is_success:
+                    _is_success = p.update(condition=self.solver_owner_condition)
                 continue
-
-            request.map_constraints_to_demands()
-            requests_to_solve[p.id] = request
-            opt = optimizer.Optimizer(self.conf, _requests=requests_to_solve)
-            solution = opt.get_solution()
 
             recommendations = []
             if not solution or not solution.decisions:
-                message = _LI("Plan {} search failed, no "
-                              "recommendations found").format(p.id)
+                if (int(round(time.time())) - self.millisec_to_sec(p.updated)) > self.conf.solver.solver_timeout:
+                    message = _LI("Plan {} is timed out, exceed the expected "
+                                  "time {} seconds").format(p.id, self.conf.solver.timeout)
+
+                else:
+                    message = _LI("Plan {} search failed, no "
+                                  "recommendations found by machine {}").format(p.id, p.solver_owner)
                 LOG.info(message)
                 # Update the plan status
                 p.status = self.Plan.NOT_FOUND
                 p.message = message
-                p.update()
+                while 'FAILURE | Could not acquire lock' in _is_success:
+                    _is_success = p.update(condition=self.solver_owner_condition)
             else:
                 # Assemble recommendation result JSON
                 for demand_name in solution.decisions:
                     resource = solution.decisions[demand_name]
+                    is_rehome = "false" if resource.get("existing_placement") == 'true' else "true"
+                    location_id = "" if resource.get("cloud_region_version") == '2.5' else resource.get("location_id")
 
                     rec = {
                         # FIXME(shankar) A&AI must not be hardcoded here.
@@ -260,15 +333,14 @@ class SolverService(cotyledon.Service):
                             "inventory_type": resource.get("inventory_type"),
                             "cloud_owner": resource.get("cloud_owner"),
                             "location_type": resource.get("location_type"),
-                            "location_id": resource.get("location_id")},
+                            "location_id": location_id,
+                            "is_rehome": is_rehome,
+                        },
                         "attributes": {
                             "physical-location-id":
                                 resource.get("physical_location_id"),
-                            "sriov_automation":
-                                resource.get("sriov_automation"),
                             "cloud_owner": resource.get("cloud_owner"),
-                            'cloud_version':
-                                resource.get("cloud_region_version")},
+                            'aic_version': resource.get("cloud_region_version")},
                     }
                     if rec["candidate"]["inventory_type"] == "service":
                         rec["attributes"]["host_id"] = resource.get("host_id")
@@ -287,12 +359,15 @@ class SolverService(cotyledon.Service):
                     "recommendations": recommendations
                 }
                 p.status = self.Plan.SOLVED
-                p.update()
+                while 'FAILURE | Could not acquire lock' in _is_success:
+                    _is_success = p.update(condition=self.solver_owner_condition)
             LOG.info(_LI("Plan {} search complete, solution with {} "
-                         "recommendations found").
-                     format(p.id, len(recommendations)))
+                         "recommendations found by machine {}").
+                     format(p.id, len(recommendations), p.solver_owner))
             LOG.debug("Plan {} detailed solution: {}".
                       format(p.id, p.solution))
+            LOG.info("Plan name: {}".
+                      format(p.name))
 
             # Check status, update plan with response, SOLVED or ERROR
 
