@@ -46,3 +46,6 @@ class Location(object):
 
         # depending on type
         self.value = None
+
+        # customer location country
+        self.country = None

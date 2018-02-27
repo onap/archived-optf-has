@@ -22,6 +22,7 @@ import os
 
 import eventlet
 import mock
+import base64
 
 eventlet.monkey_patch(os=False)
 
@@ -41,17 +42,26 @@ class BaseApiTest(oslo_test_base.BaseTestCase):
     framework.
     """
 
+    extra_environment = {
+        'AUTH_TYPE': 'Basic',
+        'HTTP_AUTHORIZATION': 'Basic {}'.format(base64.encodestring('admin:default').strip())}
+
     def setUp(self):
+        print("setup called ... ")
         super(BaseApiTest, self).setUp()
         # self._set_config()
         # TODO(dileep.ranganathan): Move common mock and configs to BaseTest
         cfg.CONF.set_override('mock', True, 'music_api')
+        cfg.CONF.set_override('username', "admin", 'conductor_api')
+        cfg.CONF.set_override('password', "default", 'conductor_api')
+
         self.app = self._make_app()
 
         def reset_pecan():
             pecan.set_config({}, overwrite=True)
 
         self.addCleanup(reset_pecan)
+
 
     def _make_app(self):
         # Determine where we are so we can set up paths in the config
@@ -62,6 +72,7 @@ class BaseApiTest(oslo_test_base.BaseTestCase):
                 'modules': ['conductor.api'],
             },
         }
+
         return pecan.testing.load_test_app(self.app_config, conf=cfg.CONF)
 
     def path_get(self, project_file=None):
