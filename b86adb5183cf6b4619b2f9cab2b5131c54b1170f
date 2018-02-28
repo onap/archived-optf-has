@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "5a93c517_c19ccb11",
+        "filename": "conductor/conductor/data/service.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 172,
+      "author": {
+        "id": 1361
+      },
+      "writtenOn": "2018-02-28T22:19:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5a93c517_a5e0b4fa",
+      "range": {
+        "startLine": 170,
+        "startChar": 3,
+        "endLine": 172,
+        "endChar": 27
+      },
+      "revId": "b86adb5183cf6b4619b2f9cab2b5131c54b1170f",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5a93c517_45e9b0e4",
         "filename": "conductor/conductor/data/service.py",
         "patchSetId": 1
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "5a93c517_619db709",
+        "filename": "conductor/conductor/data/service.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 360,
+      "author": {
+        "id": 1361
+      },
+      "writtenOn": "2018-02-28T22:19:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5a93c517_45e9b0e4",
+      "range": {
+        "startLine": 358,
+        "startChar": 8,
+        "endLine": 360,
+        "endChar": 25
+      },
+      "revId": "b86adb5183cf6b4619b2f9cab2b5131c54b1170f",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5a93c517_e973fc7d",
         "filename": "conductor/conductor/tests/unit/data/candidate.json",
         "patchSetId": 1
@@ -59,6 +107,24 @@
       "writtenOn": "2018-02-25T01:44:25Z",
       "side": 1,
       "message": "We should also create a cloud candidate, candidate_type \u003d \"cloud\"",
+      "revId": "b86adb5183cf6b4619b2f9cab2b5131c54b1170f",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a93c517_21048f48",
+        "filename": "conductor/conductor/tests/unit/data/candidate.json",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1361
+      },
+      "writtenOn": "2018-02-28T22:19:31Z",
+      "side": 1,
+      "message": "Done. Using candiate_list.json instead of candidate.json. Added cloud candidate with candidate_type\u003d\u0027cloud\u0027",
+      "parentUuid": "5a93c517_e973fc7d",
       "revId": "b86adb5183cf6b4619b2f9cab2b5131c54b1170f",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": false
