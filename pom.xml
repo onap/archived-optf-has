@@ -31,7 +31,15 @@
     <name>optf-has</name>
     <version>1.1.0-SNAPSHOT</version>
     <description>Homing Allocation Service</description>
-
+    <properties>
+		<!-- Sonar Properties -->
+		<sonar.language>java</sonar.language>
+		<sonar.java.coveragePlugin>jacoco</sonar.java.coveragePlugin>
+		<sonar.surefire.reportsPath>${project.build.directory}/surefire-reports</sonar.surefire.reportsPath>
+		<sonar.jacoco.reportPath>${project.build.directory}/coverage-reports/jacoco.exec</sonar.jacoco.reportPath>
+		<sonar.jacoco.reportMissing.force.zero>false</sonar.jacoco.reportMissing.force.zero>
+		<sonar.projectVersion>${project.version}</sonar.projectVersion>
+    </properties>
     <modules>
         <module>conductor</module>
         <!--<module>docs</module>-->
