@@ -1,0 +1,157 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a93c517_f4bbcc0c",
+        "filename": "conductor/conductor/solver/optimizer/constraints/aic_distance.py",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 2041
+      },
+      "writtenOn": "2018-02-28T00:38:08Z",
+      "side": 1,
+      "message": "I\u0027m guessing this is the same constraint as cloud_distance.\n\nhttps://gerrit.onap.org/r/gitweb?p\u003doptf/has.git;a\u003dblob;f\u003dconductor/conductor/solver/optimizer/constraints/cloud_distance.py;h\u003d1e862d408462e38944b931c2e35cad752cf27e27;hb\u003dHEAD",
+      "revId": "fb42182515085127f6378e029c663727ae260cc7",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a93c517_d46570b5",
+        "filename": "conductor/conductor/solver/request/functions/aic_version.py",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 2041
+      },
+      "writtenOn": "2018-02-28T00:38:08Z",
+      "side": 1,
+      "message": "This should be refactored as Cloud Version",
+      "revId": "fb42182515085127f6378e029c663727ae260cc7",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a93c517_1450b8d2",
+        "filename": "conductor/conductor/solver/request/request_simulator.py",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 2041
+      },
+      "writtenOn": "2018-02-28T00:38:08Z",
+      "side": 1,
+      "message": "This is just a data file for simulation. Not needed.",
+      "revId": "fb42182515085127f6378e029c663727ae260cc7",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a93c517_b439c4a5",
+        "filename": "conductor/conductor/solver/simulators/a_and_ai/extended_100_regions.csv",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 2041
+      },
+      "writtenOn": "2018-02-28T00:38:08Z",
+      "side": 1,
+      "message": "This is just a data file for simulation. Not needed.",
+      "revId": "fb42182515085127f6378e029c663727ae260cc7",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a93c517_d43ed08b",
+        "filename": "conductor/conductor/solver/simulators/a_and_ai/nodes.csv",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 2041
+      },
+      "writtenOn": "2018-02-28T00:38:08Z",
+      "side": 1,
+      "message": "This is just a data file for simulation. Not needed.",
+      "revId": "fb42182515085127f6378e029c663727ae260cc7",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a93c517_743fbc87",
+        "filename": "conductor/conductor/solver/simulators/a_and_ai/region_generator.py",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 2041
+      },
+      "writtenOn": "2018-02-28T00:38:08Z",
+      "side": 1,
+      "message": "This is just for simulation. Not needed.",
+      "revId": "fb42182515085127f6378e029c663727ae260cc7",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a93c517_9444c81b",
+        "filename": "conductor/conductor/solver/simulators/dhv/dhv_test_template.json",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 2041
+      },
+      "writtenOn": "2018-02-28T00:38:08Z",
+      "side": 1,
+      "message": "This is just a data file for simulation. Not needed.",
+      "revId": "fb42182515085127f6378e029c663727ae260cc7",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a93c517_f452ecdc",
+        "filename": "conductor/conductor/solver/simulators/test_conductor.py",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 2041
+      },
+      "writtenOn": "2018-02-28T00:38:08Z",
+      "side": 1,
+      "message": "This is just a data file for simulation. Not needed.",
+      "revId": "fb42182515085127f6378e029c663727ae260cc7",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a93c517_544ac026",
+        "filename": "conductor/conductor/solver/simulators/test_data.py",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 2041
+      },
+      "writtenOn": "2018-02-28T00:38:08Z",
+      "side": 1,
+      "message": "This is just a data file for simulation. Not needed.",
+      "revId": "fb42182515085127f6378e029c663727ae260cc7",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
