@@ -1,0 +1,47 @@
+---
+project: 'optf-has'
+project_creation_date: '2017-07-06'
+lifecycle_state: 'Incubation'
+project_lead: &onap_releng_ptl
+    name: 'Sarat Puthenpura'
+    email: 'sarat@research.att.com'
+    id: 'sarat'
+    company: 'ATT'
+    timezone: 'America/Bedminster'
+primary_contact: *onap_releng_ptl
+issue_tracking:
+    type: 'jira'
+    url: 'https://jira.onap.org/projects/OPTFRA'
+    key: 'OPTFRA'
+meetings:
+    - type: 'zoom'
+        agenda: 'https://wiki.onap.org/display/DW/Meeting+Notes+for+OOF'
+        url: 'https://wiki.onap.org/pages/viewpage.action?pageId=11928319'
+        server: 'n/a'
+        channel: 'n/a'
+        repeats: 'weekly'
+        time: '15:00 UTC'
+committers:
+    - <<: *onap_releng_ptl
+    - name: 'Maopeng Zhang'
+        email: 'zhang.maopeng1@zte.com.cn'
+        company: 'ZTE'
+        id: 'maopengzhang'
+        timezone: 'Beijing'
+    - name: 'Sastry Isukapalli'
+        email: 'sastry@research.att.com'
+        company: 'ATT'
+        id: 'sisukapalli'
+        timezone: 'America/Bedminster'
+    - name: 'Shankaranarayanan Puzhavakath Narayanan'
+        email: 'snarayanan@research.att.com'
+        company: 'ATT'
+        id: 'snarayanan'
+        timezone: 'America/Bedminster'
+    - name: 'Yoram Zini'
+        email: 'yzini@cisco.com'
+        company: 'Cisco'
+        id: 'yoram'
+        timezone: 'Israel/GMT+2(winter),GMT+3(summer)'
+tsc:
+    approval: 'https://lists.onap.org/pipermail/onap-tsc'
