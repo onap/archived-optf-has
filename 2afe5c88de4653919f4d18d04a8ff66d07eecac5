@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a93c517_1c221a52",
+        "filename": "conductor/conductor/tests/unit/data/candidate_list.json",
+        "patchSetId": 2
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 2041
+      },
+      "writtenOn": "2018-03-01T01:34:11Z",
+      "side": 1,
+      "message": "candidate_id should be a cloud-region-id. In case of cloud candidates this will be equivalent to the location_id NYCNY55",
+      "range": {
+        "startLine": 24,
+        "startChar": 7,
+        "endLine": 24,
+        "endChar": 19
+      },
+      "revId": "2afe5c88de4653919f4d18d04a8ff66d07eecac5",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a93c517_3c1fd609",
+        "filename": "conductor/conductor/tests/unit/data/candidate_list.json",
+        "patchSetId": 2
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 2041
+      },
+      "writtenOn": "2018-03-01T01:34:11Z",
+      "side": 1,
+      "message": "This should be of type cloud as well",
+      "range": {
+        "startLine": 25,
+        "startChar": 25,
+        "endLine": 25,
+        "endChar": 32
+      },
+      "revId": "2afe5c88de4653919f4d18d04a8ff66d07eecac5",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a93c517_5c24225f",
+        "filename": "conductor/conductor/tests/unit/data/candidate_list.json",
+        "patchSetId": 2
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 2041
+      },
+      "writtenOn": "2018-03-01T01:34:11Z",
+      "side": 1,
+      "message": "Nit: cloud candidates don\u0027t have host_id",
+      "range": {
+        "startLine": 28,
+        "startChar": 18,
+        "endLine": 28,
+        "endChar": 25
+      },
+      "revId": "2afe5c88de4653919f4d18d04a8ff66d07eecac5",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a93c517_fc140eea",
+        "filename": "conductor/conductor/tests/unit/data/constraints.json",
+        "patchSetId": 2
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 2041
+      },
+      "writtenOn": "2018-03-01T01:34:11Z",
+      "side": 1,
+      "message": "The previous comments are relevant to this too.",
+      "range": {
+        "startLine": 25,
+        "startChar": 6,
+        "endLine": 34,
+        "endChar": 20
+      },
+      "revId": "2afe5c88de4653919f4d18d04a8ff66d07eecac5",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
