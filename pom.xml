@@ -26,7 +26,7 @@
     </parent>
 
     <groupId>org.onap.optf.has</groupId>
-    <artifactId>optf-has-root</artifactId>
+    <artifactId>optf-has</artifactId>
 
     <name>optf-has</name>
     <version>1.1.0-SNAPSHOT</version>
@@ -36,6 +36,19 @@
         <module>conductor</module>
         <!--<module>docs</module>-->
     </modules>
+
+    <properties>
+        <sonar.sourceEncoding>UTF-8</sonar.sourceEncoding>
+        <sonar.sources>conductor/conductor</sonar.sources>
+        <sonar.tests>conductor/conductor/tests</sonar.tests>
+        <sonar.python.coverage.reportPath>conductor/cover/coverage.xml</sonar.python.coverage.reportPath>
+        <sonar.language>py</sonar.language>
+        <sonar.pluginname>python</sonar.pluginname>
+        <sonar.inclusions>**/**.py</sonar.inclusions>
+        <sonar.exclusions>**/tests/**,setup.py,**/lib/**</sonar.exclusions>
+        <sonar.test.inclusions>**/tests/**.py</sonar.test.inclusions>
+        <sonar.test.exclusions>**/**.py,setup.py,**/lib/**</sonar.test.exclusions>
+    </properties>
 
     <build>
         <plugins>
