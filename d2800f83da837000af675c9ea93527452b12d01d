@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a93c517_39f03ffd",
+        "filename": "conductor/conductor/setup.cfg",
+        "patchSetId": 1
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 2041
+      },
+      "writtenOn": "2018-03-02T17:36:51Z",
+      "side": 1,
+      "message": "Ikram, please add your email instead.",
+      "range": {
+        "startLine": 6,
+        "startChar": 16,
+        "endLine": 6,
+        "endChar": 40
+      },
+      "revId": "d2800f83da837000af675c9ea93527452b12d01d",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
