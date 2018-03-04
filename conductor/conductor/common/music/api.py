@@ -20,6 +20,7 @@
 """Music Data Store API"""
 
 import copy
+import logging
 import time
 
 from oslo_config import cfg
@@ -68,6 +69,20 @@ MUSIC_API_OPTS = [
     cfg.BoolOpt('mock',
                 default=False,
                 help='Use mock API'),
+    cfg.StrOpt('music_topology',
+               default='SimpleStrategy'),
+    cfg.StrOpt('first_datacenter_name',
+               help='Name of the first data center'),
+    cfg.IntOpt('first_datacenter_replicas',
+               help='Number of replicas in first data center'),
+    cfg.StrOpt('second_datacenter_name',
+               help='Name of the second data center'),
+    cfg.IntOpt('second_datacenter_replicas',
+               help='Number of replicas in second data center'),
+    cfg.StrOpt('third_datacenter_name',
+               help='Name of the third data center'),
+    cfg.IntOpt('third_datacenter_replicas',
+               help='Number of replicas in third data center'),
 ]
 
 CONF.register_opts(MUSIC_API_OPTS, group='music_api')
@@ -112,6 +127,14 @@ class MusicAPI(object):
         # TODO(jdandrea): Allow override at creation time.
         self.lock_timeout = CONF.music_api.lock_timeout
         self.replication_factor = CONF.music_api.replication_factor
+        self.music_topology = CONF.music_api.music_topology
+
+        self.first_datacenter_name = CONF.music_api.first_datacenter_name
+        self.first_datacenter_replicas = CONF.music_api.first_datacenter_replicas
+        self.second_datacenter_name = CONF.music_api.second_datacenter_name
+        self.second_datacenter_replicas = CONF.music_api.second_datacenter_replicas
+        self.third_datacenter_name = CONF.music_api.third_datacenter_name
+        self.third_datacenter_replicas = CONF.music_api.third_datacenter_replicas
 
         MUSIC_API = self
 
@@ -174,25 +197,29 @@ class MusicAPI(object):
         return response and response.ok
 
     def payload_init(self, keyspace=None, table=None,
-                     pk_value=None, atomic=False):
+                     pk_value=None, atomic=False, condition=None):
         """Initialize payload for Music requests.
 
         Supports atomic operations.
         Returns a payload of data and lock_name (if any).
         """
-        if atomic:
-            lock_name = self.lock_create(keyspace, table, pk_value)
-        else:
-            lock_name = None
+        #if atomic:
+        #    lock_name = self.lock_create(keyspace, table, pk_value)
+        #else:
+        #    lock_name = None
 
-        lock_id = self.lock_ids.get(lock_name)
+        # lock_id = self.lock_ids.get(lock_name)
         data = {
             'consistencyInfo': {
-                'type': 'atomic' if atomic else 'eventual',
-                'lockId': lock_id,
+                'type': 'atomic' if condition else 'eventual',
             }
         }
-        return {'data': data, 'lock_name': lock_name}
+
+        if condition:
+            data['conditions'] = condition
+
+        # , 'lock_name': lock_name
+        return {'data': data}
 
     def payload_delete(self, payload):
         """Delete payload for Music requests. Cleans up atomic operations."""
@@ -209,10 +236,21 @@ class MusicAPI(object):
         payload = self.payload_init()
         data = payload.get('data')
         data['durabilityOfWrites'] = True
-        data['replicationInfo'] = {
-            'class': 'SimpleStrategy',
-            'replication_factor': self.replication_factor,
+        replication_info = {
+            'class': self.music_topology,
         }
+
+        if self.music_topology == 'SimpleStrategy':
+            replication_info['replication_factor'] = self.replication_factor
+        elif self.music_topology == 'NetworkTopologyStrategy':
+            if self.first_datacenter_name and self.first_datacenter_replicas:
+                replication_info[self.first_datacenter_name] = self.first_datacenter_replicas
+            if self.second_datacenter_name and self.second_datacenter_replicas:
+                replication_info[self.second_datacenter_name] = self.second_datacenter_replicas
+            if self.third_datacenter_name and self.third_datacenter_replicas:
+                replication_info[self.third_datacenter_name] = self.third_datacenter_replicas
+
+        data['replicationInfo'] = replication_info
 
         path = '/keyspaces/%s' % keyspace
         if CONF.music_api.debug:
@@ -289,9 +327,9 @@ class MusicAPI(object):
         return response and response.ok
 
     def row_update(self, keyspace, table,  # pylint: disable=R0913
-                   pk_name, pk_value, values, atomic=False):
+                   pk_name, pk_value, values, atomic=False, condition=None):
         """Update a row."""
-        payload = self.payload_init(keyspace, table, pk_value, atomic)
+        payload = self.payload_init(keyspace, table, pk_value, atomic, condition)
         data = payload.get('data')
         data['values'] = values
 
@@ -300,8 +338,8 @@ class MusicAPI(object):
             LOG.debug("Updating row with pk_value {} in table "
                       "{}, keyspace {}".format(pk_value, table, keyspace))
         response = self.rest.request(method='put', path=path, data=data)
-        self.payload_delete(payload)
-        return response and response.ok
+        # self.payload_delete(payload)
+        return response and response.ok and response.content
 
     def row_read(self, keyspace, table, pk_name=None, pk_value=None):
         """Read one or more rows. Not atomic."""
@@ -379,6 +417,9 @@ class MockAPI(object):
         LOG.info(_LI("Initializing Music Mock API"))
 
         global MUSIC_API
+
+        # set the urllib log level to ERROR
+        logging.getLogger('urllib3').setLevel(logging.ERROR)
 
         self.music['keyspaces'] = {}
 

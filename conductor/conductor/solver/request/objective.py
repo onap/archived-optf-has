@@ -105,6 +105,10 @@ class Operand(object):
 
                     value = self.function.compute(loc_a, loc_z)
 
+        elif self.function.func_type == "cost":
+            for demand_name, candidate_info in _decision_path.decisions.items():
+                value += float(candidate_info['cost'])
+
         if self.operation == "product":
             value *= self.weight
 
