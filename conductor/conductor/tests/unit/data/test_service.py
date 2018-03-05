@@ -18,11 +18,13 @@
 #
 import json
 import unittest
+import uuid
 
 import conductor.data.service as service
 import mock
 import stevedore
 import yaml
+from conductor.common.utils import conductor_logging_util as log_util
 from conductor.data.plugins.inventory_provider import extensions as ip_ext
 from conductor.data.plugins.service_controller import extensions as sc_ext
 from conductor.data.service import DataEndpoint
@@ -32,6 +34,7 @@ from oslo_config import cfg
 class TestDataEndpoint(unittest.TestCase):
 
     def setUp(self):
+        cfg.CONF.set_override('keyspace', 'conductor')
         ip_ext_manager = (
             ip_ext.Manager(cfg.CONF, 'conductor.inventory_provider.plugin'))
         sc_ext_manager = (
@@ -77,7 +80,6 @@ class TestDataEndpoint(unittest.TestCase):
         req_json['category'] = 'region'
         self.assertEqual({'response': 'NYCNY55', 'error': False},
                          self.data_ep.get_candidate_zone(None, req_json))
-
 
     @mock.patch.object(service.LOG, 'error')
     @mock.patch.object(service.LOG, 'debug')
@@ -132,22 +134,28 @@ class TestDataEndpoint(unittest.TestCase):
     @mock.patch.object(service.LOG, 'error')
     @mock.patch.object(service.LOG, 'debug')
     @mock.patch.object(service.LOG, 'info')
+    @mock.patch.object(log_util, 'getTransactionId')
     @mock.patch.object(stevedore.ExtensionManager, 'map_method')
-    def test_reslove_demands(self, ext_mock, info_mock, debug_mock,
+    def test_reslove_demands(self, ext_mock, logutil_mock, info_mock, debug_mock,
                              error_mock):
         req_json_file = './conductor/tests/unit/data/demands.json'
         req_json = yaml.safe_load(open(req_json_file).read())
+        ctxt = {
+            'plan_id': uuid.uuid4(),
+            'keyspace': cfg.CONF.keyspace
+        }
+        logutil_mock.return_value = uuid.uuid4()
         ext_mock.return_value = []
         expected_response = {'response': {'resolved_demands': None},
                              'error': True}
         self.assertEqual(expected_response,
-                         self.data_ep.resolve_demands(None, req_json))
+                         self.data_ep.resolve_demands(ctxt, req_json))
         return_value = req_json['demands']['vG']
         ext_mock.return_value = [return_value]
         expected_response = {'response': {'resolved_demands': return_value},
                              'error': False}
         self.assertEqual(expected_response,
-                         self.data_ep.resolve_demands(None, req_json))
+                         self.data_ep.resolve_demands(ctxt, req_json))
 
 
 if __name__ == "__main__":

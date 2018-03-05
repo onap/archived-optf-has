@@ -67,6 +67,7 @@
     "key2": "value2",
     "key3": "value3"
   },
+  "request_type": "initial",
   "properties": {
     "evaluate": {
       "network_roles": "",
