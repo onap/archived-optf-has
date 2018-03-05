@@ -41,6 +41,7 @@
         <sonar.sourceEncoding>UTF-8</sonar.sourceEncoding>
         <sonar.sources>conductor/conductor</sonar.sources>
         <sonar.tests>conductor/conductor/tests</sonar.tests>
+        <sonar.junit.reportsPath>conductor/xunit-results.xml</sonar.junit.reportsPath>
         <sonar.python.coverage.reportPath>conductor/cover/coverage.xml</sonar.python.coverage.reportPath>
         <sonar.language>py</sonar.language>
         <sonar.pluginname>python</sonar.pluginname>

@@ -28,8 +28,9 @@ TESTRARGS=$1
 # https://bugs.launchpad.net/testrepository/+bug/1411804
 #
 # this work around exists until that is addressed
+touch
 if [[ "$TESTARGS" =~ "until-failure" ]]; then
-    python setup.py testr --slowest --testr-args="$TESTRARGS"
+    python setup.py testr --slowest --testr-args="$TESTRARGS" | subunit2junitxml --output-to=xunit-results.xml
 else
-    python setup.py testr --slowest --testr-args="--subunit $TESTRARGS" | subunit-trace -f
+    python setup.py testr --slowest --testr-args="--subunit $TESTRARGS" | subunit-trace -f | subunit2junitxml --output-to=xunit-results.xml
 fi

@@ -58,6 +58,7 @@ conductor/conductor/common/music/voting.py
 .cache
 nosetests.xml
 coverage.xml
+xunit*.xml
 
 # Translations
 *.mo
