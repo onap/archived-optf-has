@@ -1,7 +1,7 @@
-#!/usr/bin/env bash
+#!/bin/bash
 #
 # -------------------------------------------------------------------------
-#   Copyright (c) 2015-2017 AT&T Intellectual Property
+#   Copyright (c) 2018 Intel Corporation Intellectual Property
 #
 #   Licensed under the Apache License, Version 2.0 (the "License");
 #   you may not use this file except in compliance with the License.
@@ -18,18 +18,24 @@
 # -------------------------------------------------------------------------
 #
 
+run_tox_test()
+{ 
+  set -x
+  CURDIR=$(pwd)
+  TOXINIS=$(find . -name "tox.ini")
+  for TOXINI in "${TOXINIS[@]}"; do
+    DIR=$(echo "$TOXINI" | rev | cut -f2- -d'/' | rev)
+    cd "${CURDIR}/${DIR}"
+    rm -rf ./venv-tox ./.tox
+    virtualenv ./venv-tox
+    source ./venv-tox/bin/activate
+    pip install --upgrade pip
+    pip install --upgrade tox argparse
+    pip freeze
+    tox -e cover
+    deactivate
+    rm -rf ./venv-tox ./.tox
+  done
+}
 
-set -o pipefail
-
-TESTRARGS=$1
-
-# --until-failure is not compatible with --subunit see:
-#
-# https://bugs.launchpad.net/testrepository/+bug/1411804
-#
-# this work around exists until that is addressed
-if [[ "$TESTARGS" =~ "until-failure" ]]; then
-    python setup.py testr --slowest --testr-args="$TESTRARGS" | subunit2junitxml --output-to=xunit-results.xml
-else
-    python setup.py testr --slowest --testr-args="--subunit $TESTRARGS" | subunit-1to2 | subunit2junitxml --forward --output-to=xunit-results.xml
-fi
+run_tox_test
