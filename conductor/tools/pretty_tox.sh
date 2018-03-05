@@ -29,7 +29,7 @@ TESTRARGS=$1
 #
 # this work around exists until that is addressed
 if [[ "$TESTARGS" =~ "until-failure" ]]; then
-    python setup.py testr --slowest --testr-args="$TESTRARGS"
+    python setup.py testr --slowest --testr-args="$TESTRARGS" | subunit2junitxml --output-to=xunit-results.xml
 else
-    python setup.py testr --slowest --testr-args="--subunit $TESTRARGS" | subunit-trace -f
+    python setup.py testr --slowest --testr-args="--subunit $TESTRARGS" | subunit2junitxml --output-to=xunit-results.xml
 fi
