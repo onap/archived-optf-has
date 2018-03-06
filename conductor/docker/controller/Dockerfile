@@ -18,10 +18,8 @@
 FROM python:2.7
 RUN apt-get update
 RUN apt-get --assume-yes install python-setuptools
-RUN virtualenv ../venv
 RUN git clone https://gerrit.onap.org/r/optf/has
-WORKDIR ./conductor
-RUN pip install .
-RUN pwd
+WORKDIR ./has/conductor/
+RUN pip install -e .
 RUN echo "Starting conductor-controller"
 CMD ["python","/usr/local/bin/conductor-controller", "--config-file=/usr/local/bin/conductor.conf"]
