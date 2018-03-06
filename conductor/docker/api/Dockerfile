@@ -16,11 +16,23 @@
 # -------------------------------------------------------------------------
 
 FROM python:2.7
+ENV CON_ADDR "127.0.0.1"
+ENV CON_PORT "8091"
+
+EXPOSE 8091
+
 RUN apt-get update
 RUN apt-get --assume-yes install python-setuptools
+RUN apt-get install -y unzip
+RUN apt-get install -y curl
+RUN apt-get install -y wget
+RUN rm -rf ./has
 RUN git clone https://gerrit.onap.org/r/optf/has
-WORKDIR ./conductor
-RUN pip install .
-COPY ./conductor.conf conductor.conf
-RUN ls -ltr /usr/local/bin/conductor-api
-CMD ["sh","-c", "python /usr/local/bin/conductor-api --port=8091 -- --config-file=conductor.conf"]
+WORKDIR ./has/conductor/
+#RUN ls 
+RUN pip install -e .
+#COPY ./conductor.conf conductor.conf
+WORKDIR ./has/conductor/docker/api
+COPY api_paste.ini /usr/local/bin/api_paste.ini
+RUN ls 
+CMD ["sh","-c", "python /usr/local/bin/conductor-api --port=8091 -- --config-file=/usr/local/bin/conductor.conf"]

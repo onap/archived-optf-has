@@ -1,9 +1,6 @@
-#codecloud.web.att.com
-#vi /etc/resolve.conf
-#nameserver 135.207.142.20
-#nameserver 135.207.142.21
-#nameserver 135.207.255.13
-
+#!/bin/bash
+# TODO (IKRAM): need to test api only first to test the docker upload chain. 
+# Will enable the others once api is tested
 docker build -t api api/
 docker build -t controller controller/
 docker build -t data data/
