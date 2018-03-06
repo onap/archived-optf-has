@@ -707,6 +707,7 @@ class Translator(object):
         for operand in operands:
             weight = 1.0
             args = None
+            nested = False
 
             if operand.keys() == ['distance_between']:
                 # Value must be a list of length 2 with one
