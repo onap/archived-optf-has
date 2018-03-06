@@ -1,0 +1,5 @@
+docker stop $(sudo docker ps -a -q  --filter ancestor=api)
+docker stop $(sudo docker ps -a -q  --filter ancestor=solver)
+docker stop $(sudo docker ps -a -q  --filter ancestor=reservation)
+docker stop $(sudo docker ps -a -q  --filter ancestor=data)
+docker stop $(sudo docker ps -a -q  --filter ancestor=controller)
