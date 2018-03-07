@@ -475,7 +475,6 @@ class AAI(base.InventoryProviderBase):
         network_role_uri = \
             '/network/l3-networks?network-role=' + network_role_id
         path = self._aai_versioned_path(network_role_uri)
-        network_role_id = network_role_id
 
         # This UUID is reserved by A&AI for a Conductor-specific named query.
         named_query_uid = "96e54642-c0e1-4aa2-af53-e37c623b8d01"
