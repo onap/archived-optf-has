@@ -1,0 +1,19 @@
+ {
+      "demand_name": [
+      {
+        "attributes": {
+            "global-customer-id": "customer-123",
+            "equipment-role": "TEST",
+            "service-type": "TEST"
+        },
+        "inventory_provider": "aai",
+        "inventory_type": "service"
+      },
+      {
+        "service_resource_id": "service-resource-id-123",
+        "region": "",
+        "inventory_type": "cloud",
+        "inventory_provider": "aai"
+      }
+    ]
+ }

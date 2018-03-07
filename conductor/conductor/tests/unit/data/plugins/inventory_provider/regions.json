@@ -1,0 +1,20 @@
+{
+    "region-name": {
+        "cloud_type": "opensource",
+        "complex": {
+            "city": "Middletown",
+            "state": "NJ",
+            "longitude": "30.12",
+            "latitude": "50.34",
+            "country": "USA",
+            "complex_name": "complex-name",
+            "region": "USA",
+            "complex_id": "complex-id"
+        },
+        "cloud_region_version": "1.0",
+        "physical_location_id": "location-id",
+        "cloud_owner": "cloud-owner",
+        "cloud_zone": "cloud-zone",
+        "complex_name": "complex-name"
+    }
+}
