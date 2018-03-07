@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a93c517_b3ea2272",
+        "filename": "INFO.yaml",
+        "patchSetId": 2
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 2041
+      },
+      "writtenOn": "2018-03-07T01:55:08Z",
+      "side": 1,
+      "message": "Israel, time zone is GMT+2  (winter clock) or GMT+3 (summer clock)",
+      "range": {
+        "startLine": 45,
+        "startChar": 8,
+        "endLine": 45,
+        "endChar": 16
+      },
+      "revId": "fdde98f1ef4772a2137b7497959e80c129681761",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
