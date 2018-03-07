@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a93c517_b670d0a4",
+        "filename": "conductor/conductor/controller/translator.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 710,
+      "author": {
+        "id": 2041
+      },
+      "writtenOn": "2018-03-07T01:13:17Z",
+      "side": 1,
+      "message": "Ikram, Larry, Can you please review the change? I don\u0027t recall writing the nesting, so I\u0027m guessing this was added by one of you recently.",
+      "range": {
+        "startLine": 710,
+        "startChar": 12,
+        "endLine": 710,
+        "endChar": 18
+      },
+      "revId": "ec1bd3c6dcf8620139330f0ed6ea2ccd235f83c1",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
