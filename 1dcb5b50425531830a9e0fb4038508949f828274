@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a93c517_4829a1e4",
+        "filename": "conductor/conductor/controller/translator.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 715,
+      "author": {
+        "id": 1361
+      },
+      "writtenOn": "2018-03-08T06:53:00Z",
+      "side": 1,
+      "message": "Shankar. Could you please confirm this? This was causing exception when the operand.keys() is distance_between.",
+      "range": {
+        "startLine": 715,
+        "startChar": 16,
+        "endLine": 715,
+        "endChar": 45
+      },
+      "revId": "1dcb5b50425531830a9e0fb4038508949f828274",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
