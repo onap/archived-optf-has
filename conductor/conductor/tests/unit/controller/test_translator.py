@@ -174,7 +174,6 @@ class TestNoExceptionTranslator(unittest.TestCase):
             'type': 'distance_to_location'}}
         self.assertEquals(self.Translator.parse_constraints(constraints), rtn)
 
-    # TODO(ruoyu)
     @patch('conductor.controller.translator.Translator.create_components')
     def parse_optimization(self, mock_create):
         args = ['customer_loc', 'vGMuxInfra']
@@ -185,12 +184,18 @@ class TestNoExceptionTranslator(unittest.TestCase):
             "operands": [{"operation": "product",
                           "weight": 1.0,
                           "function": func,
-                          "function_param": args}]
+                          "function_param": args},
+                         {"operation": "product",
+                          "weight": 5.0,
+                          "function": func,
+                          "function_param": args},
+                         ]
         }
         opt = {'minimize': {
             'sum': [{
-                'distance_between': ['customer_loc', 'vGMuxInfra']}, {
-                'distance_between': ['customer_loc', 'vG']}]}}
+                'distance_between': ['customer_loc', 'vGMuxInfra']},
+                { 'product': {'sum':{'product': '5'}}},
+                {'distance_between': ['customer_loc', 'vG']}]}}
         self.Translator._demands = {'vG': '',
                                     'vGMuxInfra': '',
                                     'customer_loc': ''}

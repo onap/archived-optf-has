@@ -83,6 +83,15 @@ class TestTranslatorServiceNoException(unittest.TestCase):
         self.translator_svc.translate(self.mock_plan)
         self.assertEquals(self.mock_plan.status, 'error')
 
+    @patch('conductor.controller.translator_svc.TranslatorService._gracefully_stop')
+    def terminate(self, mock_stop):
+        mock_stop.assert_called_once()
+        self.assertFalse(self.translator_svc.running)
+
+    @patch('conductor.controller.translator_svc.TranslatorService._restart')
+    def reload(self, mock_restart):
+        mock_restart.assert_called_once()
+
     def tearDown(self):
         patch.stopall()
 

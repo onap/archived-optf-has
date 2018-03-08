@@ -712,6 +712,7 @@ class Translator(object):
             if operand.keys() == ['distance_between']:
                 # Value must be a list of length 2 with one
                 # location and one demand
+                function = 'distance_between'
                 args = get_distance_between_args(operand)
 
             elif operand.keys() == ['product']:
