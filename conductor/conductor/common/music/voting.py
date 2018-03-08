@@ -32,7 +32,7 @@ def current_time_millis():
     return int(round(time.time() * 1000))
 
 
-def main():
+def main(): # pragma: no cover
     """Sample usage of Music."""
     service.prepare_service()
     CONF.set_override('debug', True, 'music_api')

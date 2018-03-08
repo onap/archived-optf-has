@@ -404,7 +404,7 @@ class MusicAPI(object):
         return response and response.text
 
 
-class MockAPI(object):
+class MockAPI(object): # pragma: no cover
     """Wrapper for Music API"""
 
     # Mock state for Music

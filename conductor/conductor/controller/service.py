@@ -69,7 +69,7 @@ OPTS = service.OPTS
 CONF.register_opts(OPTS)
 
 
-class ControllerServiceLauncher(object):
+class ControllerServiceLauncher(object): # pragma: no cover
     """Launcher for the controller service."""
 
     def __init__(self, conf):
