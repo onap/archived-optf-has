@@ -480,7 +480,7 @@ class MockAPI(object):
         return True
 
     def row_update(self, keyspace, table,  # pylint: disable=R0913
-                   pk_name, pk_value, values, atomic=False):
+                   pk_name, pk_value, values, atomic=False, condition=None):
         """Update a row."""
         if CONF.music_api.debug:
             LOG.debug("Updating row with pk_value {} in table "
