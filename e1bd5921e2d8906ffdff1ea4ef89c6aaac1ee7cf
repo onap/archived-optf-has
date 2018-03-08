@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a93c517_9cf7eed2",
+        "filename": "conductor/conductor/common/music/api.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 483,
+      "author": {
+        "id": 2977
+      },
+      "writtenOn": "2018-03-08T08:46:18Z",
+      "side": 1,
+      "message": "Hi. Shankar. Can you please confirm this? This variable is newly added in MusicAPI class, but not added in MockAPI class.",
+      "range": {
+        "startLine": 483,
+        "startChar": 59,
+        "endLine": 483,
+        "endChar": 74
+      },
+      "revId": "e1bd5921e2d8906ffdff1ea4ef89c6aaac1ee7cf",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
