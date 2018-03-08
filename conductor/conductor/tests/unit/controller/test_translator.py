@@ -46,7 +46,6 @@ class TestNoExceptionTranslator(unittest.TestCase):
         cfg.CONF.set_override('keyspace', 'conductor')
         cfg.CONF.set_override('keyspace', 'conductor_rpc', 'messaging_server')
         cfg.CONF.set_override('concurrent', True, 'controller')
-        cfg.CONF.set_override('mock', True, 'music_api')
         conf = cfg.CONF
         self.Translator = Translator(
             conf, 'some_template', str(uuid.uuid4()), get_template())
@@ -91,6 +90,15 @@ class TestNoExceptionTranslator(unittest.TestCase):
         self.Translator.validate_components()
         self.assertTrue(self.Translator._valid)
 
+    @patch('conductor.controller.translator.Translator._parse_parameters')
+    def test_parse_parameters(self, mock_parse):
+        self.Translator._locations = ''
+        self.Translator._demands = ''
+        self.Translator._constraints = ''
+        self.Translator._reservations = ''
+        self.Translator.parse_parameters()
+        mock_parse.assert_called()
+
     def test_parse_parameter(self):
         self.Translator.create_components()
         rtn = self.Translator._parse_parameters(
@@ -113,6 +121,46 @@ class TestNoExceptionTranslator(unittest.TestCase):
         demands = ""
         self.assertRaises(TranslatorException,
                           self.Translator.parse_demands, demands)
+
+    @patch('conductor.common.music.messaging.component.RPCClient.call')
+    def test_parse_demands_with_candidate(self, mock_call):
+        demands = {
+            "vGMuxInfra": [{
+                "inventory_provider": "aai",
+                "inventory_type": "service",
+                "customer_id": "some_company",
+                "service_type": "5G",
+                "candidates": [{
+                    "candidate_id": []
+
+                }],
+                "required_candidates": [{
+                    "candidate_id": "1a9983b8-0o43-4e16-9947-c3f37234536d"
+                }]
+            }]
+        }
+        self.Translator._plan_id = ""
+        self.Translator._plan_name = ""
+        mock_call.return_value = {'resolved_demands': {"vGMuxInfra": [{
+            'inventory_provider': 'aai',
+            'inventory_type': 'service',
+            'customer_id': 'some_company',
+            'service_type': '5G',
+            "candidates": {
+                "candidate_id": []
+            }
+        }]
+        }}
+        rtn = {'vGMuxInfra': {'candidates': [{'candidate_id': [],
+                                              'cost': 0,
+                                              'inventory_provider': 'aai'},
+                                             {'candidates': {'candidate_id': []},
+                                              'customer_id': 'some_company',
+                                              'inventory_provider': 'aai',
+                                              'inventory_type': 'service',
+                                              'service_type': '5G'}]}}
+
+        self.assertEquals(self.Translator.parse_demands(demands), rtn)
 
     @patch('conductor.common.music.messaging.component.RPCClient.call')
     def test_parse_demands_without_candidate(self, mock_call):
@@ -164,6 +212,7 @@ class TestNoExceptionTranslator(unittest.TestCase):
             'demands': ['vG'],
             'properties': {'distance': '< 100 km',
                            'location': 'custom_loc'}}}
+
         rtn = {'constraint_loc_vG': {
             'demands': 'vG',
             'name': 'constraint_loc',
@@ -174,23 +223,33 @@ class TestNoExceptionTranslator(unittest.TestCase):
             'type': 'distance_to_location'}}
         self.assertEquals(self.Translator.parse_constraints(constraints), rtn)
 
-    # TODO(ruoyu)
     @patch('conductor.controller.translator.Translator.create_components')
-    def parse_optimization(self, mock_create):
-        args = ['customer_loc', 'vGMuxInfra']
-        func = 'distance_between'
-        expected_parse = {
-            "goal": "min",
-            "operation": "sum",
-            "operands": [{"operation": "product",
-                          "weight": 1.0,
-                          "function": func,
-                          "function_param": args}]
-        }
+    def test_parse_optimization(self, mock_create):
+        expected_parse = {'goal': 'min',
+                          'operands': [{'function': 'distance_between',
+                                        'function_param': ['customer_loc', 'vGMuxInfra'],
+                                        'operation': 'product',
+                                        'weight': 1.0},
+                                       {'function': 'distance_between',
+                                        'function_param': ['customer_loc', 'vG'],
+                                        'operation': 'product',
+                                        'weight': 1.0}],
+                          'operation': 'sum'
+                          }
+
         opt = {'minimize': {
-            'sum': [{
-                'distance_between': ['customer_loc', 'vGMuxInfra']}, {
-                'distance_between': ['customer_loc', 'vG']}]}}
+            'sum': [{'distance_between': ['customer_loc', 'vGMuxInfra']},
+                    {'product': [{'distance_between': ['customer_loc', 'vG']},
+                                 {'aic_version': ['']},
+                                 {'sum':
+                                      [{'product':
+                                            [{'distance_between':
+                                                  ['customer_loc', 'vG']}]
+                                        }]},
+                                 ]
+                     }
+
+                    ]}}
         self.Translator._demands = {'vG': '',
                                     'vGMuxInfra': '',
                                     'customer_loc': ''}
