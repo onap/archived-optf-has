@@ -58,6 +58,26 @@
       "cloud_owner": "att-aic",
       "cloud_region_version": "1.1",
       "physical_location_id": "SFOCA55"
+    },
+    {
+      "candidate_id": "instance-1",
+      "candidate_type": "service",
+      "inventory_type": "service",
+      "inventory_provider": "aai",
+      "host_id": "vnf_333",
+      "cost": "100",
+      "location_id": "SFOCA55",
+      "location_type": "azure",
+      "latitude": "32.897480",
+      "longitude": "-97.040443",
+      "city": "San Francisco",
+      "state": "CA",
+      "country": "USA",
+      "region": "US",
+      "complex_name": "sfo_one",
+      "cloud_owner": "att-aic",
+      "cloud_region_version": "1.1",
+      "physical_location_id": "SFOCA55"
     }
   ],
   "constraint_type": "instance_fit",
@@ -71,6 +91,7 @@
   "properties": {
     "evaluate": {
       "network_roles": "",
+      "replication_role": "candidate-role1",
       "complex_name": {
         "any": [
           "dalls_one"
@@ -90,7 +111,36 @@
         "all": [
           "US"
         ]
+      },
+      "cloud-region": {
+        "cloud-requests": [
+          "NYCNY55",
+          "DLLSTX55"
+        ],
+        "service-requests": [
+          "DLLSTX55"
+        ]
       }
     }
+  },
+  "resolved_candidate": {
+    "candidate_id": "instance-2",
+    "candidate_type": "service",
+    "inventory_type": "service",
+    "inventory_provider": "aai",
+    "host_id": "vnf_333",
+    "cost": "100",
+    "location_id": "SFOCA55",
+    "location_type": "azure",
+    "latitude": "32.897480",
+    "longitude": "-97.040443",
+    "city": "San Francisco",
+    "state": "CA",
+    "country": "USA",
+    "region": "US",
+    "complex_name": "sfo_one",
+    "cloud_owner": "att-aic",
+    "cloud_region_version": "1.1",
+    "physical_location_id": "SFOCA55"
   }
 }

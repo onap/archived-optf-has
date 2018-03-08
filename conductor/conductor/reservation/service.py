@@ -69,7 +69,7 @@ OPTS = service.OPTS
 CONF.register_opts(OPTS)
 
 
-class ReservationServiceLauncher(object):
+class ReservationServiceLauncher(object): # pragma: no cover
     """Launcher for the reservation service."""
 
     def __init__(self, conf):
@@ -96,7 +96,7 @@ class ReservationServiceLauncher(object):
         svcmgr.run()
 
 
-class ReservationService(cotyledon.Service):
+class ReservationService(cotyledon.Service): # pragma: no cover
     """reservation service."""
 
     # This will appear in 'ps xaf'

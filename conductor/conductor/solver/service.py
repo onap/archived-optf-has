@@ -112,7 +112,7 @@ OPTS = service.OPTS
 CONF.register_opts(OPTS)
 
 
-class SolverServiceLauncher(object):
+class SolverServiceLauncher(object): # pragma: no cover
     """Launcher for the solver service."""
 
     def __init__(self, conf):
@@ -138,7 +138,7 @@ class SolverServiceLauncher(object):
         svcmgr.run()
 
 
-class SolverService(cotyledon.Service):
+class SolverService(cotyledon.Service): # pragma: no cover
     """Solver service."""
 
     # This will appear in 'ps xaf'

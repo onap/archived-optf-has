@@ -36,7 +36,7 @@ from conductor.i18n import _
 LOG = log.getLogger(__name__)
 
 
-class ParsableErrorMiddleware(object):
+class ParsableErrorMiddleware(object): # pragma: no cover
     """Replace error body with something the client can parse."""
 
     @staticmethod

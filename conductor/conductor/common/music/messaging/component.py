@@ -243,7 +243,7 @@ class RPCClient(object):
         return response
 
 
-class RPCService(cotyledon.Service):
+class RPCService(cotyledon.Service): # pragma: no cover
     """Listener for the RPC service.
 
     An RPC Service exposes a number of endpoints, each of which contain

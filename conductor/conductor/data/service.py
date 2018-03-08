@@ -63,7 +63,7 @@ DATA_OPTS = [
 CONF.register_opts(DATA_OPTS, group='data')
 
 
-class DataServiceLauncher(object):
+class DataServiceLauncher(object): # pragma: no cover
     """Listener for the data service."""
 
     def __init__(self, conf):
