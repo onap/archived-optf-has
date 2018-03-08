@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "5a93c517_55a7f9a6",
+        "filename": "conductor/conductor/controller/service.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1361
+      },
+      "writtenOn": "2018-03-08T20:14:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5a93c517_3f9ecc63",
+      "revId": "9a1a1caa16414ea95620e55b971025a1a19e890e",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5a93c517_7f98d477",
         "filename": "conductor/conductor/data/service.py",
         "patchSetId": 2
@@ -36,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "5a93c517_b598bd6a",
+        "filename": "conductor/conductor/data/service.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1361
+      },
+      "writtenOn": "2018-03-08T20:14:35Z",
+      "side": 1,
+      "message": "Only the DataServiceLauncher class is excluded. DataEndpoint Class tests are included and covered",
+      "parentUuid": "5a93c517_7f98d477",
+      "revId": "9a1a1caa16414ea95620e55b971025a1a19e890e",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5a93c517_dfad689c",
         "filename": "conductor/conductor/solver/service.py",
         "patchSetId": 2
@@ -47,6 +83,24 @@
       "writtenOn": "2018-03-08T12:14:36Z",
       "side": 1,
       "message": "We\u0027ll need to include this in our unit tests, as it has some meaningful hominglogic in it.",
+      "revId": "9a1a1caa16414ea95620e55b971025a1a19e890e",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a93c517_f5b965cc",
+        "filename": "conductor/conductor/solver/service.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1361
+      },
+      "writtenOn": "2018-03-08T20:14:35Z",
+      "side": 1,
+      "message": "Done - Fixed",
+      "parentUuid": "5a93c517_dfad689c",
       "revId": "9a1a1caa16414ea95620e55b971025a1a19e890e",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": false
