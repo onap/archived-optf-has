@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a93c517_3f9ecc63",
+        "filename": "conductor/conductor/controller/service.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 2041
+      },
+      "writtenOn": "2018-03-08T12:14:36Z",
+      "side": 1,
+      "message": "This is okay to be excluded for the moment.",
+      "revId": "9a1a1caa16414ea95620e55b971025a1a19e890e",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a93c517_7f98d477",
+        "filename": "conductor/conductor/data/service.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 2041
+      },
+      "writtenOn": "2018-03-08T12:14:36Z",
+      "side": 1,
+      "message": "We\u0027ll need to include this in our unit tests, as it has some meaningful hominglogic in it.",
+      "revId": "9a1a1caa16414ea95620e55b971025a1a19e890e",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a93c517_dfad689c",
+        "filename": "conductor/conductor/solver/service.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 2041
+      },
+      "writtenOn": "2018-03-08T12:14:36Z",
+      "side": 1,
+      "message": "We\u0027ll need to include this in our unit tests, as it has some meaningful hominglogic in it.",
+      "revId": "9a1a1caa16414ea95620e55b971025a1a19e890e",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
