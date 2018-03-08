@@ -1,0 +1,31 @@
+{
+  "instance-group": [
+    {
+      "description": "INVENTORY_PAIR",
+      "relationship-list": {
+        "relationship": [
+          {
+            "relationship-data": [
+              {
+                "relationship-key": "service-instance.service-instance-id",
+                "relationship-value": "instance-1"
+              }
+            ],
+            "related-to": "service-instance"
+          },
+          {
+            "relationship-data": [
+              {
+                "relationship-key": "service-instance.service-instance-id",
+                "relationship-value": "instance-2"
+              }
+            ],
+            "related-to": "service-instance"
+          }
+        ]
+      },
+      "resource-version": "1",
+      "id": "1"
+    }
+  ]
+}

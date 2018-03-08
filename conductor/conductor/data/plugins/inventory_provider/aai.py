@@ -98,23 +98,15 @@ class AAI(base.InventoryProviderBase):
         self.timeout = self.conf.aai.aai_rest_timeout
         self.retries = self.conf.aai.aai_retries
 
-        kwargs = {
-            "server_url": self.base,
-            "retries": self.retries,
-            "cert_file": self.cert,
-            "cert_key_file": self.key,
-            "ca_bundle_file": self.verify,
-            "log_debug": self.conf.debug,
-            "read_timeout": self.timeout,
-        }
-        self.rest = rest.REST(**kwargs)
-
         # Cache is initially empty
         self._aai_cache = {}
         self._aai_complex_cache = {}
 
     def initialize(self):
+
         """Perform any late initialization."""
+        # Initialize the Python requests
+        self._init_python_request()
 
         # Refresh the cache once for now
         self._refresh_cache()
@@ -174,6 +166,20 @@ class AAI(base.InventoryProviderBase):
                              response.status_code, response.reason,
                              self.base, path))
         return response
+
+    def _init_python_request(self):
+
+        kwargs = {
+            "server_url": self.base,
+            "retries": self.retries,
+            "cert_file": self.cert,
+            "cert_key_file": self.key,
+            "ca_bundle_file": self.verify,
+            "log_debug": self.conf.debug,
+            "read_timeout": self.timeout,
+        }
+        self.rest = rest.REST(**kwargs)
+
 
     def _refresh_cache(self):
         """Refresh the A&AI cache."""
