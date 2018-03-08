@@ -22,6 +22,30 @@
       "revId": "1dcb5b50425531830a9e0fb4038508949f828274",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a93c517_1fdaf04b",
+        "filename": "conductor/conductor/controller/translator.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 715,
+      "author": {
+        "id": 2041
+      },
+      "writtenOn": "2018-03-08T11:29:39Z",
+      "side": 1,
+      "message": "I think this is indeed a bug, function is being used in line 772 irrespective of the operand.keys.",
+      "parentUuid": "5a93c517_4829a1e4",
+      "range": {
+        "startLine": 715,
+        "startChar": 16,
+        "endLine": 715,
+        "endChar": 45
+      },
+      "revId": "1dcb5b50425531830a9e0fb4038508949f828274",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
     }
   ]
 }
