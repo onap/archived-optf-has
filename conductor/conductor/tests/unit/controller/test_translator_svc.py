@@ -39,7 +39,10 @@ def plan_prepare(conf):
 
 
 class TestTranslatorServiceNoException(unittest.TestCase):
-    def setUp(self):
+    @patch('conductor.common.music.model.base.Base.table_create')
+    @patch('conductor.common.music.model.base.Base.insert')
+    @patch('conductor.controller.translator_svc.TranslatorService._reset_template_status')
+    def setUp(self, mock_reset, mock_insert, mock_table_create):
         cfg.CONF.set_override('polling_interval', 1, 'controller')
         cfg.CONF.set_override('keyspace', 'conductor')
         cfg.CONF.set_override('timeout', 10, 'controller')
@@ -82,6 +85,17 @@ class TestTranslatorServiceNoException(unittest.TestCase):
         mock_error.return_value = 'error'
         self.translator_svc.translate(self.mock_plan)
         self.assertEquals(self.mock_plan.status, 'error')
+
+    @patch('conductor.controller.translator_svc.TranslatorService._gracefully_stop')
+    def test_terminate(self, mock_stop):
+        self.translator_svc.terminate()
+        mock_stop.assert_called_once()
+        self.assertFalse(self.translator_svc.running)
+
+    @patch('conductor.controller.translator_svc.TranslatorService._restart')
+    def test_reload(self, mock_restart):
+        self.translator_svc.reload()
+        mock_restart.assert_called_once()
 
     def tearDown(self):
         patch.stopall()

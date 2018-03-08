@@ -174,23 +174,33 @@ class TestNoExceptionTranslator(unittest.TestCase):
             'type': 'distance_to_location'}}
         self.assertEquals(self.Translator.parse_constraints(constraints), rtn)
 
-    # TODO(ruoyu)
     @patch('conductor.controller.translator.Translator.create_components')
-    def parse_optimization(self, mock_create):
-        args = ['customer_loc', 'vGMuxInfra']
-        func = 'distance_between'
-        expected_parse = {
-            "goal": "min",
-            "operation": "sum",
-            "operands": [{"operation": "product",
-                          "weight": 1.0,
-                          "function": func,
-                          "function_param": args}]
-        }
+    def test_parse_optimization(self, mock_create):
+        expected_parse = {'goal': 'min',
+                          'operands': [{'function': 'distance_between',
+                                        'function_param': ['customer_loc', 'vGMuxInfra'],
+                                        'operation': 'product',
+                                        'weight': 1.0},
+                                       {'function': 'distance_between',
+                                        'function_param': ['customer_loc', 'vG'],
+                                        'operation': 'product',
+                                        'weight': 1.0}],
+                          'operation': 'sum'
+                          }
+
         opt = {'minimize': {
-            'sum': [{
-                'distance_between': ['customer_loc', 'vGMuxInfra']}, {
-                'distance_between': ['customer_loc', 'vG']}]}}
+            'sum': [{'distance_between': ['customer_loc', 'vGMuxInfra']},
+                    {'product': [{'distance_between': ['customer_loc', 'vG']},
+                                 {'aic_version': ['']},
+                                 {'sum':
+                                      [{'product':
+                                            [{'distance_between':
+                                                  ['customer_loc', 'vG']}]
+                                        }]},
+                                 ]
+                     }
+
+                    ]}}
         self.Translator._demands = {'vG': '',
                                     'vGMuxInfra': '',
                                     'customer_loc': ''}
