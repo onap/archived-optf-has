@@ -1,0 +1,25 @@
+{
+  "l3-network": [
+    {
+      "network-id": "network-id",
+      "network-name": "network-name",
+      "network-type": "network-type",
+      "network-role": "network-role",
+      "relationship-list": {
+        "relationship": [
+          {
+            "related-to": "cloud-region",
+            "related-link": "cloud-region-link",
+            "relationship-data": [
+
+              {
+                "relationship-key": "cloud-region.cloud-region-id",
+                "relationship-value": "test-cloud-value"
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}

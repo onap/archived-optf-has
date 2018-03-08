@@ -1,49 +1,47 @@
-{
-            "generic-vnf": [
+[
+    {
+        "vnf-id": "vnf-id",
+        "vnf-name": "vnf-name",
+        "vnf-type": "vpe",
+        "prov-status": "prov-status",
+        "equipment-role": "equipment-role",
+        "resource-version": "resource-version-id",
+        "relationship-list": {
+            "relationship": [
                 {
-                    "vnf-id": "vnf-id",
-                    "vnf-name": "vnf-name",
-                    "vnf-type": "vpe",
-                    "prov-status": "prov-status",
-                    "equipment-role": "equipment-role",
-                    "resource-version": "resource-version-id",
-                    "relationship-list": {
-                        "relationship": [
-                            {
-                                "related-to": "service-instance",
-                                "related-link": "service-instance-link",
-                                "relationship-data": [
-                                    {
-                                        "relationship-key": "customer.global-customer-id",
-                                        "relationship-value": "customer-id"
-                                    },
-                                    {
-                                        "relationship-key": "service-subscription.service-type",
-                                        "relationship-value": "service-type"
-                                    },
-                                    {
-                                        "relationship-key": "service-instance.service-instance-id",
-                                        "relationship-value": "service-instance-id"
-                                    }
-                                ]
-                            },
-                            {
-                                "related-to": "vserver",
-                                "related-link": "vserver-id",
-                                "relationship-data": [
-                                    {
-                                        "relationship-key": "cloud-region.cloud-owner",
-                                        "relationship-value": "cloud-owner"
-                                    },
-                                    {
-                                        "relationship-key": "cloud-region.cloud-region-id",
-                                        "relationship-value": "cloud-region-id"
-                                    }
-                                ]
-                            }
-
-                        ]
-                    }
+                    "related-to": "service-instance",
+                    "related-link": "/aai/v10/service-instance-link",
+                    "relationship-data": [
+                        {
+                            "relationship-key": "customer.global-customer-id",
+                            "relationship-value": "customer-123"
+                        },
+                        {
+                            "relationship-key": "service-subscription.service-type",
+                            "relationship-value": "service-type"
+                        },
+                        {
+                            "relationship-key": "service-instance.service-instance-id",
+                            "relationship-value": "service-instance-id"
+                        }
+                    ]
+                },
+                {
+                    "related-to": "vserver",
+                    "related-link": "/aai/v10/vserver-id",
+                    "relationship-data": [
+                        {
+                            "relationship-key": "cloud-region.cloud-owner",
+                            "relationship-value": "cloud-owner"
+                        },
+                        {
+                            "relationship-key": "cloud-region.cloud-region-id",
+                            "relationship-value": "cloud-region-id"
+                        }
+                    ]
                 }
+
             ]
-}
+        }
+    }
+]

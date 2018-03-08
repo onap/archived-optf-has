@@ -1,0 +1,21 @@
+{
+    "cloud-region": [],
+    "relationship-list": {
+        "relationship": [
+            {
+                "related-to": "pserver",
+                "related-link": "/aai/v10/pserver"
+            },
+            {
+                "related-to": "complex",
+                "related-link": "/aai/v10/complex-id",
+                "relationship-data": [
+                    {
+                        "relationship-key": "complex.physical-location-id",
+                        "relationship-value": "test-id"
+                    }
+                ]
+            }
+        ]
+    }
+}

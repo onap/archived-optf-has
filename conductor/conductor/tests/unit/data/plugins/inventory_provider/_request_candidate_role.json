@@ -1,0 +1,20 @@
+{
+    "generic-vnf": [{
+        "vnf-id": "vnf-id",
+        "vnf-name": "vnf-name",
+        "relationship-list": {
+            "relationship": [{
+                "related-to": "service-instance",
+                "related-link": "/aai/v10/service-instance-link",
+                "relationship-data": [{
+                        "relationship-key": "customer.global-customer-id",
+                        "relationship-value": "global-customer-id"
+                    }
+                ]
+            }]
+        }
+    }],
+    "allotted-resource": [{
+        "role": "test-role"
+    }]
+}

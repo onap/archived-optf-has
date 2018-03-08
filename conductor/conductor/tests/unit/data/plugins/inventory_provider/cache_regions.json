@@ -1,0 +1,29 @@
+{
+  "cloud-region": [
+    {
+      "cloud-owner": "att-aic",
+      "cloud-region-id": "mtunj1a",
+      "cloud-type": "openstack",
+      "owner-defined-type": "lcp",
+      "cloud-region-version": "aic3.0",
+      "identity-url": "https://identity-aic.mtunj1a.aic.cip.att.com:5000/v2.0",
+      "cloud-zone": "z1",
+      "complex-name": "c1",
+      "resource-version": "1486464068353",
+      "relationship-list": {
+        "relationship": [
+          {
+            "related-to": "complex",
+            "related-link": "/aai/v10/cloud-infrastructure/complexes/complex/MDTWNJ21A6",
+            "relationship-data": [
+              {
+                "relationship-key": "complex.physical-location-id",
+                "relationship-value": "MDTWNJ21A6"
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}
