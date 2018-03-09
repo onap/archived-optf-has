@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a93c517_264801cb",
+        "filename": "conductor/conductor/common/music/api.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 407,
+      "author": {
+        "id": 2457
+      },
+      "writtenOn": "2018-03-09T14:36:31Z",
+      "side": 1,
+      "message": "Ah yes, the Mock API. I\u0027m glad someone brought this up. I recommend this be *removed*. It was created not to be used in *any* testing but to be used as a crutch during early development, and in an environment where MUSIC was unavailable.\n\nSpecifically, if used in testing, it would roughly amount to this anti-pattern:\n\n\"Insert example (many of them, all over the place) here that passes in a \"driver\" parameter to a manager object. The driver param is typically a fake driver object. Congratulations. You\u0027ve now doubled the surface area for making mistakes. Instead, use a mock for the real driver method(s) that will be called in the unit of code being tested.\"\n\nSee this etherpad (and YouTube video and slides) for Mock BPs from key OpenStack devs:\nhttps://etherpad.openstack.org/p/obh-mock-best-practices",
+      "revId": "b7c80f55e93cfec539866857fb063304115c3cc7",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
