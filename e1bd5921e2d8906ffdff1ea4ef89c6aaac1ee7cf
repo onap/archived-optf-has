@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "5a93c517_29053145",
+        "filename": "conductor/conductor/common/music/api.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 407,
+      "author": {
+        "id": 2041
+      },
+      "writtenOn": "2018-03-12T14:52:58Z",
+      "side": 1,
+      "message": "We can remove this class totally.",
+      "range": {
+        "startLine": 407,
+        "startChar": 6,
+        "endLine": 407,
+        "endChar": 13
+      },
+      "revId": "e1bd5921e2d8906ffdff1ea4ef89c6aaac1ee7cf",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5a93c517_9cf7eed2",
         "filename": "conductor/conductor/common/music/api.py",
         "patchSetId": 3
