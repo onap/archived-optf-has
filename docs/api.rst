@@ -1,4 +1,5 @@
 .. This work is licensed under a Creative Commons Attribution 4.0 International License.
+.. Copyright (C) 2017-2018 AT&T Intellectual Property. All rights reserved.
 
 Homing API v1
 =============

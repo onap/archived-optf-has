@@ -4,7 +4,8 @@ Optimization Framework: Homing and Allocation
 =============================================
 
 .. toctree::
-   :maxdepth: 4
+   :maxdepth: 2
 
    api
+   homingspecification
    release-notes/index
