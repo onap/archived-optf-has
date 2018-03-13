@@ -26,6 +26,7 @@ from oslo_config import cfg
 from oslo_log import log
 
 from conductor.common import rest
+from conductor.data.plugins import constants
 from conductor.data.plugins.inventory_provider import base
 from conductor.i18n import _LE, _LI
 
@@ -226,6 +227,9 @@ class AAI(base.InventoryProviderBase):
                 cloud_type = region.get('cloud-type')
                 cloud_zone = region.get('cloud-zone')
 
+                # Added for HPA support
+                flavors = self._get_flavors(cloud_owner, cloud_region_id)
+
                 physical_location_list = self._get_aai_rel_link_data(data = region, related_to = 'complex', search_key = 'complex.physical-location-id')
                 if len(physical_location_list) > 0:
                     physical_location_id = physical_location_list[0].get('d_value')
@@ -292,7 +296,8 @@ class AAI(base.InventoryProviderBase):
                         'state': state,
                         'region': region,
                         'country': country,
-                    }
+                    },
+                    'flavors': flavors
                 }
                 LOG.debug("Candidate with cloud_region_id '{}' selected "
                           "as a potential candidate - ".format(cloud_region_id))
@@ -410,6 +415,37 @@ class AAI(base.InventoryProviderBase):
         self._refresh_cache()
         regions = self._aai_cache.get('cloud_region', {})
         return regions
+
+    def _get_flavors(self, cloud_owner, cloud_region_id):
+        '''
+        Fetch all flavors of a given cloud regions specified using
+        {cloud-owner}/{cloud-region-id} composite key
+        :return flavors_info json object which list of flavor nodes and
+        its children - HPACapabilities:
+        '''
+        LOG.debug("Fetch all flavors and its child nodes HPACapabilities")
+        flavor_path = constants.FLAVORS_URI % (cloud_owner, cloud_region_id)
+        path = self._aai_versioned_path(flavor_path)
+        LOG.debug("Flavors path '{}' ".format(path))
+
+        response = self._request(path=path, context="flavors", value="all")
+        if response is None:
+            return
+        if response.status_code == 200:
+            flavors_info = response.json()
+            if not flavors_info or not flavors_info["flavor"] or \
+                    len(flavors_info["flavor"]) == 0:
+                LOG.error(_LE("Flavor is missing in Cloud-Region {}/{}").
+                          format(cloud_owner, cloud_region_id))
+                return
+            LOG.debug(flavors_info)
+            # Remove extraneous flavor information
+            return flavors_info
+        else:
+            LOG.error(_LE("Received Error while fetching flavors from" \
+                          "Cloud-region {}/{}").format(cloud_owner,
+                                                       cloud_region_id))
+            return
 
     def _get_aai_path_from_link(self, link):
         path = link.split(self.version, 1)
@@ -837,6 +873,10 @@ class AAI(base.InventoryProviderBase):
                             region['complex']['region']
                         candidate['country'] = \
                             region['complex']['country']
+
+                        # Added for HPA
+                        candidate['flavors'] = \
+                            region['flavors']
 
                         if self.check_sriov_automation(
                                 candidate['cloud_region_version'], name,
