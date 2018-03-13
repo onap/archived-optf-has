@@ -1,0 +1,20 @@
+{
+     "relationship-list": {
+         "relationship": [
+             {
+                 "related-to": "service-instance",
+                 "related-link": "relationship-link",
+                 "relationship-data": [
+                     {
+                         "relationship-key": "customer.global-customer-id",
+                         "relationship-value": "customer-id"
+                     },
+                     {
+                         "relationship-key": "service-subscription.service-type",
+                         "relationship-value": "service-type"
+                     }
+                 ]
+             }
+         ]
+     }
+ }

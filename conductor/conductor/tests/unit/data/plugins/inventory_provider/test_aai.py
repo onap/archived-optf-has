@@ -21,6 +21,7 @@ import unittest
 import mock
 import conductor.data.plugins.inventory_provider.aai as aai
 from conductor.data.plugins.inventory_provider.aai import AAI
+from conductor.common import rest
 from oslo_config import cfg
 
 class TestAAI(unittest.TestCase):
@@ -217,7 +218,7 @@ class TestAAI(unittest.TestCase):
         regions_response_file = './conductor/tests/unit/data/plugins/inventory_provider/cache_regions.json'
         regions_response = json.loads(open(regions_response_file).read())
 
-        complex_json_file = './conductor/tests/unit/data/plugins/inventory_provider/_get_complex.json'
+        complex_json_file = './conductor/tests/unit/data/plugins/inventory_provider/_cached_complex.json'
         complex_json = json.loads(open(complex_json_file).read())
 
         response = mock.MagicMock()
@@ -233,3 +234,12 @@ class TestAAI(unittest.TestCase):
 
         self.assertEqual(None,
                          self.aai_ep._refresh_cache())
+
+    def test_get_aai_rel_link(self):
+
+        relatonship_response_file = './conductor/tests/unit/data/plugins/inventory_provider/relationship_list.json'
+        relatonship_response = json.loads(open(relatonship_response_file).read())
+        related_to = "service-instance"
+
+        self.assertEqual("relationship-link",
+                         self.aai_ep._get_aai_rel_link(relatonship_response, related_to))
