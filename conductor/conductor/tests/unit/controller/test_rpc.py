@@ -43,7 +43,6 @@ class TestRPCNoException(unittest.TestCase):
         cfg.CONF.set_override('timeout', 10, 'controller')
         cfg.CONF.set_override('limit', 1, 'controller')
         cfg.CONF.set_override('keyspace', 'conductor')
-        cfg.CONF.set_override('mock', True, 'music_api')
         conf = cfg.CONF
         plan_class = plan_prepare(conf)
         self.r = rpc(conf, plan_class)

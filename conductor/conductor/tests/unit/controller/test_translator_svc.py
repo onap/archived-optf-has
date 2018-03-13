@@ -20,6 +20,8 @@
 
 import unittest
 import uuid
+import time
+import futurist
 
 from mock import patch
 from mock import PropertyMock
@@ -39,7 +41,10 @@ def plan_prepare(conf):
 
 
 class TestTranslatorServiceNoException(unittest.TestCase):
-    def setUp(self):
+    @patch('conductor.common.music.model.base.Base.table_create')
+    @patch('conductor.common.music.model.base.Base.insert')
+    @patch('conductor.controller.translator_svc.TranslatorService._reset_template_status')
+    def setUp(self, mock_reset, mock_insert, mock_table_create):
         cfg.CONF.set_override('polling_interval', 1, 'controller')
         cfg.CONF.set_override('keyspace', 'conductor')
         cfg.CONF.set_override('timeout', 10, 'controller')
@@ -47,7 +52,6 @@ class TestTranslatorServiceNoException(unittest.TestCase):
         cfg.CONF.set_override('concurrent', True, 'controller')
         cfg.CONF.set_override('keyspace',
                               'conductor_rpc', 'messaging_server')
-        cfg.CONF.set_override('mock', True, 'music_api')
         self.conf = cfg.CONF
         self.Plan = plan_prepare(self.conf)
         kwargs = self.Plan
@@ -62,7 +66,7 @@ class TestTranslatorServiceNoException(unittest.TestCase):
             worker_id=1, conf=self.conf, plan_class=kwargs)
         self.translator_svc.music.keyspace_create(keyspace=self.conf.keyspace)
 
-    #TODO(ruoyu)
+    # TODO(ruoyu)
     @patch('conductor.controller.translator.Translator.ok')
     def translate_complete(self, mock_ok_func):
         with patch('conductor.controller.translator.Translator.ok',
@@ -72,16 +76,47 @@ class TestTranslatorServiceNoException(unittest.TestCase):
         self.translator_svc.translate(self.mock_plan)
         self.assertEquals(self.mock_plan.status, 'translated')
 
-    # TODO(ruoyu)
+
     @patch('conductor.controller.translator.Translator.translate')
     @patch('conductor.controller.translator.Translator.error_message')
-    def translate_error(self, mock_error, mock_trns):
+    @patch('conductor.common.music.model.base.Base.update')
+    def test_translate_error(self, mock_row_update, mock_error, mock_trns):
         with patch('conductor.controller.translator.Translator.ok',
                    new_callable=PropertyMock) as mock_ok:
             mock_ok.return_value = False
         mock_error.return_value = 'error'
         self.translator_svc.translate(self.mock_plan)
         self.assertEquals(self.mock_plan.status, 'error')
+
+    def test_millisec_to_sec(self):
+        self.assertEquals(self.translator_svc.millisec_to_sec(1000), 1)
+
+    def test_current_time_seconds(self):
+        self.assertEquals(self.translator_svc.current_time_seconds(),
+                          int(round(time.time())))
+
+    @patch('conductor.common.music.model.base.Base.insert')
+    @patch('conductor.common.music.model.search.Query.all')
+    @patch('conductor.common.music.model.base.Base.update')
+    def test_reset_template_status(self, mock_call, mock_update, mock_insert):
+        mock_plan = self.Plan(str(uuid.uuid4()),
+                              self.conf.controller.timeout,
+                              self.conf.controller.limit, None,
+                              status=self.Plan.TRANSLATING)
+        mock_call.return_value = mock_plan
+        self.translator_svc._reset_template_status()
+        mock_update.assert_called_once()
+
+    @patch('conductor.controller.translator_svc.TranslatorService._gracefully_stop')
+    def test_terminate(self, mock_stop):
+        self.translator_svc.terminate()
+        mock_stop.assert_called_once()
+        self.assertFalse(self.translator_svc.running)
+
+    @patch('conductor.controller.translator_svc.TranslatorService._restart')
+    def test_reload(self, mock_restart):
+        self.translator_svc.reload()
+        mock_restart.assert_called_once()
 
     def tearDown(self):
         patch.stopall()
