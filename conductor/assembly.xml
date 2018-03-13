@@ -20,16 +20,17 @@
     <fileSets>
         <fileSet>
             <includes>
-                <include>LICENSE</include>
-                <include>README.rst</include>
-                <include>conductor/**</include>
-                <include>doc/**</include>
-                <include>etc/**</include>
-                <include>requirements.txt</include>
+		<include>*/**</include>
             </includes>
             <excludes>
                 <exclude>**/*.pyc</exclude>
-            </excludes>
+		<exclude>target/**</exclude>
+		<exclude>docker/**</exclude>
+		<exclude>cover/**</exclude>
+		<exclude>pom.xml</exclude>
+		<exclude>assembly.xml</exclude>
+		<exclude>xunit-results.xml</exclude>
+	    </excludes>
         </fileSet>
     </fileSets>
     <baseDirectory>conductor</baseDirectory>

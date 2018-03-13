@@ -1,5 +1,5 @@
 #!/bin/bash
-# TODO (IKRAM): need to test api only first to test the docker upload chain. 
+# TODO (IKRAM): need to test api only first to test the docker upload chain.
 # Will enable the others once api is tested
 docker build -t api conductor/docker/api/
 docker build -t controller conductor/docker/controller/

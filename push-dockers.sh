@@ -1,19 +1,19 @@
-#!/bin/bash 
-BUILD_ARGS="--no-cache" 
-ORG="onap" 
-VERSION="1.1.0" 
-PROJECT="optf" 
-IMAGE="api" 
-DOCKER_REPOSITORY="nexus3.onap.org:10003" 
-IMAGE_NAME="${DOCKER_REPOSITORY}/${ORG}/${PROJECT}/${IMAGE}" 
-TIMESTAMP=$(date +"%Y%m%dT%H%M%S") 
+#!/bin/bash
+BUILD_ARGS="--no-cache"
+ORG="onap"
+VERSION="1.1.0"
+PROJECT="optf"
+IMAGE="api"
+DOCKER_REPOSITORY="nexus3.onap.org:10003"
+IMAGE_NAME="${DOCKER_REPOSITORY}/${ORG}/${PROJECT}/${IMAGE}"
+TIMESTAMP=$(date +"%Y%m%dT%H%M%S")
  
-if [ $HTTP_PROXY ]; then 
-BUILD_ARGS+=" --build-arg HTTP_PROXY=${HTTP_PROXY}" 
-fi 
-if [ $HTTPS_PROXY ]; then 
-    BUILD_ARGS+=" --build-arg HTTPS_PROXY=${HTTPS_PROXY}" 
-fi 
+if [ $HTTP_PROXY ]; then
+BUILD_ARGS+=" --build-arg HTTP_PROXY=${HTTP_PROXY}"
+fi
+if [ $HTTPS_PROXY ]; then
+    BUILD_ARGS+=" --build-arg HTTPS_PROXY=${HTTPS_PROXY}"
+fi
  
 function tag {
      echo "Tagging !!!"
@@ -24,9 +24,8 @@ function tag {
      docker tag reservation "nexus3.onap.org:10003/onap/optf/reservation"
 }
 
-
-function push_image { 
-     echo "Start push ${IMAGE_NAME}:latest" 
+function push_image {
+     echo "Start push ${IMAGE_NAME}:latest"
      
      tag
      docker push "nexus3.onap.org:10003/onap/optf/api"
@@ -35,9 +34,9 @@ function push_image {
      docker push "nexus3.onap.org:10003/onap/optf/solver"
      docker push "nexus3.onap.org:10003/onap/optf/reservation"
      
-     #docker push ${IMAGE_NAME}:latest 
-     #push_image_tag ${IMAGE_NAME}:${VERSION}-SNAPSHOT-latest 
-     #push_image_tag ${IMAGE_NAME}:${VERSION}-STAGING-latest 
-     #push_image_tag ${IMAGE_NAME}:${VERSION}-STAGING-${TIMESTAMP} 
- } 
+     #docker push ${IMAGE_NAME}:latest
+     #push_image_tag ${IMAGE_NAME}:${VERSION}-SNAPSHOT-latest
+     #push_image_tag ${IMAGE_NAME}:${VERSION}-STAGING-latest
+     #push_image_tag ${IMAGE_NAME}:${VERSION}-STAGING-${TIMESTAMP}
+ }
 push_image
