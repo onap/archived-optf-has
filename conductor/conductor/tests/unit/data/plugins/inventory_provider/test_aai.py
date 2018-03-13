@@ -138,6 +138,7 @@ class TestAAI(unittest.TestCase):
         self.mock_get_complex = mock.patch.object(AAI, '_get_complex', return_value=complex_json)
         self.mock_get_complex.start()
 
+        flavor_info = regions_response["region-name"]["flavors"]
         self.maxDiff = None
         self.assertEqual({u'demand_name': [
             {'candidate_id': u'service-instance-id', 'city': None,
@@ -161,8 +162,9 @@ class TestAAI(unittest.TestCase):
              'location_type': 'att_aic', 'longitude': u'30.12',
              'physical_location_id': u'complex-id', 'region': u'USA',
              'service_resource_id': u'service-resource-id-123',
-             'sriov_automation': 'false', 'state': u'NJ'}]},
-                         self.aai_ep.resolve_demands(demands_list))
+             'sriov_automation': 'false', 'state': u'NJ',
+             'flavors': flavor_info}]},
+            self.aai_ep.resolve_demands(demands_list))
 
     def test_get_complex(self):
 
@@ -244,6 +246,9 @@ class TestAAI(unittest.TestCase):
         complex_json_file = './conductor/tests/unit/data/plugins/inventory_provider/_cached_complex.json'
         complex_json = json.loads(open(complex_json_file).read())
 
+        flavors_json_file = './conductor/tests/unit/data/plugins/inventory_provider/_request_get_flavors.json'
+        flavors_json = json.loads(open(flavors_json_file).read())
+
         response = mock.MagicMock()
         response.status_code = 200
         response.ok = True
@@ -254,6 +259,10 @@ class TestAAI(unittest.TestCase):
 
         self.mock_get_complex = mock.patch.object(AAI, '_get_complex', return_value=complex_json)
         self.mock_get_complex.start()
+
+        self.mock_get_flavors = mock.patch.object(AAI, '_get_flavors',
+                                                  return_value=flavors_json)
+        self.mock_get_flavors.start()
 
         self.assertEqual(None,
                          self.aai_ep._refresh_cache())
@@ -266,3 +275,26 @@ class TestAAI(unittest.TestCase):
 
         self.assertEqual("relationship-link",
                          self.aai_ep._get_aai_rel_link(relatonship_response, related_to))
+
+    def test_get_flavor(self):
+        flavors_json_file = './conductor/tests/unit/data/plugins/inventory_provider/_request_get_flavors.json'
+        flavors_json = json.loads(open(flavors_json_file).read())
+
+        response = mock.MagicMock()
+        response.json.return_value = None
+
+        self.mock_get_request = mock.patch.object(AAI, '_request',
+                                                  return_value=response)
+        self.mock_get_request.start()
+
+        flavors_info = self.aai_ep._get_flavors("mock-cloud-owner",
+                                                "mock-cloud-region-id")
+        self.assertEqual(None, flavors_info)
+
+        response.status_code = 200
+        response.ok = True
+        response.json.return_value = flavors_json
+
+        flavors_info = self.aai_ep._get_flavors("mock-cloud-owner",
+                                                "mock-cloud-region-id")
+        self.assertEqual(2, len(flavors_info['flavor']))
