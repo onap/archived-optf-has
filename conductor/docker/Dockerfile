@@ -16,11 +16,16 @@
 # -------------------------------------------------------------------------
 
 FROM python:2.7
-RUN apt-get update
-RUN apt-get --assume-yes install python-setuptools
+ENV CON_ADDR "127.0.0.1"
+ENV CON_PORT "8091"
+
+EXPOSE 8091
+
+RUN apt-get update && apt-get --assume-yes install python-setuptools && \
+apt-get install -y unzip && \
+apt-get install -y curl && \
+apt-get install -y wget 
+
 RUN git clone https://gerrit.onap.org/r/optf/has
-WORKDIR ./has/conductor/
-RUN pip install -e .
-RUN pwd
-RUN echo "Starting conductor-reservation"
-CMD ["python","/usr/local/bin/conductor-reservation", "--config-file=/usr/local/bin/conductor.conf"]
+RUN cd ./has/conductor/ && pip install -e .
+COPY api_paste.ini /usr/local/bin/api_paste.ini
