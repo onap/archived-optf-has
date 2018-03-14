@@ -21,26 +21,26 @@
 
 # import json
 import operator
-
-from oslo_log import log
 import random
 
 from conductor.solver.optimizer.constraints \
     import access_distance as access_dist
 from conductor.solver.optimizer.constraints \
-    import attribute as attribute_constraint
-from conductor.solver.optimizer.constraints \
     import aic_distance as aic_dist
+from conductor.solver.optimizer.constraints \
+    import attribute as attribute_constraint
+from conductor.solver.optimizer.constraints import hpa
 from conductor.solver.optimizer.constraints \
     import inventory_group
 from conductor.solver.optimizer.constraints \
     import service as service_constraint
 from conductor.solver.optimizer.constraints import zone
 from conductor.solver.request import demand
+from conductor.solver.request import objective
 from conductor.solver.request.functions import aic_version
 from conductor.solver.request.functions import cost
 from conductor.solver.request.functions import distance_between
-from conductor.solver.request import objective
+from oslo_log import log
 
 # from conductor.solver.request.functions import distance_between
 # from conductor.solver.request import objective
@@ -100,7 +100,8 @@ class Parser(object):
             loc.loc_type = "coordinates"
             loc.value = (float(location_info["latitude"]),
                          float(location_info["longitude"]))
-            loc.country = location_info['country'] if 'country' in location_info else None
+            loc.country = location_info[
+                'country'] if 'country' in location_info else None
             self.locations[location_id] = loc
 
         # get constraints
@@ -194,7 +195,8 @@ class Parser(object):
                 location = self.locations[location_id] if location_id else None
                 my_zone_constraint = zone.Zone(
                     constraint_id, constraint_type, constraint_demands,
-                    _qualifier=qualifier, _category=category, _location=location)
+                    _qualifier=qualifier, _category=category,
+                    _location=location)
                 self.constraints[my_zone_constraint.name] = my_zone_constraint
             elif constraint_type == "attribute":
                 c_property = constraint_info.get("properties")
@@ -205,13 +207,21 @@ class Parser(object):
                                                    _properties=c_property)
                 self.constraints[my_attribute_constraint.name] = \
                     my_attribute_constraint
+            elif constraint_type == "hpa":
+                LOG.debug("Creating constraint - {}".format(constraint_type))
+                c_property = constraint_info.get("properties")
+                my_hpa_constraint = hpa.HPA(constraint_id,
+                                            constraint_type,
+                                            constraint_demands,
+                                            _properties=c_property)
+                self.constraints[my_hpa_constraint.name] = my_hpa_constraint
             else:
                 LOG.error("unknown constraint type {}".format(constraint_type))
                 return
 
         # get objective function
-        if "objective" not in json_template["conductor_solver"]\
-           or not json_template["conductor_solver"]["objective"]:
+        if "objective" not in json_template["conductor_solver"] \
+                or not json_template["conductor_solver"]["objective"]:
             self.objective = objective.Objective()
         else:
             input_objective = json_template["conductor_solver"]["objective"]
@@ -302,6 +312,7 @@ class Parser(object):
             _qualifier="same", _category="zone1")
         constraint_list.append(same_zone)
         '''
+
     def reorder_constraint(self):
         # added manual ranking to the constraint type for optimizing purpose the last 2 are costly interaction
         for constraint_name, constraint in self.constraints.items():
@@ -311,17 +322,19 @@ class Parser(object):
                 constraint.rank = 2
             elif constraint.constraint_type == "attribute":
                 constraint.rank = 3
-            elif constraint.constraint_type == "inventory_group":
+            elif constraint.constraint_type == "hpa":
                 constraint.rank = 4
-            elif constraint.constraint_type == "instance_fit":
+            elif constraint.constraint_type == "inventory_group":
                 constraint.rank = 5
-            elif constraint.constraint_type == "region_fit":
+            elif constraint.constraint_type == "instance_fit":
                 constraint.rank = 6
-            else:
+            elif constraint.constraint_type == "region_fit":
                 constraint.rank = 7
+            else:
+                constraint.rank = 8
 
     def attr_sort(self, attrs=['rank']):
-        #this helper for sorting the rank
+        # this helper for sorting the rank
         return lambda k: [getattr(k, attr) for attr in attrs]
 
     def sort_constraint_by_rank(self):
@@ -329,7 +342,6 @@ class Parser(object):
         for d_name, cl in self.demands.items():
             cl_list = cl.constraint_list
             cl_list.sort(key=self.attr_sort(attrs=['rank']))
-
 
     def assgin_constraints_to_demands(self):
         # self.parse_dhv_template() # get data from DHV template
