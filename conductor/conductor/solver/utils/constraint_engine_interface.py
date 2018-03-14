@@ -116,3 +116,22 @@ class ConstraintEngineInterface(object):
         LOG.debug("get_candidates_by_attribute response: {}".format(response))
         # response is a list of (candidate, cost) tuples
         return response
+
+    def get_candidates_with_hpa(self, label_name, candidate_list, features):
+        '''
+        Returns the candidate_list with an addition of flavor_mapping for
+        matching cloud candidates with hpa constraints.
+        :param label_name: vm_label_name passed from the SO/Policy
+        :param candidate_list: list of candidates to process
+        :param features: hpa features for this vm_label_name
+        :return: candidate_list with hpa features and flavor mapping
+        '''
+        ctxt = {}
+        args = {"candidate_list": candidate_list,
+                "features": features,
+                "label_name": label_name}
+        response = self.client.call(ctxt=ctxt,
+                                    method="get_candidates_with_hpa",
+                                    args=args)
+        LOG.debug("get_candidates_with_hpa response: {}".format(response))
+        return response
