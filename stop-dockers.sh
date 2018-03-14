@@ -1,5 +1,2 @@
-docker stop $(sudo docker ps -a -q  --filter ancestor=api)
-docker stop $(sudo docker ps -a -q  --filter ancestor=solver)
-docker stop $(sudo docker ps -a -q  --filter ancestor=reservation)
-docker stop $(sudo docker ps -a -q  --filter ancestor=data)
-docker stop $(sudo docker ps -a -q  --filter ancestor=controller)
+docker stop api solver reservation data controller
+docker rm api solver reservation data controller
