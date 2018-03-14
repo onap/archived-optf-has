@@ -1,0 +1,171 @@
+{
+  "conductor_solver": {
+    "constraints": [
+      {
+        "hpa_constraint_vG": {
+          "demands": ["vG"],
+          "name": "hpa_constraint_vG",
+          "type": "hpa",
+          "properties": {
+            "evaluate": [
+              {
+                "features": [
+                  {
+                    "architecture": "generic",
+                    "hpa-feature": "basicCapabilities",
+                    "hpa-feature-attributes": [
+                      {
+                        "hpa-attribute-key": "numVirtualCpu",
+                        "hpa-attribute-value": "4",
+                        "operator": "="
+                      },
+                      {
+                        "hpa-attribute-key": "virtualMemSize",
+                        "hpa-attribute-value": "4",
+                        "operator": "=",
+                        "unit": "GB"
+                      }
+                    ],
+                    "hpa-version": "v1"
+                  },
+                  {
+                    "architecture": "generic",
+                    "hpa-feature": "numa",
+                    "hpa-feature-attributes": [
+                      {
+                        "hpa-attribute-key": "numaNodes",
+                        "hpa-attribute-value": "2",
+                        "operator": "="
+                      },
+                      {
+                        "hpa-attribute-key": "numaCpu-0",
+                        "hpa-attribute-value": "2",
+                        "operator": "="
+                      },
+                      {
+                        "hpa-attribute-key": "numaCpu-1",
+                        "hpa-attribute-value": "4",
+                        "operator": "="
+                      },
+                      {
+                        "hpa-attribute-key": "numaMem-0",
+                        "hpa-attribute-value": "2",
+                        "operator": "=",
+                        "unit": "GB"
+                      },
+                      {
+                        "hpa-attribute-key": "numaMem-1",
+                        "hpa-attribute-value": "4",
+                        "operator": "=",
+                        "unit": "GB"
+                      }
+                    ],
+                    "hpa-version": "v1"
+                  },
+                  {
+                    "architecture": "generic",
+                    "hpa-feature": "cpuPinning",
+                    "hpa-feature-attributes": [
+                      {
+                        "hpa-attribute-key": "logicalCpuThreadPinningPolicy",
+                        "hpa-attribute-value": "prefer",
+                        "operator": "="
+                      },
+                      {
+                        "hpa-attribute-key": "logicalCpuPinningPolicy",
+                        "hpa-attribute-value": "dedicated",
+                        "operator": "="
+                      }
+                    ],
+                    "hpa-version": "v1"
+                  }
+                ],
+                "label": "flavor_label_1"
+              },
+              {
+                "features": [
+                  {
+                    "architecture": "generic",
+                    "hpa-feature": "basicCapabilities",
+                    "hpa-feature-attributes": [
+                      {
+                        "hpa-attribute-key": "numVirtualCpu",
+                        "hpa-attribute-value": "8",
+                        "operator": "="
+                      },
+                      {
+                        "hpa-attribute-key": "virtualMemSize",
+                        "hpa-attribute-value": "16",
+                        "operator": "=",
+                        "unit": "GB"
+                      }
+                    ],
+                    "hpa-version": "v1"
+                  },
+                  {
+                    "architecture": "generic",
+                    "hpa-feature": "numa",
+                    "hpa-feature-attributes": [
+                      {
+                        "hpa-attribute-key": "numaNodes",
+                        "hpa-attribute-value": "2",
+                        "operator": "="
+                      },
+                      {
+                        "hpa-attribute-key": "numaCpu-0",
+                        "hpa-attribute-value": "2",
+                        "operator": "="
+                      },
+                      {
+                        "hpa-attribute-key": "numaCpu-1",
+                        "hpa-attribute-value": "4",
+                        "operator": "="
+                      },
+                      {
+                        "hpa-attribute-key": "numaMem-0",
+                        "hpa-attribute-value": "2",
+                        "operator": "=",
+                        "unit": "GB"
+                      },
+                      {
+                        "hpa-attribute-key": "numaMem-1",
+                        "hpa-attribute-value": "4",
+                        "operator": "=",
+                        "unit": "GB"
+                      }
+                    ],
+                    "hpa-version": "v1"
+                  },
+                  {
+                    "architecture": "generic",
+                    "hpa-feature": "memoryPageSize",
+                    "hpa-feature-attributes": [
+                      {
+                        "hpa-attribute-key": "memoryPageSize",
+                        "hpa-attribute-value": "2",
+                        "operator": "=",
+                        "unit": "GB"
+                      }
+                    ],
+                    "hpa-version": "v1"
+                  }
+                ],
+                "label": "flavor_label_2"
+              }
+            ]
+          }
+        }
+      },
+      {
+        "constraint_vgmux_customer": {
+          "type": "distance_to_location",
+          "demands": ["vGMuxInfra"],
+          "properties": {
+            "distance": "< 100 km",
+            "location": "customer_loc"
+          }
+        }
+      }
+    ]
+  }
+}
