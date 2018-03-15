@@ -104,7 +104,7 @@ class TestDataEndpoint(unittest.TestCase):
         value_attrib = 'complex_name'
         value = req_json['properties']['evaluate'][value_attrib]
         candidate_list = req_json['candidate_list']
-        self.assertEqual(2, len(self.data_ep.get_candidate_discard_set(value,
+        self.assertEqual(3, len(self.data_ep.get_candidate_discard_set(value,
                                                                        candidate_list,
                                                                        value_attrib)))
         value_attrib = 'region'
@@ -112,6 +112,44 @@ class TestDataEndpoint(unittest.TestCase):
         self.assertEqual(0, len(self.data_ep.get_candidate_discard_set(value,
                                                                        candidate_list,
                                                                        value_attrib)))
+
+    def test_get_candidate_discard_set_by_cloud_region(self):
+        req_json_file = './conductor/tests/unit/data/constraints.json'
+        req_json = yaml.safe_load(open(req_json_file).read())
+        value_attrib = 'location_id'
+        value = req_json['properties']['evaluate']['cloud-region']
+        candidate_list = req_json['candidate_list']
+        self.assertEqual(2, len(
+            self.data_ep.get_candidate_discard_set_by_cloud_region(value,
+                                                                   candidate_list,
+                                                                   value_attrib)))
+
+    @mock.patch.object(service.LOG, 'error')
+    @mock.patch.object(service.LOG, 'debug')
+    @mock.patch.object(service.LOG, 'info')
+    @mock.patch.object(stevedore.ExtensionManager, 'map_method')
+    @mock.patch.object(stevedore.ExtensionManager, 'names')
+    def test_get_inventory_group_candidates(self, ext2_mock, ext1_mock,
+                                            info_mock, debug_mock, error_mock):
+        ext1_mock.return_value = None
+        req_json_file = './conductor/tests/unit/data/constraints.json'
+        req_json = yaml.safe_load(open(req_json_file).read())
+        self.assertEqual({'response': [], 'error': True},
+                         self.data_ep.get_inventory_group_candidates(None,
+                                                                     arg=req_json))
+        ext1_mock.return_value = [None]
+        self.assertEqual({'response': [], 'error': True},
+                         self.data_ep.get_inventory_group_candidates(None,
+                                                                     arg=req_json))
+        pairs = [['instance-1', 'instance-2']]
+        ext1_mock.return_value = [pairs]
+        ext2_mock.return_value = ['aai']
+        candidate_list = req_json['candidate_list']
+        expected_candidate_list = [c for c in candidate_list
+                                   if c["candidate_id"] == 'instance-1']
+        self.assertEqual({'response': expected_candidate_list, 'error': False},
+                         self.data_ep.get_inventory_group_candidates(None,
+                                                                     arg=req_json))
 
     @mock.patch.object(service.LOG, 'error')
     @mock.patch.object(service.LOG, 'debug')
@@ -123,10 +161,32 @@ class TestDataEndpoint(unittest.TestCase):
         req_json_file = './conductor/tests/unit/data/constraints.json'
         req_json = yaml.safe_load(open(req_json_file).read())
         candidate_list = req_json['candidate_list']
-        ext_mock1.return_value = [candidate_list]
-        ext_mock2.return_value = [None]
+        ext_mock1.side_effect = ip_ext_sideeffect
+        ext_mock2.return_value = ['aai']
         self.maxDiff = None
         expected_response = {'response': [candidate_list[0]], 'error': False}
+        self.assertEqual(expected_response,
+                         self.data_ep.get_candidates_by_attributes(None,
+                                                                   req_json))
+        req_json['properties']['evaluate']['network_roles'] = {"all": []}
+        expected_response = {'response': [candidate_list[0]], 'error': False}
+        self.assertEqual(expected_response,
+                         self.data_ep.get_candidates_by_attributes(None,
+                                                                   req_json))
+        req_json['properties']['evaluate']['network_roles'] = {"any": []}
+        expected_response = {'response': [candidate_list[0]], 'error': False}
+        self.assertEqual(expected_response,
+                         self.data_ep.get_candidates_by_attributes(None,
+                                                                   req_json))
+        req_json['properties']['evaluate']['network_roles'] = {
+            "all": ['role-1']}
+        expected_response = {'response': [], 'error': False}
+        self.assertEqual(expected_response,
+                         self.data_ep.get_candidates_by_attributes(None,
+                                                                   req_json))
+        req_json['properties']['evaluate']['network_roles'] = {
+            "all": ['role-2']}
+        expected_response = {'response': [], 'error': False}
         self.assertEqual(expected_response,
                          self.data_ep.get_candidates_by_attributes(None,
                                                                    req_json))
@@ -136,7 +196,8 @@ class TestDataEndpoint(unittest.TestCase):
     @mock.patch.object(service.LOG, 'info')
     @mock.patch.object(log_util, 'getTransactionId')
     @mock.patch.object(stevedore.ExtensionManager, 'map_method')
-    def test_reslove_demands(self, ext_mock, logutil_mock, info_mock, debug_mock,
+    def test_reslove_demands(self, ext_mock, logutil_mock, info_mock,
+                             debug_mock,
                              error_mock):
         req_json_file = './conductor/tests/unit/data/demands.json'
         req_json = yaml.safe_load(open(req_json_file).read())
@@ -156,6 +217,19 @@ class TestDataEndpoint(unittest.TestCase):
                              'error': False}
         self.assertEqual(expected_response,
                          self.data_ep.resolve_demands(ctxt, req_json))
+
+
+def ip_ext_sideeffect(*args, **kwargs):
+    req_json_file = './conductor/tests/unit/data/constraints.json'
+    req_json = yaml.safe_load(open(req_json_file).read())
+    candidate_list = req_json['candidate_list']
+    if args[0] == 'check_network_roles':
+        if kwargs['network_role_id'] == 'role-1':
+            return None
+        else:
+            return ['DLLSTX55']
+    elif args[0] == 'check_candidate_role':
+        return ['candidate-role0']
 
 
 if __name__ == "__main__":
