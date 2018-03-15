@@ -212,7 +212,6 @@ class TestNoExceptionTranslator(unittest.TestCase):
             'demands': ['vG'],
             'properties': {'distance': '< 100 km',
                            'location': 'custom_loc'}}}
-
         rtn = {'constraint_loc_vG': {
             'demands': 'vG',
             'name': 'constraint_loc',
@@ -222,6 +221,34 @@ class TestNoExceptionTranslator(unittest.TestCase):
                            'location': 'custom_loc'},
             'type': 'distance_to_location'}}
         self.assertEquals(self.Translator.parse_constraints(constraints), rtn)
+
+    def test_parse_hpa_constraints_format_validation(self):
+        hpa_constraint_1 = {
+            "hpa_constraint": {
+                "type": "hpa",
+                "demands": [
+                    "vG"
+                ],
+                "properties": {
+                    "evaluate": [{'flavor': '',
+                                  'features': []}]
+                }}}
+        hpa_constraint_2 = {"hpa_constraint": {
+                "type": "hpa",
+                "demands": [
+                    "vG"
+                ],
+                "properties": {
+                    "evaluate": [{'label': '',
+                                  'features': [{
+                                      'hpa-feature': '',
+                                      'hpa-version': '',
+                                      'architecture': '',
+                                      'hpa-feature-attributes': ''
+                                  }]}]
+                }}}
+        self.assertRaises(TranslatorException, self.Translator.parse_constraints, hpa_constraint_1)
+        self.assertRaises(TranslatorException, self.Translator.parse_constraints, hpa_constraint_2)
 
     @patch('conductor.controller.translator.Translator.create_components')
     def test_parse_optimization(self, mock_create):

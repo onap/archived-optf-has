@@ -95,7 +95,13 @@ CONSTRAINTS = {
                     'category': ['disaster', 'region', 'complex', 'country',
                                  'time', 'maintenance']},
     },
+    'hpa': {
+        'split': True,
+        'required': ['evaluate'],
+    },
 }
+HPA_FEATURES = ['hpa-feature-attributes', 'hpa-feature', 'hpa-version', 'architecture']
+HPA_ATTRIBUTES = ['hpa-attribute-key', 'hpa-attribute-value', 'operator', 'unit']
 
 
 class TranslatorException(Exception):
@@ -421,7 +427,7 @@ class Translator(object):
                             "demand {}".format(name)
                         )
                     if inventory_type and \
-                            inventory_type not in INVENTORY_TYPES:
+                                    inventory_type not in INVENTORY_TYPES:
                         raise TranslatorException(
                             "Unknown inventory type {} specified for "
                             "demand {}".format(inventory_type, name)
@@ -488,11 +494,11 @@ class Translator(object):
                 required_candidates = requirement.get("required_candidates")
                 excluded_candidates = requirement.get("excluded_candidates")
                 if (required_candidates and
-                    excluded_candidates and
-                    set(map(lambda entry: entry['candidate_id'],
-                            required_candidates))
-                    & set(map(lambda entry: entry['candidate_id'],
-                              excluded_candidates))):
+                        excluded_candidates and
+                            set(map(lambda entry: entry['candidate_id'],
+                                    required_candidates))
+                            & set(map(lambda entry: entry['candidate_id'],
+                                      excluded_candidates))):
                     raise TranslatorException(
                         "Required candidate list and excluded candidate"
                         " list are not mutually exclusive for demand"
@@ -507,13 +513,13 @@ class Translator(object):
             resolved_demands = \
                 response and response.get('resolved_demands')
 
-            required_candidates = resolved_demands\
+            required_candidates = resolved_demands \
                 .get('required_candidates')
             if not resolved_demands:
                 raise TranslatorException(
                     "Unable to resolve inventory "
                     "candidates for demand {}"
-                    .format(name)
+                        .format(name)
                 )
             resolved_candidates = resolved_demands.get(name)
             for candidate in resolved_candidates:
@@ -528,7 +534,7 @@ class Translator(object):
                     raise TranslatorException(
                         "Unable to find any required "
                         "candidate for demand {}"
-                        .format(name)
+                            .format(name)
                     )
             parsed[name] = {
                 "candidates": inventory_candidates,
@@ -584,6 +590,48 @@ class Translator(object):
                                 "No value specified for property '{}' in "
                                 "constraint named '{}'".format(
                                     req_prop, name))
+                            # For HPA constraints
+                        if constraint_type == 'hpa':
+                            # Make sure there is at least one
+                            # set of label and feature
+                            for para in value.get(req_prop):
+                                if not para.get('label') \
+                                        or not para.get('features') \
+                                        or para.get('features') == '' \
+                                        or para.get('label') == '':
+                                    raise TranslatorException(
+                                        "HPA requirements need at least "
+                                        "one set of label and features"
+                                    )
+                                for feature in para.get('features'):
+                                    if type(feature) is not dict:
+                                        raise TranslatorException(
+                                            "HPA feature must be"
+                                            " a dict"
+                                        )
+                                    for key in feature.keys():
+                                        if key not in HPA_FEATURES:
+                                            raise TranslatorException(
+                                                "Invalid feature '{}' "
+                                                "found in HPA constraints"
+                                                    .format(key)
+                                            )
+                                        for attr in feature.get(
+                                                'hpa-feature-attributes'):
+                                            if type(attr) is not dict:
+                                                raise TranslatorException(
+                                                    "HPA feature attributes "
+                                                    "must be a dict"
+                                                )
+                                            for name in attr.keys():
+                                                if name not in \
+                                                        HPA_ATTRIBUTES:
+                                                    raise TranslatorException(
+                                                        "Invalid attribute '{}'"
+                                                        " found inside "
+                                                        "HPA feature attributes"
+                                                            .format(attr)
+                                                    )
 
                     # Make sure there are no unknown properties
                     optional = constraint_def.get('optional', [])
