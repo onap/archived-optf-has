@@ -212,7 +212,6 @@ class TestNoExceptionTranslator(unittest.TestCase):
             'demands': ['vG'],
             'properties': {'distance': '< 100 km',
                            'location': 'custom_loc'}}}
-
         rtn = {'constraint_loc_vG': {
             'demands': 'vG',
             'name': 'constraint_loc',
@@ -222,6 +221,118 @@ class TestNoExceptionTranslator(unittest.TestCase):
                            'location': 'custom_loc'},
             'type': 'distance_to_location'}}
         self.assertEquals(self.Translator.parse_constraints(constraints), rtn)
+
+    def test_parse_hpa_constraints(self):
+        hpa_constraint = {
+            "hpa_constraint": {
+                "type": "hpa",
+                "demands": [
+                    "vG"
+                ],
+                "properties": {
+                    "evaluate": [{'label': 'xx',
+                                  'features': [{
+                                      'hpa-feature': 'BasicCapabilities',
+                                      'hpa-version': 'v1',
+                                      'architecture': 'generic',
+                                      'hpa-feature-attributes': [
+                                          {
+                                              'hpa-attribute-key': 'numVirtualCpu',
+                                              'hpa-attribute-value': '4',
+                                              'operator': '='
+                                          },
+                                          {
+                                              'hpa-attribute-key': 'virtualMemSize',
+                                              'hpa-attribute-value': '4',
+                                              'operator': '=',
+                                              'unit': 'GB'
+                                          }
+                                      ]
+                                  }],}]
+                }}}
+        rtn = {'hpa_constraint_vG': {'demands': 'vG',
+                            'name': 'hpa_constraint',
+                            'properties': {'evaluate': [{'features': [{'architecture': 'generic',
+                                                                       'hpa-feature': 'BasicCapabilities',
+                                                                       'hpa-feature-attributes': [{'hpa-attribute-key': 'numVirtualCpu',
+                                                                                                   'hpa-attribute-value': '4',
+                                                                                                   'operator': '='},
+                                                                                                  {'hpa-attribute-key': 'virtualMemSize',
+                                                                                                   'hpa-attribute-value': '4',
+                                                                                                   'operator': '=',
+                                                                                                   'unit': 'GB'}],
+                                                                       'hpa-version': 'v1'}],
+                                                         'label': 'xx'}]},
+                            'type': 'hpa'}}
+
+        self.assertEquals(self.Translator.parse_constraints(hpa_constraint), rtn)
+
+    def test_parse_hpa_constraints_format_validation(self):
+        hpa_constraint_1 = {
+            "hpa_constraint": {
+                "type": "hpa",
+                "demands": [
+                    "vG"
+                ],
+                "properties": {
+                    "evaluate": [{'flavor': 'xx',
+                                  'features': []}]
+                }}}
+        hpa_constraint_2 = {"hpa_constraint": {
+                "type": "hpa",
+                "demands": [
+                    "vG"
+                ],
+                "properties": {
+                    "evaluate": [{'label': 'xx',
+                                  'features': [{
+                                      'hpa-feature': '',
+                                      'hpa-version': '',
+                                      'architecture': '',
+                                      'hpa-feature-attributes': [''],
+                                  }]}]
+                }}}
+
+        hpa_constraint_3 = {
+            "hpa_constraint": {
+                "type": "hpa",
+                "demands": [
+                    "vG"
+                ],
+                "properties": {
+                    "evaluate": [{'label': 'xx',
+                                  'features': [{
+                                      'hpa-feature': 'BasicCapabilities',
+                                      'hpa-version': 'v1',
+                                      'architecture': 'generic',
+                                      'hpa-feature-attributes': [
+                                          {
+                                              'hpa-attribute-key': 'numVirtualCpu',
+                                              'hpa-attribute-value': '4',
+
+                                          },
+                                      ]
+                                  }], }]
+                }}}
+
+        hpa_constraint_4 = {"hpa_constraint": {
+            "type": "hpa",
+            "demands": [
+                "vG"
+            ],
+            "properties": {
+                "evaluate": [{'label': 'xx',
+                              'features': [{
+                                  'hpa-feature': '',
+                                  'architecture': '',
+                                  'hpa-feature-attributes': [''],
+                              }]}]
+            }}}
+
+        self.assertRaises(TranslatorException, self.Translator.parse_constraints, hpa_constraint_1)
+        self.assertRaises(TranslatorException, self.Translator.parse_constraints, hpa_constraint_2)
+        self.assertRaises(TranslatorException, self.Translator.parse_constraints, hpa_constraint_3)
+        self.assertRaises(TranslatorException, self.Translator.parse_constraints, hpa_constraint_4)
 
     @patch('conductor.controller.translator.Translator.create_components')
     def test_parse_optimization(self, mock_create):
