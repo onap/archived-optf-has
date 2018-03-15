@@ -16,6 +16,7 @@
 #
 # -------------------------------------------------------------------------
 #
+import copy
 import json
 import unittest
 import uuid
@@ -34,7 +35,6 @@ from oslo_config import cfg
 class TestDataEndpoint(unittest.TestCase):
 
     def setUp(self):
-        cfg.CONF.set_override('keyspace', 'conductor')
         ip_ext_manager = (
             ip_ext.Manager(cfg.CONF, 'conductor.inventory_provider.plugin'))
         sc_ext_manager = (
@@ -218,6 +218,69 @@ class TestDataEndpoint(unittest.TestCase):
         self.assertEqual(expected_response,
                          self.data_ep.resolve_demands(ctxt, req_json))
 
+    @mock.patch.object(service.LOG, 'error')
+    @mock.patch.object(service.LOG, 'info')
+    @mock.patch.object(stevedore.ExtensionManager, 'names')
+    @mock.patch.object(stevedore.ExtensionManager, 'map_method')
+    def test_get_candidates_with_hpa(self, hpa_mock, ext_mock1,
+                                     info_mock, error_mock):
+        req_json_file = './conductor/tests/unit/data/candidate_list.json'
+        hpa_json_file = './conductor/tests/unit/data/hpa_constraints.json'
+        hpa_json = yaml.safe_load(open(hpa_json_file).read())
+        req_json = yaml.safe_load(open(req_json_file).read())
+        candidate_list = req_json['candidate_list']
+        (constraint_id, constraint_info) = \
+            hpa_json["conductor_solver"]["constraints"][0].items()[0]
+        hpa_constraint = constraint_info['properties']
+        features = hpa_constraint['evaluate'][0]['features']
+        label_name = hpa_constraint['evaluate'][0]['label']
+        ext_mock1.return_value = ['aai']
+        flavor_info = {"flavor-id": "vim-flavor-id1",
+                       "flavor-name": "vim-flavor-name1"}
+        hpa_mock.return_value = [flavor_info]
+        self.maxDiff = None
+        args = generate_args(candidate_list, features, label_name)
+        hpa_candidate_list = copy.deepcopy(candidate_list)
+        hpa_candidate_list[1]['flavor_map'] = {}
+        hpa_candidate_list[1]['flavor_map'][label_name] = "vim-flavor-name1"
+        expected_response = {'response': hpa_candidate_list, 'error': False}
+        self.assertEqual(expected_response,
+                         self.data_ep.get_candidates_with_hpa(None, args))
+
+        hpa_candidate_list2 = list()
+        hpa_candidate_list2.append(copy.deepcopy(candidate_list[0]))
+        args = generate_args(candidate_list, features, label_name)
+        hpa_mock.return_value = []
+        expected_response = {'response': hpa_candidate_list2, 'error': False}
+        self.assertEqual(expected_response,
+                         self.data_ep.get_candidates_with_hpa(None, args))
+
+        flavor_info = {}
+        hpa_mock.return_value = [flavor_info]
+        expected_response = {'response': hpa_candidate_list2, 'error': False}
+        self.assertEqual(expected_response,
+                         self.data_ep.get_candidates_with_hpa(None, args))
+
+        flavor_info = {"flavor-id": "vim-flavor-id1",
+                       "flavor-name": ""}
+        hpa_mock.return_value = [flavor_info]
+        expected_response = {'response': hpa_candidate_list2, 'error': False}
+        self.assertEqual(expected_response,
+                         self.data_ep.get_candidates_with_hpa(None, args))
+
+        flavor_info = {"flavor-id": "vim-flavor-id1"}
+        hpa_mock.return_value = [flavor_info]
+        expected_response = {'response': hpa_candidate_list2, 'error': False}
+        self.assertEqual(expected_response,
+                         self.data_ep.get_candidates_with_hpa(None, args))
+
+
+def generate_args(candidate_list, features, label_name):
+    arg_candidate_list = copy.deepcopy(candidate_list)
+    args = {"candidate_list": arg_candidate_list,
+            "features": features,
+            "label_name": label_name}
+    return args
 
 def ip_ext_sideeffect(*args, **kwargs):
     req_json_file = './conductor/tests/unit/data/constraints.json'
