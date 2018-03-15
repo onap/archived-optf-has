@@ -21,17 +21,17 @@
 # import os
 
 import cotyledon
-from oslo_config import cfg
-from oslo_log import log
-# from stevedore import driver
-
+from conductor import messaging
 # from conductor import __file__ as conductor_root
 from conductor.common.music import messaging as music_messaging
+from conductor.common.utils import conductor_logging_util as log_util
 from conductor.data.plugins.inventory_provider import extensions as ip_ext
 from conductor.data.plugins.service_controller import extensions as sc_ext
 from conductor.i18n import _LE, _LI, _LW
-from conductor import messaging
-from conductor.common.utils import conductor_logging_util as log_util
+from oslo_config import cfg
+from oslo_log import log
+
+# from stevedore import driver
 # from conductor.solver.resource import region
 # from conductor.solver.resource import service
 
@@ -426,6 +426,53 @@ class DataEndpoint(object):
             "inventory provider: {}".format(
                 candidate_list, self.ip_ext_manager.names()[0]))
         return {'response': candidate_list, 'error': False}
+
+    def get_candidates_with_hpa(self, ctx, arg):
+        '''
+        RPC for getting candidates flavor mapping for matching hpa
+        :param ctx: context
+        :param arg: contains input passed from client side for RPC call
+        :return: response candidate_list with matching label to flavor mapping
+        '''
+        error = False
+        candidate_list = arg["candidate_list"]
+        label_name = arg["label_name"]
+        features = arg["features"]
+        discard_set = set()
+        for candidate in candidate_list:
+            # perform this check only for cloud candidates
+            if candidate["inventory_type"] != "cloud":
+                continue
+
+            # TODO(Ritu Sood)
+            # flavor_info = match_hpa(candidate, features)
+            flavor_info = None
+            if not flavor_info:
+                discard_set.add(candidate.get("candidate_id"))
+            else:
+                # Create flavor_map if not exist already
+                if not candidate.get("flavor_map"):
+                    candidate["flavor_map"] = {}
+
+                # Check if flavor mapping for current label_name already
+                # exists. This is an invalid condition.
+                if not candidate["flavor_map"][label_name]:
+                    error = True
+                    LOG.error(_LE("Flavor mapping for label name {} already"
+                                  "exists").format(label_name))
+                    return {'response': None, 'error': error}
+                else:
+                    # Create flavor mapping for label_name to flavor
+                    candidate["flavor_map"][label_name] = flavor_info
+
+        # return candidates not in discard set
+        candidate_list[:] = [c for c in candidate_list
+                             if c['candidate_id'] not in discard_set]
+        LOG.info(_LI(
+            "Candidates with matching hpa capabilities: {}, "
+            "inventory provider: {}").format(candidate_list,
+                                             self.ip_ext_manager.names()[0]))
+        return {'response': candidate_list, 'error': error}
 
     def resolve_demands(self, ctx, arg):
 
