@@ -21,13 +21,11 @@ import re
 import time
 import uuid
 
-
-from oslo_config import cfg
-from oslo_log import log
-
 from conductor.common import rest
 from conductor.data.plugins.inventory_provider import base
 from conductor.i18n import _LE, _LI
+from oslo_config import cfg
+from oslo_log import log
 
 LOG = log.getLogger(__name__)
 
@@ -821,6 +819,11 @@ class AAI(base.InventoryProviderBase):
                                 region['cloud_region_version'])
                         candidate['cloud_owner'] = \
                             region['cloud_owner']
+
+                        # Added vim-id for short-term workaround
+                        candidate['vim-id'] = \
+                            region['cloud_owner'] + '_' + region_id
+
                         candidate['physical_location_id'] = \
                             region['complex']['complex_id']
                         candidate['complex_name'] = \
@@ -991,6 +994,10 @@ class AAI(base.InventoryProviderBase):
                         rl_data = rl_data_list[0]
                         cloud_region_id = rl_data.get('d_value')
                         candidate['location_id'] = cloud_region_id
+
+                        # Added vim-id for short-term workaround
+                        candidate['vim-id'] = \
+                            candidate['cloud_owner'] + '_' + cloud_region_id
 
                         # get AIC version for service candidate
                         if cloud_region_id:

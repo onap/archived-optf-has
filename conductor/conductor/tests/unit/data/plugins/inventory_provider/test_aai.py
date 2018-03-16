@@ -18,11 +18,12 @@
 #
 import json
 import unittest
-import mock
+
 import conductor.data.plugins.inventory_provider.aai as aai
+import mock
 from conductor.data.plugins.inventory_provider.aai import AAI
-from conductor.common import rest
 from oslo_config import cfg
+
 
 class TestAAI(unittest.TestCase):
 
@@ -138,8 +139,30 @@ class TestAAI(unittest.TestCase):
         self.mock_get_complex.start()
 
         self.maxDiff = None
-        self.assertEqual({u'demand_name': [{'candidate_id': u'service-instance-id','city': None,'cloud_owner': u'cloud-owner','cloud_region_version': '','complex_name': None,'cost': 1.0,'country': u'USA','existing_placement': 'false','host_id': u'vnf-name','inventory_provider': 'aai','inventory_type': 'service','latitude': u'28.543251','location_id': u'cloud-region-id','location_type': 'att_aic','longitude': u'-81.377112','physical_location_id': 'test-id','region': u'SE','service_resource_id': '','sriov_automation': 'false','state': None},{'candidate_id': u'region-name','city': u'Middletown','cloud_owner': u'cloud-owner','cloud_region_version': u'1.0','complex_name': u'complex-name','cost': 2.0,'country': u'USA','existing_placement': 'false','inventory_provider': 'aai','inventory_type': 'cloud','latitude': u'50.34','location_id': u'region-name','location_type': 'att_aic','longitude': u'30.12','physical_location_id': u'complex-id','region': u'USA','service_resource_id': u'service-resource-id-123','sriov_automation': 'false','state': u'NJ'}]} ,
-                       self.aai_ep.resolve_demands(demands_list))
+        self.assertEqual({u'demand_name': [
+            {'candidate_id': u'service-instance-id', 'city': None,
+             'cloud_owner': u'cloud-owner',
+             'vim-id': 'cloud-owner_cloud-region-id',
+             'cloud_region_version': '', 'complex_name': None, 'cost': 1.0,
+             'country': u'USA', 'existing_placement': 'false',
+             'host_id': u'vnf-name', 'inventory_provider': 'aai',
+             'inventory_type': 'service', 'latitude': u'28.543251',
+             'location_id': u'cloud-region-id', 'location_type': 'att_aic',
+             'longitude': u'-81.377112', 'physical_location_id': 'test-id',
+             'region': u'SE', 'service_resource_id': '',
+             'sriov_automation': 'false', 'state': None},
+            {'candidate_id': u'region-name', 'city': u'Middletown',
+             'cloud_owner': u'cloud-owner',
+             'vim-id': 'cloud-owner_region-name',
+             'cloud_region_version': u'1.0', 'complex_name': u'complex-name',
+             'cost': 2.0, 'country': u'USA', 'existing_placement': 'false',
+             'inventory_provider': 'aai', 'inventory_type': 'cloud',
+             'latitude': u'50.34', 'location_id': u'region-name',
+             'location_type': 'att_aic', 'longitude': u'30.12',
+             'physical_location_id': u'complex-id', 'region': u'USA',
+             'service_resource_id': u'service-resource-id-123',
+             'sriov_automation': 'false', 'state': u'NJ'}]},
+                         self.aai_ep.resolve_demands(demands_list))
 
     def test_get_complex(self):
 

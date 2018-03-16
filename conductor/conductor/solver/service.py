@@ -335,6 +335,7 @@ class SolverService(cotyledon.Service):
                             "location_type": resource.get("location_type"),
                             "location_id": location_id,
                             "is_rehome": is_rehome,
+                            "vim-id": resource.get("vim-id"),
                         },
                         "attributes": {
                             "physical-location-id":
