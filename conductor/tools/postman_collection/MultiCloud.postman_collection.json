@@ -1,0 +1,69 @@
+{
+	"info": {
+		"_postman_id": "1cb02423-a987-44fa-87a4-9dcbcdbedab4",
+		"name": "MultiCloud",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "api/multicloud/v0/check_vim_capacity",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{url}}/api/multicloud/v0/check_vim_capacity",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"multicloud",
+						"v0",
+						"check_vim_capacity"
+					]
+				}
+			},
+			"response": [
+				{
+					"id": "27e9c15c-3992-41b9-83d9-8c4b5dc1ccae",
+					"name": "Default",
+					"originalRequest": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"vCPU\": 10, \"VIMs\": [\"HPA-cloud_cloud-region-2\", \"HPA-cloud_cloud-region-1\"], \"Storage\": 100, \"Memory\": 4.5}"
+						},
+						"url": {
+							"raw": "{{url}}/api/multicloud/v0/check_vim_capacity",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"multicloud",
+								"v0",
+								"check_vim_capacity"
+							]
+						}
+					},
+					"code": 200,
+					"_postman_previewlanguage": null,
+					"header": null,
+					"cookie": [],
+					"body": "{\"VIMs\": [\"HPA-cloud_cloud-region-1\"]}"
+				}
+			]
+		}
+	]
+}
