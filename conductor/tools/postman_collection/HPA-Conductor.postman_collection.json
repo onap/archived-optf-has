@@ -1,0 +1,371 @@
+{
+	"info": {
+		"_postman_id": "239540d1-161b-4d72-9fbb-12c97ddeec8d",
+		"name": "HPA-Conductor",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Plans",
+			"description": "",
+			"item": [
+				{
+					"name": "Create Plan with HPA",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"var data = JSON.parse(responseBody);",
+									"postman.setEnvironmentVariable(\"plan_id\", data['id']);"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "X-Auth-Token",
+								"value": "{{auth_token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{  \r\n   \"name\":\"vCPE-with-HPA\",\r\n   \"template\":{  \r\n      \"homing_template_version\":\"2017-10-10\",\r\n      \"parameters\":{  \r\n         \"service_name\":\"Residential vCPE\",\r\n         \"service_id\":\"vcpe_service_id\",\r\n         \"customer_lat\":32.89748,\r\n         \"customer_long\":-97.040443,\r\n         \"REQUIRED_MEM\":4,\r\n         \"REQUIRED_DISK\":100,\r\n         \"pnf_id\":\"some_pnf_id\"\r\n      },\r\n      \"locations\":{  \r\n         \"customer_loc\":{  \r\n            \"latitude\":{  \r\n               \"get_param\":\"customer_lat\"\r\n            },\r\n            \"longitude\":{  \r\n               \"get_param\":\"customer_long\"\r\n            }\r\n         },\r\n         \"brg_loc\":{  \r\n            \"pnf_host_name\":{  \r\n               \"get_param\":\"pnf_id\"\r\n            }\r\n         }\r\n      },\r\n      \"demands\":{  \r\n         \"vGMuxInfra\":[  \r\n            {  \r\n               \"inventory_provider\":\"aai\",\r\n               \"inventory_type\":\"service\",\r\n               \"attributes\":{  \r\n                  \"equipment_type\":\"vG_Mux\",\r\n                  \"customer_id\":\"some_company\"\r\n               },\r\n               \"excluded_candidates\":[  \r\n                  {  \r\n                     \"candidate_id\":\"1ac71fb8-ad43-4e16-9459-c3f372b8236d\"\r\n                  }\r\n               ],\r\n               \"existing_placement\":[  \r\n                  {  \r\n                     \"candidate_id\":\"21d5f3e8-e714-4383-8f99-cc480144505a\"\r\n                  }\r\n               ]\r\n            }\r\n         ],\r\n         \"vG\":[  \r\n            {  \r\n               \"inventory_provider\":\"aai\",\r\n               \"inventory_type\":\"cloud\"\r\n            }\r\n         ]\r\n      },\r\n      \"constraints\":{  \r\n         \"constraint_vgmux_customer\":{  \r\n            \"type\":\"distance_to_location\",\r\n            \"demands\":[  \r\n               \"vGMuxInfra\"\r\n            ],\r\n            \"properties\":{  \r\n               \"distance\":\"< 100 km\",\r\n               \"location\":\"customer_loc\"\r\n            }\r\n         },\r\n         \"colocation\":{  \r\n            \"type\":\"zone\",\r\n            \"demands\":[  \r\n               \"vGMuxInfra\",\r\n               \"vG\"\r\n            ],\r\n            \"properties\":{  \r\n               \"qualifier\":\"same\",\r\n               \"category\":\"region\"\r\n            }\r\n         },\r\n         \"hpa_constraint\":{  \r\n            \"type\":\"hpa\",\r\n            \"demands\":[  \r\n               \"vG\"\r\n            ],\r\n            \"properties\":{  \r\n               \"evaluate\":[  \r\n                  {  \r\n                     \"label\":\"flavor_label_1\",\r\n                     \"features\":[  \r\n                        {  \r\n                           \"hpa-feature\":\"basicCapabilities\",\r\n                           \"hpa-version\":\"v1\",\r\n                           \"architecture\":\"generic\",\r\n                           \"hpa-feature-attributes\":[  \r\n                              {  \r\n                                 \"hpa-attribute-key\":\"numVirtualCpu\",\r\n                                 \"hpa-attribute-value\":\"4\",\r\n                                 \"operator\":\"=\"\r\n                              },\r\n                              {  \r\n                                 \"hpa-attribute-key\":\"virtualMemSize\",\r\n                                 \"hpa-attribute-value\":\"4\",\r\n                                 \"operator\":\"=\",\r\n                                 \"unit\":\"GB\"\r\n                              }\r\n                           ]\r\n                        },\r\n                        {  \r\n                           \"hpa-feature\":\"numa\",\r\n                           \"hpa-version\":\"v1\",\r\n                           \"architecture\":\"generic\",\r\n                           \"hpa-feature-attributes\":[  \r\n                              {  \r\n                                 \"hpa-attribute-key\":\"numaNodes\",\r\n                                 \"hpa-attribute-value\":\"2\",\r\n                                 \"operator\":\"=\"\r\n                              },\r\n                              {  \r\n                                 \"hpa-attribute-key\":\"numaCpu-0\",\r\n                                 \"hpa-attribute-value\":\"2\",\r\n                                 \"operator\":\"=\"\r\n                              },\r\n                              {  \r\n                                 \"hpa-attribute-key\":\"numaCpu-1\",\r\n                                 \"hpa-attribute-value\":\"4\",\r\n                                 \"operator\":\"=\"\r\n                              },\r\n                              {  \r\n                                 \"hpa-attribute-key\":\"numaMem-0\",\r\n                                 \"hpa-attribute-value\":\"2\",\r\n                                 \"operator\":\"=\",\r\n                                 \"unit\":\"GB\"\r\n                              },\r\n                              {  \r\n                                 \"hpa-attribute-key\":\"numaMem-1\",\r\n                                 \"hpa-attribute-value\":\"4\",\r\n                                 \"operator\":\"=\",\r\n                                 \"unit\":\"GB\"\r\n                              }\r\n                           ]\r\n                        },\r\n                        {  \r\n                           \"hpa-feature\":\"cpuPinning\",\r\n                           \"hpa-version\":\"v1\",\r\n                           \"architecture\":\"generic\",\r\n                           \"hpa-feature-attributes\":[  \r\n                              {  \r\n                                 \"hpa-attribute-key\":\"logicalCpuThreadPinningPolicy\",\r\n                                 \"hpa-attribute-value\":\"prefer\",\r\n                                 \"operator\":\"=\"\r\n                              },\r\n                              {  \r\n                                 \"hpa-attribute-key\":\"logicalCpuPinningPolicy\",\r\n                                 \"hpa-attribute-value\":\"dedicated\",\r\n                                 \"operator\":\"=\"\r\n                              }\r\n                           ]\r\n                        }\r\n                     ]\r\n                  },\r\n                  {  \r\n                     \"label\":\"flavor_label_2\",\r\n                     \"features\":[  \r\n                        {  \r\n                           \"hpa-feature\":\"basicCapabilities\",\r\n                           \"hpa-version\":\"v1\",\r\n                           \"architecture\":\"generic\",\r\n                           \"hpa-feature-attributes\":[  \r\n                              {  \r\n                                 \"hpa-attribute-key\":\"numVirtualCpu\",\r\n                                 \"hpa-attribute-value\":\"8\",\r\n                                 \"operator\":\"=\"\r\n                              },\r\n                              {  \r\n                                 \"hpa-attribute-key\":\"virtualMemSize\",\r\n                                 \"hpa-attribute-value\":\"16\",\r\n                                 \"operator\":\"=\",\r\n                                 \"unit\":\"GB\"\r\n                              }\r\n                           ]\r\n                        },\r\n                        {  \r\n                           \"hpa-feature\":\"numa\",\r\n                           \"hpa-version\":\"v1\",\r\n                           \"architecture\":\"generic\",\r\n                           \"hpa-feature-attributes\":[  \r\n                              {  \r\n                                 \"hpa-attribute-key\":\"numaNodes\",\r\n                                 \"hpa-attribute-value\":\"2\",\r\n                                 \"operator\":\"=\"\r\n                              },\r\n                              {  \r\n                                 \"hpa-attribute-key\":\"numaCpu-0\",\r\n                                 \"hpa-attribute-value\":\"2\",\r\n                                 \"operator\":\"=\"\r\n                              },\r\n                              {  \r\n                                 \"hpa-attribute-key\":\"numaCpu-1\",\r\n                                 \"hpa-attribute-value\":\"4\",\r\n                                 \"operator\":\"=\"\r\n                              },\r\n                              {  \r\n                                 \"hpa-attribute-key\":\"numaMem-0\",\r\n                                 \"hpa-attribute-value\":\"2\",\r\n                                 \"operator\":\"=\",\r\n                                 \"unit\":\"GB\"\r\n                              },\r\n                              {  \r\n                                 \"hpa-attribute-key\":\"numaMem-1\",\r\n                                 \"hpa-attribute-value\":\"4\",\r\n                                 \"operator\":\"=\",\r\n                                 \"unit\":\"GB\"\r\n                              }\r\n                           ]\r\n                        },\r\n                        {  \r\n                           \"hpa-feature\":\"memoryPageSize\",\r\n                           \"hpa-version\":\"v1\",\r\n                           \"architecture\":\"generic\",\r\n                           \"hpa-feature-attributes\":[  \r\n                              {  \r\n                                 \"hpa-attribute-key\":\"memoryPageSize\",\r\n                                 \"hpa-attribute-value\":\"2\",\r\n                                 \"operator\":\"=\",\r\n                                 \"unit\":\"GB\"\r\n                              }\r\n                           ]\r\n                        }\r\n                     ]\r\n                  }\r\n               ]\r\n            }\r\n         }\r\n      },\r\n      \"optimization\":{  \r\n         \"minimize\":{  \r\n            \"sum\":[  \r\n               {  \r\n                  \"distance_between\":[  \r\n                     \"customer_loc\",\r\n                     \"vGMuxInfra\"\r\n                  ]\r\n               },\r\n               {  \r\n                  \"distance_between\":[  \r\n                     \"customer_loc\",\r\n                     \"vG\"\r\n                  ]\r\n               }\r\n            ]\r\n         }\r\n      }\r\n   },\r\n   \"timeout\":5,\r\n   \"limit\":3\r\n}"
+						},
+						"url": {
+							"raw": "{{conductor}}/plans",
+							"host": [
+								"{{conductor}}"
+							],
+							"path": [
+								"plans"
+							]
+						},
+						"description": "Plans"
+					},
+					"response": []
+				},
+				{
+					"name": "Create Plan Sanity - Simple",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"var data = JSON.parse(responseBody);",
+									"postman.setEnvironmentVariable(\"plan_id\", data['id']);"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "X-Auth-Token",
+								"value": "{{auth_token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{  \r\n   \"name\":\"vCPE-Sanity1\",\r\n   \"template\":{  \r\n      \"homing_template_version\":\"2017-10-10\",\r\n      \"parameters\":{  \r\n         \"service_name\":\"Residential vCPE\",\r\n         \"service_id\":\"vcpe_service_id\",\r\n         \"customer_lat\":32.89748,\r\n         \"customer_long\":-97.040443,\r\n         \"REQUIRED_MEM\":4,\r\n         \"REQUIRED_DISK\":100,\r\n         \"pnf_id\":\"some_pnf_id\"\r\n      },\r\n      \"locations\":{  \r\n         \"customer_loc\":{  \r\n            \"latitude\":{  \r\n               \"get_param\":\"customer_lat\"\r\n            },\r\n            \"longitude\":{  \r\n               \"get_param\":\"customer_long\"\r\n            }\r\n         }\r\n      },\r\n      \"demands\":{  \r\n         \"vG\":[  \r\n            {  \r\n               \"inventory_provider\":\"aai\",\r\n               \"inventory_type\":\"cloud\"\r\n            }\r\n         ]\r\n      },\r\n      \"constraints\":{  \r\n         \"constraint_vg_customer\":{  \r\n            \"type\":\"distance_to_location\",\r\n            \"demands\":[  \r\n               \"vG\"\r\n            ],\r\n            \"properties\":{  \r\n               \"distance\":\"< 5000 km\",\r\n               \"location\":\"customer_loc\"\r\n            }\r\n         }\r\n      },\r\n      \"optimization\":{  \r\n         \"minimize\":{  \r\n            \"sum\":[  \r\n               {  \r\n                  \"distance_between\":[  \r\n                     \"customer_loc\",\r\n                     \"vG\"\r\n                  ]\r\n               },\r\n               {  \r\n                  \"distance_between\":[  \r\n                     \"customer_loc\",\r\n                     \"vG\"\r\n                  ]\r\n               }\r\n            ]\r\n         }\r\n      }\r\n   },\r\n   \"timeout\":5,\r\n   \"limit\":3\r\n}"
+						},
+						"url": {
+							"raw": "{{conductor}}/plans",
+							"host": [
+								"{{conductor}}"
+							],
+							"path": [
+								"plans"
+							]
+						},
+						"description": "Plans"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Plans",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"var data = JSON.parse(responseBody);",
+									"postman.setEnvironmentVariable(\"plan_id\", data['plans'][0]['id']);"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "X-Auth-Token",
+								"value": "{{auth_token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{conductor}}/plans/",
+							"host": [
+								"{{conductor}}"
+							],
+							"path": [
+								"plans",
+								""
+							]
+						},
+						"description": "Plans"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Plan",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "X-Auth-Token",
+								"value": "{{auth_token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"inventory\": {\n        \"THIRD_PARTY_INVENTORY_KEY\": {\n            \"type\": \"Inventory::ThirdParty\",\n            \"properties\": {\n                \"platform_id\": \"PLATFORM_ID\",\n                \"uri\": \"http://host:port/path?query\"\n            }\n        },\n        \"DATA_CENTER_AVAILABILITY_KEY\": {\n            \"type\": \"Inventory::ForStack\",\n            \"properties\": {\n                \"template\": \"TEMPLATE_YAML\",\n                \"template_uri\": \"TEMPLATE_URI\",\n                \"environment\": \"ENV_YAML\",\n                \"environment_url\": \"ENV_URI\"\n            }\n        },\n        \"A_AND_AI_KEY\": {\n            \"type\": \"Inventory::Search\",\n            \"properties\": {\n                \"query\": \"QUERY_FORMAT_TBD\"\n            }\n        }\n    },\n    \"constraints\": {\n        \"NETWORK_LATENCY_KEY\": {\n            \"type\": \"Constraint::NetworkLatency\",\n            \"properties\": {\n                \"inventory_sets\": [\n                    {\"get_inventory\": \"DATA_CENTER_AVAILABILITY_KEY\"},\n                    {\"get_inventory\": \"Inventory::EuroZone\"}\n                ],\n                \"FILTER_KEY\": \"FILTER_VALUE_TBD\"\n            }\n        },\n        \"NETWORK_BANDWIDTH_KEY\": {\n            \"type\": \"Constraint::NetworkBandwidth\",\n            \"properties\": {\n                \"inventory_sets\": [\n                    {\"get_inventory\": \"TBD\"},\n                    {\"get_inventory\": \"TBD\"}\n                ],\n                \"FILTER_KEY\": \"FILTER_VALUE_TBD\"\n            }\n        },\n        \"SITE_RESTRICTIONS_KEY\": {\n            \"type\": \"Constraint::Filter\",\n            \"properties\": {\n                \"inventory_sets\": [\n                    {\"get_inventory\": \"TBD\"}\n                ],\n                \"FILTER_KEY\": \"FILTER_VALUE_TBD\"\n            }\n        },\n        \"SITE_LOCATION_KEY\": {\n            \"type\": \"Constraint::SiteLocation\",\n            \"properties\": {\n                \"inventory_sets\": [\n                    {\"get_inventory\": \"TBD\"}\n                ],\n                \"FILTER_KEY\": \"FILTER_VALUE_TBD\"\n            }\n        },\n        \"EXCLUSIVE_DISASTER_ZONE_KEY\": {\n            \"type\": \"Constraint::ExclusiveDisasterZones\",\n            \"properties\": {\n                \"inventory_sets\": [\n                    {\"get_inventory\": \"TBD\"}\n                ],\n                \"FILTER_KEY\": \"FILTER_VALUE_TBD\"\n            }\n        },\n        \"MINIMUM_DISTANCE_BETWEEN_KEY\": {\n            \"type\": \"Constraint::MinimumDistance\",\n            \"properties\": {\n                \"inventory_sets\": [\n                    {\"get_inventory\": \"TBD\"}\n                ],\n                \"FILTER_KEY\": \"FILTER_VALUE_TBD\"\n            }\n        }\n    },\n    \"cost\": \"FUNCTION_TBD\"\n}"
+						},
+						"url": {
+							"raw": "{{conductor}}/plans/{{plan_id}}",
+							"host": [
+								"{{conductor}}"
+							],
+							"path": [
+								"plans",
+								"{{plan_id}}"
+							]
+						},
+						"description": "Plan"
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Plan",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "X-Auth-Token",
+								"value": "{{auth_token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{conductor}}/plans/142c84f4-6252-41ad-ac44-98dab343a24a",
+							"host": [
+								"{{conductor}}"
+							],
+							"path": [
+								"plans",
+								"142c84f4-6252-41ad-ac44-98dab343a24a"
+							]
+						},
+						"description": "Plan"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Music",
+			"description": "Validate using MUSIC APIs",
+			"item": [
+				{
+					"name": "PLANS table",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"url": {
+							"raw": "{{music}}/MUSIC/rest/keyspaces/conductor/tables/plans/rows/?id={{plan_id}}",
+							"host": [
+								"{{music}}"
+							],
+							"path": [
+								"MUSIC",
+								"rest",
+								"keyspaces",
+								"conductor",
+								"tables",
+								"plans",
+								"rows",
+								""
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "{{plan_id}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "PLANS table All Rows",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"url": {
+							"raw": "{{music}}/MUSIC/rest/keyspaces/conductor/tables/plans/rows",
+							"host": [
+								"{{music}}"
+							],
+							"path": [
+								"MUSIC",
+								"rest",
+								"keyspaces",
+								"conductor",
+								"tables",
+								"plans",
+								"rows"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Version Test",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"url": {
+							"raw": "{{music}}/MUSIC/rest/version",
+							"host": [
+								"{{music}}"
+							],
+							"path": [
+								"MUSIC",
+								"rest",
+								"version"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"id": "d43e4971-494a-467a-b867-c544f609df40",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"id": "64aca1f5-a33a-446e-9f67-7c3bdfbc0a36",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"id": "6af4e8da-c81a-4165-892c-877336f78227",
+			"key": "conductor_root",
+			"value": "http://{{host}}:{{port}}",
+			"type": "string"
+		},
+		{
+			"id": "275be3ee-d97b-4be0-930f-42ece4243ebe",
+			"key": "music",
+			"value": "http://{{music_host}}:{{music_port}}",
+			"type": "string",
+			"description": ""
+		},
+		{
+			"id": "537621de-c2f0-462a-983b-1854b49410c0",
+			"key": "conductor",
+			"value": "{{conductor_root}}/{{version}}",
+			"type": "string"
+		},
+		{
+			"id": "adf46a4a-d1b0-4b2f-99a2-54a7cfebc37e",
+			"key": "version",
+			"value": "v1",
+			"type": "string"
+		},
+		{
+			"id": "c6494bfc-2a32-4575-8b67-bff0749475e8",
+			"key": "Accept",
+			"value": "application/json",
+			"type": "string"
+		},
+		{
+			"id": "e144d46e-5077-4fa3-8a02-c259a4f63601",
+			"key": "host",
+			"value": "otconap5.sc.intel.com",
+			"type": "string"
+		},
+		{
+			"id": "4c4828a7-80ba-4686-bbf0-76351fe84e46",
+			"key": "port",
+			"value": "8091",
+			"type": "string"
+		},
+		{
+			"id": "f384cff2-5216-4e2a-8ddc-0cc422160712",
+			"key": "music_host",
+			"value": "10.3.79.140",
+			"type": "string",
+			"description": ""
+		},
+		{
+			"id": "ac688def-2aff-4d79-a284-6105ef770b28",
+			"key": "music_port",
+			"value": "8080",
+			"type": "string",
+			"description": ""
+		}
+	]
+}

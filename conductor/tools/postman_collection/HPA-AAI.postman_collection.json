@@ -1,0 +1,938 @@
+{
+	"info": {
+		"_postman_id": "c7491763-38f0-4488-84ae-d6e6c42e34da",
+		"name": "HPA-AAI",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Create Complex",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "X-TransactionId",
+						"value": "9999"
+					},
+					{
+						"key": "X-FromAppId",
+						"value": "jimmy-postman"
+					},
+					{
+						"key": "Real-Time",
+						"value": "true"
+					},
+					{
+						"key": "Authorization",
+						"value": "Basic QUFJOkFBSQ=="
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"physical-location-id\": \"DLLSTX233\",\r\n    \"complex-name\": \"complex1\",\r\n    \"physical-location-type\": \"Mobility\",\r\n    \"data-center-code\": \"example-data-center-code-val-6667\",\r\n    \"identity-url\": \"example-identity-url-val-28399\",\r\n    \"street1\": \"example-street1-val-28399\",\r\n    \"street2\": \"example-street2-val-28399\",\r\n    \"elevation\": \"example-elevation-val-28399\",\r\n    \"lata\": \"example-lata-val-28399\",\r\n    \"country\": \"USA\",\r\n    \"latitude\": \"32.89948\",\r\n    \"longitude\": \"-97.045443\",\r\n    \"postal-code\": \"00000\",\r\n    \"region\": \"USA\",\r\n    \"city\": \"Dallas\",\r\n    \"state\": \"TX\"\r\n}"
+				},
+				"url": {
+					"raw": "{{aai}}/cloud-infrastructure/complexes/complex/DLLSTX233",
+					"host": [
+						"{{aai}}"
+					],
+					"path": [
+						"cloud-infrastructure",
+						"complexes",
+						"complex",
+						"DLLSTX233"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "PUT complex2-cloud-region-2 relationship",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "X-TransactionId",
+						"value": "9999"
+					},
+					{
+						"key": "X-FromAppId",
+						"value": "jimmy-postman"
+					},
+					{
+						"key": "Real-Time",
+						"value": "true"
+					},
+					{
+						"key": "Authorization",
+						"value": "Basic QUFJOkFBSQ=="
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"related-to\": \"complex\",\r\n  \"related-link\": \"/aai/v13/cloud-infrastructure/complexes/complex/DLLSTX233\",\r\n  \"relationship-data\": [\r\n  {\r\n      \"relationship-key\": \"complex.physical-location-id\",\r\n      \"relationship-value\": \"DLLSTX233\"\r\n  }\r\n  ]\r\n}"
+				},
+				"url": {
+					"raw": "{{aai}}/cloud-infrastructure/cloud-regions/cloud-region/HPA-cloud/cloud-region-2/relationship-list/relationship",
+					"host": [
+						"{{aai}}"
+					],
+					"path": [
+						"cloud-infrastructure",
+						"cloud-regions",
+						"cloud-region",
+						"HPA-cloud",
+						"cloud-region-2",
+						"relationship-list",
+						"relationship"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET Flavors Cloud-Region2",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "X-TransactionId",
+						"value": "9999"
+					},
+					{
+						"key": "X-FromAppId",
+						"value": "jimmy-postman"
+					},
+					{
+						"key": "Real-Time",
+						"value": "true"
+					},
+					{
+						"key": "Authorization",
+						"value": "Basic QUFJOkFBSQ=="
+					},
+					{
+						"key": "Accept",
+						"value": "application/json"
+					}
+				],
+				"body": {},
+				"url": {
+					"raw": "{{aai}}/cloud-infrastructure/cloud-regions/cloud-region/HPA-cloud/cloud-region-2/flavors/?depth=all",
+					"host": [
+						"{{aai}}"
+					],
+					"path": [
+						"cloud-infrastructure",
+						"cloud-regions",
+						"cloud-region",
+						"HPA-cloud",
+						"cloud-region-2",
+						"flavors",
+						""
+					],
+					"query": [
+						{
+							"key": "depth",
+							"value": "all"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET Cloud-Region2",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "X-TransactionId",
+						"value": "9999"
+					},
+					{
+						"key": "X-FromAppId",
+						"value": "jimmy-postman"
+					},
+					{
+						"key": "Real-Time",
+						"value": "true"
+					},
+					{
+						"key": "Authorization",
+						"value": "Basic QUFJOkFBSQ=="
+					},
+					{
+						"key": "Accept",
+						"value": "application/json"
+					}
+				],
+				"body": {},
+				"url": {
+					"raw": "{{aai}}/cloud-infrastructure/cloud-regions/cloud-region/HPA-cloud/cloud-region-2?depth=all",
+					"host": [
+						"{{aai}}"
+					],
+					"path": [
+						"cloud-infrastructure",
+						"cloud-regions",
+						"cloud-region",
+						"HPA-cloud",
+						"cloud-region-2"
+					],
+					"query": [
+						{
+							"key": "depth",
+							"value": "all"
+						}
+					]
+				}
+			},
+			"response": [
+				{
+					"id": "a7489768-466f-4f2e-ac78-778c669644f4",
+					"name": "GET Cloud-Region2",
+					"originalRequest": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "X-TransactionId",
+								"value": "9999",
+								"disabled": false
+							},
+							{
+								"key": "X-FromAppId",
+								"value": "jimmy-postman",
+								"disabled": false
+							},
+							{
+								"key": "Real-Time",
+								"value": "true",
+								"disabled": false
+							},
+							{
+								"key": "Authorization",
+								"value": "Basic QUFJOkFBSQ==",
+								"disabled": false
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"disabled": false
+							}
+						],
+						"body": {},
+						"url": {
+							"raw": "{{aai}}/cloud-infrastructure/cloud-regions/cloud-region/HPA-cloud/cloud-region-2?depth=all",
+							"host": [
+								"{{aai}}"
+							],
+							"path": [
+								"cloud-infrastructure",
+								"cloud-regions",
+								"cloud-region",
+								"HPA-cloud",
+								"cloud-region-2"
+							],
+							"query": [
+								{
+									"key": "depth",
+									"value": "all"
+								}
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Connection",
+							"value": "close",
+							"name": "Connection",
+							"description": "Options that are desired for the connection"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json",
+							"name": "Content-Type",
+							"description": "The mime type of this content"
+						},
+						{
+							"key": "Date",
+							"value": "Sat, 17 Mar 2018 17:27:13 GMT",
+							"name": "Date",
+							"description": "The date and time that the message was sent"
+						},
+						{
+							"key": "Strict-Transport-Security",
+							"value": "max-age=16000000; includeSubDomains; preload;",
+							"name": "Strict-Transport-Security",
+							"description": "A HSTS Policy informing the HTTP client how long to cache the HTTPS only policy and whether this applies to subdomains."
+						},
+						{
+							"key": "X-AAI-TXID",
+							"value": "1-otconap5-180317-17:27:13:058-50029",
+							"name": "X-AAI-TXID",
+							"description": "Custom header"
+						},
+						{
+							"key": "vertex-id",
+							"value": "28816",
+							"name": "vertex-id",
+							"description": "Custom header"
+						}
+					],
+					"cookie": [],
+					"body": "{\"cloud-owner\":\"HPA-cloud\",\"cloud-region-id\":\"cloud-region-2\",\"cloud-type\":\"openstack-pike\",\"owner-defined-type\":\"example-owner-defined-type-val-848\",\"cloud-region-version\":\"example-cloud-region-version-val-75919\",\"identity-url\":\"example-identity-url-val-14861\",\"cloud-zone\":\"example-cloud-zone-val-4978\",\"complex-name\":\"example-complex-name-val-62100\",\"sriov-automation\":true,\"cloud-extra-info\":\"example-cloud-extra-info-val-49466\",\"cloud-epa-caps\":\"example-cloud-epa-caps-val-99504\",\"resource-version\":\"1521307358985\",\"volume-groups\":{\"volume-group\":[{\"volume-group-id\":\"example-volume-group-id-val-66706\",\"volume-group-name\":\"example-volume-group-name-val-77554\",\"heat-stack-id\":\"example-heat-stack-id-val-70180\",\"vnf-type\":\"example-vnf-type-val-87572\",\"orchestration-status\":\"example-orchestration-status-val-34971\",\"model-customization-id\":\"example-model-customization-id-val-83513\",\"vf-module-model-customization-id\":\"example-vf-module-model-customization-id-val-6507\",\"resource-version\":\"1521306714613\"}]},\"tenants\":{\"tenant\":[{\"tenant-id\":\"tenant-id-2\",\"tenant-name\":\"tenant-name-2\",\"tenant-context\":\"example-tenant-context-val-28442\",\"resource-version\":\"1521306714631\",\"vservers\":{\"vserver\":[{\"vserver-id\":\"vserver-21\",\"vserver-name\":\"vserver-name-2\",\"vserver-name2\":\"example-vserver-name2-val-75154\",\"prov-status\":\"example-prov-status-val-62624\",\"vserver-selflink\":\"example-vserver-selflink-val-3687\",\"in-maint\":true,\"is-closed-loop-disabled\":true,\"resource-version\":\"1521306714637\",\"volumes\":{\"volume\":[{\"volume-id\":\"example-volume-id-val-11970\",\"volume-selflink\":\"example-volume-selflink-val-76166\",\"resource-version\":\"1521306714645\"}]},\"l-interfaces\":{\"l-interface\":[{\"interface-name\":\"example-interface-name-val-33353\",\"interface-role\":\"example-interface-role-val-20528\",\"v6-wan-link-ip\":\"example-v6-wan-link-ip-val-39242\",\"selflink\":\"example-selflink-val-69696\",\"interface-id\":\"example-interface-id-val-96452\",\"macaddr\":\"example-macaddr-val-92350\",\"network-name\":\"example-network-name-val-76057\",\"management-option\":\"example-management-option-val-24749\",\"interface-description\":\"example-interface-description-val-61248\",\"is-port-mirrored\":true,\"resource-version\":\"1521306714659\",\"in-maint\":true,\"prov-status\":\"example-prov-status-val-66068\",\"is-ip-unnumbered\":true,\"allowed-address-pairs\":\"example-allowed-address-pairs-val-97717\",\"vlans\":{\"vlan\":[{\"vlan-interface\":\"example-vlan-interface-val-69702\",\"vlan-id-inner\":67994473,\"vlan-id-outer\":93729787,\"resource-version\":\"1521306714666\",\"speed-value\":\"example-speed-value-val-13924\",\"speed-units\":\"example-speed-units-val-36978\",\"vlan-description\":\"example-vlan-description-val-33791\",\"backdoor-connection\":\"example-backdoor-connection-val-17790\",\"vpn-key\":\"example-vpn-key-val-9875\",\"orchestration-status\":\"example-orchestration-status-val-56763\",\"in-maint\":true,\"prov-status\":\"example-prov-status-val-70388\",\"is-ip-unnumbered\":true,\"l3-interface-ipv4-address-list\":[{\"l3-interface-ipv4-address\":\"example-l3-interface-ipv4-address-val-11760\",\"l3-interface-ipv4-prefix-length\":56201707,\"vlan-id-inner\":73451064,\"vlan-id-outer\":91938369,\"is-floating\":true,\"resource-version\":\"1521306714673\",\"neutron-network-id\":\"example-neutron-network-id-val-98070\",\"neutron-subnet-id\":\"example-neutron-subnet-id-val-27472\"}],\"l3-interface-ipv6-address-list\":[{\"l3-interface-ipv6-address\":\"example-l3-interface-ipv6-address-val-39990\",\"l3-interface-ipv6-prefix-length\":23094280,\"vlan-id-inner\":45385157,\"vlan-id-outer\":7251303,\"is-floating\":true,\"resource-version\":\"1521306714686\",\"neutron-network-id\":\"example-neutron-network-id-val-91087\",\"neutron-subnet-id\":\"example-neutron-subnet-id-val-43501\"}]}]},\"sriov-vfs\":{\"sriov-vf\":[{\"pci-id\":\"example-pci-id-val-91063\",\"vf-vlan-filter\":\"example-vf-vlan-filter-val-77261\",\"vf-mac-filter\":\"example-vf-mac-filter-val-52679\",\"vf-vlan-strip\":true,\"vf-vlan-anti-spoof-check\":true,\"vf-mac-anti-spoof-check\":true,\"vf-mirrors\":\"example-vf-mirrors-val-39917\",\"vf-broadcast-allow\":true,\"vf-unknown-multicast-allow\":true,\"vf-unknown-unicast-allow\":true,\"vf-insert-stag\":true,\"vf-link-status\":\"example-vf-link-status-val-7159\",\"resource-version\":\"1521306714704\",\"neutron-network-id\":\"example-neutron-network-id-val-6599\"}]},\"l-interfaces\":{\"l-interface\":[{\"interface-name\":\"example-interface-name-val-31463\",\"interface-role\":\"example-interface-role-val-59891\",\"v6-wan-link-ip\":\"example-v6-wan-link-ip-val-37795\",\"selflink\":\"example-selflink-val-8079\",\"interface-id\":\"example-interface-id-val-7732\",\"macaddr\":\"example-macaddr-val-4153\",\"network-name\":\"example-network-name-val-95567\",\"management-option\":\"example-management-option-val-37882\",\"interface-description\":\"example-interface-description-val-49246\",\"is-port-mirrored\":true,\"resource-version\":\"1521306714716\",\"in-maint\":true,\"prov-status\":\"example-prov-status-val-679\",\"is-ip-unnumbered\":true,\"allowed-address-pairs\":\"example-allowed-address-pairs-val-51719\"}]},\"l3-interface-ipv4-address-list\":[{\"l3-interface-ipv4-address\":\"example-l3-interface-ipv4-address-val-25727\",\"l3-interface-ipv4-prefix-length\":72086436,\"vlan-id-inner\":49585016,\"vlan-id-outer\":31295411,\"is-floating\":true,\"resource-version\":\"1521306714727\",\"neutron-network-id\":\"example-neutron-network-id-val-60599\",\"neutron-subnet-id\":\"example-neutron-subnet-id-val-63673\"}],\"l3-interface-ipv6-address-list\":[{\"l3-interface-ipv6-address\":\"example-l3-interface-ipv6-address-val-23230\",\"l3-interface-ipv6-prefix-length\":52397550,\"vlan-id-inner\":90366390,\"vlan-id-outer\":74424116,\"is-floating\":true,\"resource-version\":\"1521306714738\",\"neutron-network-id\":\"example-neutron-network-id-val-8866\",\"neutron-subnet-id\":\"example-neutron-subnet-id-val-39258\"}]}]}}]}}]},\"flavors\":{\"flavor\":[{\"flavor-id\":\"acf8220b-4d96-4c30-a426-2e9382f3fff2\",\"flavor-name\":\"flavor-cpu-topology-instruction-set\",\"flavor-vcpus\":32,\"flavor-ram\":65536,\"flavor-disk\":1048576,\"flavor-ephemeral\":128,\"flavor-swap\":\"0\",\"flavor-is-public\":false,\"flavor-selflink\":\"pXtX\",\"flavor-disabled\":false,\"hpa-capabilities\":{\"hpa-capability\":[{\"hpa-capability-id\":\"11a4bfe1-1993-4fda-bd1c-ef333b4f76a9\",\"hpa-feature\":\"cpuInstructionSetExtensions\",\"hpa-version\":\"v1\",\"architecture\":\"Intel64\",\"resource-version\":\"1521306714796\",\"hpa-feature-attributes\":[{\"hpa-attribute-key\":\"instructionSetExtensions\",\"hpa-attribute-value\":\"{\\\"value\\\":{['aes', 'sse', 'avx', 'smt']}}\",\"resource-version\":\"1521306714799\"}]},{\"hpa-capability-id\":\"23ec6d4d-7fee-48d8-9e4a-c598feb101ed\",\"hpa-feature\":\"basicCapabilities\",\"hpa-version\":\"v1\",\"architecture\":\"generic\",\"resource-version\":\"1521306714769\",\"hpa-feature-attributes\":[{\"hpa-attribute-key\":\"virtualMemSize\",\"hpa-attribute-value\":\"{\\\"value\\\":65536, \\\"unit\\\":\\\"MB\\\" }\",\"resource-version\":\"1521306714782\"},{\"hpa-attribute-key\":\"numVirtualCpu\",\"hpa-attribute-value\":\"{\\\"value\\\":32}\",\"resource-version\":\"1521306714773\"}]},{\"hpa-capability-id\":\"9fa22e64-41b4-471f-96ad-6c4708635e4c\",\"hpa-feature\":\"cpuTopology\",\"hpa-version\":\"v1\",\"architecture\":\"generic\",\"resource-version\":\"1521306714813\",\"hpa-feature-attributes\":[{\"hpa-attribute-key\":\"numCpuThreads\",\"hpa-attribute-value\":\"{\\\"value\\\":8}\",\"resource-version\":\"1521306714841\"},{\"hpa-attribute-key\":\"numCpuCores\",\"hpa-attribute-value\":\"{\\\"value\\\":16}\",\"resource-version\":\"1521306714817\"},{\"hpa-attribute-key\":\"numCpuSockets\",\"hpa-attribute-value\":\"{\\\"value\\\":2}\",\"resource-version\":\"1521306714826\"}]}]},\"resource-version\":\"1521306714764\"},{\"flavor-id\":\"e5aa2b2e-3206-41b6-80d5-cf041b098c43\",\"flavor-name\":\"flavor-cpu-pinning-ovsdpdk-instruction-set\",\"flavor-vcpus\":32,\"flavor-ram\":131072,\"flavor-disk\":2097152,\"flavor-ephemeral\":128,\"flavor-swap\":\"0\",\"flavor-is-public\":false,\"flavor-selflink\":\"pXtX\",\"flavor-disabled\":false,\"hpa-capabilities\":{\"hpa-capability\":[{\"hpa-capability-id\":\"5565615b-1077-4bb5-a340-c5be48db2aaa\",\"hpa-feature\":\"basicCapabilities\",\"hpa-version\":\"v1\",\"architecture\":\"generic\",\"resource-version\":\"1521306714950\",\"hpa-feature-attributes\":[{\"hpa-attribute-key\":\"numVirtualCpu\",\"hpa-attribute-value\":\"{\\\"value\\\":32}\",\"resource-version\":\"1521306714964\"},{\"hpa-attribute-key\":\"virtualMemSize\",\"hpa-attribute-value\":\"{\\\"value\\\":131072, \\\"unit\\\":\\\"MB\\\" }\",\"resource-version\":\"1521306714954\"}]},{\"hpa-capability-id\":\"9d36a8fe-bfee-446a-bbcb-881ee66c8f78\",\"hpa-feature\":\"ovsDpdk\",\"hpa-version\":\"v1\",\"architecture\":\"generic\",\"resource-version\":\"1521306714876\",\"hpa-feature-attributes\":[{\"hpa-attribute-key\":\"dataProcessingAccelerationLibrary\",\"hpa-attribute-value\":\"{\\\"value\\\":\\\"v17.02\\\"}\",\"resource-version\":\"1521306714881\"}]},{\"hpa-capability-id\":\"d140c945-1532-4908-86c9-d7f71416f1dd\",\"hpa-feature\":\"cpuPinning\",\"hpa-version\":\"v1\",\"architecture\":\"generic\",\"resource-version\":\"1521306714899\",\"hpa-feature-attributes\":[{\"hpa-attribute-key\":\"logicalCpuThreadPinningPolicy\",\"hpa-attribute-value\":\"{value:\\\"prefer\\\"}\",\"resource-version\":\"1521306714915\"},{\"hpa-attribute-key\":\"logicalCpuPinningPolicy\",\"hpa-attribute-value\":\"{\\\"value\\\":\\\"dedicated\\\"}\",\"resource-version\":\"1521306714904\"}]},{\"hpa-capability-id\":\"5d04f4d8-e257-4442-8417-19a525e56096\",\"hpa-feature\":\"cpuInstructionSetExtensions\",\"hpa-version\":\"v1\",\"architecture\":\"generic\",\"resource-version\":\"1521306714931\",\"hpa-feature-attributes\":[{\"hpa-attribute-key\":\"instructionSetExtensions\",\"hpa-attribute-value\":\"{\\\"value\\\":{['aes', 'avx']}}\",\"resource-version\":\"1521306714936\"}]}]},\"resource-version\":\"1521306714871\"}]},\"group-assignments\":{\"group-assignment\":[{\"group-id\":\"example-group-id-val-67573\",\"group-type\":\"example-group-type-val-91331\",\"group-name\":\"example-group-name-val-95940\",\"group-description\":\"example-group-description-val-89653\",\"resource-version\":\"1521306714983\"}]},\"snapshots\":{\"snapshot\":[{\"snapshot-id\":\"example-snapshot-id-val-31759\",\"snapshot-name\":\"example-snapshot-name-val-32860\",\"snapshot-architecture\":\"example-snapshot-architecture-val-2456\",\"snapshot-os-distro\":\"example-snapshot-os-distro-val-75068\",\"snapshot-os-version\":\"example-snapshot-os-version-val-8641\",\"application\":\"example-application-val-6391\",\"application-vendor\":\"example-application-vendor-val-52418\",\"application-version\":\"example-application-version-val-92869\",\"snapshot-selflink\":\"example-snapshot-selflink-val-69763\",\"prev-snapshot-id\":\"example-prev-snapshot-id-val-19500\",\"resource-version\":\"1521306714993\"}]},\"images\":{\"image\":[{\"image-id\":\"example-image-id-val-91485\",\"image-name\":\"example-image-name-val-86952\",\"image-architecture\":\"example-image-architecture-val-21769\",\"image-os-distro\":\"example-image-os-distro-val-15267\",\"image-os-version\":\"example-image-os-version-val-90601\",\"application\":\"example-application-val-41444\",\"application-vendor\":\"example-application-vendor-val-50626\",\"application-version\":\"example-application-version-val-11318\",\"image-selflink\":\"example-image-selflink-val-18790\",\"resource-version\":\"1521306715005\",\"metadata\":{\"metadatum\":[{\"metaname\":\"example-metaname-val-39609\",\"metaval\":\"example-metaval-val-62296\",\"resource-version\":\"1521306715009\"}]}}]},\"dvs-switches\":{\"dvs-switch\":[{\"switch-name\":\"example-switch-name-val-23942\",\"vcenter-url\":\"example-vcenter-url-val-7815\",\"resource-version\":\"1521306715024\"}]},\"oam-networks\":{\"oam-network\":[{\"network-uuid\":\"example-network-uuid-val-1062\",\"network-name\":\"example-network-name-val-96413\",\"cvlan-tag\":20601039,\"ipv4-oam-gateway-address\":\"example-ipv4-oam-gateway-address-val-92545\",\"ipv4-oam-gateway-address-prefix-length\":9067,\"resource-version\":\"1521306715034\"}]},\"availability-zones\":{\"availability-zone\":[{\"availability-zone-name\":\"example-availability-zone-name-val-37097\",\"hypervisor-type\":\"example-hypervisor-type-val-91298\",\"operational-status\":\"example-operational-status-val-4894\",\"resource-version\":\"1521306715044\"}]},\"relationship-list\":{\"relationship\":[{\"related-to\":\"complex\",\"relationship-label\":\"org.onap.relationships.inventory.LocatedIn\",\"related-link\":\"/aai/v13/cloud-infrastructure/complexes/complex/DLLSTX233\",\"relationship-data\":[{\"relationship-key\":\"complex.physical-location-id\",\"relationship-value\":\"DLLSTX233\"}]}]},\"vip-ipv4-address-list\":[{\"vip-ipv4-address\":\"example-vip-ipv4-address-val-9775\",\"vip-ipv4-prefix-length\":21779008,\"vlan-id-inner\":183626,\"vlan-id-outer\":7595139,\"is-floating\":true,\"resource-version\":\"1521306715054\",\"neutron-network-id\":\"example-neutron-network-id-val-61916\",\"neutron-subnet-id\":\"example-neutron-subnet-id-val-94467\"}],\"vip-ipv6-address-list\":[{\"vip-ipv6-address\":\"example-vip-ipv6-address-val-71778\",\"vip-ipv6-prefix-length\":54690289,\"vlan-id-inner\":37212492,\"vlan-id-outer\":58857577,\"is-floating\":true,\"resource-version\":\"1521306715064\",\"neutron-network-id\":\"example-neutron-network-id-val-2251\",\"neutron-subnet-id\":\"example-neutron-subnet-id-val-64440\"}],\"hpa-capabilities\":{\"hpa-capability\":[{\"hpa-capability-id\":\"example-hpa-capability-id-val-22083\",\"hpa-feature\":\"cloud-specific-hpa\",\"hpa-version\":\"example-hpa-version-val-64467\",\"architecture\":\"example-architecture-val-82451\",\"resource-version\":\"1521306715075\",\"hpa-feature-attributes\":[{\"hpa-attribute-key\":\"example-hpa-attribute-key-val-28058\",\"hpa-attribute-value\":\"example-hpa-attribute-value-val-74993\",\"resource-version\":\"1521306715078\"}]}]}}"
+				}
+			]
+		},
+		{
+			"name": "GET Cloud-Region1",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "X-TransactionId",
+						"value": "9999"
+					},
+					{
+						"key": "X-FromAppId",
+						"value": "jimmy-postman"
+					},
+					{
+						"key": "Real-Time",
+						"value": "true"
+					},
+					{
+						"key": "Authorization",
+						"value": "Basic QUFJOkFBSQ=="
+					},
+					{
+						"key": "Accept",
+						"value": "application/json"
+					}
+				],
+				"body": {},
+				"url": {
+					"raw": "{{aai}}/cloud-infrastructure/cloud-regions/cloud-region/HPA-cloud/cloud-region-1?depth=all",
+					"host": [
+						"{{aai}}"
+					],
+					"path": [
+						"cloud-infrastructure",
+						"cloud-regions",
+						"cloud-region",
+						"HPA-cloud",
+						"cloud-region-1"
+					],
+					"query": [
+						{
+							"key": "depth",
+							"value": "all"
+						}
+					]
+				}
+			},
+			"response": [
+				{
+					"id": "ce66c1a6-3f54-4318-b66f-f5ecfea79e38",
+					"name": "GET Cloud-Region1",
+					"originalRequest": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "X-TransactionId",
+								"value": "9999"
+							},
+							{
+								"key": "X-FromAppId",
+								"value": "jimmy-postman"
+							},
+							{
+								"key": "Real-Time",
+								"value": "true"
+							},
+							{
+								"key": "Authorization",
+								"value": "Basic QUFJOkFBSQ=="
+							},
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"body": {},
+						"url": {
+							"raw": "{{aai}}/cloud-infrastructure/cloud-regions/cloud-region/HPA-cloud/cloud-region-1?depth=all",
+							"host": [
+								"{{aai}}"
+							],
+							"path": [
+								"cloud-infrastructure",
+								"cloud-regions",
+								"cloud-region",
+								"HPA-cloud",
+								"cloud-region-1"
+							],
+							"query": [
+								{
+									"key": "depth",
+									"value": "all"
+								}
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Connection",
+							"value": "close",
+							"name": "Connection",
+							"description": "Options that are desired for the connection"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json",
+							"name": "Content-Type",
+							"description": "The mime type of this content"
+						},
+						{
+							"key": "Date",
+							"value": "Sat, 17 Mar 2018 17:25:51 GMT",
+							"name": "Date",
+							"description": "The date and time that the message was sent"
+						},
+						{
+							"key": "Strict-Transport-Security",
+							"value": "max-age=16000000; includeSubDomains; preload;",
+							"name": "Strict-Transport-Security",
+							"description": "A HSTS Policy informing the HTTP client how long to cache the HTTPS only policy and whether this applies to subdomains."
+						},
+						{
+							"key": "X-AAI-TXID",
+							"value": "1-otconap5-180317-17:25:51:746-14527",
+							"name": "X-AAI-TXID",
+							"description": "Custom header"
+						},
+						{
+							"key": "vertex-id",
+							"value": "4152",
+							"name": "vertex-id",
+							"description": "Custom header"
+						}
+					],
+					"cookie": [],
+					"body": "{\"cloud-owner\":\"HPA-cloud\",\"cloud-region-id\":\"cloud-region-1\",\"cloud-type\":\"openstack-pike\",\"owner-defined-type\":\"example-owner-defined-type-val-848\",\"cloud-region-version\":\"example-cloud-region-version-val-75919\",\"identity-url\":\"example-identity-url-val-14861\",\"cloud-zone\":\"example-cloud-zone-val-4978\",\"complex-name\":\"example-complex-name-val-62100\",\"sriov-automation\":true,\"cloud-extra-info\":\"example-cloud-extra-info-val-49466\",\"cloud-epa-caps\":\"example-cloud-epa-caps-val-99504\",\"resource-version\":\"1521307375722\",\"volume-groups\":{\"volume-group\":[{\"volume-group-id\":\"example-volume-group-id-val-66706\",\"volume-group-name\":\"example-volume-group-name-val-77554\",\"heat-stack-id\":\"example-heat-stack-id-val-70180\",\"vnf-type\":\"example-vnf-type-val-87572\",\"orchestration-status\":\"example-orchestration-status-val-34971\",\"model-customization-id\":\"example-model-customization-id-val-83513\",\"vf-module-model-customization-id\":\"example-vf-module-model-customization-id-val-6507\",\"resource-version\":\"1521306555806\"}]},\"tenants\":{\"tenant\":[{\"tenant-id\":\"tenant-id-1\",\"tenant-name\":\"tenant-name-1\",\"tenant-context\":\"example-tenant-context-val-28442\",\"resource-version\":\"1521306556951\",\"vservers\":{\"vserver\":[{\"vserver-id\":\"vserver-1\",\"vserver-name\":\"vserver-name-1\",\"vserver-name2\":\"example-vserver-name2-val-75154\",\"prov-status\":\"example-prov-status-val-62624\",\"vserver-selflink\":\"example-vserver-selflink-val-3687\",\"in-maint\":true,\"is-closed-loop-disabled\":true,\"resource-version\":\"1521306556989\",\"volumes\":{\"volume\":[{\"volume-id\":\"example-volume-id-val-11970\",\"volume-selflink\":\"example-volume-selflink-val-76166\",\"resource-version\":\"1521306557727\"}]},\"l-interfaces\":{\"l-interface\":[{\"interface-name\":\"example-interface-name-val-33353\",\"interface-role\":\"example-interface-role-val-20528\",\"v6-wan-link-ip\":\"example-v6-wan-link-ip-val-39242\",\"selflink\":\"example-selflink-val-69696\",\"interface-id\":\"example-interface-id-val-96451\",\"macaddr\":\"example-macaddr-val-92350\",\"network-name\":\"example-network-name-val-76057\",\"management-option\":\"example-management-option-val-24749\",\"interface-description\":\"example-interface-description-val-61248\",\"is-port-mirrored\":true,\"resource-version\":\"1521306558446\",\"in-maint\":true,\"prov-status\":\"example-prov-status-val-66068\",\"is-ip-unnumbered\":true,\"allowed-address-pairs\":\"example-allowed-address-pairs-val-97717\",\"vlans\":{\"vlan\":[{\"vlan-interface\":\"example-vlan-interface-val-69702\",\"vlan-id-inner\":67994473,\"vlan-id-outer\":93729787,\"resource-version\":\"1521306558520\",\"speed-value\":\"example-speed-value-val-13924\",\"speed-units\":\"example-speed-units-val-36978\",\"vlan-description\":\"example-vlan-description-val-33791\",\"backdoor-connection\":\"example-backdoor-connection-val-17790\",\"vpn-key\":\"example-vpn-key-val-9875\",\"orchestration-status\":\"example-orchestration-status-val-56763\",\"in-maint\":true,\"prov-status\":\"example-prov-status-val-70388\",\"is-ip-unnumbered\":true,\"l3-interface-ipv4-address-list\":[{\"l3-interface-ipv4-address\":\"example-l3-interface-ipv4-address-val-11760\",\"l3-interface-ipv4-prefix-length\":56201707,\"vlan-id-inner\":73451064,\"vlan-id-outer\":91938369,\"is-floating\":true,\"resource-version\":\"1521306559236\",\"neutron-network-id\":\"example-neutron-network-id-val-98070\",\"neutron-subnet-id\":\"example-neutron-subnet-id-val-27472\"}],\"l3-interface-ipv6-address-list\":[{\"l3-interface-ipv6-address\":\"example-l3-interface-ipv6-address-val-39990\",\"l3-interface-ipv6-prefix-length\":23094280,\"vlan-id-inner\":45385157,\"vlan-id-outer\":7251303,\"is-floating\":true,\"resource-version\":\"1521306559291\",\"neutron-network-id\":\"example-neutron-network-id-val-91087\",\"neutron-subnet-id\":\"example-neutron-subnet-id-val-43501\"}]}]},\"sriov-vfs\":{\"sriov-vf\":[{\"pci-id\":\"example-pci-id-val-91062\",\"vf-vlan-filter\":\"example-vf-vlan-filter-val-77261\",\"vf-mac-filter\":\"example-vf-mac-filter-val-52679\",\"vf-vlan-strip\":true,\"vf-vlan-anti-spoof-check\":true,\"vf-mac-anti-spoof-check\":true,\"vf-mirrors\":\"example-vf-mirrors-val-39917\",\"vf-broadcast-allow\":true,\"vf-unknown-multicast-allow\":true,\"vf-unknown-unicast-allow\":true,\"vf-insert-stag\":true,\"vf-link-status\":\"example-vf-link-status-val-7159\",\"resource-version\":\"1521306559341\",\"neutron-network-id\":\"example-neutron-network-id-val-6599\"}]},\"l-interfaces\":{\"l-interface\":[{\"interface-name\":\"example-interface-name-val-31463\",\"interface-role\":\"example-interface-role-val-59891\",\"v6-wan-link-ip\":\"example-v6-wan-link-ip-val-37795\",\"selflink\":\"example-selflink-val-8079\",\"interface-id\":\"example-interface-id-val-7731\",\"macaddr\":\"example-macaddr-val-4153\",\"network-name\":\"example-network-name-val-95567\",\"management-option\":\"example-management-option-val-37882\",\"interface-description\":\"example-interface-description-val-49246\",\"is-port-mirrored\":true,\"resource-version\":\"1521306559439\",\"in-maint\":true,\"prov-status\":\"example-prov-status-val-679\",\"is-ip-unnumbered\":true,\"allowed-address-pairs\":\"example-allowed-address-pairs-val-51719\"}]},\"l3-interface-ipv4-address-list\":[{\"l3-interface-ipv4-address\":\"example-l3-interface-ipv4-address-val-25727\",\"l3-interface-ipv4-prefix-length\":72086436,\"vlan-id-inner\":49585016,\"vlan-id-outer\":31295411,\"is-floating\":true,\"resource-version\":\"1521306560129\",\"neutron-network-id\":\"example-neutron-network-id-val-60599\",\"neutron-subnet-id\":\"example-neutron-subnet-id-val-63673\"}],\"l3-interface-ipv6-address-list\":[{\"l3-interface-ipv6-address\":\"example-l3-interface-ipv6-address-val-23230\",\"l3-interface-ipv6-prefix-length\":52397550,\"vlan-id-inner\":90366390,\"vlan-id-outer\":74424116,\"is-floating\":true,\"resource-version\":\"1521306560154\",\"neutron-network-id\":\"example-neutron-network-id-val-8866\",\"neutron-subnet-id\":\"example-neutron-subnet-id-val-39258\"}]}]}}]}}]},\"flavors\":{\"flavor\":[{\"flavor-id\":\"9cf8220b-4d96-4c30-a426-2e9382f3fff2\",\"flavor-name\":\"flavor-numa-cpu-topology-instruction-set\",\"flavor-vcpus\":64,\"flavor-ram\":65536,\"flavor-disk\":1048576,\"flavor-ephemeral\":128,\"flavor-swap\":\"0\",\"flavor-is-public\":false,\"flavor-selflink\":\"pXtX\",\"flavor-disabled\":false,\"hpa-capabilities\":{\"hpa-capability\":[{\"hpa-capability-id\":\"01a4bfe1-1993-4fda-bd1c-ef333b4f76a9\",\"hpa-feature\":\"cpuInstructionSetExtensions\",\"hpa-version\":\"v1\",\"architecture\":\"Intel64\",\"resource-version\":\"1521306560982\",\"hpa-feature-attributes\":[{\"hpa-attribute-key\":\"instructionSetExtensions\",\"hpa-attribute-value\":\"{\\\"value\\\":{['AAA', 'BBB', 'CCC', 'DDD']}}\",\"resource-version\":\"1521306560989\"}]},{\"hpa-capability-id\":\"167ad6a2-7d9c-4bf2-9a1b-30e5311b8c66\",\"hpa-feature\":\"numa\",\"hpa-version\":\"v1\",\"architecture\":\"generic\",\"resource-version\":\"1521306561020\",\"hpa-feature-attributes\":[{\"hpa-attribute-key\":\"numaCpu-1\",\"hpa-attribute-value\":\"{\\\"value\\\":4}\",\"resource-version\":\"1521306561060\"},{\"hpa-attribute-key\":\"numaNodes\",\"hpa-attribute-value\":\"{\\\"value\\\":2}\",\"resource-version\":\"1521306561088\"},{\"hpa-attribute-key\":\"numaCpu-0\",\"hpa-attribute-value\":\"{\\\"value\\\":2}\",\"resource-version\":\"1521306561028\"},{\"hpa-attribute-key\":\"numaMem-0\",\"hpa-attribute-value\":\"{\\\"value\\\":2, \\\"unit\\\":\\\"GB\\\" }\",\"resource-version\":\"1521306561044\"},{\"hpa-attribute-key\":\"numaMem-1\",\"hpa-attribute-value\":\"{\\\"value\\\":4, \\\"unit\\\":\\\"GB\\\" }\",\"resource-version\":\"1521306561074\"}]},{\"hpa-capability-id\":\"13ec6d4d-7fee-48d8-9e4a-c598feb101ed\",\"hpa-feature\":\"basicCapabilities\",\"hpa-version\":\"v1\",\"architecture\":\"generic\",\"resource-version\":\"1521306560909\",\"hpa-feature-attributes\":[{\"hpa-attribute-key\":\"numVirtualCpu\",\"hpa-attribute-value\":\"{\\\"value\\\":64}\",\"resource-version\":\"1521306560932\"},{\"hpa-attribute-key\":\"virtualMemSize\",\"hpa-attribute-value\":\"{\\\"value\\\":65536, \\\"unit\\\":\\\"MB\\\" }\",\"resource-version\":\"1521306560954\"}]},{\"hpa-capability-id\":\"8fa22e64-41b4-471f-96ad-6c4708635e4c\",\"hpa-feature\":\"cpuTopology\",\"hpa-version\":\"v1\",\"architecture\":\"generic\",\"resource-version\":\"1521306561109\",\"hpa-feature-attributes\":[{\"hpa-attribute-key\":\"numCpuCores\",\"hpa-attribute-value\":\"{\\\"value\\\":8}\",\"resource-version\":\"1521306561114\"},{\"hpa-attribute-key\":\"numCpuThreads\",\"hpa-attribute-value\":\"{\\\"value\\\":8}\",\"resource-version\":\"1521306561138\"},{\"hpa-attribute-key\":\"numCpuSockets\",\"hpa-attribute-value\":\"{\\\"value\\\":6}\",\"resource-version\":\"1521306561126\"}]}]},\"resource-version\":\"1521306560203\"},{\"flavor-id\":\"f5aa2b2e-3206-41b6-80d5-cf041b098c43\",\"flavor-name\":\"flavor-cpu-pinning-ovsdpdk-instruction-set\",\"flavor-vcpus\":32,\"flavor-ram\":131072,\"flavor-disk\":2097152,\"flavor-ephemeral\":128,\"flavor-swap\":\"0\",\"flavor-is-public\":false,\"flavor-selflink\":\"pXtX\",\"flavor-disabled\":false,\"hpa-capabilities\":{\"hpa-capability\":[{\"hpa-capability-id\":\"4d04f4d8-e257-4442-8417-19a525e56096\",\"hpa-feature\":\"cpuInstructionSetExtensions\",\"hpa-version\":\"v1\",\"architecture\":\"generic\",\"resource-version\":\"1521306561223\",\"hpa-feature-attributes\":[{\"hpa-attribute-key\":\"instructionSetExtensions\",\"hpa-attribute-value\":\"{\\\"value\\\":{['A11', 'B22']}}\",\"resource-version\":\"1521306561228\"}]},{\"hpa-capability-id\":\"8d36a8fe-bfee-446a-bbcb-881ee66c8f78\",\"hpa-feature\":\"ovsDpdk\",\"hpa-version\":\"v1\",\"architecture\":\"generic\",\"resource-version\":\"1521306561170\",\"hpa-feature-attributes\":[{\"hpa-attribute-key\":\"dataProcessingAccelerationLibrary\",\"hpa-attribute-value\":\"{\\\"value\\\":\\\"v18.02\\\"}\",\"resource-version\":\"1521306561175\"}]},{\"hpa-capability-id\":\"c140c945-1532-4908-86c9-d7f71416f1dd\",\"hpa-feature\":\"cpuPinning\",\"hpa-version\":\"v1\",\"architecture\":\"generic\",\"resource-version\":\"1521306561191\",\"hpa-feature-attributes\":[{\"hpa-attribute-key\":\"logicalCpuPinningPolicy\",\"hpa-attribute-value\":\"{\\\"value\\\":\\\"dedicated\\\"}\",\"resource-version\":\"1521306561196\"},{\"hpa-attribute-key\":\"logicalCpuThreadPinningPolicy\",\"hpa-attribute-value\":\"{value:\\\"prefer\\\"}\",\"resource-version\":\"1521306561206\"}]},{\"hpa-capability-id\":\"4565615b-1077-4bb5-a340-c5be48db2aaa\",\"hpa-feature\":\"basicCapabilities\",\"hpa-version\":\"v1\",\"architecture\":\"generic\",\"resource-version\":\"1521306561244\",\"hpa-feature-attributes\":[{\"hpa-attribute-key\":\"numVirtualCpu\",\"hpa-attribute-value\":\"{\\\"value\\\":32}\",\"resource-version\":\"1521306561259\"},{\"hpa-attribute-key\":\"virtualMemSize\",\"hpa-attribute-value\":\"{\\\"value\\\":131072, \\\"unit\\\":\\\"MB\\\" }\",\"resource-version\":\"1521306561248\"}]}]},\"resource-version\":\"1521306561164\"}]},\"group-assignments\":{\"group-assignment\":[{\"group-id\":\"example-group-id-val-67572\",\"group-type\":\"example-group-type-val-91331\",\"group-name\":\"example-group-name-val-95940\",\"group-description\":\"example-group-description-val-89653\",\"resource-version\":\"1521306561284\"}]},\"snapshots\":{\"snapshot\":[{\"snapshot-id\":\"example-snapshot-id-val-31758\",\"snapshot-name\":\"example-snapshot-name-val-32860\",\"snapshot-architecture\":\"example-snapshot-architecture-val-2456\",\"snapshot-os-distro\":\"example-snapshot-os-distro-val-75068\",\"snapshot-os-version\":\"example-snapshot-os-version-val-8641\",\"application\":\"example-application-val-6391\",\"application-vendor\":\"example-application-vendor-val-52418\",\"application-version\":\"example-application-version-val-92869\",\"snapshot-selflink\":\"example-snapshot-selflink-val-69763\",\"prev-snapshot-id\":\"example-prev-snapshot-id-val-19500\",\"resource-version\":\"1521306561311\"}]},\"images\":{\"image\":[{\"image-id\":\"example-image-id-val-91484\",\"image-name\":\"example-image-name-val-86952\",\"image-architecture\":\"example-image-architecture-val-21769\",\"image-os-distro\":\"example-image-os-distro-val-15267\",\"image-os-version\":\"example-image-os-version-val-90601\",\"application\":\"example-application-val-41444\",\"application-vendor\":\"example-application-vendor-val-50626\",\"application-version\":\"example-application-version-val-11318\",\"image-selflink\":\"example-image-selflink-val-18790\",\"resource-version\":\"1521306561362\",\"metadata\":{\"metadatum\":[{\"metaname\":\"example-metaname-val-39609\",\"metaval\":\"example-metaval-val-62296\",\"resource-version\":\"1521306561387\"}]}}]},\"dvs-switches\":{\"dvs-switch\":[{\"switch-name\":\"example-switch-name-val-23942\",\"vcenter-url\":\"example-vcenter-url-val-7815\",\"resource-version\":\"1521306561409\"}]},\"oam-networks\":{\"oam-network\":[{\"network-uuid\":\"example-network-uuid-val-1061\",\"network-name\":\"example-network-name-val-96413\",\"cvlan-tag\":20601039,\"ipv4-oam-gateway-address\":\"example-ipv4-oam-gateway-address-val-92545\",\"ipv4-oam-gateway-address-prefix-length\":9067,\"resource-version\":\"1521306561436\"}]},\"availability-zones\":{\"availability-zone\":[{\"availability-zone-name\":\"example-availability-zone-name-val-37096\",\"hypervisor-type\":\"example-hypervisor-type-val-91298\",\"operational-status\":\"example-operational-status-val-4894\",\"resource-version\":\"1521306561465\"}]},\"relationship-list\":{\"relationship\":[{\"related-to\":\"complex\",\"relationship-label\":\"org.onap.relationships.inventory.LocatedIn\",\"related-link\":\"/aai/v13/cloud-infrastructure/complexes/complex/DLLSTX233\",\"relationship-data\":[{\"relationship-key\":\"complex.physical-location-id\",\"relationship-value\":\"DLLSTX233\"}]}]},\"vip-ipv4-address-list\":[{\"vip-ipv4-address\":\"example-vip-ipv4-address-val-9775\",\"vip-ipv4-prefix-length\":21779008,\"vlan-id-inner\":183626,\"vlan-id-outer\":7595139,\"is-floating\":true,\"resource-version\":\"1521306561488\",\"neutron-network-id\":\"example-neutron-network-id-val-61916\",\"neutron-subnet-id\":\"example-neutron-subnet-id-val-94467\"}],\"vip-ipv6-address-list\":[{\"vip-ipv6-address\":\"example-vip-ipv6-address-val-71778\",\"vip-ipv6-prefix-length\":54690289,\"vlan-id-inner\":37212492,\"vlan-id-outer\":58857577,\"is-floating\":true,\"resource-version\":\"1521306561508\",\"neutron-network-id\":\"example-neutron-network-id-val-2251\",\"neutron-subnet-id\":\"example-neutron-subnet-id-val-64440\"}],\"hpa-capabilities\":{\"hpa-capability\":[{\"hpa-capability-id\":\"example-hpa-capability-id-val-22082\",\"hpa-feature\":\"cloud-specific-hpa\",\"hpa-version\":\"example-hpa-version-val-64467\",\"architecture\":\"example-architecture-val-82451\",\"resource-version\":\"1521306561528\",\"hpa-feature-attributes\":[{\"hpa-attribute-key\":\"example-hpa-attribute-key-val-28058\",\"hpa-attribute-value\":\"example-hpa-attribute-value-val-74993\",\"resource-version\":\"1521306561532\"}]}]}}"
+				}
+			]
+		},
+		{
+			"name": "PUT Cloud-Region 1",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "8291bdde-7685-4ddd-956e-7c62fa1bdeee",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "X-TransactionId",
+						"value": "9999"
+					},
+					{
+						"key": "X-FromAppId",
+						"value": "jimmy-postman"
+					},
+					{
+						"key": "Real-Time",
+						"value": "true"
+					},
+					{
+						"key": "Authorization",
+						"value": "Basic QUFJOkFBSQ=="
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"cloud-owner\": \"HPA-cloud\",\r\n  \"cloud-region-id\": \"cloud-region-1\",\r\n  \"cloud-type\": \"openstack-pike\",\r\n  \"owner-defined-type\": \"example-owner-defined-type-val-848\",\r\n  \"cloud-region-version\": \"example-cloud-region-version-val-75919\",\r\n  \"identity-url\": \"example-identity-url-val-14861\",\r\n  \"cloud-zone\": \"example-cloud-zone-val-4978\",\r\n  \"complex-name\": \"example-complex-name-val-62100\",\r\n  \"sriov-automation\": \"true\",\r\n  \"cloud-extra-info\": \"example-cloud-extra-info-val-49466\",\r\n  \"cloud-epa-caps\": \"example-cloud-epa-caps-val-99504\",\r\n  \"volume-groups\": {\r\n    \"volume-group\": {\r\n      \"volume-group-id\": \"example-volume-group-id-val-66706\",\r\n      \"volume-group-name\": \"example-volume-group-name-val-77554\",\r\n      \"heat-stack-id\": \"example-heat-stack-id-val-70180\",\r\n      \"vnf-type\": \"example-vnf-type-val-87572\",\r\n      \"orchestration-status\": \"example-orchestration-status-val-34971\",\r\n      \"model-customization-id\": \"example-model-customization-id-val-83513\",\r\n      \"vf-module-model-customization-id\": \"example-vf-module-model-customization-id-val-6507\"\r\n    }\r\n  },\r\n  \"tenants\": {\r\n    \"tenant\": {\r\n      \"tenant-id\": \"tenant-id-1\",\r\n      \"tenant-name\": \"tenant-name-1\",\r\n      \"tenant-context\": \"example-tenant-context-val-28442\",\r\n      \"vservers\": {\r\n        \"vserver\": {\r\n          \"vserver-id\": \"vserver-1\",\r\n          \"vserver-name\": \"vserver-name-1\",\r\n          \"vserver-name2\": \"example-vserver-name2-val-75154\",\r\n          \"prov-status\": \"example-prov-status-val-62624\",\r\n          \"vserver-selflink\": \"example-vserver-selflink-val-3687\",\r\n          \"in-maint\": \"true\",\r\n          \"is-closed-loop-disabled\": \"true\",\r\n          \"volumes\": {\r\n            \"volume\": {\r\n              \"volume-id\": \"example-volume-id-val-11970\",\r\n              \"volume-selflink\": \"example-volume-selflink-val-76166\"\r\n            }\r\n          },\r\n          \"l-interfaces\": {\r\n            \"l-interface\": {\r\n              \"interface-name\": \"example-interface-name-val-33353\",\r\n              \"interface-role\": \"example-interface-role-val-20528\",\r\n              \"v6-wan-link-ip\": \"example-v6-wan-link-ip-val-39242\",\r\n              \"selflink\": \"example-selflink-val-69696\",\r\n              \"interface-id\": \"example-interface-id-val-96451\",\r\n              \"macaddr\": \"example-macaddr-val-92350\",\r\n              \"network-name\": \"example-network-name-val-76057\",\r\n              \"management-option\": \"example-management-option-val-24749\",\r\n              \"interface-description\": \"example-interface-description-val-61248\",\r\n              \"is-port-mirrored\": \"true\",\r\n              \"in-maint\": \"true\",\r\n              \"prov-status\": \"example-prov-status-val-66068\",\r\n              \"is-ip-unnumbered\": \"true\",\r\n              \"allowed-address-pairs\": \"example-allowed-address-pairs-val-97717\",\r\n              \"vlans\": {\r\n                \"vlan\": {\r\n                  \"vlan-interface\": \"example-vlan-interface-val-69702\",\r\n                  \"vlan-id-inner\": \"67994473\",\r\n                  \"vlan-id-outer\": \"93729787\",\r\n                  \"speed-value\": \"example-speed-value-val-13924\",\r\n                  \"speed-units\": \"example-speed-units-val-36978\",\r\n                  \"vlan-description\": \"example-vlan-description-val-33791\",\r\n                  \"backdoor-connection\": \"example-backdoor-connection-val-17790\",\r\n                  \"vpn-key\": \"example-vpn-key-val-9875\",\r\n                  \"orchestration-status\": \"example-orchestration-status-val-56763\",\r\n                  \"in-maint\": \"true\",\r\n                  \"prov-status\": \"example-prov-status-val-70388\",\r\n                  \"is-ip-unnumbered\": \"true\",\r\n                  \"l3-interface-ipv4-address-list\": {\r\n                    \"l3-interface-ipv4-address\": \"example-l3-interface-ipv4-address-val-11760\",\r\n                    \"l3-interface-ipv4-prefix-length\": \"56201707\",\r\n                    \"vlan-id-inner\": \"73451064\",\r\n                    \"vlan-id-outer\": \"91938369\",\r\n                    \"is-floating\": \"true\",\r\n                    \"neutron-network-id\": \"example-neutron-network-id-val-98070\",\r\n                    \"neutron-subnet-id\": \"example-neutron-subnet-id-val-27472\"\r\n                  },\r\n                  \"l3-interface-ipv6-address-list\": {\r\n                    \"l3-interface-ipv6-address\": \"example-l3-interface-ipv6-address-val-39990\",\r\n                    \"l3-interface-ipv6-prefix-length\": \"23094280\",\r\n                    \"vlan-id-inner\": \"45385157\",\r\n                    \"vlan-id-outer\": \"7251303\",\r\n                    \"is-floating\": \"true\",\r\n                    \"neutron-network-id\": \"example-neutron-network-id-val-91087\",\r\n                    \"neutron-subnet-id\": \"example-neutron-subnet-id-val-43501\"\r\n                  }\r\n                }\r\n              },\r\n              \"sriov-vfs\": {\r\n                \"sriov-vf\": {\r\n                  \"pci-id\": \"example-pci-id-val-91062\",\r\n                  \"vf-vlan-filter\": \"example-vf-vlan-filter-val-77261\",\r\n                  \"vf-mac-filter\": \"example-vf-mac-filter-val-52679\",\r\n                  \"vf-vlan-strip\": \"true\",\r\n                  \"vf-vlan-anti-spoof-check\": \"true\",\r\n                  \"vf-mac-anti-spoof-check\": \"true\",\r\n                  \"vf-mirrors\": \"example-vf-mirrors-val-39917\",\r\n                  \"vf-broadcast-allow\": \"true\",\r\n                  \"vf-unknown-multicast-allow\": \"true\",\r\n                  \"vf-unknown-unicast-allow\": \"true\",\r\n                  \"vf-insert-stag\": \"true\",\r\n                  \"vf-link-status\": \"example-vf-link-status-val-7159\",\r\n                  \"neutron-network-id\": \"example-neutron-network-id-val-6599\"\r\n                }\r\n              },\r\n              \"l-interfaces\": {\r\n                \"l-interface\": {\r\n                  \"interface-name\": \"example-interface-name-val-31463\",\r\n                  \"interface-role\": \"example-interface-role-val-59891\",\r\n                  \"v6-wan-link-ip\": \"example-v6-wan-link-ip-val-37795\",\r\n                  \"selflink\": \"example-selflink-val-8079\",\r\n                  \"interface-id\": \"example-interface-id-val-7731\",\r\n                  \"macaddr\": \"example-macaddr-val-4153\",\r\n                  \"network-name\": \"example-network-name-val-95567\",\r\n                  \"management-option\": \"example-management-option-val-37882\",\r\n                  \"interface-description\": \"example-interface-description-val-49246\",\r\n                  \"is-port-mirrored\": \"true\",\r\n                  \"in-maint\": \"true\",\r\n                  \"prov-status\": \"example-prov-status-val-679\",\r\n                  \"is-ip-unnumbered\": \"true\",\r\n                  \"allowed-address-pairs\": \"example-allowed-address-pairs-val-51719\"\r\n                }\r\n              },\r\n              \"l3-interface-ipv4-address-list\": {\r\n                \"l3-interface-ipv4-address\": \"example-l3-interface-ipv4-address-val-25727\",\r\n                \"l3-interface-ipv4-prefix-length\": \"72086436\",\r\n                \"vlan-id-inner\": \"49585016\",\r\n                \"vlan-id-outer\": \"31295411\",\r\n                \"is-floating\": \"true\",\r\n                \"neutron-network-id\": \"example-neutron-network-id-val-60599\",\r\n                \"neutron-subnet-id\": \"example-neutron-subnet-id-val-63673\"\r\n              },\r\n              \"l3-interface-ipv6-address-list\": {\r\n                \"l3-interface-ipv6-address\": \"example-l3-interface-ipv6-address-val-23230\",\r\n                \"l3-interface-ipv6-prefix-length\": \"52397550\",\r\n                \"vlan-id-inner\": \"90366390\",\r\n                \"vlan-id-outer\": \"74424116\",\r\n                \"is-floating\": \"true\",\r\n                \"neutron-network-id\": \"example-neutron-network-id-val-8866\",\r\n                \"neutron-subnet-id\": \"example-neutron-subnet-id-val-39258\"\r\n              }\r\n            }\r\n          }\r\n        }\r\n      }\r\n    }\r\n  },\r\n  \"flavors\": {\r\n    \"flavor\": [\r\n      {\r\n        \"flavor-id\": \"9cf8220b-4d96-4c30-a426-2e9382f3fff2\",\r\n        \"flavor-name\": \"flavor-numa-cpu-topology-instruction-set\",\r\n        \"flavor-vcpus\": 64,\r\n        \"flavor-ram\": 65536,\r\n        \"flavor-disk\": 1048576,\r\n        \"flavor-ephemeral\": 128,\r\n        \"flavor-swap\": \"0\",\r\n        \"flavor-is-public\": false,\r\n        \"flavor-selflink\": \"pXtX\",\r\n        \"flavor-disabled\": false,\r\n        \"hpa-capabilities\": {\r\n          \"hpa-capability\": [\r\n            {\r\n              \"hpa-capability-id\": \"13ec6d4d-7fee-48d8-9e4a-c598feb101ed\",\r\n              \"hpa-feature\": \"basicCapabilities\",\r\n              \"hpa-version\": \"v1\",\r\n              \"architecture\": \"generic\",\r\n              \"hpa-feature-attributes\": [\r\n                {\r\n                  \"hpa-attribute-key\": \"numVirtualCpu\",\r\n                  \"hpa-attribute-value\": \"{\\\"value\\\":64}\"\r\n                },\r\n                {\r\n                  \"hpa-attribute-key\": \"virtualMemSize\",\r\n                  \"hpa-attribute-value\": \"{\\\"value\\\":65536, \\\"unit\\\":\\\"MB\\\" }\"\r\n                }\r\n              ]\r\n            },\r\n            {\r\n              \"hpa-capability-id\": \"01a4bfe1-1993-4fda-bd1c-ef333b4f76a9\",\r\n              \"hpa-feature\": \"instructionSetExtensions\",\r\n              \"hpa-version\": \"v1\",\r\n              \"architecture\": \"Intel64\",\r\n              \"hpa-feature-attributes\": [\r\n                {\r\n                  \"hpa-attribute-key\": \"instructionSetExtensions\",\r\n                  \"hpa-attribute-value\": \"{\\\"value\\\": [\\\"aes\\\", \\\"sse\\\", \\\"avx\\\", \\\"smt\\\"]}\"\r\n                }\r\n              ]\r\n            },\r\n            {\r\n              \"hpa-capability-id\": \"167ad6a2-7d9c-4bf2-9a1b-30e5311b8c66\",\r\n              \"hpa-feature\": \"numa\",\r\n              \"hpa-version\": \"v1\",\r\n              \"architecture\": \"generic\",\r\n              \"hpa-feature-attributes\": [\r\n                {\r\n                  \"hpa-attribute-key\": \"numaCpu-0\",\r\n                  \"hpa-attribute-value\": \"{\\\"value\\\":2}\"\r\n                },\r\n                {\r\n                  \"hpa-attribute-key\": \"numaMem-0\",\r\n                  \"hpa-attribute-value\": \"{\\\"value\\\":2, \\\"unit\\\":\\\"GB\\\" }\"\r\n                },\r\n                {\r\n                  \"hpa-attribute-key\": \"numaCpu-1\",\r\n                  \"hpa-attribute-value\": \"{\\\"value\\\":4}\"\r\n                },\r\n                {\r\n                  \"hpa-attribute-key\": \"numaMem-1\",\r\n                  \"hpa-attribute-value\": \"{\\\"value\\\":4, \\\"unit\\\":\\\"GB\\\" }\"\r\n                },\r\n                {\r\n                  \"hpa-attribute-key\": \"numaNodes\",\r\n                  \"hpa-attribute-value\": \"{\\\"value\\\":2}\"\r\n                }\r\n              ]\r\n            },\r\n            {\r\n              \"hpa-capability-id\": \"8fa22e64-41b4-471f-96ad-6c4708635e4c\",\r\n              \"hpa-feature\": \"cpuTopology\",\r\n              \"hpa-version\": \"v1\",\r\n              \"architecture\": \"generic\",\r\n              \"hpa-feature-attributes\": [\r\n                {\r\n                  \"hpa-attribute-key\": \"numCpuCores\",\r\n                  \"hpa-attribute-value\": \"{\\\"value\\\":8}\"\r\n                },\r\n                {\r\n                  \"hpa-attribute-key\": \"numCpuSockets\",\r\n                  \"hpa-attribute-value\": \"{\\\"value\\\":6}\"\r\n                },\r\n                {\r\n                  \"hpa-attribute-key\": \"numCpuThreads\",\r\n                  \"hpa-attribute-value\": \"{\\\"value\\\":8}\"\r\n                }\r\n              ]\r\n            }\r\n          ]\r\n        }\r\n      },\r\n      {\r\n        \"flavor-id\": \"f5aa2b2e-3206-41b6-80d5-cf041b098c43\",\r\n        \"flavor-name\": \"flavor-cpu-pinning-ovsdpdk-instruction-set\",\r\n        \"flavor-vcpus\": 32,\r\n        \"flavor-ram\": 131072,\r\n        \"flavor-disk\": 2097152,\r\n        \"flavor-ephemeral\": 128,\r\n        \"flavor-swap\": \"0\",\r\n        \"flavor-is-public\": false,\r\n        \"flavor-selflink\": \"pXtX\",\r\n        \"flavor-disabled\": false,\r\n        \"hpa-capabilities\": {\r\n          \"hpa-capability\": [\r\n            {\r\n              \"hpa-capability-id\": \"8d36a8fe-bfee-446a-bbcb-881ee66c8f78\",\r\n              \"hpa-feature\": \"ovsDpdk\",\r\n              \"hpa-version\": \"v1\",\r\n              \"architecture\": \"generic\",\r\n              \"hpa-feature-attributes\": [\r\n                {\r\n                  \"hpa-attribute-key\": \"dataProcessingAccelerationLibrary\",\r\n                  \"hpa-attribute-value\": \"{\\\"value\\\":\\\"v18.02\\\"}\"\r\n                }\r\n              ]\r\n            },\r\n            {\r\n              \"hpa-capability-id\": \"c140c945-1532-4908-86c9-d7f71416f1dd\",\r\n              \"hpa-feature\": \"cpuPinning\",\r\n              \"hpa-version\": \"v1\",\r\n              \"architecture\": \"generic\",\r\n              \"hpa-feature-attributes\": [\r\n                {\r\n                  \"hpa-attribute-key\": \"logicalCpuPinningPolicy\",\r\n                  \"hpa-attribute-value\": \"{\\\"value\\\":\\\"dedicated\\\"}\"\r\n                },\r\n                {\r\n                  \"hpa-attribute-key\": \"logicalCpuThreadPinningPolicy\",\r\n                  \"hpa-attribute-value\": \"{value:\\\"prefer\\\"}\"\r\n                }\r\n              ]\r\n            },\r\n            {\r\n              \"hpa-capability-id\": \"4d04f4d8-e257-4442-8417-19a525e56096\",\r\n              \"hpa-feature\": \"instructionSetExtensions\",\r\n              \"hpa-version\": \"v1\",\r\n              \"architecture\": \"generic\",\r\n              \"hpa-feature-attributes\": [\r\n                {\r\n                  \"hpa-attribute-key\": \"instructionSetExtensions\",\r\n                  \"hpa-attribute-value\": \"{\\\"value\\\":[\\\"aes\\\", \\\"avx\\\"]}\"\r\n                }\r\n              ]\r\n            },\r\n            {\r\n              \"hpa-capability-id\": \"4565615b-1077-4bb5-a340-c5be48db2aaa\",\r\n              \"hpa-feature\": \"basicCapabilities\",\r\n              \"hpa-version\": \"v1\",\r\n              \"architecture\": \"generic\",\r\n              \"hpa-feature-attributes\": [\r\n                {\r\n                  \"hpa-attribute-key\": \"virtualMemSize\",\r\n                  \"hpa-attribute-value\": \"{\\\"value\\\":131072, \\\"unit\\\":\\\"MB\\\" }\"\r\n                },\r\n                {\r\n                  \"hpa-attribute-key\": \"numVirtualCpu\",\r\n                  \"hpa-attribute-value\": \"{\\\"value\\\":32}\"\r\n                }\r\n              ]\r\n            }\r\n          ]\r\n        }\r\n      }\r\n    ]\r\n  },\r\n  \"group-assignments\": {\r\n    \"group-assignment\": {\r\n      \"group-id\": \"example-group-id-val-67572\",\r\n      \"group-type\": \"example-group-type-val-91331\",\r\n      \"group-name\": \"example-group-name-val-95940\",\r\n      \"group-description\": \"example-group-description-val-89653\"\r\n    }\r\n  },\r\n  \"snapshots\": {\r\n    \"snapshot\": {\r\n      \"snapshot-id\": \"example-snapshot-id-val-31758\",\r\n      \"snapshot-name\": \"example-snapshot-name-val-32860\",\r\n      \"snapshot-architecture\": \"example-snapshot-architecture-val-2456\",\r\n      \"snapshot-os-distro\": \"example-snapshot-os-distro-val-75068\",\r\n      \"snapshot-os-version\": \"example-snapshot-os-version-val-8641\",\r\n      \"application\": \"example-application-val-6391\",\r\n      \"application-vendor\": \"example-application-vendor-val-52418\",\r\n      \"application-version\": \"example-application-version-val-92869\",\r\n      \"snapshot-selflink\": \"example-snapshot-selflink-val-69763\",\r\n      \"prev-snapshot-id\": \"example-prev-snapshot-id-val-19500\"\r\n    }\r\n  },\r\n  \"images\": {\r\n    \"image\": {\r\n      \"image-id\": \"example-image-id-val-91484\",\r\n      \"image-name\": \"example-image-name-val-86952\",\r\n      \"image-architecture\": \"example-image-architecture-val-21769\",\r\n      \"image-os-distro\": \"example-image-os-distro-val-15267\",\r\n      \"image-os-version\": \"example-image-os-version-val-90601\",\r\n      \"application\": \"example-application-val-41444\",\r\n      \"application-vendor\": \"example-application-vendor-val-50626\",\r\n      \"application-version\": \"example-application-version-val-11318\",\r\n      \"image-selflink\": \"example-image-selflink-val-18790\",\r\n      \"metadata\": {\r\n        \"metadatum\": {\r\n          \"metaname\": \"example-metaname-val-39609\",\r\n          \"metaval\": \"example-metaval-val-62296\"\r\n        }\r\n      }\r\n    }\r\n  },\r\n  \"dvs-switches\": {\r\n    \"dvs-switch\": {\r\n      \"switch-name\": \"example-switch-name-val-23942\",\r\n      \"vcenter-url\": \"example-vcenter-url-val-7815\"\r\n    }\r\n  },\r\n  \"oam-networks\": {\r\n    \"oam-network\": {\r\n      \"network-uuid\": \"example-network-uuid-val-1061\",\r\n      \"network-name\": \"example-network-name-val-96413\",\r\n      \"cvlan-tag\": \"20601039\",\r\n      \"ipv4-oam-gateway-address\": \"example-ipv4-oam-gateway-address-val-92545\",\r\n      \"ipv4-oam-gateway-address-prefix-length\": \"9067\"\r\n    }\r\n  },\r\n  \"availability-zones\": {\r\n    \"availability-zone\": {\r\n      \"availability-zone-name\": \"example-availability-zone-name-val-37096\",\r\n      \"hypervisor-type\": \"example-hypervisor-type-val-91298\",\r\n      \"operational-status\": \"example-operational-status-val-4894\"\r\n    }\r\n  },\r\n  \"vip-ipv4-address-list\": {\r\n    \"vip-ipv4-address\": \"example-vip-ipv4-address-val-9775\",\r\n    \"vip-ipv4-prefix-length\": \"21779008\",\r\n    \"vlan-id-inner\": \"183626\",\r\n    \"vlan-id-outer\": \"7595139\",\r\n    \"is-floating\": \"true\",\r\n    \"neutron-network-id\": \"example-neutron-network-id-val-61916\",\r\n    \"neutron-subnet-id\": \"example-neutron-subnet-id-val-94467\"\r\n  },\r\n  \"vip-ipv6-address-list\": {\r\n    \"vip-ipv6-address\": \"example-vip-ipv6-address-val-71778\",\r\n    \"vip-ipv6-prefix-length\": \"54690289\",\r\n    \"vlan-id-inner\": \"37212492\",\r\n    \"vlan-id-outer\": \"58857577\",\r\n    \"is-floating\": \"true\",\r\n    \"neutron-network-id\": \"example-neutron-network-id-val-2251\",\r\n    \"neutron-subnet-id\": \"example-neutron-subnet-id-val-64440\"\r\n  },\r\n  \"hpa-capabilities\": {\r\n    \"hpa-capability\": {\r\n      \"hpa-capability-id\": \"example-hpa-capability-id-val-22082\",\r\n      \"hpa-feature\": \"cloud-specific-hpa\",\r\n      \"hpa-version\": \"example-hpa-version-val-64467\",\r\n      \"architecture\": \"example-architecture-val-82451\",\r\n      \"hpa-feature-attributes\": {\r\n        \"hpa-attribute-key\": \"example-hpa-attribute-key-val-28058\",\r\n        \"hpa-attribute-value\": \"example-hpa-attribute-value-val-74993\"\r\n      }\r\n    }\r\n  }\r\n}"
+				},
+				"url": {
+					"raw": "{{aai}}/cloud-infrastructure/cloud-regions/cloud-region/HPA-cloud/cloud-region-1",
+					"host": [
+						"{{aai}}"
+					],
+					"path": [
+						"cloud-infrastructure",
+						"cloud-regions",
+						"cloud-region",
+						"HPA-cloud",
+						"cloud-region-1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "PUT Cloud-Region 2",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "8291bdde-7685-4ddd-956e-7c62fa1bdeee",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "X-TransactionId",
+						"value": "9999"
+					},
+					{
+						"key": "X-FromAppId",
+						"value": "jimmy-postman"
+					},
+					{
+						"key": "Real-Time",
+						"value": "true"
+					},
+					{
+						"key": "Authorization",
+						"value": "Basic QUFJOkFBSQ=="
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"cloud-owner\": \"HPA-cloud\",\r\n  \"cloud-region-id\": \"cloud-region-2\",\r\n  \"cloud-type\": \"openstack-pike\",\r\n  \"owner-defined-type\": \"example-owner-defined-type-val-848\",\r\n  \"cloud-region-version\": \"example-cloud-region-version-val-75919\",\r\n  \"identity-url\": \"example-identity-url-val-14861\",\r\n  \"cloud-zone\": \"example-cloud-zone-val-4978\",\r\n  \"complex-name\": \"example-complex-name-val-62100\",\r\n  \"sriov-automation\": \"true\",\r\n  \"cloud-extra-info\": \"example-cloud-extra-info-val-49466\",\r\n  \"cloud-epa-caps\": \"example-cloud-epa-caps-val-99504\",\r\n  \"volume-groups\": {\r\n    \"volume-group\": {\r\n      \"volume-group-id\": \"example-volume-group-id-val-66706\",\r\n      \"volume-group-name\": \"example-volume-group-name-val-77554\",\r\n      \"heat-stack-id\": \"example-heat-stack-id-val-70180\",\r\n      \"vnf-type\": \"example-vnf-type-val-87572\",\r\n      \"orchestration-status\": \"example-orchestration-status-val-34971\",\r\n      \"model-customization-id\": \"example-model-customization-id-val-83513\",\r\n      \"vf-module-model-customization-id\": \"example-vf-module-model-customization-id-val-6507\"\r\n    }\r\n  },\r\n  \"tenants\": {\r\n    \"tenant\": {\r\n      \"tenant-id\": \"tenant-id-2\",\r\n      \"tenant-name\": \"tenant-name-2\",\r\n      \"tenant-context\": \"example-tenant-context-val-28442\",\r\n      \"vservers\": {\r\n        \"vserver\": {\r\n          \"vserver-id\": \"vserver-21\",\r\n          \"vserver-name\": \"vserver-name-2\",\r\n          \"vserver-name2\": \"example-vserver-name2-val-75154\",\r\n          \"prov-status\": \"example-prov-status-val-62624\",\r\n          \"vserver-selflink\": \"example-vserver-selflink-val-3687\",\r\n          \"in-maint\": \"true\",\r\n          \"is-closed-loop-disabled\": \"true\",\r\n          \"volumes\": {\r\n            \"volume\": {\r\n              \"volume-id\": \"example-volume-id-val-11970\",\r\n              \"volume-selflink\": \"example-volume-selflink-val-76166\"\r\n            }\r\n          },\r\n          \"l-interfaces\": {\r\n            \"l-interface\": {\r\n              \"interface-name\": \"example-interface-name-val-33353\",\r\n              \"interface-role\": \"example-interface-role-val-20528\",\r\n              \"v6-wan-link-ip\": \"example-v6-wan-link-ip-val-39242\",\r\n              \"selflink\": \"example-selflink-val-69696\",\r\n              \"interface-id\": \"example-interface-id-val-96452\",\r\n              \"macaddr\": \"example-macaddr-val-92350\",\r\n              \"network-name\": \"example-network-name-val-76057\",\r\n              \"management-option\": \"example-management-option-val-24749\",\r\n              \"interface-description\": \"example-interface-description-val-61248\",\r\n              \"is-port-mirrored\": \"true\",\r\n              \"in-maint\": \"true\",\r\n              \"prov-status\": \"example-prov-status-val-66068\",\r\n              \"is-ip-unnumbered\": \"true\",\r\n              \"allowed-address-pairs\": \"example-allowed-address-pairs-val-97717\",\r\n              \"vlans\": {\r\n                \"vlan\": {\r\n                  \"vlan-interface\": \"example-vlan-interface-val-69702\",\r\n                  \"vlan-id-inner\": \"67994473\",\r\n                  \"vlan-id-outer\": \"93729787\",\r\n                  \"speed-value\": \"example-speed-value-val-13924\",\r\n                  \"speed-units\": \"example-speed-units-val-36978\",\r\n                  \"vlan-description\": \"example-vlan-description-val-33791\",\r\n                  \"backdoor-connection\": \"example-backdoor-connection-val-17790\",\r\n                  \"vpn-key\": \"example-vpn-key-val-9875\",\r\n                  \"orchestration-status\": \"example-orchestration-status-val-56763\",\r\n                  \"in-maint\": \"true\",\r\n                  \"prov-status\": \"example-prov-status-val-70388\",\r\n                  \"is-ip-unnumbered\": \"true\",\r\n                  \"l3-interface-ipv4-address-list\": {\r\n                    \"l3-interface-ipv4-address\": \"example-l3-interface-ipv4-address-val-11760\",\r\n                    \"l3-interface-ipv4-prefix-length\": \"56201707\",\r\n                    \"vlan-id-inner\": \"73451064\",\r\n                    \"vlan-id-outer\": \"91938369\",\r\n                    \"is-floating\": \"true\",\r\n                    \"neutron-network-id\": \"example-neutron-network-id-val-98070\",\r\n                    \"neutron-subnet-id\": \"example-neutron-subnet-id-val-27472\"\r\n                  },\r\n                  \"l3-interface-ipv6-address-list\": {\r\n                    \"l3-interface-ipv6-address\": \"example-l3-interface-ipv6-address-val-39990\",\r\n                    \"l3-interface-ipv6-prefix-length\": \"23094280\",\r\n                    \"vlan-id-inner\": \"45385157\",\r\n                    \"vlan-id-outer\": \"7251303\",\r\n                    \"is-floating\": \"true\",\r\n                    \"neutron-network-id\": \"example-neutron-network-id-val-91087\",\r\n                    \"neutron-subnet-id\": \"example-neutron-subnet-id-val-43501\"\r\n                  }\r\n                }\r\n              },\r\n              \"sriov-vfs\": {\r\n                \"sriov-vf\": {\r\n                  \"pci-id\": \"example-pci-id-val-91063\",\r\n                  \"vf-vlan-filter\": \"example-vf-vlan-filter-val-77261\",\r\n                  \"vf-mac-filter\": \"example-vf-mac-filter-val-52679\",\r\n                  \"vf-vlan-strip\": \"true\",\r\n                  \"vf-vlan-anti-spoof-check\": \"true\",\r\n                  \"vf-mac-anti-spoof-check\": \"true\",\r\n                  \"vf-mirrors\": \"example-vf-mirrors-val-39917\",\r\n                  \"vf-broadcast-allow\": \"true\",\r\n                  \"vf-unknown-multicast-allow\": \"true\",\r\n                  \"vf-unknown-unicast-allow\": \"true\",\r\n                  \"vf-insert-stag\": \"true\",\r\n                  \"vf-link-status\": \"example-vf-link-status-val-7159\",\r\n                  \"neutron-network-id\": \"example-neutron-network-id-val-6599\"\r\n                }\r\n              },\r\n              \"l-interfaces\": {\r\n                \"l-interface\": {\r\n                  \"interface-name\": \"example-interface-name-val-31463\",\r\n                  \"interface-role\": \"example-interface-role-val-59891\",\r\n                  \"v6-wan-link-ip\": \"example-v6-wan-link-ip-val-37795\",\r\n                  \"selflink\": \"example-selflink-val-8079\",\r\n                  \"interface-id\": \"example-interface-id-val-7732\",\r\n                  \"macaddr\": \"example-macaddr-val-4153\",\r\n                  \"network-name\": \"example-network-name-val-95567\",\r\n                  \"management-option\": \"example-management-option-val-37882\",\r\n                  \"interface-description\": \"example-interface-description-val-49246\",\r\n                  \"is-port-mirrored\": \"true\",\r\n                  \"in-maint\": \"true\",\r\n                  \"prov-status\": \"example-prov-status-val-679\",\r\n                  \"is-ip-unnumbered\": \"true\",\r\n                  \"allowed-address-pairs\": \"example-allowed-address-pairs-val-51719\"\r\n                }\r\n              },\r\n              \"l3-interface-ipv4-address-list\": {\r\n                \"l3-interface-ipv4-address\": \"example-l3-interface-ipv4-address-val-25727\",\r\n                \"l3-interface-ipv4-prefix-length\": \"72086436\",\r\n                \"vlan-id-inner\": \"49585016\",\r\n                \"vlan-id-outer\": \"31295411\",\r\n                \"is-floating\": \"true\",\r\n                \"neutron-network-id\": \"example-neutron-network-id-val-60599\",\r\n                \"neutron-subnet-id\": \"example-neutron-subnet-id-val-63673\"\r\n              },\r\n              \"l3-interface-ipv6-address-list\": {\r\n                \"l3-interface-ipv6-address\": \"example-l3-interface-ipv6-address-val-23230\",\r\n                \"l3-interface-ipv6-prefix-length\": \"52397550\",\r\n                \"vlan-id-inner\": \"90366390\",\r\n                \"vlan-id-outer\": \"74424116\",\r\n                \"is-floating\": \"true\",\r\n                \"neutron-network-id\": \"example-neutron-network-id-val-8866\",\r\n                \"neutron-subnet-id\": \"example-neutron-subnet-id-val-39258\"\r\n              }\r\n            }\r\n          }\r\n        }\r\n      }\r\n    }\r\n  },\r\n  \"flavors\": {\r\n    \"flavor\": [\r\n      {\r\n        \"flavor-id\": \"acf8220b-4d96-4c30-a426-2e9382f3fff2\",\r\n        \"flavor-name\": \"flavor-cpu-topology-instruction-set\",\r\n        \"flavor-vcpus\": 32,\r\n        \"flavor-ram\": 65536,\r\n        \"flavor-disk\": 1048576,\r\n        \"flavor-ephemeral\": 128,\r\n        \"flavor-swap\": \"0\",\r\n        \"flavor-is-public\": false,\r\n        \"flavor-selflink\": \"pXtX\",\r\n        \"flavor-disabled\": false,\r\n        \"hpa-capabilities\": {\r\n          \"hpa-capability\": [\r\n            {\r\n              \"hpa-capability-id\": \"23ec6d4d-7fee-48d8-9e4a-c598feb101ed\",\r\n              \"hpa-feature\": \"basicCapabilities\",\r\n              \"hpa-version\": \"v1\",\r\n              \"architecture\": \"generic\",\r\n              \"hpa-feature-attributes\": [\r\n                {\r\n                  \"hpa-attribute-key\": \"numVirtualCpu\",\r\n                  \"hpa-attribute-value\": \"{\\\"value\\\":32}\"\r\n                },\r\n                {\r\n                  \"hpa-attribute-key\": \"virtualMemSize\",\r\n                  \"hpa-attribute-value\": \"{\\\"value\\\":65536, \\\"unit\\\":\\\"MB\\\" }\"\r\n                }\r\n              ]\r\n            },\r\n            {\r\n              \"hpa-capability-id\": \"01a4bfe1-1993-4fda-bd1c-ef333b4f76a9\",\r\n              \"hpa-feature\": \"instructionSetExtensions\",\r\n              \"hpa-version\": \"v1\",\r\n              \"architecture\": \"Intel64\",\r\n              \"hpa-feature-attributes\": [\r\n                {\r\n                  \"hpa-attribute-key\": \"instructionSetExtensions\",\r\n                  \"hpa-attribute-value\": \"{\\\"value\\\": [\\\"aes\\\", \\\"sse\\\", \\\"avx\\\", \\\"smt\\\"]}\"\r\n                }\r\n              ]\r\n            },\r\n            {\r\n              \"hpa-capability-id\": \"9fa22e64-41b4-471f-96ad-6c4708635e4c\",\r\n              \"hpa-feature\": \"cpuTopology\",\r\n              \"hpa-version\": \"v1\",\r\n              \"architecture\": \"generic\",\r\n              \"hpa-feature-attributes\": [\r\n                {\r\n                  \"hpa-attribute-key\": \"numCpuCores\",\r\n                  \"hpa-attribute-value\": \"{\\\"value\\\":16}\"\r\n                },\r\n                {\r\n                  \"hpa-attribute-key\": \"numCpuSockets\",\r\n                  \"hpa-attribute-value\": \"{\\\"value\\\":2}\"\r\n                },\r\n                {\r\n                  \"hpa-attribute-key\": \"numCpuThreads\",\r\n                  \"hpa-attribute-value\": \"{\\\"value\\\":8}\"\r\n                }\r\n              ]\r\n            }\r\n          ]\r\n        }\r\n      },\r\n      {\r\n        \"flavor-id\": \"e5aa2b2e-3206-41b6-80d5-cf041b098c43\",\r\n        \"flavor-name\": \"flavor-cpu-pinning-ovsdpdk-instruction-set\",\r\n        \"flavor-vcpus\": 32,\r\n        \"flavor-ram\": 131072,\r\n        \"flavor-disk\": 2097152,\r\n        \"flavor-ephemeral\": 128,\r\n        \"flavor-swap\": \"0\",\r\n        \"flavor-is-public\": false,\r\n        \"flavor-selflink\": \"pXtX\",\r\n        \"flavor-disabled\": false,\r\n        \"hpa-capabilities\": {\r\n          \"hpa-capability\": [\r\n            {\r\n              \"hpa-capability-id\": \"9d36a8fe-bfee-446a-bbcb-881ee66c8f78\",\r\n              \"hpa-feature\": \"ovsDpdk\",\r\n              \"hpa-version\": \"v1\",\r\n              \"architecture\": \"generic\",\r\n              \"hpa-feature-attributes\": [\r\n                {\r\n                  \"hpa-attribute-key\": \"dataProcessingAccelerationLibrary\",\r\n                  \"hpa-attribute-value\": \"{\\\"value\\\":\\\"v17.02\\\"}\"\r\n                }\r\n              ]\r\n            },\r\n            {\r\n              \"hpa-capability-id\": \"d140c945-1532-4908-86c9-d7f71416f1dd\",\r\n              \"hpa-feature\": \"cpuPinning\",\r\n              \"hpa-version\": \"v1\",\r\n              \"architecture\": \"generic\",\r\n              \"hpa-feature-attributes\": [\r\n                {\r\n                  \"hpa-attribute-key\": \"logicalCpuPinningPolicy\",\r\n                  \"hpa-attribute-value\": \"{\\\"value\\\":\\\"dedicated\\\"}\"\r\n                },\r\n                {\r\n                  \"hpa-attribute-key\": \"logicalCpuThreadPinningPolicy\",\r\n                  \"hpa-attribute-value\": \"{value:\\\"prefer\\\"}\"\r\n                }\r\n              ]\r\n            },\r\n           {\r\n              \"hpa-capability-id\": \"01a4bfe1-1993-4fda-bd1c-ef333b4f76a9\",\r\n              \"hpa-feature\": \"instructionSetExtensions\",\r\n              \"hpa-version\": \"v1\",\r\n              \"architecture\": \"Intel64\",\r\n              \"hpa-feature-attributes\": [\r\n                {\r\n                  \"hpa-attribute-key\": \"instructionSetExtensions\",\r\n                  \"hpa-attribute-value\": \"{\\\"value\\\": [\\\"avx\\\", \\\"smt\\\"]}\"\r\n                }\r\n              ]\r\n            },\r\n            {\r\n              \"hpa-capability-id\": \"5565615b-1077-4bb5-a340-c5be48db2aaa\",\r\n              \"hpa-feature\": \"basicCapabilities\",\r\n              \"hpa-version\": \"v1\",\r\n              \"architecture\": \"generic\",\r\n              \"hpa-feature-attributes\": [\r\n                {\r\n                  \"hpa-attribute-key\": \"virtualMemSize\",\r\n                  \"hpa-attribute-value\": \"{\\\"value\\\":131072, \\\"unit\\\":\\\"MB\\\" }\"\r\n                },\r\n                {\r\n                  \"hpa-attribute-key\": \"numVirtualCpu\",\r\n                  \"hpa-attribute-value\": \"{\\\"value\\\":32}\"\r\n                }\r\n              ]\r\n            }\r\n          ]\r\n        }\r\n      }\r\n    ]\r\n  },\r\n  \"group-assignments\": {\r\n    \"group-assignment\": {\r\n      \"group-id\": \"example-group-id-val-67573\",\r\n      \"group-type\": \"example-group-type-val-91331\",\r\n      \"group-name\": \"example-group-name-val-95940\",\r\n      \"group-description\": \"example-group-description-val-89653\"\r\n    }\r\n  },\r\n  \"snapshots\": {\r\n    \"snapshot\": {\r\n      \"snapshot-id\": \"example-snapshot-id-val-31759\",\r\n      \"snapshot-name\": \"example-snapshot-name-val-32860\",\r\n      \"snapshot-architecture\": \"example-snapshot-architecture-val-2456\",\r\n      \"snapshot-os-distro\": \"example-snapshot-os-distro-val-75068\",\r\n      \"snapshot-os-version\": \"example-snapshot-os-version-val-8641\",\r\n      \"application\": \"example-application-val-6391\",\r\n      \"application-vendor\": \"example-application-vendor-val-52418\",\r\n      \"application-version\": \"example-application-version-val-92869\",\r\n      \"snapshot-selflink\": \"example-snapshot-selflink-val-69763\",\r\n      \"prev-snapshot-id\": \"example-prev-snapshot-id-val-19500\"\r\n    }\r\n  },\r\n  \"images\": {\r\n    \"image\": {\r\n      \"image-id\": \"example-image-id-val-91485\",\r\n      \"image-name\": \"example-image-name-val-86952\",\r\n      \"image-architecture\": \"example-image-architecture-val-21769\",\r\n      \"image-os-distro\": \"example-image-os-distro-val-15267\",\r\n      \"image-os-version\": \"example-image-os-version-val-90601\",\r\n      \"application\": \"example-application-val-41444\",\r\n      \"application-vendor\": \"example-application-vendor-val-50626\",\r\n      \"application-version\": \"example-application-version-val-11318\",\r\n      \"image-selflink\": \"example-image-selflink-val-18790\",\r\n      \"metadata\": {\r\n        \"metadatum\": {\r\n          \"metaname\": \"example-metaname-val-39609\",\r\n          \"metaval\": \"example-metaval-val-62296\"\r\n        }\r\n      }\r\n    }\r\n  },\r\n  \"dvs-switches\": {\r\n    \"dvs-switch\": {\r\n      \"switch-name\": \"example-switch-name-val-23942\",\r\n      \"vcenter-url\": \"example-vcenter-url-val-7815\"\r\n    }\r\n  },\r\n  \"oam-networks\": {\r\n    \"oam-network\": {\r\n      \"network-uuid\": \"example-network-uuid-val-1062\",\r\n      \"network-name\": \"example-network-name-val-96413\",\r\n      \"cvlan-tag\": \"20601039\",\r\n      \"ipv4-oam-gateway-address\": \"example-ipv4-oam-gateway-address-val-92545\",\r\n      \"ipv4-oam-gateway-address-prefix-length\": \"9067\"\r\n    }\r\n  },\r\n  \"availability-zones\": {\r\n    \"availability-zone\": {\r\n      \"availability-zone-name\": \"example-availability-zone-name-val-37097\",\r\n      \"hypervisor-type\": \"example-hypervisor-type-val-91298\",\r\n      \"operational-status\": \"example-operational-status-val-4894\"\r\n    }\r\n  },\r\n  \"vip-ipv4-address-list\": {\r\n    \"vip-ipv4-address\": \"example-vip-ipv4-address-val-9775\",\r\n    \"vip-ipv4-prefix-length\": \"21779008\",\r\n    \"vlan-id-inner\": \"183626\",\r\n    \"vlan-id-outer\": \"7595139\",\r\n    \"is-floating\": \"true\",\r\n    \"neutron-network-id\": \"example-neutron-network-id-val-61916\",\r\n    \"neutron-subnet-id\": \"example-neutron-subnet-id-val-94467\"\r\n  },\r\n  \"vip-ipv6-address-list\": {\r\n    \"vip-ipv6-address\": \"example-vip-ipv6-address-val-71778\",\r\n    \"vip-ipv6-prefix-length\": \"54690289\",\r\n    \"vlan-id-inner\": \"37212492\",\r\n    \"vlan-id-outer\": \"58857577\",\r\n    \"is-floating\": \"true\",\r\n    \"neutron-network-id\": \"example-neutron-network-id-val-2251\",\r\n    \"neutron-subnet-id\": \"example-neutron-subnet-id-val-64440\"\r\n  },\r\n  \"hpa-capabilities\": {\r\n    \"hpa-capability\": {\r\n      \"hpa-capability-id\": \"example-hpa-capability-id-val-22083\",\r\n      \"hpa-feature\": \"cloud-specific-hpa\",\r\n      \"hpa-version\": \"example-hpa-version-val-64467\",\r\n      \"architecture\": \"example-architecture-val-82451\",\r\n      \"hpa-feature-attributes\": {\r\n        \"hpa-attribute-key\": \"example-hpa-attribute-key-val-28058\",\r\n        \"hpa-attribute-value\": \"example-hpa-attribute-value-val-74993\"\r\n      }\r\n    }\r\n  }\r\n}"
+				},
+				"url": {
+					"raw": "{{aai}}/cloud-infrastructure/cloud-regions/cloud-region/HPA-cloud/cloud-region-2",
+					"host": [
+						"{{aai}}"
+					],
+					"path": [
+						"cloud-infrastructure",
+						"cloud-regions",
+						"cloud-region",
+						"HPA-cloud",
+						"cloud-region-2"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "PUT complex1-cloud-region-1 relationship",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "X-TransactionId",
+						"value": "9999"
+					},
+					{
+						"key": "X-FromAppId",
+						"value": "jimmy-postman"
+					},
+					{
+						"key": "Real-Time",
+						"value": "true"
+					},
+					{
+						"key": "Authorization",
+						"value": "Basic QUFJOkFBSQ=="
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"related-to\": \"complex\",\r\n  \"related-link\": \"/aai/v13/cloud-infrastructure/complexes/complex/DLLSTX233\",\r\n  \"relationship-data\": [\r\n  {\r\n      \"relationship-key\": \"complex.physical-location-id\",\r\n      \"relationship-value\": \"DLLSTX233\"\r\n  }\r\n  ]\r\n}"
+				},
+				"url": {
+					"raw": "{{aai}}/cloud-infrastructure/cloud-regions/cloud-region/HPA-cloud/cloud-region-1/relationship-list/relationship",
+					"host": [
+						"{{aai}}"
+					],
+					"path": [
+						"cloud-infrastructure",
+						"cloud-regions",
+						"cloud-region",
+						"HPA-cloud",
+						"cloud-region-1",
+						"relationship-list",
+						"relationship"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET Flavors Cloud-Region1",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "X-TransactionId",
+						"value": "9999"
+					},
+					{
+						"key": "X-FromAppId",
+						"value": "jimmy-postman"
+					},
+					{
+						"key": "Real-Time",
+						"value": "true"
+					},
+					{
+						"key": "Authorization",
+						"value": "Basic QUFJOkFBSQ=="
+					},
+					{
+						"key": "Accept",
+						"value": "application/json"
+					}
+				],
+				"body": {},
+				"url": {
+					"raw": "{{aai}}/cloud-infrastructure/cloud-regions/cloud-region/HPA-cloud/cloud-region-1/flavors/?depth=all",
+					"host": [
+						"{{aai}}"
+					],
+					"path": [
+						"cloud-infrastructure",
+						"cloud-regions",
+						"cloud-region",
+						"HPA-cloud",
+						"cloud-region-1",
+						"flavors",
+						""
+					],
+					"query": [
+						{
+							"key": "depth",
+							"value": "all"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET Complex",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "X-TransactionId",
+						"value": "9999"
+					},
+					{
+						"key": "X-FromAppId",
+						"value": "jimmy-postman"
+					},
+					{
+						"key": "Real-Time",
+						"value": "true"
+					},
+					{
+						"key": "Authorization",
+						"value": "Basic QUFJOkFBSQ=="
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"physical-location-id\": \"example-complex-name-val-62100\",\r\n    \"data-center-code\": \"example-data-center-code-val-6667\",\r\n    \"complex-name\": \"example-complex-name-val-62100\",\r\n    \"identity-url\": \"example-identity-url-val-28399\",\r\n    \"physical-location-type\": \"example-physical-location-type-val-28399\",\r\n    \"street1\": \"example-street1-val-28399\",\r\n    \"street2\": \"example-street2-val-28399\",\r\n    \"city\": \"example-city-val-28399\",\r\n    \"state\": \"example-state-val-28399\",\r\n    \"postal-code\": \"example-postal-code-val-28399\",\r\n    \"country\": \"example-country-val-28399\",\r\n    \"region\": \"example-region-val-28399\",\r\n    \"latitude\": \"example-latitude-val-28399\",\r\n    \"longitude\": \"example-longitude-val-28399\",\r\n    \"elevation\": \"example-elevation-val-28399\",\r\n    \"lata\": \"example-lata-val-28399\"\r\n}"
+				},
+				"url": {
+					"raw": "{{aai}}/cloud-infrastructure/complexes",
+					"host": [
+						"{{aai}}"
+					],
+					"path": [
+						"cloud-infrastructure",
+						"complexes"
+					]
+				}
+			},
+			"response": [
+				{
+					"id": "628394a3-e049-4c51-9246-eb0f933c349e",
+					"name": "GET Complex",
+					"originalRequest": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "X-TransactionId",
+								"value": "9999",
+								"disabled": false
+							},
+							{
+								"key": "X-FromAppId",
+								"value": "jimmy-postman",
+								"disabled": false
+							},
+							{
+								"key": "Real-Time",
+								"value": "true",
+								"disabled": false
+							},
+							{
+								"key": "Authorization",
+								"value": "Basic QUFJOkFBSQ==",
+								"disabled": false
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"disabled": false
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"disabled": false
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"physical-location-id\": \"example-complex-name-val-62100\",\r\n    \"data-center-code\": \"example-data-center-code-val-6667\",\r\n    \"complex-name\": \"example-complex-name-val-62100\",\r\n    \"identity-url\": \"example-identity-url-val-28399\",\r\n    \"physical-location-type\": \"example-physical-location-type-val-28399\",\r\n    \"street1\": \"example-street1-val-28399\",\r\n    \"street2\": \"example-street2-val-28399\",\r\n    \"city\": \"example-city-val-28399\",\r\n    \"state\": \"example-state-val-28399\",\r\n    \"postal-code\": \"example-postal-code-val-28399\",\r\n    \"country\": \"example-country-val-28399\",\r\n    \"region\": \"example-region-val-28399\",\r\n    \"latitude\": \"example-latitude-val-28399\",\r\n    \"longitude\": \"example-longitude-val-28399\",\r\n    \"elevation\": \"example-elevation-val-28399\",\r\n    \"lata\": \"example-lata-val-28399\"\r\n}"
+						},
+						"url": {
+							"raw": "{{aai}}/cloud-infrastructure/complexes",
+							"host": [
+								"{{aai}}"
+							],
+							"path": [
+								"cloud-infrastructure",
+								"complexes"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Length",
+							"value": "1603",
+							"name": "Content-Length",
+							"description": "The length of the response body in octets (8-bit bytes)"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json",
+							"name": "Content-Type",
+							"description": "The mime type of this content"
+						},
+						{
+							"key": "Date",
+							"value": "Sat, 17 Mar 2018 17:27:54 GMT",
+							"name": "Date",
+							"description": "The date and time that the message was sent"
+						},
+						{
+							"key": "Strict-Transport-Security",
+							"value": "max-age=16000000; includeSubDomains; preload;",
+							"name": "Strict-Transport-Security",
+							"description": "A HSTS Policy informing the HTTP client how long to cache the HTTPS only policy and whether this applies to subdomains."
+						},
+						{
+							"key": "X-AAI-TXID",
+							"value": "0-otconap5-180317-17:27:54:114-8316",
+							"name": "X-AAI-TXID",
+							"description": "Custom header"
+						},
+						{
+							"key": "vertex-id",
+							"value": "4344",
+							"name": "vertex-id",
+							"description": "Custom header"
+						}
+					],
+					"cookie": [],
+					"body": "{\"complex\":[{\"physical-location-id\":\"DLLSTX233\",\"data-center-code\":\"example-data-center-code-val-6667\",\"complex-name\":\"complex1\",\"identity-url\":\"example-identity-url-val-28399\",\"resource-version\":\"1521304870595\",\"physical-location-type\":\"Mobility\",\"street1\":\"example-street1-val-28399\",\"street2\":\"example-street2-val-28399\",\"city\":\"Dallas\",\"state\":\"TX\",\"postal-code\":\"00000\",\"country\":\"USA\",\"region\":\"USA\",\"latitude\":\"45.395968\",\"longitude\":\"-71.135344\",\"elevation\":\"example-elevation-val-28399\",\"lata\":\"example-lata-val-28399\",\"relationship-list\":{\"relationship\":[{\"related-to\":\"cloud-region\",\"relationship-label\":\"org.onap.relationships.inventory.LocatedIn\",\"related-link\":\"/aai/v13/cloud-infrastructure/cloud-regions/cloud-region/HPA-cloud/cloud-region-1\",\"relationship-data\":[{\"relationship-key\":\"cloud-region.cloud-owner\",\"relationship-value\":\"HPA-cloud\"},{\"relationship-key\":\"cloud-region.cloud-region-id\",\"relationship-value\":\"cloud-region-1\"}],\"related-to-property\":[{\"property-key\":\"cloud-region.owner-defined-type\",\"property-value\":\"example-owner-defined-type-val-848\"}]},{\"related-to\":\"cloud-region\",\"relationship-label\":\"org.onap.relationships.inventory.LocatedIn\",\"related-link\":\"/aai/v13/cloud-infrastructure/cloud-regions/cloud-region/HPA-cloud/cloud-region-2\",\"relationship-data\":[{\"relationship-key\":\"cloud-region.cloud-owner\",\"relationship-value\":\"HPA-cloud\"},{\"relationship-key\":\"cloud-region.cloud-region-id\",\"relationship-value\":\"cloud-region-2\"}],\"related-to-property\":[{\"property-key\":\"cloud-region.owner-defined-type\",\"property-value\":\"example-owner-defined-type-val-848\"}]}]}}]}"
+				}
+			]
+		},
+		{
+			"name": "GET HPA capability",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "X-TransactionId",
+						"value": "9999"
+					},
+					{
+						"key": "X-FromAppId",
+						"value": "jimmy-postman"
+					},
+					{
+						"key": "Real-Time",
+						"value": "true"
+					},
+					{
+						"key": "Authorization",
+						"value": "Basic QUFJOkFBSQ=="
+					},
+					{
+						"key": "Accept",
+						"value": "application/json"
+					}
+				],
+				"body": {},
+				"url": {
+					"raw": "{{aai}}/cloud-infrastructure/cloud-regions/cloud-region/HPA-cloud/cloud-region-1/flavors/flavor/9cf8220b-4d96-4c30-a426-2e9382f3fff2/hpa-capabilities/hpa-capability/01a4bfe1-1993-4fda-bd1c-ef333b4f76a9",
+					"host": [
+						"{{aai}}"
+					],
+					"path": [
+						"cloud-infrastructure",
+						"cloud-regions",
+						"cloud-region",
+						"HPA-cloud",
+						"cloud-region-1",
+						"flavors",
+						"flavor",
+						"9cf8220b-4d96-4c30-a426-2e9382f3fff2",
+						"hpa-capabilities",
+						"hpa-capability",
+						"01a4bfe1-1993-4fda-bd1c-ef333b4f76a9"
+					]
+				},
+				"description": "Get a HPA capability from a flavor using capability Id"
+			},
+			"response": []
+		},
+		{
+			"name": "GET HPA capability Copy",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "X-TransactionId",
+						"value": "9999"
+					},
+					{
+						"key": "X-FromAppId",
+						"value": "jimmy-postman"
+					},
+					{
+						"key": "Real-Time",
+						"value": "true"
+					},
+					{
+						"key": "Authorization",
+						"value": "Basic QUFJOkFBSQ=="
+					},
+					{
+						"key": "Accept",
+						"value": "application/json"
+					}
+				],
+				"body": {},
+				"url": {
+					"raw": "{{aai}}/cloud-infrastructure/cloud-regions/cloud-region/HPA-cloud/cloud-region-1/flavors/flavor/9cf8220b-4d96-4c30-a426-2e9382f3fff2/hpa-capabilities/hpa-capability/?hpa-capability-id=01a4bfe1-1993-4fda-bd1c-ef333b4f76a9&depth=all",
+					"host": [
+						"{{aai}}"
+					],
+					"path": [
+						"cloud-infrastructure",
+						"cloud-regions",
+						"cloud-region",
+						"HPA-cloud",
+						"cloud-region-1",
+						"flavors",
+						"flavor",
+						"9cf8220b-4d96-4c30-a426-2e9382f3fff2",
+						"hpa-capabilities",
+						"hpa-capability",
+						""
+					],
+					"query": [
+						{
+							"key": "hpa-capability-id",
+							"value": "01a4bfe1-1993-4fda-bd1c-ef333b4f76a9"
+						},
+						{
+							"key": "depth",
+							"value": "all"
+						}
+					]
+				},
+				"description": "Get a HPA capability from a flavor using capability Id"
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"id": "0e9d73d0-a004-4920-a49c-7a7745acf8eb",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"id": "9832ce67-d72a-425a-942f-9f32b3922fa8",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"id": "0a396096-a5d0-4d91-b715-edd1363fd96c",
+			"key": "aai",
+			"value": "https://otconap5.sc.intel.com:8443/aai/v13",
+			"type": "string",
+			"description": ""
+		}
+	]
+}
