@@ -1,0 +1,371 @@
+{
+	"info": {
+		"_postman_id": "239540d1-161b-4d72-9fbb-12c97ddeec8d",
+		"name": "HPA-Conductor",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Plans",
+			"description": "",
+			"item": [
+				{
+					"name": "Create Plan with HPA",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"var data = JSON.parse(responseBody);",
+									"postman.setEnvironmentVariable(\"plan_id\", data['id']);"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "X-Auth-Token",
+								"value": "{{auth_token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"vCPE-with-HPA\",\n  \"template\": {\n  \"homing_template_version\": \"2017-10-10\",\n  \"parameters\": {\n    \"service_name\": \"Residential vCPE\",\n    \"service_id\": \"vcpe_service_id\",\n    \"customer_lat\": 32.89748,\n    \"customer_long\": -97.040443,\n    \"REQUIRED_MEM\": 4,\n    \"REQUIRED_DISK\": 100,\n    \"pnf_id\": \"some_pnf_id\"\n  },\n  \"locations\": {\n    \"customer_loc\": {\n      \"latitude\": {\n        \"get_param\": \"customer_lat\"\n      },\n      \"longitude\": {\n        \"get_param\": \"customer_long\"\n      }\n    },\n    \"brg_loc\": {\n      \"pnf_host_name\": {\n        \"get_param\": \"pnf_id\"\n      }\n    }\n  },\n  \"demands\": {\n    \"vGMuxInfra\": [\n      {\n        \"inventory_provider\": \"aai\",\n        \"inventory_type\": \"service\",\n        \"attributes\": {\n          \"equipment_type\": \"vG_Mux\",\n          \"customer_id\": \"some_company\"\n        },\n        \"excluded_candidates\": [\n          {\n            \"candidate_id\": \"1ac71fb8-ad43-4e16-9459-c3f372b8236d\"\n          }\n        ],\n        \"existing_placement\": [\n          {\n            \"candidate_id\": \"21d5f3e8-e714-4383-8f99-cc480144505a\"\n          }\n        ]\n      }\n    ],\n    \"vG\": [\n      {\n        \"inventory_provider\": \"aai\",\n        \"inventory_type\": \"cloud\"\n      }\n    ]\n  },\n  \"constraints\": [\n    {\n      \"constraint_vgmux_customer\": {\n        \"type\": \"distance_to_location\",\n        \"demands\": [\n          \"vGMuxInfra\"\n        ],\n        \"properties\": {\n          \"distance\": \"< 100 km\",\n          \"location\": \"customer_loc\"\n        }\n      }\n    },\n    {\n      \"colocation\": {\n        \"type\": \"zone\",\n        \"demands\": [\n          \"vGMuxInfra\",\n          \"vG\"\n        ],\n        \"properties\": {\n          \"qualifier\": \"same\",\n          \"category\": \"region\"\n        }\n      }\n    },\n    {\n      \"hpa_constraint\": {\n        \"type\": \"hpa\",\n        \"demands\": [\n          \"vG\"\n        ],\n        \"properties\": {\n          \"evaluate\": [\n            {\n              \"label\": \"flavor_label_1\",\n              \"features\": [\n                {\n                  \"hpa-feature\": \"basicCapabilities\",\n                  \"hpa-version\": \"v1\",\n                  \"architecture\": \"generic\",\n                  \"hpa-feature-attributes\": [\n                    {\n                      \"hpa-attribute-key\": \"numVirtualCpu\",\n                      \"hpa-attribute-value\": \"4\",\n                      \"operator\": \"=\"\n                    },\n                    {\n                      \"hpa-attribute-key\": \"virtualMemSize\",\n                      \"hpa-attribute-value\": \"4\",\n                      \"operator\": \"=\",\n                      \"unit\": \"GB\"\n                    }\n                  ]\n                },\n                {\n                  \"hpa-feature\": \"numa\",\n                  \"hpa-version\": \"v1\",\n                  \"architecture\": \"generic\",\n                  \"hpa-feature-attributes\": [\n                    {\n                      \"hpa-attribute-key\": \"numaNodes\",\n                      \"hpa-attribute-value\": \"2\",\n                      \"operator\": \"=\"\n                    },\n                    {\n                      \"hpa-attribute-key\": \"numaCpu-0\",\n                      \"hpa-attribute-value\": \"2\",\n                      \"operator\": \"=\"\n                    },\n                    {\n                      \"hpa-attribute-key\": \"numaCpu-1\",\n                      \"hpa-attribute-value\": \"4\",\n                      \"operator\": \"=\"\n                    },\n                    {\n                      \"hpa-attribute-key\": \"numaMem-0\",\n                      \"hpa-attribute-value\": \"2\",\n                      \"operator\": \"=\",\n                      \"unit\": \"GB\"\n                    },\n                    {\n                      \"hpa-attribute-key\": \"numaMem-1\",\n                      \"hpa-attribute-value\": \"4\",\n                      \"operator\": \"=\",\n                      \"unit\": \"GB\"\n                    }\n                  ]\n                },\n                {\n                  \"hpa-feature\": \"cpuPinning\",\n                  \"hpa-version\": \"v1\",\n                  \"architecture\": \"generic\",\n                  \"hpa-feature-attributes\": [\n                    {\n                      \"hpa-attribute-key\": \"logicalCpuThreadPinningPolicy\",\n                      \"hpa-attribute-value\": \"prefer\",\n                      \"operator\": \"=\"\n                    },\n                    {\n                      \"hpa-attribute-key\": \"logicalCpuPinningPolicy\",\n                      \"hpa-attribute-value\": \"dedicated\",\n                      \"operator\": \"=\"\n                    }\n                  ]\n                }\n              ]\n            },\n            {\n              \"label\": \"flavor_label_2\",\n              \"features\": [\n                {\n                  \"hpa-feature\": \"basicCapabilities\",\n                  \"hpa-version\": \"v1\",\n                  \"architecture\": \"generic\",\n                  \"hpa-feature-attributes\": [\n                    {\n                      \"hpa-attribute-key\": \"numVirtualCpu\",\n                      \"hpa-attribute-value\": \"8\",\n                      \"operator\": \"=\"\n                    },\n                    {\n                      \"hpa-attribute-key\": \"virtualMemSize\",\n                      \"hpa-attribute-value\": \"16\",\n                      \"operator\": \"=\",\n                      \"unit\": \"GB\"\n                    }\n                  ]\n                },\n                {\n                  \"hpa-feature\": \"numa\",\n                  \"hpa-version\": \"v1\",\n                  \"architecture\": \"generic\",\n                  \"hpa-feature-attributes\": [\n                    {\n                      \"hpa-attribute-key\": \"numaNodes\",\n                      \"hpa-attribute-value\": \"2\",\n                      \"operator\": \"=\"\n                    },\n                    {\n                      \"hpa-attribute-key\": \"numaCpu-0\",\n                      \"hpa-attribute-value\": \"2\",\n                      \"operator\": \"=\"\n                    },\n                    {\n                      \"hpa-attribute-key\": \"numaCpu-1\",\n                      \"hpa-attribute-value\": \"4\",\n                      \"operator\": \"=\"\n                    },\n                    {\n                      \"hpa-attribute-key\": \"numaMem-0\",\n                      \"hpa-attribute-value\": \"2\",\n                      \"operator\": \"=\",\n                      \"unit\": \"GB\"\n                    },\n                    {\n                      \"hpa-attribute-key\": \"numaMem-1\",\n                      \"hpa-attribute-value\": \"4\",\n                      \"operator\": \"=\",\n                      \"unit\": \"GB\"\n                    }\n                  ]\n                },\n                {\n                  \"hpa-feature\": \"memoryPageSize\",\n                  \"hpa-version\": \"v1\",\n                  \"architecture\": \"generic\",\n                  \"hpa-feature-attributes\": [\n                    {\n                      \"hpa-attribute-key\": \"memoryPageSize\",\n                      \"hpa-attribute-value\": \"2\",\n                      \"operator\": \"=\",\n                      \"unit\": \"GB\"\n                    }\n                  ]\n                }\n              ]\n            }\n          ]\n        }\n      }\n    }\n  ],\n  \"optimization\": {\n    \"minimize\": {\n      \"sum\": [\n        {\n          \"distance_between\": [\n            \"customer_loc\",\n            \"vGMuxInfra\"\n          ]\n        },\n        {\n          \"distance_between\": [\n            \"customer_loc\",\n            \"vG\"\n          ]\n        }\n      ]\n    }\n  }\n},\n  \"timeout\": 5,\n  \"limit\": 3\n}"
+						},
+						"url": {
+							"raw": "{{conductor}}/plans",
+							"host": [
+								"{{conductor}}"
+							],
+							"path": [
+								"plans"
+							]
+						},
+						"description": "Plans"
+					},
+					"response": []
+				},
+				{
+					"name": "Create Plan Sanity - Simple",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"var data = JSON.parse(responseBody);",
+									"postman.setEnvironmentVariable(\"plan_id\", data['id']);"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "X-Auth-Token",
+								"value": "{{auth_token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"vCPE-Sanity1\",\n  \"template\": {\n  \"homing_template_version\": \"2017-10-10\",\n  \"parameters\": {\n    \"service_name\": \"Residential vCPE\",\n    \"service_id\": \"vcpe_service_id\",\n    \"customer_lat\": 32.89748,\n    \"customer_long\": -97.040443,\n    \"REQUIRED_MEM\": 4,\n    \"REQUIRED_DISK\": 100,\n    \"pnf_id\": \"some_pnf_id\"\n  },\n  \"locations\": {\n    \"customer_loc\": {\n      \"latitude\": {\n        \"get_param\": \"customer_lat\"\n      },\n      \"longitude\": {\n        \"get_param\": \"customer_long\"\n      }\n    }\n  },\n  \"demands\": {\n    \"vG\": [\n      {\n        \"inventory_provider\": \"aai\",\n        \"inventory_type\": \"cloud\"\n      }\n    ]\n  },\n  \"constraints\": [\n    {\n      \"constraint_vg_customer\": {\n        \"type\": \"distance_to_location\",\n        \"demands\": [\n          \"vG\"\n        ],\n        \"properties\": {\n          \"distance\": \"< 100 km\",\n          \"location\": \"customer_loc\"\n        }\n      }\n    }\n  ],\n  \"optimization\": {\n    \"minimize\": {\n      \"sum\": [\n        {\n          \"distance_between\": [\n            \"customer_loc\",\n            \"vG\"\n          ]\n        },\n        {\n          \"distance_between\": [\n            \"customer_loc\",\n            \"vG\"\n          ]\n        }\n      ]\n    }\n  }\n},\n  \"timeout\": 5,\n  \"limit\": 3\n}"
+						},
+						"url": {
+							"raw": "{{conductor}}/plans",
+							"host": [
+								"{{conductor}}"
+							],
+							"path": [
+								"plans"
+							]
+						},
+						"description": "Plans"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Plans",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"var data = JSON.parse(responseBody);",
+									"postman.setEnvironmentVariable(\"plan_id\", data['plans'][0]['id']);"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "X-Auth-Token",
+								"value": "{{auth_token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{conductor}}/plans/",
+							"host": [
+								"{{conductor}}"
+							],
+							"path": [
+								"plans",
+								""
+							]
+						},
+						"description": "Plans"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Plan",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "X-Auth-Token",
+								"value": "{{auth_token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"inventory\": {\n        \"THIRD_PARTY_INVENTORY_KEY\": {\n            \"type\": \"Inventory::ThirdParty\",\n            \"properties\": {\n                \"platform_id\": \"PLATFORM_ID\",\n                \"uri\": \"http://host:port/path?query\"\n            }\n        },\n        \"DATA_CENTER_AVAILABILITY_KEY\": {\n            \"type\": \"Inventory::ForStack\",\n            \"properties\": {\n                \"template\": \"TEMPLATE_YAML\",\n                \"template_uri\": \"TEMPLATE_URI\",\n                \"environment\": \"ENV_YAML\",\n                \"environment_url\": \"ENV_URI\"\n            }\n        },\n        \"A_AND_AI_KEY\": {\n            \"type\": \"Inventory::Search\",\n            \"properties\": {\n                \"query\": \"QUERY_FORMAT_TBD\"\n            }\n        }\n    },\n    \"constraints\": {\n        \"NETWORK_LATENCY_KEY\": {\n            \"type\": \"Constraint::NetworkLatency\",\n            \"properties\": {\n                \"inventory_sets\": [\n                    {\"get_inventory\": \"DATA_CENTER_AVAILABILITY_KEY\"},\n                    {\"get_inventory\": \"Inventory::EuroZone\"}\n                ],\n                \"FILTER_KEY\": \"FILTER_VALUE_TBD\"\n            }\n        },\n        \"NETWORK_BANDWIDTH_KEY\": {\n            \"type\": \"Constraint::NetworkBandwidth\",\n            \"properties\": {\n                \"inventory_sets\": [\n                    {\"get_inventory\": \"TBD\"},\n                    {\"get_inventory\": \"TBD\"}\n                ],\n                \"FILTER_KEY\": \"FILTER_VALUE_TBD\"\n            }\n        },\n        \"SITE_RESTRICTIONS_KEY\": {\n            \"type\": \"Constraint::Filter\",\n            \"properties\": {\n                \"inventory_sets\": [\n                    {\"get_inventory\": \"TBD\"}\n                ],\n                \"FILTER_KEY\": \"FILTER_VALUE_TBD\"\n            }\n        },\n        \"SITE_LOCATION_KEY\": {\n            \"type\": \"Constraint::SiteLocation\",\n            \"properties\": {\n                \"inventory_sets\": [\n                    {\"get_inventory\": \"TBD\"}\n                ],\n                \"FILTER_KEY\": \"FILTER_VALUE_TBD\"\n            }\n        },\n        \"EXCLUSIVE_DISASTER_ZONE_KEY\": {\n            \"type\": \"Constraint::ExclusiveDisasterZones\",\n            \"properties\": {\n                \"inventory_sets\": [\n                    {\"get_inventory\": \"TBD\"}\n                ],\n                \"FILTER_KEY\": \"FILTER_VALUE_TBD\"\n            }\n        },\n        \"MINIMUM_DISTANCE_BETWEEN_KEY\": {\n            \"type\": \"Constraint::MinimumDistance\",\n            \"properties\": {\n                \"inventory_sets\": [\n                    {\"get_inventory\": \"TBD\"}\n                ],\n                \"FILTER_KEY\": \"FILTER_VALUE_TBD\"\n            }\n        }\n    },\n    \"cost\": \"FUNCTION_TBD\"\n}"
+						},
+						"url": {
+							"raw": "{{conductor}}/plans/{{plan_id}}",
+							"host": [
+								"{{conductor}}"
+							],
+							"path": [
+								"plans",
+								"{{plan_id}}"
+							]
+						},
+						"description": "Plan"
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Plan",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "X-Auth-Token",
+								"value": "{{auth_token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{conductor}}/plans/{{plan_id}}",
+							"host": [
+								"{{conductor}}"
+							],
+							"path": [
+								"plans",
+								"{{plan_id}}"
+							]
+						},
+						"description": "Plan"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Music",
+			"description": "Validate using MUSIC APIs",
+			"item": [
+				{
+					"name": "PLANS table",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"url": {
+							"raw": "{{music}}/MUSIC/rest/keyspaces/conductor/tables/plans/rows/?id={{plan_id}}",
+							"host": [
+								"{{music}}"
+							],
+							"path": [
+								"MUSIC",
+								"rest",
+								"keyspaces",
+								"conductor",
+								"tables",
+								"plans",
+								"rows",
+								""
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "{{plan_id}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "PLANS table All Rows",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"url": {
+							"raw": "{{music}}/MUSIC/rest/keyspaces/conductor/tables/plans/rows",
+							"host": [
+								"{{music}}"
+							],
+							"path": [
+								"MUSIC",
+								"rest",
+								"keyspaces",
+								"conductor",
+								"tables",
+								"plans",
+								"rows"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Version Test",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"url": {
+							"raw": "{{music}}/MUSIC/rest/version",
+							"host": [
+								"{{music}}"
+							],
+							"path": [
+								"MUSIC",
+								"rest",
+								"version"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"id": "d43e4971-494a-467a-b867-c544f609df40",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"id": "64aca1f5-a33a-446e-9f67-7c3bdfbc0a36",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"id": "2947b775-44a7-4c47-8648-4a324c1b6c3d",
+			"key": "conductor_root",
+			"value": "http://{{host}}:{{port}}",
+			"type": "string"
+		},
+		{
+			"id": "a0b08aa2-cf0c-44ea-8ef2-78aa480dfb0d",
+			"key": "music",
+			"value": "http://{{music_host}}:{{music_port}}",
+			"type": "string",
+			"description": ""
+		},
+		{
+			"id": "916f958e-42d6-42b5-a8b5-d076f3d59638",
+			"key": "conductor",
+			"value": "{{conductor_root}}/{{version}}",
+			"type": "string"
+		},
+		{
+			"id": "fb591950-2a2e-4210-b9b7-97645885382d",
+			"key": "version",
+			"value": "v1",
+			"type": "string"
+		},
+		{
+			"id": "59e476c0-232a-4805-a0b2-bf66323276d3",
+			"key": "Accept",
+			"value": "application/json",
+			"type": "string"
+		},
+		{
+			"id": "c95ac27c-7efb-412b-8fd6-7bce2f58e8dd",
+			"key": "host",
+			"value": "localhost",
+			"type": "string"
+		},
+		{
+			"id": "08326aec-cd31-46b8-8177-e1a7418e4d3d",
+			"key": "port",
+			"value": "8091",
+			"type": "string"
+		},
+		{
+			"id": "726b9bb6-05c6-4424-9a66-ab9ad95359c0",
+			"key": "music_host",
+			"value": "localhost",
+			"type": "string",
+			"description": ""
+		},
+		{
+			"id": "02d9d946-bb6d-4dca-9004-d7aa6dd4351f",
+			"key": "music_port",
+			"value": "8080",
+			"type": "string",
+			"description": ""
+		}
+	]
+}
