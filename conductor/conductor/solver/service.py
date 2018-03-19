@@ -17,23 +17,22 @@
 # -------------------------------------------------------------------------
 #
 
-import cotyledon
-import time
 import socket
-from oslo_config import cfg
-from oslo_log import log
+import time
 
+import cotyledon
+from conductor import messaging
+from conductor import service
 from conductor.common.models import plan
 from conductor.common.music import api
 from conductor.common.music import messaging as music_messaging
 from conductor.common.music.model import base
 from conductor.i18n import _LE, _LI
-from conductor import messaging
-from conductor import service
 from conductor.solver.optimizer import optimizer
 from conductor.solver.request import parser
 from conductor.solver.utils import constraint_engine_interface as cei
-
+from oslo_config import cfg
+from oslo_log import log
 
 # To use oslo.log in services:
 #
@@ -346,6 +345,11 @@ class SolverService(cotyledon.Service):
                     if rec["candidate"]["inventory_type"] == "service":
                         rec["attributes"]["host_id"] = resource.get("host_id")
                         rec["candidate"]["host_id"] = resource.get("host_id")
+
+                    if rec["candidate"]["inventory_type"] == "cloud":
+                        if resource.get("flavor_map"):
+                            rec["attributes"]["flavors"] = resource.get(
+                                "flavor_map")
 
                     # TODO(snarayanan): Add total value to recommendations?
                     # msg = "--- total value of decision = {}"
