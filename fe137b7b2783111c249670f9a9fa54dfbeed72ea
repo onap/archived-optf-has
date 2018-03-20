@@ -1,0 +1,211 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a93c517_f5185377",
+        "filename": "conductor/conductor/data/hpa_utils.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1361
+      },
+      "writtenOn": "2018-03-20T17:16:36Z",
+      "side": 1,
+      "message": "Add this comment to _get_normalized_value",
+      "range": {
+        "startLine": 49,
+        "startChar": 7,
+        "endLine": 49,
+        "endChar": 43
+      },
+      "revId": "fe137b7b2783111c249670f9a9fa54dfbeed72ea",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a93c517_95730fb4",
+        "filename": "conductor/conductor/data/hpa_utils.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 106,
+      "author": {
+        "id": 1361
+      },
+      "writtenOn": "2018-03-20T17:16:36Z",
+      "side": 1,
+      "message": "My understanding is that op is a function variable. For consistency op can be assigned as _match_all_operator? Does this work?",
+      "range": {
+        "startLine": 106,
+        "startChar": 17,
+        "endLine": 106,
+        "endChar": 22
+      },
+      "revId": "fe137b7b2783111c249670f9a9fa54dfbeed72ea",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a93c517_5556e707",
+        "filename": "conductor/conductor/data/hpa_utils.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 117,
+      "author": {
+        "id": 1361
+      },
+      "writtenOn": "2018-03-20T17:16:36Z",
+      "side": 1,
+      "message": "Should this be req_value?\nfollow up -\u003e For consistency use c_value itself?",
+      "range": {
+        "startLine": 117,
+        "startChar": 19,
+        "endLine": 117,
+        "endChar": 26
+      },
+      "revId": "fe137b7b2783111c249670f9a9fa54dfbeed72ea",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a93c517_755be32e",
+        "filename": "conductor/conductor/data/hpa_utils.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 117,
+      "author": {
+        "id": 1361
+      },
+      "writtenOn": "2018-03-20T17:16:36Z",
+      "side": 1,
+      "message": "Should this be flavor_value?\nfollow up -\u003e For consistency use f_value itself?",
+      "range": {
+        "startLine": 117,
+        "startChar": 44,
+        "endLine": 117,
+        "endChar": 51
+      },
+      "revId": "fe137b7b2783111c249670f9a9fa54dfbeed72ea",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a93c517_b5096bdf",
+        "filename": "conductor/conductor/data/hpa_utils.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 125,
+      "author": {
+        "id": 1361
+      },
+      "writtenOn": "2018-03-20T17:16:36Z",
+      "side": 1,
+      "message": "match_all_operator is expecting 2 lists big_list and small_list, could you please pass the lists as parameters?",
+      "range": {
+        "startLine": 125,
+        "startChar": 19,
+        "endLine": 125,
+        "endChar": 37
+      },
+      "revId": "fe137b7b2783111c249670f9a9fa54dfbeed72ea",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a93c517_b5788b90",
+        "filename": "conductor/conductor/data/hpa_utils.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 125,
+      "author": {
+        "id": 1361
+      },
+      "writtenOn": "2018-03-20T17:16:36Z",
+      "side": 1,
+      "message": "Based on the above comment. This can be a call to op?",
+      "range": {
+        "startLine": 125,
+        "startChar": 19,
+        "endLine": 125,
+        "endChar": 38
+      },
+      "revId": "fe137b7b2783111c249670f9a9fa54dfbeed72ea",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a93c517_15405f34",
+        "filename": "conductor/conductor/data/hpa_utils.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 125,
+      "author": {
+        "id": 1361
+      },
+      "writtenOn": "2018-03-20T17:16:36Z",
+      "side": 1,
+      "message": "Limit all lines to a maximum of 79 characters.",
+      "range": {
+        "startLine": 125,
+        "startChar": 11,
+        "endLine": 125,
+        "endChar": 107
+      },
+      "revId": "fe137b7b2783111c249670f9a9fa54dfbeed72ea",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a93c517_757203af",
+        "filename": "conductor/conductor/data/hpa_utils.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 144,
+      "author": {
+        "id": 1361
+      },
+      "writtenOn": "2018-03-20T17:16:36Z",
+      "side": 1,
+      "message": "Intend the comment to the function",
+      "range": {
+        "startLine": 144,
+        "startChar": 8,
+        "endLine": 144,
+        "endChar": 66
+      },
+      "revId": "fe137b7b2783111c249670f9a9fa54dfbeed72ea",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a93c517_55a4a707",
+        "filename": "conductor/conductor/data/hpa_utils.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 153,
+      "author": {
+        "id": 1361
+      },
+      "writtenOn": "2018-03-20T17:16:36Z",
+      "side": 1,
+      "message": "Dangling comment.",
+      "range": {
+        "startLine": 153,
+        "startChar": 15,
+        "endLine": 153,
+        "endChar": 57
+      },
+      "revId": "fe137b7b2783111c249670f9a9fa54dfbeed72ea",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
