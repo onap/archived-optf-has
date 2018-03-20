@@ -1,0 +1,39 @@
+"features": [
+                {
+                  "hpa-feature": "basicCapabilities",
+                  "hpa-version": "v1",
+                  "architecture": "generic",
+                  "hpa-feature-attributes": [
+                    {
+                      "hpa-attribute-key": "numVirtualCpu",
+                      "hpa-attribute-value": "8",
+                      "operator": "="
+                    },
+                    {
+                      "hpa-attribute-key": "virtualMemSize",
+                      "hpa-attribute-value": "16384",
+                      "operator": "=",
+                      "unit": "MB"
+                    }
+                  ]
+                },
+                {
+                  "hpa-feature": "cpuPinning",
+                  "hpa-version": "v1",
+                  "architecture": "generic",
+                  "hpa-feature-attributes": [
+                    {
+                      "hpa-attribute-key": "logicalCpuThreadPinningPolicy",
+                      "hpa-attribute-value": "prefer",
+                      "operator": "="
+                    },
+                    {
+                      "hpa-attribute-key": "logicalCpuPinningPolicy",
+                      "hpa-attribute-value": "dedicated",
+                      "operator": "="
+                    }
+                  ]
+                }
+            ]
+
+
