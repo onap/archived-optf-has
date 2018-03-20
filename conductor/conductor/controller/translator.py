@@ -22,17 +22,16 @@ import datetime
 import json
 import os
 import uuid
-import yaml
 
-from oslo_config import cfg
-from oslo_log import log
 import six
-
+import yaml
 from conductor import __file__ as conductor_root
-from conductor.common.music import messaging as music_messaging
-from conductor.common import threshold
 from conductor import messaging
 from conductor import service
+from conductor.common import threshold
+from conductor.common.music import messaging as music_messaging
+from oslo_config import cfg
+from oslo_log import log
 
 LOG = log.getLogger(__name__)
 
@@ -94,6 +93,11 @@ CONSTRAINTS = {
         'allowed': {'qualifier': ['same', 'different'],
                     'category': ['disaster', 'region', 'complex', 'country',
                                  'time', 'maintenance']},
+    },
+    'vim_fit': {
+        'split': True,
+        'required': ['controller'],
+        'optional': ['request'],
     },
 }
 
