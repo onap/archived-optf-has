@@ -20,6 +20,7 @@ import json
 import unittest
 
 import conductor.data.plugins.inventory_provider.aai as aai
+from conductor.data.plugins.inventory_provider import hpa_utils
 import mock
 from conductor.data.plugins.inventory_provider.aai import AAI
 from oslo_config import cfg
@@ -266,3 +267,21 @@ class TestAAI(unittest.TestCase):
 
         self.assertEqual("relationship-link",
                          self.aai_ep._get_aai_rel_link(relatonship_response, related_to))
+
+    def test_match_hpa(self):
+        flavor_json_file = \
+           './conductor/tests/unit/data/plugins/inventory_provider/hpa_flavors.json'
+        flavor_json = json.loads(open(flavor_json_file).read())
+        feature_json_file = \
+            './conductor/tests/unit/data/plugins/inventory_provider/hpa_req_features.json'
+        feature_json = json.loads(open(feature_json_file).read())
+        candidate_json_file = './conductor/tests/unit/data/candidate_list.json'
+        candidate_json = json.loads(open(candidate_json_file).read())
+        candidate_json['candidate_list'][1]['flavors'] = flavor_json
+        hpa_provider = hpa_utils.HpaMatchProvider(
+                           candidate_json['candidate_list'][1], feature_json)
+        flavor_map = hpa_provider.match_flavor()
+        self.assertEqual(flavor_map['flavor-name'],
+                                        'flavor-cpu-pinning-ovsdpdk-instruction-set')
+
+

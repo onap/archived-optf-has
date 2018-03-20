@@ -23,6 +23,7 @@ import uuid
 
 from conductor.common import rest
 from conductor.data.plugins.inventory_provider import base
+from conductor.data.plugins.inventory_provider import hpa_utils
 from conductor.i18n import _LE, _LI
 from oslo_config import cfg
 from oslo_log import log
@@ -1260,3 +1261,10 @@ class AAI(base.InventoryProviderBase):
                               " {}".format(inventory_type))
 
         return resolved_demands
+
+    def match_hpa(self, candidate, features):
+        """Match HPA features requirement with the candidate flavors """
+        hpa_provider = hpa_utils.HpaMatchProvider(candidate, self.feature_json)
+        flavor_map = hpa_provider.match_flavor()
+        return flavor_map
+
