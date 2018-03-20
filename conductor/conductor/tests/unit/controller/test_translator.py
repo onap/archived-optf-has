@@ -19,15 +19,15 @@
 """Test classes for translator"""
 
 import os
-import yaml
-import uuid
 import unittest
+import uuid
 
+import yaml
+from conductor import __file__ as conductor_root
 from conductor.controller.translator import Translator
 from conductor.controller.translator import TranslatorException
-from conductor import __file__ as conductor_root
-from oslo_config import cfg
 from mock import patch
+from oslo_config import cfg
 
 
 def get_template():
@@ -222,6 +222,68 @@ class TestNoExceptionTranslator(unittest.TestCase):
                            'location': 'custom_loc'},
             'type': 'distance_to_location'}}
         self.assertEquals(self.Translator.parse_constraints(constraints), rtn)
+
+    def test_parse_vim_fit_constraint(self):
+        vim_fit_constraint = {
+            "check_cloud_capacity": {
+                "type": "vim_fit",
+                "demands": [
+                    "vG"
+                ],
+                "properties": {
+                    "controller": "multicloud",
+                    "request": {
+                        "vCPU": 10,
+                        "Memory": {
+                            "quantity": "10",
+                            "unit": "GB"
+                        },
+                        "Storage": {
+                            "quantity": "100",
+                            "unit": "GB"
+                        }
+                    }
+                }
+            }
+        }
+        expected_response = {
+            "check_cloud_capacity_vG" : {
+                "type": "vim_fit",
+                "demands": "vG",
+                "name": "check_cloud_capacity",
+                "properties": {
+                    "controller": "multicloud",
+                    "request": {
+                        "vCPU": 10,
+                        "Memory": {
+                            "quantity": "10",
+                            "unit": "GB"
+                        },
+                        "Storage": {
+                            "quantity": "100",
+                            "unit": "GB"
+                        }
+                    }
+                }
+            }
+        }
+        vim_fit_constraint2 = {
+            "check_cloud_capacity": {
+                "type": "vim_fit",
+                "demands": [
+                    "vG"
+                ],
+                "properties": {
+                    "vim-controller": "multicloud"
+                }
+            }
+        }
+        self.maxDiff = None
+        self.assertEquals(expected_response, self.Translator.parse_constraints(
+            vim_fit_constraint))
+        self.assertRaises(TranslatorException,
+                          self.Translator.parse_constraints,
+                          vim_fit_constraint2)
 
     @patch('conductor.controller.translator.Translator.create_components')
     def test_parse_optimization(self, mock_create):
