@@ -28,6 +28,7 @@ import yaml
 from conductor.common.utils import conductor_logging_util as log_util
 from conductor.data.plugins.inventory_provider import extensions as ip_ext
 from conductor.data.plugins.service_controller import extensions as sc_ext
+from conductor.data.plugins.vim_controller import extensions as vc_ext
 from conductor.data.service import DataEndpoint
 from oslo_config import cfg
 
@@ -37,9 +38,13 @@ class TestDataEndpoint(unittest.TestCase):
     def setUp(self):
         ip_ext_manager = (
             ip_ext.Manager(cfg.CONF, 'conductor.inventory_provider.plugin'))
+        vc_ext_manager = (
+            vc_ext.Manager(cfg.CONF, 'conductor.vim_controller.plugin'))
         sc_ext_manager = (
             sc_ext.Manager(cfg.CONF, 'conductor.service_controller.plugin'))
-        self.data_ep = DataEndpoint(ip_ext_manager, sc_ext_manager)
+        self.data_ep = DataEndpoint(ip_ext_manager,
+                                    vc_ext_manager,
+                                    sc_ext_manager)
 
     def tearDown(self):
         pass
@@ -273,6 +278,41 @@ class TestDataEndpoint(unittest.TestCase):
         expected_response = {'response': hpa_candidate_list2, 'error': False}
         self.assertEqual(expected_response,
                          self.data_ep.get_candidates_with_hpa(None, args))
+
+    @mock.patch.object(service.LOG, 'warn')
+    @mock.patch.object(service.LOG, 'info')
+    @mock.patch.object(stevedore.ExtensionManager, 'names')
+    @mock.patch.object(stevedore.ExtensionManager, 'map_method')
+    def test_get_candidates_with_vim_capacity(self, vim_mock, ext_mock1,
+                                              info_mock, warn_mock):
+        req_json_file = './conductor/tests/unit/data/candidate_list.json'
+        hpa_json_file = './conductor/tests/unit/data/hpa_constraints.json'
+        hpa_json = yaml.safe_load(open(hpa_json_file).read())
+        req_json = yaml.safe_load(open(req_json_file).read())
+        candidate_list = req_json['candidate_list']
+        ext_mock1.return_value = ['MultiCloud']
+        (constraint_id, constraint_info) = \
+            hpa_json["conductor_solver"]["constraints"][2].items()[0]
+        vim_request = constraint_info['properties']['request']
+        ctxt = {}
+        args = {"candidate_list": candidate_list,
+                "request": vim_request}
+        vim_mock.return_value = ['att-aic_DLLSTX55']
+        self.assertEqual({'response': candidate_list, 'error': False},
+                         self.data_ep.get_candidates_with_vim_capacity(ctxt,
+                                                                       args))
+        vim_mock.return_value = ['att-aic_NYCNY33']
+        self.assertEqual({'response': [candidate_list[0]], 'error': False},
+                         self.data_ep.get_candidates_with_vim_capacity(ctxt,
+                                                                       args))
+        vim_mock.return_value = []
+        self.assertEqual({'response': candidate_list, 'error': True},
+                         self.data_ep.get_candidates_with_vim_capacity(ctxt,
+                                                                       args))
+        vim_mock.return_value = None
+        self.assertEqual({'response': candidate_list, 'error': True},
+                         self.data_ep.get_candidates_with_vim_capacity(ctxt,
+                                                                       args))
 
 
 def generate_args(candidate_list, features, label_name):
