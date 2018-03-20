@@ -165,6 +165,26 @@
             "location": "customer_loc"
           }
         }
+      },
+      {
+        "check_cloud_capacity": {
+          "type": "vim_fit",
+          "demands": ["vG"],
+          "properties": {
+            "controller": "multicloud",
+            "request": {
+              "vCPU": 10,
+              "Memory": {
+                "quantity": "10",
+                "unit": "GB"
+              },
+              "Storage": {
+                "quantity": "100",
+                "unit": "GB"
+              }
+            }
+          }
+        }
       }
     ]
   }
