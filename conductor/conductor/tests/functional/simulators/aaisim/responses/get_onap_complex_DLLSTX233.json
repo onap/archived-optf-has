@@ -1,0 +1,65 @@
+        {
+            "physical-location-id": "DLLSTX233",
+            "data-center-code": "example-data-center-code-val-6667",
+            "complex-name": "complex1",
+            "identity-url": "example-identity-url-val-28399",
+            "resource-version": "1521304870595",
+            "physical-location-type": "Mobility",
+            "street1": "example-street1-val-28399",
+            "street2": "example-street2-val-28399",
+            "city": "Dallas",
+            "state": "TX",
+            "postal-code": "00000",
+            "country": "USA",
+            "region": "USA",
+            "latitude": "45.395968",
+            "longitude": "-71.135344",
+            "elevation": "example-elevation-val-28399",
+            "lata": "example-lata-val-28399",
+            "relationship-list": {
+                "relationship": [
+                    {
+                        "related-to": "cloud-region",
+                        "relationship-label": "org.onap.relationships.inventory.LocatedIn",
+                        "related-link": "/aai/v13/cloud-infrastructure/cloud-regions/cloud-region/HPA-cloud/cloud-region-1",
+                        "relationship-data": [
+                            {
+                                "relationship-key": "cloud-region.cloud-owner",
+                                "relationship-value": "HPA-cloud"
+                            },
+                            {
+                                "relationship-key": "cloud-region.cloud-region-id",
+                                "relationship-value": "cloud-region-1"
+                            }
+                        ],
+                        "related-to-property": [
+                            {
+                                "property-key": "cloud-region.owner-defined-type",
+                                "property-value": "example-owner-defined-type-val-848"
+                            }
+                        ]
+                    },
+                    {
+                        "related-to": "cloud-region",
+                        "relationship-label": "org.onap.relationships.inventory.LocatedIn",
+                        "related-link": "/aai/v13/cloud-infrastructure/cloud-regions/cloud-region/HPA-cloud/cloud-region-2",
+                        "relationship-data": [
+                            {
+                                "relationship-key": "cloud-region.cloud-owner",
+                                "relationship-value": "HPA-cloud"
+                            },
+                            {
+                                "relationship-key": "cloud-region.cloud-region-id",
+                                "relationship-value": "cloud-region-2"
+                            }
+                        ],
+                        "related-to-property": [
+                            {
+                                "property-key": "cloud-region.owner-defined-type",
+                                "property-value": "example-owner-defined-type-val-848"
+                            }
+                        ]
+                    }
+                ]
+            }
+        }

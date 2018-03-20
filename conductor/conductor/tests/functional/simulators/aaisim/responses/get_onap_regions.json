@@ -1,0 +1,1078 @@
+{
+   "cloud-region": [
+      {
+         "cloud-owner": "HPA-cloud",
+         "cloud-region-id": "cloud-region-1",
+         "cloud-type": "openstack-pike",
+         "owner-defined-type": "example-owner-defined-type-val-848",
+         "cloud-region-version": "example-cloud-region-version-val-75919",
+         "identity-url": "example-identity-url-val-14861",
+         "cloud-zone": "example-cloud-zone-val-4978",
+         "complex-name": "example-complex-name-val-62100",
+         "sriov-automation": true,
+         "cloud-extra-info": "example-cloud-extra-info-val-49466",
+         "cloud-epa-caps": "example-cloud-epa-caps-val-99504",
+         "resource-version": "1521307375722",
+         "volume-groups": {
+            "volume-group": [
+               {
+                  "volume-group-id": "example-volume-group-id-val-66706",
+                  "volume-group-name": "example-volume-group-name-val-77554",
+                  "heat-stack-id": "example-heat-stack-id-val-70180",
+                  "vnf-type": "example-vnf-type-val-87572",
+                  "orchestration-status": "example-orchestration-status-val-34971",
+                  "model-customization-id": "example-model-customization-id-val-83513",
+                  "vf-module-model-customization-id": "example-vf-module-model-customization-id-val-6507",
+                  "resource-version": "1521306555806"
+               }
+            ]
+         },
+         "tenants": {
+            "tenant": [
+               {
+                  "tenant-id": "tenant-id-1",
+                  "tenant-name": "tenant-name-1",
+                  "tenant-context": "example-tenant-context-val-28442",
+                  "resource-version": "1521306556951",
+                  "vservers": {
+                     "vserver": [
+                        {
+                           "vserver-id": "vserver-1",
+                           "vserver-name": "vserver-name-1",
+                           "vserver-name2": "example-vserver-name2-val-75154",
+                           "prov-status": "example-prov-status-val-62624",
+                           "vserver-selflink": "example-vserver-selflink-val-3687",
+                           "in-maint": true,
+                           "is-closed-loop-disabled": true,
+                           "resource-version": "1521306556989",
+                           "volumes": {
+                              "volume": [
+                                 {
+                                    "volume-id": "example-volume-id-val-11970",
+                                    "volume-selflink": "example-volume-selflink-val-76166",
+                                    "resource-version": "1521306557727"
+                                 }
+                              ]
+                           },
+                           "l-interfaces": {
+                              "l-interface": [
+                                 {
+                                    "interface-name": "example-interface-name-val-33353",
+                                    "interface-role": "example-interface-role-val-20528",
+                                    "v6-wan-link-ip": "example-v6-wan-link-ip-val-39242",
+                                    "selflink": "example-selflink-val-69696",
+                                    "interface-id": "example-interface-id-val-96451",
+                                    "macaddr": "example-macaddr-val-92350",
+                                    "network-name": "example-network-name-val-76057",
+                                    "management-option": "example-management-option-val-24749",
+                                    "interface-description": "example-interface-description-val-61248",
+                                    "is-port-mirrored": true,
+                                    "resource-version": "1521306558446",
+                                    "in-maint": true,
+                                    "prov-status": "example-prov-status-val-66068",
+                                    "is-ip-unnumbered": true,
+                                    "allowed-address-pairs": "example-allowed-address-pairs-val-97717",
+                                    "vlans": {
+                                       "vlan": [
+                                          {
+                                             "vlan-interface": "example-vlan-interface-val-69702",
+                                             "vlan-id-inner": 67994473,
+                                             "vlan-id-outer": 93729787,
+                                             "resource-version": "1521306558520",
+                                             "speed-value": "example-speed-value-val-13924",
+                                             "speed-units": "example-speed-units-val-36978",
+                                             "vlan-description": "example-vlan-description-val-33791",
+                                             "backdoor-connection": "example-backdoor-connection-val-17790",
+                                             "vpn-key": "example-vpn-key-val-9875",
+                                             "orchestration-status": "example-orchestration-status-val-56763",
+                                             "in-maint": true,
+                                             "prov-status": "example-prov-status-val-70388",
+                                             "is-ip-unnumbered": true,
+                                             "l3-interface-ipv4-address-list": [
+                                                {
+                                                   "l3-interface-ipv4-address": "example-l3-interface-ipv4-address-val-11760",
+                                                   "l3-interface-ipv4-prefix-length": 56201707,
+                                                   "vlan-id-inner": 73451064,
+                                                   "vlan-id-outer": 91938369,
+                                                   "is-floating": true,
+                                                   "resource-version": "1521306559236",
+                                                   "neutron-network-id": "example-neutron-network-id-val-98070",
+                                                   "neutron-subnet-id": "example-neutron-subnet-id-val-27472"
+                                                }
+                                             ],
+                                             "l3-interface-ipv6-address-list": [
+                                                {
+                                                   "l3-interface-ipv6-address": "example-l3-interface-ipv6-address-val-39990",
+                                                   "l3-interface-ipv6-prefix-length": 23094280,
+                                                   "vlan-id-inner": 45385157,
+                                                   "vlan-id-outer": 7251303,
+                                                   "is-floating": true,
+                                                   "resource-version": "1521306559291",
+                                                   "neutron-network-id": "example-neutron-network-id-val-91087",
+                                                   "neutron-subnet-id": "example-neutron-subnet-id-val-43501"
+                                                }
+                                             ]
+                                          }
+                                       ]
+                                    },
+                                    "sriov-vfs": {
+                                       "sriov-vf": [
+                                          {
+                                             "pci-id": "example-pci-id-val-91062",
+                                             "vf-vlan-filter": "example-vf-vlan-filter-val-77261",
+                                             "vf-mac-filter": "example-vf-mac-filter-val-52679",
+                                             "vf-vlan-strip": true,
+                                             "vf-vlan-anti-spoof-check": true,
+                                             "vf-mac-anti-spoof-check": true,
+                                             "vf-mirrors": "example-vf-mirrors-val-39917",
+                                             "vf-broadcast-allow": true,
+                                             "vf-unknown-multicast-allow": true,
+                                             "vf-unknown-unicast-allow": true,
+                                             "vf-insert-stag": true,
+                                             "vf-link-status": "example-vf-link-status-val-7159",
+                                             "resource-version": "1521306559341",
+                                             "neutron-network-id": "example-neutron-network-id-val-6599"
+                                          }
+                                       ]
+                                    },
+                                    "l-interfaces": {
+                                       "l-interface": [
+                                          {
+                                             "interface-name": "example-interface-name-val-31463",
+                                             "interface-role": "example-interface-role-val-59891",
+                                             "v6-wan-link-ip": "example-v6-wan-link-ip-val-37795",
+                                             "selflink": "example-selflink-val-8079",
+                                             "interface-id": "example-interface-id-val-7731",
+                                             "macaddr": "example-macaddr-val-4153",
+                                             "network-name": "example-network-name-val-95567",
+                                             "management-option": "example-management-option-val-37882",
+                                             "interface-description": "example-interface-description-val-49246",
+                                             "is-port-mirrored": true,
+                                             "resource-version": "1521306559439",
+                                             "in-maint": true,
+                                             "prov-status": "example-prov-status-val-679",
+                                             "is-ip-unnumbered": true,
+                                             "allowed-address-pairs": "example-allowed-address-pairs-val-51719"
+                                          }
+                                       ]
+                                    },
+                                    "l3-interface-ipv4-address-list": [
+                                       {
+                                          "l3-interface-ipv4-address": "example-l3-interface-ipv4-address-val-25727",
+                                          "l3-interface-ipv4-prefix-length": 72086436,
+                                          "vlan-id-inner": 49585016,
+                                          "vlan-id-outer": 31295411,
+                                          "is-floating": true,
+                                          "resource-version": "1521306560129",
+                                          "neutron-network-id": "example-neutron-network-id-val-60599",
+                                          "neutron-subnet-id": "example-neutron-subnet-id-val-63673"
+                                       }
+                                    ],
+                                    "l3-interface-ipv6-address-list": [
+                                       {
+                                          "l3-interface-ipv6-address": "example-l3-interface-ipv6-address-val-23230",
+                                          "l3-interface-ipv6-prefix-length": 52397550,
+                                          "vlan-id-inner": 90366390,
+                                          "vlan-id-outer": 74424116,
+                                          "is-floating": true,
+                                          "resource-version": "1521306560154",
+                                          "neutron-network-id": "example-neutron-network-id-val-8866",
+                                          "neutron-subnet-id": "example-neutron-subnet-id-val-39258"
+                                       }
+                                    ]
+                                 }
+                              ]
+                           }
+                        }
+                     ]
+                  }
+               }
+            ]
+         },
+         "flavors": {
+            "flavor": [
+               {
+                  "flavor-id": "9cf8220b-4d96-4c30-a426-2e9382f3fff2",
+                  "flavor-name": "flavor-numa-cpu-topology-instruction-set",
+                  "flavor-vcpus": 64,
+                  "flavor-ram": 65536,
+                  "flavor-disk": 1048576,
+                  "flavor-ephemeral": 128,
+                  "flavor-swap": "0",
+                  "flavor-is-public": false,
+                  "flavor-selflink": "pXtX",
+                  "flavor-disabled": false,
+                  "hpa-capabilities": {
+                     "hpa-capability": [
+                        {
+                           "hpa-capability-id": "01a4bfe1-1993-4fda-bd1c-ef333b4f76a9",
+                           "hpa-feature": "cpuInstructionSetExtensions",
+                           "hpa-version": "v1",
+                           "architecture": "Intel64",
+                           "resource-version": "1521306560982",
+                           "hpa-feature-attributes": [
+                              {
+                                 "hpa-attribute-key": "instructionSetExtensions",
+                                 "hpa-attribute-value": "{\"value\":{['AAA', 'BBB', 'CCC', 'DDD']}}",
+                                 "resource-version": "1521306560989"
+                              }
+                           ]
+                        },
+                        {
+                           "hpa-capability-id": "167ad6a2-7d9c-4bf2-9a1b-30e5311b8c66",
+                           "hpa-feature": "numa",
+                           "hpa-version": "v1",
+                           "architecture": "generic",
+                           "resource-version": "1521306561020",
+                           "hpa-feature-attributes": [
+                              {
+                                 "hpa-attribute-key": "numaCpu-1",
+                                 "hpa-attribute-value": {
+                                    "value": 4
+                                 },
+                                 "resource-version": "1521306561060"
+                              },
+                              {
+                                 "hpa-attribute-key": "numaNodes",
+                                 "hpa-attribute-value": {
+                                    "value": 2
+                                 },
+                                 "resource-version": "1521306561088"
+                              },
+                              {
+                                 "hpa-attribute-key": "numaCpu-0",
+                                 "hpa-attribute-value": {
+                                    "value": 2
+                                 },
+                                 "resource-version": "1521306561028"
+                              },
+                              {
+                                 "hpa-attribute-key": "numaMem-0",
+                                 "hpa-attribute-value": {
+                                    "value": 2,
+                                    "unit": "GB"
+                                 },
+                                 "resource-version": "1521306561044"
+                              },
+                              {
+                                 "hpa-attribute-key": "numaMem-1",
+                                 "hpa-attribute-value": {
+                                    "value": 4,
+                                    "unit": "GB"
+                                 },
+                                 "resource-version": "1521306561074"
+                              }
+                           ]
+                        },
+                        {
+                           "hpa-capability-id": "13ec6d4d-7fee-48d8-9e4a-c598feb101ed",
+                           "hpa-feature": "basicCapabilities",
+                           "hpa-version": "v1",
+                           "architecture": "generic",
+                           "resource-version": "1521306560909",
+                           "hpa-feature-attributes": [
+                              {
+                                 "hpa-attribute-key": "numVirtualCpu",
+                                 "hpa-attribute-value": {
+                                    "value": 64
+                                 },
+                                 "resource-version": "1521306560932"
+                              },
+                              {
+                                 "hpa-attribute-key": "virtualMemSize",
+                                 "hpa-attribute-value": {
+                                    "value": 65536,
+                                    "unit": "MB"
+                                 },
+                                 "resource-version": "1521306560954"
+                              }
+                           ]
+                        },
+                        {
+                           "hpa-capability-id": "8fa22e64-41b4-471f-96ad-6c4708635e4c",
+                           "hpa-feature": "cpuTopology",
+                           "hpa-version": "v1",
+                           "architecture": "generic",
+                           "resource-version": "1521306561109",
+                           "hpa-feature-attributes": [
+                              {
+                                 "hpa-attribute-key": "numCpuCores",
+                                 "hpa-attribute-value": {
+                                    "value": 8
+                                 },
+                                 "resource-version": "1521306561114"
+                              },
+                              {
+                                 "hpa-attribute-key": "numCpuThreads",
+                                 "hpa-attribute-value": {
+                                    "value": 8
+                                 },
+                                 "resource-version": "1521306561138"
+                              },
+                              {
+                                 "hpa-attribute-key": "numCpuSockets",
+                                 "hpa-attribute-value": {
+                                    "value": 6
+                                 },
+                                 "resource-version": "1521306561126"
+                              }
+                           ]
+                        }
+                     ]
+                  },
+                  "resource-version": "1521306560203"
+               },
+               {
+                  "flavor-id": "f5aa2b2e-3206-41b6-80d5-cf041b098c43",
+                  "flavor-name": "flavor-cpu-pinning-ovsdpdk-instruction-set",
+                  "flavor-vcpus": 32,
+                  "flavor-ram": 131072,
+                  "flavor-disk": 2097152,
+                  "flavor-ephemeral": 128,
+                  "flavor-swap": "0",
+                  "flavor-is-public": false,
+                  "flavor-selflink": "pXtX",
+                  "flavor-disabled": false,
+                  "hpa-capabilities": {
+                     "hpa-capability": [
+                        {
+                           "hpa-capability-id": "4d04f4d8-e257-4442-8417-19a525e56096",
+                           "hpa-feature": "cpuInstructionSetExtensions",
+                           "hpa-version": "v1",
+                           "architecture": "generic",
+                           "resource-version": "1521306561223",
+                           "hpa-feature-attributes": [
+                              {
+                                 "hpa-attribute-key": "instructionSetExtensions",
+                                 "hpa-attribute-value": "{\"value\":{['A11', 'B22']}}",
+                                 "resource-version": "1521306561228"
+                              }
+                           ]
+                        },
+                        {
+                           "hpa-capability-id": "8d36a8fe-bfee-446a-bbcb-881ee66c8f78",
+                           "hpa-feature": "ovsDpdk",
+                           "hpa-version": "v1",
+                           "architecture": "generic",
+                           "resource-version": "1521306561170",
+                           "hpa-feature-attributes": [
+                              {
+                                 "hpa-attribute-key": "dataProcessingAccelerationLibrary",
+                                 "hpa-attribute-value": {
+                                    "value": "v18.02"
+                                 },
+                                 "resource-version": "1521306561175"
+                              }
+                           ]
+                        },
+                        {
+                           "hpa-capability-id": "c140c945-1532-4908-86c9-d7f71416f1dd",
+                           "hpa-feature": "cpuPinning",
+                           "hpa-version": "v1",
+                           "architecture": "generic",
+                           "resource-version": "1521306561191",
+                           "hpa-feature-attributes": [
+                              {
+                                 "hpa-attribute-key": "logicalCpuPinningPolicy",
+                                 "hpa-attribute-value": {
+                                    "value": "dedicated"
+                                 },
+                                 "resource-version": "1521306561196"
+                              },
+                              {
+                                 "hpa-attribute-key": "logicalCpuThreadPinningPolicy",
+                                 "hpa-attribute-value": {
+                                    "value": "prefer"
+                                 },
+                                 "resource-version": "1521306561206"
+                              }
+                           ]
+                        },
+                        {
+                           "hpa-capability-id": "4565615b-1077-4bb5-a340-c5be48db2aaa",
+                           "hpa-feature": "basicCapabilities",
+                           "hpa-version": "v1",
+                           "architecture": "generic",
+                           "resource-version": "1521306561244",
+                           "hpa-feature-attributes": [
+                              {
+                                 "hpa-attribute-key": "numVirtualCpu",
+                                 "hpa-attribute-value": {
+                                    "value": 32
+                                 },
+                                 "resource-version": "1521306561259"
+                              },
+                              {
+                                 "hpa-attribute-key": "virtualMemSize",
+                                 "hpa-attribute-value": {
+                                    "value": 131072,
+                                    "unit": "MB"
+                                 },
+                                 "resource-version": "1521306561248"
+                              }
+                           ]
+                        }
+                     ]
+                  },
+                  "resource-version": "1521306561164"
+               }
+            ]
+         },
+         "group-assignments": {
+            "group-assignment": [
+               {
+                  "group-id": "example-group-id-val-67572",
+                  "group-type": "example-group-type-val-91331",
+                  "group-name": "example-group-name-val-95940",
+                  "group-description": "example-group-description-val-89653",
+                  "resource-version": "1521306561284"
+               }
+            ]
+         },
+         "snapshots": {
+            "snapshot": [
+               {
+                  "snapshot-id": "example-snapshot-id-val-31758",
+                  "snapshot-name": "example-snapshot-name-val-32860",
+                  "snapshot-architecture": "example-snapshot-architecture-val-2456",
+                  "snapshot-os-distro": "example-snapshot-os-distro-val-75068",
+                  "snapshot-os-version": "example-snapshot-os-version-val-8641",
+                  "application": "example-application-val-6391",
+                  "application-vendor": "example-application-vendor-val-52418",
+                  "application-version": "example-application-version-val-92869",
+                  "snapshot-selflink": "example-snapshot-selflink-val-69763",
+                  "prev-snapshot-id": "example-prev-snapshot-id-val-19500",
+                  "resource-version": "1521306561311"
+               }
+            ]
+         },
+         "images": {
+            "image": [
+               {
+                  "image-id": "example-image-id-val-91484",
+                  "image-name": "example-image-name-val-86952",
+                  "image-architecture": "example-image-architecture-val-21769",
+                  "image-os-distro": "example-image-os-distro-val-15267",
+                  "image-os-version": "example-image-os-version-val-90601",
+                  "application": "example-application-val-41444",
+                  "application-vendor": "example-application-vendor-val-50626",
+                  "application-version": "example-application-version-val-11318",
+                  "image-selflink": "example-image-selflink-val-18790",
+                  "resource-version": "1521306561362",
+                  "metadata": {
+                     "metadatum": [
+                        {
+                           "metaname": "example-metaname-val-39609",
+                           "metaval": "example-metaval-val-62296",
+                           "resource-version": "1521306561387"
+                        }
+                     ]
+                  }
+               }
+            ]
+         },
+         "dvs-switches": {
+            "dvs-switch": [
+               {
+                  "switch-name": "example-switch-name-val-23942",
+                  "vcenter-url": "example-vcenter-url-val-7815",
+                  "resource-version": "1521306561409"
+               }
+            ]
+         },
+         "oam-networks": {
+            "oam-network": [
+               {
+                  "network-uuid": "example-network-uuid-val-1061",
+                  "network-name": "example-network-name-val-96413",
+                  "cvlan-tag": 20601039,
+                  "ipv4-oam-gateway-address": "example-ipv4-oam-gateway-address-val-92545",
+                  "ipv4-oam-gateway-address-prefix-length": 9067,
+                  "resource-version": "1521306561436"
+               }
+            ]
+         },
+         "availability-zones": {
+            "availability-zone": [
+               {
+                  "availability-zone-name": "example-availability-zone-name-val-37096",
+                  "hypervisor-type": "example-hypervisor-type-val-91298",
+                  "operational-status": "example-operational-status-val-4894",
+                  "resource-version": "1521306561465"
+               }
+            ]
+         },
+         "relationship-list": {
+            "relationship": [
+               {
+                  "related-to": "complex",
+                  "relationship-label": "org.onap.relationships.inventory.LocatedIn",
+                  "related-link": "/aai/v13/cloud-infrastructure/complexes/complex/DLLSTX233",
+                  "relationship-data": [
+                     {
+                        "relationship-key": "complex.physical-location-id",
+                        "relationship-value": "DLLSTX233"
+                     }
+                  ]
+               }
+            ]
+         },
+         "vip-ipv4-address-list": [
+            {
+               "vip-ipv4-address": "example-vip-ipv4-address-val-9775",
+               "vip-ipv4-prefix-length": 21779008,
+               "vlan-id-inner": 183626,
+               "vlan-id-outer": 7595139,
+               "is-floating": true,
+               "resource-version": "1521306561488",
+               "neutron-network-id": "example-neutron-network-id-val-61916",
+               "neutron-subnet-id": "example-neutron-subnet-id-val-94467"
+            }
+         ],
+         "vip-ipv6-address-list": [
+            {
+               "vip-ipv6-address": "example-vip-ipv6-address-val-71778",
+               "vip-ipv6-prefix-length": 54690289,
+               "vlan-id-inner": 37212492,
+               "vlan-id-outer": 58857577,
+               "is-floating": true,
+               "resource-version": "1521306561508",
+               "neutron-network-id": "example-neutron-network-id-val-2251",
+               "neutron-subnet-id": "example-neutron-subnet-id-val-64440"
+            }
+         ],
+         "hpa-capabilities": {
+            "hpa-capability": [
+               {
+                  "hpa-capability-id": "example-hpa-capability-id-val-22082",
+                  "hpa-feature": "cloud-specific-hpa",
+                  "hpa-version": "example-hpa-version-val-64467",
+                  "architecture": "example-architecture-val-82451",
+                  "resource-version": "1521306561528",
+                  "hpa-feature-attributes": [
+                     {
+                        "hpa-attribute-key": "example-hpa-attribute-key-val-28058",
+                        "hpa-attribute-value": "example-hpa-attribute-value-val-74993",
+                        "resource-version": "1521306561532"
+                     }
+                  ]
+               }
+            ]
+         }
+      },
+      {
+         "cloud-owner": "HPA-cloud",
+         "cloud-region-id": "cloud-region-2",
+         "cloud-type": "openstack-pike",
+         "owner-defined-type": "example-owner-defined-type-val-848",
+         "cloud-region-version": "example-cloud-region-version-val-75919",
+         "identity-url": "example-identity-url-val-14861",
+         "cloud-zone": "example-cloud-zone-val-4978",
+         "complex-name": "example-complex-name-val-62100",
+         "sriov-automation": true,
+         "cloud-extra-info": "example-cloud-extra-info-val-49466",
+         "cloud-epa-caps": "example-cloud-epa-caps-val-99504",
+         "resource-version": "1521307358985",
+         "volume-groups": {
+            "volume-group": [
+               {
+                  "volume-group-id": "example-volume-group-id-val-66706",
+                  "volume-group-name": "example-volume-group-name-val-77554",
+                  "heat-stack-id": "example-heat-stack-id-val-70180",
+                  "vnf-type": "example-vnf-type-val-87572",
+                  "orchestration-status": "example-orchestration-status-val-34971",
+                  "model-customization-id": "example-model-customization-id-val-83513",
+                  "vf-module-model-customization-id": "example-vf-module-model-customization-id-val-6507",
+                  "resource-version": "1521306714613"
+               }
+            ]
+         },
+         "tenants": {
+            "tenant": [
+               {
+                  "tenant-id": "tenant-id-2",
+                  "tenant-name": "tenant-name-2",
+                  "tenant-context": "example-tenant-context-val-28442",
+                  "resource-version": "1521306714631",
+                  "vservers": {
+                     "vserver": [
+                        {
+                           "vserver-id": "vserver-21",
+                           "vserver-name": "vserver-name-2",
+                           "vserver-name2": "example-vserver-name2-val-75154",
+                           "prov-status": "example-prov-status-val-62624",
+                           "vserver-selflink": "example-vserver-selflink-val-3687",
+                           "in-maint": true,
+                           "is-closed-loop-disabled": true,
+                           "resource-version": "1521306714637",
+                           "volumes": {
+                              "volume": [
+                                 {
+                                    "volume-id": "example-volume-id-val-11970",
+                                    "volume-selflink": "example-volume-selflink-val-76166",
+                                    "resource-version": "1521306714645"
+                                 }
+                              ]
+                           },
+                           "l-interfaces": {
+                              "l-interface": [
+                                 {
+                                    "interface-name": "example-interface-name-val-33353",
+                                    "interface-role": "example-interface-role-val-20528",
+                                    "v6-wan-link-ip": "example-v6-wan-link-ip-val-39242",
+                                    "selflink": "example-selflink-val-69696",
+                                    "interface-id": "example-interface-id-val-96452",
+                                    "macaddr": "example-macaddr-val-92350",
+                                    "network-name": "example-network-name-val-76057",
+                                    "management-option": "example-management-option-val-24749",
+                                    "interface-description": "example-interface-description-val-61248",
+                                    "is-port-mirrored": true,
+                                    "resource-version": "1521306714659",
+                                    "in-maint": true,
+                                    "prov-status": "example-prov-status-val-66068",
+                                    "is-ip-unnumbered": true,
+                                    "allowed-address-pairs": "example-allowed-address-pairs-val-97717",
+                                    "vlans": {
+                                       "vlan": [
+                                          {
+                                             "vlan-interface": "example-vlan-interface-val-69702",
+                                             "vlan-id-inner": 67994473,
+                                             "vlan-id-outer": 93729787,
+                                             "resource-version": "1521306714666",
+                                             "speed-value": "example-speed-value-val-13924",
+                                             "speed-units": "example-speed-units-val-36978",
+                                             "vlan-description": "example-vlan-description-val-33791",
+                                             "backdoor-connection": "example-backdoor-connection-val-17790",
+                                             "vpn-key": "example-vpn-key-val-9875",
+                                             "orchestration-status": "example-orchestration-status-val-56763",
+                                             "in-maint": true,
+                                             "prov-status": "example-prov-status-val-70388",
+                                             "is-ip-unnumbered": true,
+                                             "l3-interface-ipv4-address-list": [
+                                                {
+                                                   "l3-interface-ipv4-address": "example-l3-interface-ipv4-address-val-11760",
+                                                   "l3-interface-ipv4-prefix-length": 56201707,
+                                                   "vlan-id-inner": 73451064,
+                                                   "vlan-id-outer": 91938369,
+                                                   "is-floating": true,
+                                                   "resource-version": "1521306714673",
+                                                   "neutron-network-id": "example-neutron-network-id-val-98070",
+                                                   "neutron-subnet-id": "example-neutron-subnet-id-val-27472"
+                                                }
+                                             ],
+                                             "l3-interface-ipv6-address-list": [
+                                                {
+                                                   "l3-interface-ipv6-address": "example-l3-interface-ipv6-address-val-39990",
+                                                   "l3-interface-ipv6-prefix-length": 23094280,
+                                                   "vlan-id-inner": 45385157,
+                                                   "vlan-id-outer": 7251303,
+                                                   "is-floating": true,
+                                                   "resource-version": "1521306714686",
+                                                   "neutron-network-id": "example-neutron-network-id-val-91087",
+                                                   "neutron-subnet-id": "example-neutron-subnet-id-val-43501"
+                                                }
+                                             ]
+                                          }
+                                       ]
+                                    },
+                                    "sriov-vfs": {
+                                       "sriov-vf": [
+                                          {
+                                             "pci-id": "example-pci-id-val-91063",
+                                             "vf-vlan-filter": "example-vf-vlan-filter-val-77261",
+                                             "vf-mac-filter": "example-vf-mac-filter-val-52679",
+                                             "vf-vlan-strip": true,
+                                             "vf-vlan-anti-spoof-check": true,
+                                             "vf-mac-anti-spoof-check": true,
+                                             "vf-mirrors": "example-vf-mirrors-val-39917",
+                                             "vf-broadcast-allow": true,
+                                             "vf-unknown-multicast-allow": true,
+                                             "vf-unknown-unicast-allow": true,
+                                             "vf-insert-stag": true,
+                                             "vf-link-status": "example-vf-link-status-val-7159",
+                                             "resource-version": "1521306714704",
+                                             "neutron-network-id": "example-neutron-network-id-val-6599"
+                                          }
+                                       ]
+                                    },
+                                    "l-interfaces": {
+                                       "l-interface": [
+                                          {
+                                             "interface-name": "example-interface-name-val-31463",
+                                             "interface-role": "example-interface-role-val-59891",
+                                             "v6-wan-link-ip": "example-v6-wan-link-ip-val-37795",
+                                             "selflink": "example-selflink-val-8079",
+                                             "interface-id": "example-interface-id-val-7732",
+                                             "macaddr": "example-macaddr-val-4153",
+                                             "network-name": "example-network-name-val-95567",
+                                             "management-option": "example-management-option-val-37882",
+                                             "interface-description": "example-interface-description-val-49246",
+                                             "is-port-mirrored": true,
+                                             "resource-version": "1521306714716",
+                                             "in-maint": true,
+                                             "prov-status": "example-prov-status-val-679",
+                                             "is-ip-unnumbered": true,
+                                             "allowed-address-pairs": "example-allowed-address-pairs-val-51719"
+                                          }
+                                       ]
+                                    },
+                                    "l3-interface-ipv4-address-list": [
+                                       {
+                                          "l3-interface-ipv4-address": "example-l3-interface-ipv4-address-val-25727",
+                                          "l3-interface-ipv4-prefix-length": 72086436,
+                                          "vlan-id-inner": 49585016,
+                                          "vlan-id-outer": 31295411,
+                                          "is-floating": true,
+                                          "resource-version": "1521306714727",
+                                          "neutron-network-id": "example-neutron-network-id-val-60599",
+                                          "neutron-subnet-id": "example-neutron-subnet-id-val-63673"
+                                       }
+                                    ],
+                                    "l3-interface-ipv6-address-list": [
+                                       {
+                                          "l3-interface-ipv6-address": "example-l3-interface-ipv6-address-val-23230",
+                                          "l3-interface-ipv6-prefix-length": 52397550,
+                                          "vlan-id-inner": 90366390,
+                                          "vlan-id-outer": 74424116,
+                                          "is-floating": true,
+                                          "resource-version": "1521306714738",
+                                          "neutron-network-id": "example-neutron-network-id-val-8866",
+                                          "neutron-subnet-id": "example-neutron-subnet-id-val-39258"
+                                       }
+                                    ]
+                                 }
+                              ]
+                           }
+                        }
+                     ]
+                  }
+               }
+            ]
+         },
+         "flavors": {
+            "flavor": [
+               {
+                  "flavor-id": "acf8220b-4d96-4c30-a426-2e9382f3fff2",
+                  "flavor-name": "flavor-cpu-topology-instruction-set",
+                  "flavor-vcpus": 32,
+                  "flavor-ram": 65536,
+                  "flavor-disk": 1048576,
+                  "flavor-ephemeral": 128,
+                  "flavor-swap": "0",
+                  "flavor-is-public": false,
+                  "flavor-selflink": "pXtX",
+                  "flavor-disabled": false,
+                  "hpa-capabilities": {
+                     "hpa-capability": [
+                        {
+                           "hpa-capability-id": "11a4bfe1-1993-4fda-bd1c-ef333b4f76a9",
+                           "hpa-feature": "cpuInstructionSetExtensions",
+                           "hpa-version": "v1",
+                           "architecture": "Intel64",
+                           "resource-version": "1521306714796",
+                           "hpa-feature-attributes": [
+                              {
+                                 "hpa-attribute-key": "instructionSetExtensions",
+                                 "hpa-attribute-value": "{\"value\":{['aes', 'sse', 'avx', 'smt']}}",
+                                 "resource-version": "1521306714799"
+                              }
+                           ]
+                        },
+                        {
+                           "hpa-capability-id": "23ec6d4d-7fee-48d8-9e4a-c598feb101ed",
+                           "hpa-feature": "basicCapabilities",
+                           "hpa-version": "v1",
+                           "architecture": "generic",
+                           "resource-version": "1521306714769",
+                           "hpa-feature-attributes": [
+                              {
+                                 "hpa-attribute-key": "virtualMemSize",
+                                 "hpa-attribute-value": {
+                                    "value": 65536,
+                                    "unit": "MB"
+                                 },
+                                 "resource-version": "1521306714782"
+                              },
+                              {
+                                 "hpa-attribute-key": "numVirtualCpu",
+                                 "hpa-attribute-value": {
+                                    "value": 32
+                                 },
+                                 "resource-version": "1521306714773"
+                              }
+                           ]
+                        },
+                        {
+                           "hpa-capability-id": "9fa22e64-41b4-471f-96ad-6c4708635e4c",
+                           "hpa-feature": "cpuTopology",
+                           "hpa-version": "v1",
+                           "architecture": "generic",
+                           "resource-version": "1521306714813",
+                           "hpa-feature-attributes": [
+                              {
+                                 "hpa-attribute-key": "numCpuThreads",
+                                 "hpa-attribute-value": {
+                                    "value": 8
+                                 },
+                                 "resource-version": "1521306714841"
+                              },
+                              {
+                                 "hpa-attribute-key": "numCpuCores",
+                                 "hpa-attribute-value": {
+                                    "value": 16
+                                 },
+                                 "resource-version": "1521306714817"
+                              },
+                              {
+                                 "hpa-attribute-key": "numCpuSockets",
+                                 "hpa-attribute-value": {
+                                    "value": 2
+                                 },
+                                 "resource-version": "1521306714826"
+                              }
+                           ]
+                        }
+                     ]
+                  },
+                  "resource-version": "1521306714764"
+               },
+               {
+                  "flavor-id": "e5aa2b2e-3206-41b6-80d5-cf041b098c43",
+                  "flavor-name": "flavor-cpu-pinning-ovsdpdk-instruction-set",
+                  "flavor-vcpus": 32,
+                  "flavor-ram": 131072,
+                  "flavor-disk": 2097152,
+                  "flavor-ephemeral": 128,
+                  "flavor-swap": "0",
+                  "flavor-is-public": false,
+                  "flavor-selflink": "pXtX",
+                  "flavor-disabled": false,
+                  "hpa-capabilities": {
+                     "hpa-capability": [
+                        {
+                           "hpa-capability-id": "5565615b-1077-4bb5-a340-c5be48db2aaa",
+                           "hpa-feature": "basicCapabilities",
+                           "hpa-version": "v1",
+                           "architecture": "generic",
+                           "resource-version": "1521306714950",
+                           "hpa-feature-attributes": [
+                              {
+                                 "hpa-attribute-key": "numVirtualCpu",
+                                 "hpa-attribute-value": {
+                                    "value": 32
+                                 },
+                                 "resource-version": "1521306714964"
+                              },
+                              {
+                                 "hpa-attribute-key": "virtualMemSize",
+                                 "hpa-attribute-value": {
+                                    "value": 131072,
+                                    "unit": "MB"
+                                 },
+                                 "resource-version": "1521306714954"
+                              }
+                           ]
+                        },
+                        {
+                           "hpa-capability-id": "9d36a8fe-bfee-446a-bbcb-881ee66c8f78",
+                           "hpa-feature": "ovsDpdk",
+                           "hpa-version": "v1",
+                           "architecture": "generic",
+                           "resource-version": "1521306714876",
+                           "hpa-feature-attributes": [
+                              {
+                                 "hpa-attribute-key": "dataProcessingAccelerationLibrary",
+                                 "hpa-attribute-value": {
+                                    "value": "v17.02"
+                                 },
+                                 "resource-version": "1521306714881"
+                              }
+                           ]
+                        },
+                        {
+                           "hpa-capability-id": "d140c945-1532-4908-86c9-d7f71416f1dd",
+                           "hpa-feature": "cpuPinning",
+                           "hpa-version": "v1",
+                           "architecture": "generic",
+                           "resource-version": "1521306714899",
+                           "hpa-feature-attributes": [
+                              {
+                                 "hpa-attribute-key": "logicalCpuThreadPinningPolicy",
+                                 "hpa-attribute-value": {
+                                    "value": "prefer"
+                                 },
+                                 "resource-version": "1521306714915"
+                              },
+                              {
+                                 "hpa-attribute-key": "logicalCpuPinningPolicy",
+                                 "hpa-attribute-value": {
+                                    "value": "dedicated"
+                                 },
+                                 "resource-version": "1521306714904"
+                              }
+                           ]
+                        },
+                        {
+                           "hpa-capability-id": "5d04f4d8-e257-4442-8417-19a525e56096",
+                           "hpa-feature": "cpuInstructionSetExtensions",
+                           "hpa-version": "v1",
+                           "architecture": "generic",
+                           "resource-version": "1521306714931",
+                           "hpa-feature-attributes": [
+                              {
+                                 "hpa-attribute-key": "instructionSetExtensions",
+                                 "hpa-attribute-value": "{\"value\":{['aes', 'avx']}}",
+                                 "resource-version": "1521306714936"
+                              }
+                           ]
+                        }
+                     ]
+                  },
+                  "resource-version": "1521306714871"
+               }
+            ]
+         },
+         "group-assignments": {
+            "group-assignment": [
+               {
+                  "group-id": "example-group-id-val-67573",
+                  "group-type": "example-group-type-val-91331",
+                  "group-name": "example-group-name-val-95940",
+                  "group-description": "example-group-description-val-89653",
+                  "resource-version": "1521306714983"
+               }
+            ]
+         },
+         "snapshots": {
+            "snapshot": [
+               {
+                  "snapshot-id": "example-snapshot-id-val-31759",
+                  "snapshot-name": "example-snapshot-name-val-32860",
+                  "snapshot-architecture": "example-snapshot-architecture-val-2456",
+                  "snapshot-os-distro": "example-snapshot-os-distro-val-75068",
+                  "snapshot-os-version": "example-snapshot-os-version-val-8641",
+                  "application": "example-application-val-6391",
+                  "application-vendor": "example-application-vendor-val-52418",
+                  "application-version": "example-application-version-val-92869",
+                  "snapshot-selflink": "example-snapshot-selflink-val-69763",
+                  "prev-snapshot-id": "example-prev-snapshot-id-val-19500",
+                  "resource-version": "1521306714993"
+               }
+            ]
+         },
+         "images": {
+            "image": [
+               {
+                  "image-id": "example-image-id-val-91485",
+                  "image-name": "example-image-name-val-86952",
+                  "image-architecture": "example-image-architecture-val-21769",
+                  "image-os-distro": "example-image-os-distro-val-15267",
+                  "image-os-version": "example-image-os-version-val-90601",
+                  "application": "example-application-val-41444",
+                  "application-vendor": "example-application-vendor-val-50626",
+                  "application-version": "example-application-version-val-11318",
+                  "image-selflink": "example-image-selflink-val-18790",
+                  "resource-version": "1521306715005",
+                  "metadata": {
+                     "metadatum": [
+                        {
+                           "metaname": "example-metaname-val-39609",
+                           "metaval": "example-metaval-val-62296",
+                           "resource-version": "1521306715009"
+                        }
+                     ]
+                  }
+               }
+            ]
+         },
+         "dvs-switches": {
+            "dvs-switch": [
+               {
+                  "switch-name": "example-switch-name-val-23942",
+                  "vcenter-url": "example-vcenter-url-val-7815",
+                  "resource-version": "1521306715024"
+               }
+            ]
+         },
+         "oam-networks": {
+            "oam-network": [
+               {
+                  "network-uuid": "example-network-uuid-val-1062",
+                  "network-name": "example-network-name-val-96413",
+                  "cvlan-tag": 20601039,
+                  "ipv4-oam-gateway-address": "example-ipv4-oam-gateway-address-val-92545",
+                  "ipv4-oam-gateway-address-prefix-length": 9067,
+                  "resource-version": "1521306715034"
+               }
+            ]
+         },
+         "availability-zones": {
+            "availability-zone": [
+               {
+                  "availability-zone-name": "example-availability-zone-name-val-37097",
+                  "hypervisor-type": "example-hypervisor-type-val-91298",
+                  "operational-status": "example-operational-status-val-4894",
+                  "resource-version": "1521306715044"
+               }
+            ]
+         },
+         "relationship-list": {
+            "relationship": [
+               {
+                  "related-to": "complex",
+                  "relationship-label": "org.onap.relationships.inventory.LocatedIn",
+                  "related-link": "/aai/v13/cloud-infrastructure/complexes/complex/DLLSTX233",
+                  "relationship-data": [
+                     {
+                        "relationship-key": "complex.physical-location-id",
+                        "relationship-value": "DLLSTX233"
+                     }
+                  ]
+               }
+            ]
+         },
+         "vip-ipv4-address-list": [
+            {
+               "vip-ipv4-address": "example-vip-ipv4-address-val-9775",
+               "vip-ipv4-prefix-length": 21779008,
+               "vlan-id-inner": 183626,
+               "vlan-id-outer": 7595139,
+               "is-floating": true,
+               "resource-version": "1521306715054",
+               "neutron-network-id": "example-neutron-network-id-val-61916",
+               "neutron-subnet-id": "example-neutron-subnet-id-val-94467"
+            }
+         ],
+         "vip-ipv6-address-list": [
+            {
+               "vip-ipv6-address": "example-vip-ipv6-address-val-71778",
+               "vip-ipv6-prefix-length": 54690289,
+               "vlan-id-inner": 37212492,
+               "vlan-id-outer": 58857577,
+               "is-floating": true,
+               "resource-version": "1521306715064",
+               "neutron-network-id": "example-neutron-network-id-val-2251",
+               "neutron-subnet-id": "example-neutron-subnet-id-val-64440"
+            }
+         ],
+         "hpa-capabilities": {
+            "hpa-capability": [
+               {
+                  "hpa-capability-id": "example-hpa-capability-id-val-22083",
+                  "hpa-feature": "cloud-specific-hpa",
+                  "hpa-version": "example-hpa-version-val-64467",
+                  "architecture": "example-architecture-val-82451",
+                  "resource-version": "1521306715075",
+                  "hpa-feature-attributes": [
+                     {
+                        "hpa-attribute-key": "example-hpa-attribute-key-val-28058",
+                        "hpa-attribute-value": "example-hpa-attribute-value-val-74993",
+                        "resource-version": "1521306715078"
+                     }
+                  ]
+               }
+            ]
+         }
+      }
+   ]
+}
