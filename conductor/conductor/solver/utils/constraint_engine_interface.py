@@ -135,3 +135,20 @@ class ConstraintEngineInterface(object):
                                     args=args)
         LOG.debug("get_candidates_with_hpa response: {}".format(response))
         return response
+
+    def get_candidates_with_vim_capacity(self, candidate_list, vim_request):
+        '''
+        Returns the candidate_list with required vim capacity.
+        :param candidate_list: list of candidates to process
+        :param requests: vim requests with required cpu, memory and disk
+        :return: candidate_list with required vim capacity.
+        '''
+        ctxt = {}
+        args = {"candidate_list": candidate_list,
+                "request": vim_request}
+        response = self.client.call(ctxt=ctxt,
+                                    method="get_candidates_with_vim_capacity",
+                                    args=args)
+        LOG.debug(
+            "get_candidates_with_vim_capacity response: {}".format(response))
+        return response
