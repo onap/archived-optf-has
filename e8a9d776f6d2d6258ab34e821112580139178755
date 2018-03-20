@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a93c517_522a822d",
+        "filename": "conductor/conductor/solver/service.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 348,
+      "author": {
+        "id": 2041
+      },
+      "writtenOn": "2018-03-20T15:18:20Z",
+      "side": 1,
+      "message": "I\u0027m wondering if there is a case for picking an existing service instance based on HPA attributes. Or are we only expecting new VNFs that are spun up based on HPA characteristics ?",
+      "range": {
+        "startLine": 348,
+        "startChar": 19,
+        "endLine": 348,
+        "endChar": 69
+      },
+      "revId": "e8a9d776f6d2d6258ab34e821112580139178755",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
