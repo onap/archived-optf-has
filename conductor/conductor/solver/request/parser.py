@@ -34,6 +34,7 @@ from conductor.solver.optimizer.constraints \
     import inventory_group
 from conductor.solver.optimizer.constraints \
     import service as service_constraint
+from conductor.solver.optimizer.constraints import vim_fit
 from conductor.solver.optimizer.constraints import zone
 from conductor.solver.request import demand
 from conductor.solver.request import objective
@@ -215,6 +216,14 @@ class Parser(object):
                                             constraint_demands,
                                             _properties=c_property)
                 self.constraints[my_hpa_constraint.name] = my_hpa_constraint
+            elif constraint_type == "vim_fit":
+                LOG.debug("Creating constraint - {}".format(constraint_type))
+                c_property = constraint_info.get("properties")
+                my_vim_constraint = vim_fit.VimFit(constraint_id,
+                                                   constraint_type,
+                                                   constraint_demands,
+                                                   _properties=c_property)
+                self.constraints[my_vim_constraint.name] = my_vim_constraint
             else:
                 LOG.error("unknown constraint type {}".format(constraint_type))
                 return
@@ -330,8 +339,10 @@ class Parser(object):
                 constraint.rank = 6
             elif constraint.constraint_type == "region_fit":
                 constraint.rank = 7
-            else:
+            elif constraint.constraint_type == "vim_fit":
                 constraint.rank = 8
+            else:
+                constraint.rank = 9
 
     def attr_sort(self, attrs=['rank']):
         # this helper for sorting the rank
