@@ -24,10 +24,12 @@ import conductor.common.music.api
 import conductor.common.music.messaging.component
 import conductor.conf.inventory_provider
 import conductor.conf.service_controller
+import conductor.conf.vim_controller
 import conductor.controller.service
 import conductor.controller.translator_svc
 import conductor.data.plugins.inventory_provider.aai
 import conductor.data.plugins.service_controller.sdnc
+import conductor.data.plugins.vim_controller.multicloud
 import conductor.reservation.service
 import conductor.service
 import conductor.solver.service
@@ -53,6 +55,10 @@ def list_opts():
             conductor.conf.inventory_provider.
             INV_PROVIDER_EXT_MANAGER_OPTS)),
         ('aai', conductor.data.plugins.inventory_provider.aai.AAI_OPTS),
+        ('vim_controller', itertools.chain(
+            conductor.conf.vim_controller.VIM_CONTROLLER_EXT_MANAGER_OPTS)),
+        ('multicloud',
+         conductor.data.plugins.vim_controller.multicloud.MULTICLOUD_OPTS),
         ('service_controller', itertools.chain(
             conductor.conf.service_controller.
             SVC_CONTROLLER_EXT_MANAGER_OPTS)),

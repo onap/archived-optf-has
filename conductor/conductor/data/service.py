@@ -27,6 +27,7 @@ from conductor.common.music import messaging as music_messaging
 from conductor.common.utils import conductor_logging_util as log_util
 from conductor.data.plugins.inventory_provider import extensions as ip_ext
 from conductor.data.plugins.service_controller import extensions as sc_ext
+from conductor.data.plugins.vim_controller import extensions as vc_ext
 from conductor.i18n import _LE, _LI, _LW
 from oslo_config import cfg
 from oslo_log import log
@@ -77,6 +78,9 @@ class DataServiceLauncher(object):
         self.ip_ext_manager = (
             ip_ext.Manager(conf, 'conductor.inventory_provider.plugin'))
         self.ip_ext_manager.initialize()
+        self.vc_ext_manager = (
+            vc_ext.Manager(conf, 'conductor.vim_controller.plugin'))
+        self.vc_ext_manager.initialize()
         self.sc_ext_manager = (
             sc_ext.Manager(conf, 'conductor.service_controller.plugin'))
         self.sc_ext_manager.initialize()
@@ -87,6 +91,7 @@ class DataServiceLauncher(object):
             topic = "data"
             target = music_messaging.Target(topic=topic)
             endpoints = [DataEndpoint(self.ip_ext_manager,
+                                      self.vc_ext_manager,
                                       self.sc_ext_manager), ]
             flush = not self.conf.data.concurrent
             kwargs = {'transport': transport,
@@ -101,9 +106,10 @@ class DataServiceLauncher(object):
 
 
 class DataEndpoint(object):
-    def __init__(self, ip_ext_manager, sc_ext_manager):
+    def __init__(self, ip_ext_manager, vc_ext_manager, sc_ext_manager):
 
         self.ip_ext_manager = ip_ext_manager
+        self.vc_ext_manager = vc_ext_manager
         self.sc_ext_manager = sc_ext_manager
         self.plugin_cache = {}
 
@@ -488,6 +494,47 @@ class DataEndpoint(object):
             "Candidates with matching hpa capabilities: {}, "
             "inventory provider: {}").format(candidate_list,
                                              self.ip_ext_manager.names()[0]))
+        return {'response': candidate_list, 'error': error}
+
+    def get_candidates_with_vim_capacity(self, ctx, arg):
+        '''
+        RPC for getting candidates with vim capacity
+        :param ctx: context
+        :param arg: contains input passed from client side for RPC call
+        :return: response candidate_list with with required vim capacity
+        '''
+        error = False
+        candidate_list = arg["candidate_list"]
+        vim_request = arg["request"]
+        vim_list = list()
+        discard_set = set()
+        for candidate in candidate_list:
+            if candidate["inventory_type"] == "cloud":
+                vim_list.append(candidate['vim-id'])
+
+        vim_request['VIMs'] = vim_list
+        vims_result = self.ip_ext_manager.map_method(
+            'check_vim_capacity',
+            vim_request
+        )
+
+        if vims_result and len(vims_result) > 0:
+            for candidate in candidate_list:
+                # perform this check only for cloud candidates
+                if candidate["inventory_type"] == "cloud":
+                    if candidate['vim-id'] not in vims_result:
+                        discard_set.add(candidate.get("candidate_id"))
+
+            # return candidates not in discard set
+            candidate_list[:] = [c for c in candidate_list
+                                 if c['candidate_id'] not in discard_set]
+        else:
+            error = True
+
+        LOG.info(_LI(
+            "Candidates with with vim capacity: {}, inventory provider: "
+            "{}").format(candidate_list, self.ip_ext_manager.names()[0]))
+
         return {'response': candidate_list, 'error': error}
 
     def resolve_demands(self, ctx, arg):
