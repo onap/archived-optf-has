@@ -298,3 +298,20 @@ class TestAAI(unittest.TestCase):
         flavors_info = self.aai_ep._get_flavors("mock-cloud-owner",
                                                 "mock-cloud-region-id")
         self.assertEqual(2, len(flavors_info['flavor']))
+
+    def test_match_hpa(self):
+        flavor_json_file = \
+           './conductor/tests/unit/data/plugins/inventory_provider/hpa_flavors.json'
+        flavor_json = json.loads(open(flavor_json_file).read())
+        feature_json_file = \
+            './conductor/tests/unit/data/plugins/inventory_provider/hpa_req_features.json'
+        feature_json = json.loads(open(feature_json_file).read())
+        candidate_json_file = './conductor/tests/unit/data/candidate_list.json'
+        candidate_json = json.loads(open(candidate_json_file).read())
+        candidate_json['candidate_list'][1]['flavors'] = flavor_json
+        flavor_map = {"flavor-id": "f5aa2b2e-3206-41b6-80d5-cf041b098c43", \
+                      "flavor-name": "flavor-cpu-pinning-ovsdpdk-instruction-set" }
+
+        self.assertEqual(flavor_map,
+             self.aai_ep.match_hpa(candidate_json['candidate_list'][1], feature_json))
+
