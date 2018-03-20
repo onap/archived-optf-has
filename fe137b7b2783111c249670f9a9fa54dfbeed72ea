@@ -206,6 +206,23 @@
       "revId": "fe137b7b2783111c249670f9a9fa54dfbeed72ea",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a93c517_d518b720",
+        "filename": "conductor/conductor/tests/unit/data/hpa_req_features.json",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1361
+      },
+      "writtenOn": "2018-03-20T17:17:41Z",
+      "side": 1,
+      "message": "please use hpa_constraints.json for unit tests",
+      "revId": "fe137b7b2783111c249670f9a9fa54dfbeed72ea",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
     }
   ]
 }
