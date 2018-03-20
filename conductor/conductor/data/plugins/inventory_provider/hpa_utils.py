@@ -22,8 +22,10 @@
    Hardware Platform Awareness (HPA) constraint plugin'''
 
 # python imports
+import yaml
+import operator
 
-# Conductor imports
+from conductor.i18n import _LE, _LI
 
 # Third-party library imports
 from oslo_log import log
@@ -46,3 +48,222 @@ def  match_all_operator(big_list, small_list):
     small_set = set(small_list)
 
     return small_set.issubset(big_set)
+
+
+class HpaMatchProvider(object):
+
+    def __init__(self, candidate, req_cap_list):
+        self.flavors_list = candidate['flavors']['flavor']
+        self.req_cap_list = req_cap_list
+
+    # Find the flavor which has all the required capabilities
+    def match_flavor(self):
+        # Keys to find capability match
+        hpa_keys = ['hpa-feature', 'architecture', 'hpa-version']
+        req_filter_list = []
+        for capability in CapabilityDataParser.get_item(self.req_cap_list,
+                                                        None):
+            if capability.item['mandatory'] == 'True':
+                hpa_list = {k: capability.item[k] \
+                            for k in hpa_keys if k in capability.item}
+                req_filter_list.append(hpa_list)
+        max_score = -1
+        flavor_map = None
+        for flavor in self.flavors_list:
+            flavor_filter_list = []
+            try:
+                flavor_cap_list = flavor['hpa-capabilities']
+            except KeyError:
+                LOG.info(_LI("invalid JSON "))
+                return None
+            for capability in CapabilityDataParser.get_item(flavor_cap_list,
+                                                            'hpa-capability'):
+                hpa_list = {k: capability.item[k] \
+                               for k in hpa_keys if k in capability.item}
+                flavor_filter_list.append(hpa_list)
+            # if flavor has the matching capability compare attributes
+            if self._is_cap_supported(flavor_filter_list, req_filter_list):
+                match_found, score = self._compare_feature_attributes(flavor_cap_list)
+                if match_found:
+                    LOG.info(_LI("Matching Flavor found '{}' for request - {}").
+                             format(flavor['flavor-name'], self.req_cap_list))
+                    if score > max_score:
+                        max_score = score
+                        flavor_map = {"flavor-id": flavor['flavor-id'],
+                                  "flavor-name": flavor['flavor-name']}
+        return flavor_map
+
+
+    def _is_cap_supported(self, flavor, cap):
+        try:
+            for elem in cap:
+                flavor.remove(elem)
+        except ValueError:
+            return False
+        # Found all capabilities in Flavor
+        return True
+
+    # Convert to bytes value using unit
+    def _get_normalized_value(self, unit, value):
+
+        if not value.isdigit():
+            return value
+        value = int(value)
+        if unit == 'KB':
+            value = value * 1024
+        elif unit == 'MB':
+            value = value * 1024 * 1024
+        elif unit == 'GB':
+            value = value * 1024 * 1024 * 1024
+        return str(value)
+
+    def _get_req_attribute(self, req_attr):
+        try:
+            c_op = req_attr['operator']
+            c_value = req_attr['hpa-attribute-value']
+            c_unit = None
+            if 'unit' in req_attr:
+                c_unit = req_attr['unit']
+        except KeyError:
+            LOG.info(_LI("invalid JSON "))
+            return None
+
+        if c_unit:
+            c_value = self._get_normalized_value(c_unit, c_value)
+        return c_value, c_op
+
+    def _get_flavor_attribute(self, flavor_attr):
+        try:
+            attrib_value = yaml.load(flavor_attr['hpa-attribute-value'])
+        except:
+            return None
+
+        f_unit = None
+        f_value = None
+        for key, value in attrib_value.iteritems():
+            if key == 'value':
+                f_value = value
+            elif key == 'unit':
+                f_unit = value
+        if f_unit:
+            f_value = self._get_normalized_value(f_unit, f_value)
+        return f_value
+
+    def _get_operator(self, req_op):
+
+        OPERATORS = ['=', '<', '>', '<=', '>=', 'ALL']
+
+        if not req_op in OPERATORS:
+            return None
+
+        if req_op == ">":
+            op = operator.gt
+        elif req_op == ">=":
+            op = operator.ge
+        elif req_op == "<":
+            op = operator.lt
+        elif req_op == "<=":
+            op = operator.le
+        elif req_op == "=":
+            op = operator.eq
+        elif req_op == 'ALL':
+            op = _match_all_operator
+
+        return op
+
+
+    def _compare_attribute(self, flavor_attr, req_attr):
+
+        req_value, req_op = self._get_req_attribute(req_attr)
+        flavor_value = self._get_flavor_attribute(flavor_attr)
+
+        if req_value is None or flavor_value is None:
+            return False
+
+        # Compare operators only valid for Integers
+        if req_op in ['<', '>', '<=', '>=']:
+            if not req_value.isdigit() or not flavor_value.isdigit():
+                return False
+
+        op = self._get_operator(req_op)
+        if not op:
+            return False
+
+        if req_op == 'ALL':
+            # All is valid only for lists
+            if isinstance(req_value, list) and isinstance(flavor_value, list):
+                return op(flavor_value, req_value)
+
+        # if values are string compare them as strings
+        if req_op == '=':
+            if not req_value.isdigit() or not flavor_value.isdigit():
+                return op(req_value, flavor_value)
+
+        # Only integers left to compare
+        if req_op in ['<', '>', '<=', '>=', '=']:
+            return  op(int(flavor_value), int(req_value))
+
+        return False
+
+    # for the feature get the capabilty feature attribute list
+    def _get_flavor_cfa_list(self, feature, flavor_cap_list):
+        for capability in CapabilityDataParser.get_item(flavor_cap_list,
+                                                        'hpa-capability'):
+            flavor_feature, feature_attributes = capability.get_fields()
+            # One feature will match this condition as we have pre-filtered
+            if feature == flavor_feature:
+                return feature_attributes
+
+    # flavor has all the required capabilties
+    # For each required capability find capability in flavor
+    # and compare each attribute
+    def _compare_feature_attributes(self, flavor_cap_list):
+        score = 0
+        for capability in CapabilityDataParser.get_item(self.req_cap_list, None):
+            hpa_feature, req_cfa_list = capability.get_fields()
+            flavor_cfa_list = self._get_flavor_cfa_list(hpa_feature, flavor_cap_list)
+            if flavor_cfa_list is not None:
+                for req_feature_attr in req_cfa_list:
+                    req_attr_key = req_feature_attr['hpa-attribute-key']
+                     # filter to get the attribute being compared
+                    flavor_feature_attr = \
+                        filter(lambda ele: ele['hpa-attribute-key'] == \
+                               req_attr_key, flavor_cfa_list)
+                    if not flavor_feature_attr:
+                        return False, 0
+                    if not self._compare_attribute(flavor_feature_attr[0],
+                                                   req_feature_attr):
+                        return False, 0
+            if flavor_cfa_list is not None and capability.item['mandatory'] == 'False':
+                score = score + int(capability.item['score'])
+        return True, score
+
+
+class CapabilityDataParser(object):
+    """Helper class to parse  data"""
+
+    def __init__(self, item):
+        self.item = item
+
+    @classmethod
+    def get_item(cls, payload, key):
+        try:
+            if key is None:
+                features = payload
+            else:
+                features = (payload[key])
+
+            for f in features:
+                yield cls(f)
+        except KeyError:
+            LOG.info(_LI("invalid JSON "))
+
+    def get_fields(self):
+        return (self.get_feature(),
+                self.get_feature_attributes())
+
+    def get_feature_attributes(self):
+        return self.item.get('hpa-feature-attributes')
+
+    def get_feature(self):
+        return self.item.get('hpa-feature')
