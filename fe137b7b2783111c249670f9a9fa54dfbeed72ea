@@ -223,6 +223,52 @@
       "revId": "fe137b7b2783111c249670f9a9fa54dfbeed72ea",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a93c517_b5d72b23",
+        "filename": "conductor/conductor/tests/unit/data/test_hpa_utils.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1361
+      },
+      "writtenOn": "2018-03-20T17:20:00Z",
+      "side": 1,
+      "message": "suggestion: Rename to TestHPAUtils.\nAlso add unit tests for other utility functions if it is not covered fully.",
+      "range": {
+        "startLine": 26,
+        "startChar": 6,
+        "endLine": 26,
+        "endChar": 18
+      },
+      "revId": "fe137b7b2783111c249670f9a9fa54dfbeed72ea",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a93c517_95d22f33",
+        "filename": "conductor/conductor/tests/unit/data/test_hpa_utils.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1361
+      },
+      "writtenOn": "2018-03-20T17:20:00Z",
+      "side": 1,
+      "message": "test_match_flavor?",
+      "range": {
+        "startLine": 40,
+        "startChar": 8,
+        "endLine": 40,
+        "endChar": 18
+      },
+      "revId": "fe137b7b2783111c249670f9a9fa54dfbeed72ea",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
     }
   ]
 }
