@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a93c517_0b511bd8",
+        "filename": "conductor/conductor/controller/translator.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 430,
+      "author": {
+        "id": 285
+      },
+      "writtenOn": "2018-03-21T03:45:14Z",
+      "side": 1,
+      "message": "unnecessary change",
+      "range": {
+        "startLine": 430,
+        "startChar": 25,
+        "endLine": 430,
+        "endChar": 37
+      },
+      "revId": "b62a5e2cd94d36a9f817edcfd63deca2d2ed02e5",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a93c517_4b47231e",
+        "filename": "conductor/conductor/controller/translator.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 578,
+      "author": {
+        "id": 285
+      },
+      "writtenOn": "2018-03-21T03:45:14Z",
+      "side": 1,
+      "message": "This check doesn\u0027t ensure that the required fields are present. This checking only for invalid attributes.",
+      "range": {
+        "startLine": 577,
+        "startChar": 28,
+        "endLine": 578,
+        "endChar": 51
+      },
+      "revId": "b62a5e2cd94d36a9f817edcfd63deca2d2ed02e5",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
