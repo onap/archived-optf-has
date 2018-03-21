@@ -22,6 +22,30 @@
       "revId": "9ed17f979b4e22ed8a7db65d4852bb75f2fdf43f",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a93c517_6bb3ff0a",
+        "filename": "conductor/conductor/data/plugins/inventory_provider/aai.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 437,
+      "author": {
+        "id": 1361
+      },
+      "writtenOn": "2018-03-21T06:08:37Z",
+      "side": 1,
+      "message": "match hpa function can either expect a flavors dictionary or None.",
+      "parentUuid": "5a93c517_6b577fcb",
+      "range": {
+        "startLine": 436,
+        "startChar": 12,
+        "endLine": 437,
+        "endChar": 53
+      },
+      "revId": "9ed17f979b4e22ed8a7db65d4852bb75f2fdf43f",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
     }
   ]
 }
