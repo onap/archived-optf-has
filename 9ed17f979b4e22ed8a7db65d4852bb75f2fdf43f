@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a93c517_6b577fcb",
+        "filename": "conductor/conductor/data/plugins/inventory_provider/aai.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 437,
+      "author": {
+        "id": 285
+      },
+      "writtenOn": "2018-03-21T03:47:11Z",
+      "side": 1,
+      "message": "Should the validation of data from AAI done here or in the match hpa function? Currently match function assumes that the data is formatted correctly.",
+      "range": {
+        "startLine": 436,
+        "startChar": 12,
+        "endLine": 437,
+        "endChar": 53
+      },
+      "revId": "9ed17f979b4e22ed8a7db65d4852bb75f2fdf43f",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
