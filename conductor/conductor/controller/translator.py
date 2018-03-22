@@ -475,6 +475,7 @@ class Translator(object):
             ctxt = {
                 "plan_id": self._plan_id,
                 "plan_name": self._plan_name,
+                "keyspace": self.conf.keyspace,
             }
             args = {
                 "demands": {
