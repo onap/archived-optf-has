@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a93c517_de6206ad",
+        "filename": "conductor/conductor/data/plugins/inventory_provider/aai.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 1267,
+      "author": {
+        "id": 1361
+      },
+      "writtenOn": "2018-03-22T22:33:53Z",
+      "side": 1,
+      "message": "This should be features.",
+      "range": {
+        "startLine": 1267,
+        "startChar": 60,
+        "endLine": 1267,
+        "endChar": 78
+      },
+      "revId": "c28d56a9179531e4edeff5b9b92e7f505f25cf17",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a93c517_5e6ef697",
+        "filename": "conductor/conductor/data/plugins/inventory_provider/hpa_utils.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1361
+      },
+      "writtenOn": "2018-03-22T22:33:53Z",
+      "side": 1,
+      "message": "Is there unit tests available as another patch?",
+      "revId": "c28d56a9179531e4edeff5b9b92e7f505f25cf17",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
