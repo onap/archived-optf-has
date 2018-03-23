@@ -13,6 +13,10 @@ class LoggerFilter(logging.Filter):
 def getTransactionId(keyspace, plan_id):
     """ get transaction id from a pariticular plan in MUSIC """
     rows = api.API().row_read(keyspace, "plans", "id", plan_id)
+    
+    if 'result' in rows:
+        rows = rows['result']
+    
     for row_id, row_value in rows.items():
         template = row_value['template']
         if template:

@@ -37,7 +37,7 @@ global MUSIC_API
 
 MUSIC_API_OPTS = [
     cfg.StrOpt('server_url',
-               default='http://controller:8080/MUSIC/rest',
+               default='http://controller:8080/MUSIC/rest/v2',
                help='Base URL for Music REST API without a trailing slash.'),
     cfg.ListOpt('hostnames',
                 deprecated_for_removal=True,
@@ -83,6 +83,16 @@ MUSIC_API_OPTS = [
                help='Name of the third data center'),
     cfg.IntOpt('third_datacenter_replicas',
                help='Number of replicas in third data center'),
+    cfg.BoolOpt('music_new_version', 
+               help='new or old version'),
+    cfg.StrOpt('music_version', 
+               help='for version'),
+    cfg.StrOpt('aafuser', 
+               help='for header value'),
+    cfg.StrOpt('aafpass', 
+               help='for header value'),
+    cfg.StrOpt('aafns', 
+               help='for header value'),
 ]
 
 CONF.register_opts(MUSIC_API_OPTS, group='music_api')
@@ -112,7 +122,7 @@ class MusicAPI(object):
             port = CONF.music_api.port or 8080
             path = CONF.music_api.path or '/MUSIC/rest'
             server_url = 'http://{}:{}/{}'.format(
-                host, port, path.rstrip('/').lstrip('/'))
+                host, port, version, path.rstrip('/').lstrip('/'))
 
         kwargs = {
             'server_url': server_url,
@@ -121,6 +131,15 @@ class MusicAPI(object):
             'read_timeout': CONF.music_api.read_timeout,
         }
         self.rest = rest.REST(**kwargs)
+
+        if(CONF.music_api.music_new_version):
+            MUSIC_version = CONF.music_api.music_version.split(".")
+
+            self.rest.session.headers['content-type'] = 'application/json'
+            self.rest.session.headers['X-patchVersion'] = MUSIC_version[2]
+            self.rest.session.headers['ns'] = CONF.music_api.aafns
+            self.rest.session.headers['userId'] = CONF.music_api.aafuser
+            self.rest.session.headers['password'] = CONF.music_api.aafpass
 
         self.lock_ids = {}
 

@@ -72,13 +72,22 @@ class Query(object):
         kwargs = self.__kwargs()
         rows = api.MUSIC_API.row_read(
             pk_name=pk_name, pk_value=pk_value, **kwargs)
-        return self.__rows_to_objects(rows).first()
+	 
+        if 'result' in rows:
+            return (self.__rows_to_objects(rows['result']).first())
+        else:
+            return (self.__rows_to_objects(rows).first())
 
     def all(self):
         """Return all objects"""
         kwargs = self.__kwargs()
         rows = api.MUSIC_API.row_read(**kwargs)
-        return self.__rows_to_objects(rows)
+   
+        # Accommodate both Music 2.1 and 2.2 responses 
+        if 'result' in rows:
+            return self.__rows_to_objects(rows['result'])
+        else:
+            return self.__rows_to_objects(rows)
 
     def get_plan_by_id(self, plan_id):
         """Return the plan with specific id"""
