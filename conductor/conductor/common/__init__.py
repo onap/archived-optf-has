@@ -33,6 +33,7 @@ def music_api(configuration):
     kwargs = {
         'host': configuration.get('host'),
         'port': configuration.get('port'),
+        'version': configuration.get('version'),
         'replication_factor': configuration.get('replication_factor'),
     }
     api_instance = api.API(**kwargs)
