@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a93c517_81cdfe88",
+        "filename": "conductor/conductor/controller/translator.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 285
+      },
+      "writtenOn": "2018-03-23T06:06:24Z",
+      "side": 1,
+      "message": "Can you also add a test to check if all these keys are available.",
+      "range": {
+        "startLine": 103,
+        "startChar": 15,
+        "endLine": 103,
+        "endChar": 87
+      },
+      "revId": "f0343b7070d2aba2df4275c5b567a922846d5f21",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
