@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a93c517_a0402b08",
+        "filename": "conductor/conductor/data/service.py",
+        "patchSetId": 7
+      },
+      "lineNbr": 468,
+      "author": {
+        "id": 285
+      },
+      "writtenOn": "2018-03-26T05:03:44Z",
+      "side": 1,
+      "message": "_LI?",
+      "range": {
+        "startLine": 468,
+        "startChar": 20,
+        "endLine": 468,
+        "endChar": 23
+      },
+      "revId": "3437fc2b299bf73a525bbb30e9241af14c62bd57",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
