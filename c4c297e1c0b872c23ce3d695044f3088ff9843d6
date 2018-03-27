@@ -1,0 +1,320 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a93c517_6ce68c46",
+        "filename": "conductor/conductor/data/plugins/inventory_provider/hpa_utils.py",
+        "patchSetId": 7
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 1361
+      },
+      "writtenOn": "2018-03-27T17:38:07Z",
+      "side": 1,
+      "message": "same applies here. Does this support floating point values?",
+      "range": {
+        "startLine": 90,
+        "startChar": 15,
+        "endLine": 90,
+        "endChar": 30
+      },
+      "revId": "c4c297e1c0b872c23ce3d695044f3088ff9843d6",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a93c517_4cd5d041",
+        "filename": "conductor/conductor/data/plugins/inventory_provider/hpa_utils.py",
+        "patchSetId": 7
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 1361
+      },
+      "writtenOn": "2018-03-27T17:38:07Z",
+      "side": 1,
+      "message": "value might not be Integer always?",
+      "range": {
+        "startLine": 92,
+        "startChar": 16,
+        "endLine": 92,
+        "endChar": 26
+      },
+      "revId": "c4c297e1c0b872c23ce3d695044f3088ff9843d6",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a93c517_6c544cca",
+        "filename": "conductor/conductor/data/plugins/inventory_provider/hpa_utils.py",
+        "patchSetId": 7
+      },
+      "lineNbr": 109,
+      "author": {
+        "id": 1361
+      },
+      "writtenOn": "2018-03-27T17:38:07Z",
+      "side": 1,
+      "message": "Suggestion - Can we get any additional information regarding  the error if this happens? Applies to all KeyError logs.",
+      "range": {
+        "startLine": 109,
+        "startChar": 12,
+        "endLine": 109,
+        "endChar": 42
+      },
+      "revId": "c4c297e1c0b872c23ce3d695044f3088ff9843d6",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a93c517_6c020cb6",
+        "filename": "conductor/conductor/data/plugins/inventory_provider/hpa_utils.py",
+        "patchSetId": 7
+      },
+      "lineNbr": 151,
+      "author": {
+        "id": 1361
+      },
+      "writtenOn": "2018-03-27T17:38:07Z",
+      "side": 1,
+      "message": "Can we keep this as a function like other operators? not a instance method.",
+      "range": {
+        "startLine": 151,
+        "startChar": 16,
+        "endLine": 151,
+        "endChar": 41
+      },
+      "revId": "c4c297e1c0b872c23ce3d695044f3088ff9843d6",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a93c517_8cff58aa",
+        "filename": "conductor/conductor/data/plugins/inventory_provider/hpa_utils.py",
+        "patchSetId": 7
+      },
+      "lineNbr": 157,
+      "author": {
+        "id": 1361
+      },
+      "writtenOn": "2018-03-27T17:38:07Z",
+      "side": 1,
+      "message": "This will be outside the class",
+      "range": {
+        "startLine": 155,
+        "startChar": 0,
+        "endLine": 157,
+        "endChar": 20
+      },
+      "revId": "c4c297e1c0b872c23ce3d695044f3088ff9843d6",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a93c517_ace6d414",
+        "filename": "conductor/conductor/data/plugins/inventory_provider/hpa_utils.py",
+        "patchSetId": 7
+      },
+      "lineNbr": 169,
+      "author": {
+        "id": 1361
+      },
+      "writtenOn": "2018-03-27T17:38:07Z",
+      "side": 1,
+      "message": "This will throw exception if the value is coming in is integer. Can we use something like isinstance or similar which is more defensive? (int).isdigit() is throwing exception. If we are doing such strict checking that we need to ensure that the value passed in is string from both multicloud and policy",
+      "range": {
+        "startLine": 169,
+        "startChar": 29,
+        "endLine": 169,
+        "endChar": 38
+      },
+      "revId": "c4c297e1c0b872c23ce3d695044f3088ff9843d6",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a93c517_ccca406e",
+        "filename": "conductor/conductor/data/plugins/inventory_provider/hpa_utils.py",
+        "patchSetId": 7
+      },
+      "lineNbr": 178,
+      "author": {
+        "id": 1361
+      },
+      "writtenOn": "2018-03-27T17:38:07Z",
+      "side": 1,
+      "message": "req_value",
+      "range": {
+        "startLine": 178,
+        "startChar": 61,
+        "endLine": 178,
+        "endChar": 73
+      },
+      "revId": "c4c297e1c0b872c23ce3d695044f3088ff9843d6",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a93c517_accd7488",
+        "filename": "conductor/conductor/data/plugins/inventory_provider/hpa_utils.py",
+        "patchSetId": 7
+      },
+      "lineNbr": 179,
+      "author": {
+        "id": 1361
+      },
+      "writtenOn": "2018-03-27T17:38:07Z",
+      "side": 1,
+      "message": "suggestion - Moving this into match_all_operator will make the \u0027ALL\u0027 operator behave like other operators.",
+      "range": {
+        "startLine": 178,
+        "startChar": 12,
+        "endLine": 179,
+        "endChar": 50
+      },
+      "revId": "c4c297e1c0b872c23ce3d695044f3088ff9843d6",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a93c517_78097394",
+        "filename": "conductor/conductor/data/plugins/inventory_provider/hpa_utils.py",
+        "patchSetId": 7
+      },
+      "lineNbr": 185,
+      "author": {
+        "id": 1361
+      },
+      "writtenOn": "2018-03-27T17:38:07Z",
+      "side": 1,
+      "message": "same as above",
+      "range": {
+        "startLine": 185,
+        "startChar": 18,
+        "endLine": 185,
+        "endChar": 68
+      },
+      "revId": "c4c297e1c0b872c23ce3d695044f3088ff9843d6",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a93c517_4c1dd072",
+        "filename": "conductor/conductor/data/plugins/inventory_provider/hpa_utils.py",
+        "patchSetId": 7
+      },
+      "lineNbr": 189,
+      "author": {
+        "id": 1361
+      },
+      "writtenOn": "2018-03-27T17:38:07Z",
+      "side": 1,
+      "message": "this can be coalesced into single statement?",
+      "range": {
+        "startLine": 186,
+        "startChar": 15,
+        "endLine": 189,
+        "endChar": 32
+      },
+      "revId": "c4c297e1c0b872c23ce3d695044f3088ff9843d6",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a93c517_ecaa9c84",
+        "filename": "conductor/conductor/data/plugins/inventory_provider/hpa_utils.py",
+        "patchSetId": 7
+      },
+      "lineNbr": 191,
+      "author": {
+        "id": 1361
+      },
+      "writtenOn": "2018-03-27T17:38:07Z",
+      "side": 1,
+      "message": "can floating point values exist?",
+      "range": {
+        "startLine": 191,
+        "startChar": 10,
+        "endLine": 191,
+        "endChar": 39
+      },
+      "revId": "c4c297e1c0b872c23ce3d695044f3088ff9843d6",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a93c517_ac949444",
+        "filename": "conductor/conductor/data/plugins/inventory_provider/hpa_utils.py",
+        "patchSetId": 7
+      },
+      "lineNbr": 196,
+      "author": {
+        "id": 1361
+      },
+      "writtenOn": "2018-03-27T17:38:07Z",
+      "side": 1,
+      "message": "this can be coalesced into single statement?",
+      "range": {
+        "startLine": 193,
+        "startChar": 12,
+        "endLine": 196,
+        "endChar": 28
+      },
+      "revId": "c4c297e1c0b872c23ce3d695044f3088ff9843d6",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a93c517_ece7fcaa",
+        "filename": "conductor/conductor/data/plugins/inventory_provider/hpa_utils.py",
+        "patchSetId": 7
+      },
+      "lineNbr": 233,
+      "author": {
+        "id": 1361
+      },
+      "writtenOn": "2018-03-27T17:38:07Z",
+      "side": 1,
+      "message": "nit - 2 new lines needed.",
+      "revId": "c4c297e1c0b872c23ce3d695044f3088ff9843d6",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a93c517_0ced888b",
+        "filename": "conductor/conductor/data/plugins/inventory_provider/hpa_utils.py",
+        "patchSetId": 7
+      },
+      "lineNbr": 265,
+      "author": {
+        "id": 1361
+      },
+      "writtenOn": "2018-03-27T17:38:07Z",
+      "side": 1,
+      "message": "nit - remove empty lines",
+      "range": {
+        "startLine": 263,
+        "startChar": 0,
+        "endLine": 265,
+        "endChar": 0
+      },
+      "revId": "c4c297e1c0b872c23ce3d695044f3088ff9843d6",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
