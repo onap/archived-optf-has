@@ -443,7 +443,7 @@ class DataEndpoint(object):
         error = False
         candidate_list = arg["candidate_list"]
         label_name = arg["label_name"]
-        features = arg["features"]
+        flavorProperties = arg["flavorProperties"]
         discard_set = set()
         for candidate in candidate_list:
             # perform this check only for cloud candidates
@@ -463,7 +463,7 @@ class DataEndpoint(object):
             results = self.ip_ext_manager.map_method(
                 'match_hpa',
                 candidate=candidate,
-                features=features
+                features=flavorProperties
             )
 
             if results and len(results) > 0:
