@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a93c517_67bd4702",
+        "filename": "conductor/conductor/controller/translator.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 2041
+      },
+      "writtenOn": "2018-03-27T17:37:32Z",
+      "side": 1,
+      "message": "can we also have \"2017-10-10\" in the list here ? This may break Leonardo\u0027s functional test cases.",
+      "range": {
+        "startLine": 41,
+        "startChar": 0,
+        "endLine": 41,
+        "endChar": 8
+      },
+      "revId": "ef5daacc7e54a7e66721013f140eaa8a14d6ec3b",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
