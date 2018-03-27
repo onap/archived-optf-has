@@ -54,11 +54,11 @@ class HPA(constraint.Constraint):
             self.constraint_type, demand_name))
         vm_label_list = self.properties.get('evaluate')
         for vm_demand in vm_label_list:
-            label_name = vm_demand['label']
-            features = vm_demand['features']
+            label_name = vm_demand['flavorLabel']
+            flavorProperties = vm_demand['flavorProperties']
             response = (cei.get_candidates_with_hpa(label_name,
                                                     _candidate_list,
-                                                    features))
+                                                    flavorProperties))
             if response:
                 _candidate_list = response
             else:
