@@ -12,7 +12,7 @@ Unless required by applicable law or agreed to in writing, software distributed 
 
 # Homing Specification Guide
 
-*Updated: 10 October 2017*
+*Updated: 27 Mar 2018*
 
 This document describes the Homing Template format, used by the Homing service. It is a work in progress and subject to frequent revision.
 
@@ -21,7 +21,7 @@ This document describes the Homing Template format, used by the Homing service. 
 Homing templates are defined in YAML and follow the structure outlined below.
 
 ```yaml
-homing_template_version: 2017-10-10
+homing_template_version: 2018-02-01
 parameters:
   PARAMETER_DICT
 locations:
@@ -36,7 +36,7 @@ optimization:
   OPTIMIZATION
 ```
 
-* ``homing_template_version``: This key with value 2017-10-10 (or a later date) indicates that the YAML document is a Homing template of the specified version.
+* ``homing_template_version``: This key with value 2018-02-01 (or a later date) indicates that the YAML document is a Homing template of the specified version.
 * ``parameters``: This section allows for specifying input parameters that have to be provided when instantiating the homing template. Typically, this section is used for providing runtime parameters (like SLA thresholds), which in turn is used in the existing homing policies. The section is optional and can be omitted when no input is required.
 * ``locations``: This section contains the declaration of geographic locations. This section is optional and can be omitted when no input is required.
 * ``demands``: This section contains the declaration of demands. This section with at least one demand should be defined in any Homing template, or the template would not really do anything when being instantiated.
@@ -46,10 +46,10 @@ optimization:
 
 ## Homing Template Version
 
-The value of ``homing_template_version`` tells HAS not only the format of the template but also features that will be validated and supported. Only one value is supported: ``2017-10-10`` in the initial release of HAS.
+The value of ``homing_template_version`` tells HAS not only the format of the template but also features that will be validated and supported. The following values are supported: "2016-11-01" or "2018-02-01" in the initial release of HAS.
 
 ```yaml
-homing_template_version: 2017-10-10
+homing_template_version: 2018-02-01
 ```
 
 ## Parameters
