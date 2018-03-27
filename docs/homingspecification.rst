@@ -4,7 +4,7 @@
 Homing Specification Guide
 ==========================
 
-*Updated: 10 October 2017*
+*Updated: March 23 2018*
 
 This document describes the Homing Template format, used by the Homing
 service. It is a work in progress and subject to frequent revision.
@@ -17,7 +17,7 @@ below.
 
 .. code:: yaml
 
-    homing_template_version: 2017-10-10
+    homing_template_version: 2018-02-01 
     parameters:
       PARAMETER_DICT
     locations:
@@ -31,7 +31,7 @@ below.
     optimization:
       OPTIMIZATION
 
--  ``homing_template_version``: This key with value 2017-10-10 (or a
+-  ``homing_template_version``: This key with value 2018-02-01 (or a
    later date) indicates that the YAML document is a Homing template of
    the specified version.
 -  ``parameters``: This section allows for specifying input parameters
@@ -62,12 +62,12 @@ Homing Template Version
 
 The value of ``homing_template_version`` tells HAS not only the format
 of the template but also features that will be validated and supported.
-Only one value is supported: ``2017-10-10`` in the initial release of
-HAS.
+The values support in the initial release of HAS are "2016-11-01", 
+"2017-10-10", or "2018-02-01" 
 
 .. code:: yaml
 
-    homing_template_version: 2017-10-10
+    homing_template_version: 2018-02-01 
 
 Parameters
 ----------
