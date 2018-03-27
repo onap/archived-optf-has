@@ -9,7 +9,7 @@
           "properties": {
             "evaluate": [
               {
-                "features": [
+                "flavorProperties": [
                   {
                     "architecture": "generic",
                     "hpa-feature": "basicCapabilities",
@@ -80,10 +80,10 @@
                     "hpa-version": "v1"
                   }
                 ],
-                "label": "flavor_label_1"
+                "flavorLabel": "flavor_label_1"
               },
               {
-                "features": [
+                "flavorProperties": [
                   {
                     "architecture": "generic",
                     "hpa-feature": "basicCapabilities",
@@ -150,7 +150,7 @@
                     "hpa-version": "v1"
                   }
                 ],
-                "label": "flavor_label_2"
+                "flavorLabel": "flavor_label_2"
               }
             ]
           }

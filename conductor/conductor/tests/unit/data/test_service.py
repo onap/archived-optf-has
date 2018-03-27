@@ -237,14 +237,14 @@ class TestDataEndpoint(unittest.TestCase):
         (constraint_id, constraint_info) = \
             hpa_json["conductor_solver"]["constraints"][0].items()[0]
         hpa_constraint = constraint_info['properties']
-        features = hpa_constraint['evaluate'][0]['features']
-        label_name = hpa_constraint['evaluate'][0]['label']
+        flavorProperties = hpa_constraint['evaluate'][0]['flavorProperties']
+        label_name = hpa_constraint['evaluate'][0]['flavorLabel']
         ext_mock1.return_value = ['aai']
         flavor_info = {"flavor-id": "vim-flavor-id1",
                        "flavor-name": "vim-flavor-name1"}
         hpa_mock.return_value = [flavor_info]
         self.maxDiff = None
-        args = generate_args(candidate_list, features, label_name)
+        args = generate_args(candidate_list, flavorProperties, label_name)
         hpa_candidate_list = copy.deepcopy(candidate_list)
         hpa_candidate_list[1]['flavor_map'] = {}
         hpa_candidate_list[1]['flavor_map'][label_name] = "vim-flavor-name1"
@@ -254,7 +254,7 @@ class TestDataEndpoint(unittest.TestCase):
 
         hpa_candidate_list2 = list()
         hpa_candidate_list2.append(copy.deepcopy(candidate_list[0]))
-        args = generate_args(candidate_list, features, label_name)
+        args = generate_args(candidate_list, flavorProperties, label_name)
         hpa_mock.return_value = []
         expected_response = {'response': hpa_candidate_list2, 'error': False}
         self.assertEqual(expected_response,
@@ -315,10 +315,10 @@ class TestDataEndpoint(unittest.TestCase):
                                                                        args))
 
 
-def generate_args(candidate_list, features, label_name):
+def generate_args(candidate_list, flavorProperties, label_name):
     arg_candidate_list = copy.deepcopy(candidate_list)
     args = {"candidate_list": arg_candidate_list,
-            "features": features,
+            "flavorProperties": flavorProperties,
             "label_name": label_name}
     return args
 
