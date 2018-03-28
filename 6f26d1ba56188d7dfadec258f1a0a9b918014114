@@ -34,6 +34,23 @@
       "revId": "6f26d1ba56188d7dfadec258f1a0a9b918014114",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a93c517_5420edaf",
+        "filename": "conductor/conductor/tests/unit/data/candidate_list.json",
+        "patchSetId": 6
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1739
+      },
+      "writtenOn": "2018-03-28T20:48:40Z",
+      "side": 1,
+      "message": "Can the folder tests/unit/data be further divided into tests/unit/data/hpa - tests data needed by hpa should be put in its own folder instead of making changes to the existing unit tests files.",
+      "revId": "6f26d1ba56188d7dfadec258f1a0a9b918014114",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
     }
   ]
 }
