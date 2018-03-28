@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a93c517_54f30d9f",
+        "filename": "conductor/conductor/data/plugins/inventory_provider/hpa_utils.py",
+        "patchSetId": 8
+      },
+      "lineNbr": 170,
+      "author": {
+        "id": 1361
+      },
+      "writtenOn": "2018-03-28T17:15:37Z",
+      "side": 1,
+      "message": "No underscore.",
+      "range": {
+        "startLine": 170,
+        "startChar": 17,
+        "endLine": 170,
+        "endChar": 36
+      },
+      "revId": "9b67921bf839b8d5eb69327534fe56aab2d21d4f",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
