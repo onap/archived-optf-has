@@ -2,6 +2,52 @@
   "comments": [
     {
       "key": {
+        "uuid": "5a93c517_b7e9331c",
+        "filename": "conductor/conductor/data/plugins/inventory_provider/hpa_utils.py",
+        "patchSetId": 8
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1361
+      },
+      "writtenOn": "2018-03-28T17:49:34Z",
+      "side": 1,
+      "message": "There was a space in the previous commit. Could you please fix this?",
+      "range": {
+        "startLine": 36,
+        "startChar": 4,
+        "endLine": 36,
+        "endChar": 5
+      },
+      "revId": "9b67921bf839b8d5eb69327534fe56aab2d21d4f",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a93c517_d785df59",
+        "filename": "conductor/conductor/data/plugins/inventory_provider/hpa_utils.py",
+        "patchSetId": 8
+      },
+      "lineNbr": 156,
+      "author": {
+        "id": 1361
+      },
+      "writtenOn": "2018-03-28T17:49:34Z",
+      "side": 1,
+      "message": "Did u mean req_op not in OPERATORS? \nAlso OPERATORS should be global? otherwise variable name could be made lowercase.",
+      "range": {
+        "startLine": 156,
+        "startChar": 8,
+        "endLine": 156,
+        "endChar": 35
+      },
+      "revId": "9b67921bf839b8d5eb69327534fe56aab2d21d4f",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5a93c517_54f30d9f",
         "filename": "conductor/conductor/data/plugins/inventory_provider/hpa_utils.py",
         "patchSetId": 8
