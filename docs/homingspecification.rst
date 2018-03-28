@@ -376,6 +376,7 @@ region.
 
 **Examples**
 
+**``Service Candidate``**
 .. code:: json
 
     {
@@ -396,7 +397,30 @@ region.
         "complex_name": "dalls_one",
         "cloud_owner": "att-aic",
         "cloud_region_version": "1.1",
-        "physical_location_id": "DLLSTX9A",
+        "physical_location_id": "DLLSTX9A"
+    }
+
+**``Cloud Candidate``**
+.. code:: json
+
+    {
+        "candidate_id": "NYCNY55",
+        "candidate_type": "cloud",
+        "inventory_type": "cloud",
+        "inventory_provider": "aai",
+        "cost": "100",
+        "location_id": "NYCNY55",
+        "location_type": "azure",
+        "latitude": "40.7128",
+        "longitude": "-74.0060",
+        "city": "New York",
+        "state": "NY",
+        "country": "USA",
+        "region": "US",
+        "complex_name": "ny_one",
+        "cloud_owner": "att-aic",
+        "cloud_region_version": "1.1",
+        "physical_location_id": "NYCNY55"
     }
 
 **Questions** \* Currently, candidates are either service instances or
@@ -546,6 +570,19 @@ Constraint Types
 |                                           | the granularities of     |
 |                                           | clouds/regions/availabil |
 |                                           | ity-zones.               |
++-------------------------------------------+--------------------------+
+| ``hpa``                                   | Constraint that          |
+|                                           | recommends optimal flavor|
+|                                           | and cloud region based on|
+|                                           | required hardware        |
+|                                           | capabilities for an      |
+|                                           | incoming demand.         |
++-------------------------------------------+--------------------------+
+| ``vim_fit``                               | Constraint that ensures  |
+|                                           | capacity check with      |
+|                                           | available capacities of  |
+|                                           | VIMs based on incoming   |
+|                                           | request.                 |
 +-------------------------------------------+--------------------------+
 | ``license`` (Deferred)                    | License availability     |
 |                                           | constraint.              |
@@ -849,6 +886,88 @@ Or, to place two demands in the same region:
    Really, we are talking affinity/anti-affinity at the level of DCs,
    but these terms may cause confusion with affinity/anti-affinity in
    OpenStack.
+
+HPA
+~~~~
+
+Constrain each demand's inventory candidates based on available Hardware
+platform capabilities (HPA)
+
+Requirements mapped to the inventory provider specified properties, referenced
+by the demands. For eg, properties could be hardware capabilities provided by
+the platform through flavors or cloud-region eg:(CPU-Pinning, NUMA), features
+supported by the services, etc.
+
+
+**Schema**
+
++-------------+--------------------------------------------------------+
+| Property    | Value                                                  |
++=============+========================================================+
+| ``evaluate  | List of flavorLabel, flavorProperties of each VM of the|
+| ``          | VNF demand.                                            |
++-------------+--------------------------------------------------------+
+
+.. code:: yaml
+
+    constraints:
+      hpa_constraint:
+        type: hpa
+        demands: [my_vnf_demand, my_other_vnf_demand]
+        properties:
+          evaluate:
+            - [ List of {flavorLabel : {flavor label name},
+                        flavorProperties: HPACapability DICT} ]
+    HPACapability DICT :
+      hpa-feature: basicCapabilities
+      hpa-version: v1
+      architecture: generic
+      hpa-feature-attributes:
+        - HPAFEATUREATTRIBUTES LIST
+
+    HPAFEATUREATTRIBUTES LIST:
+      hpa-attribute-key: String
+      hpa-attribute-value: String
+      operator: One of OPERATOR
+      unit: String
+    OPERATOR : ['=', '<', '>', '<=', '>=', 'ALL']
+
+VIM Fit
+~~~~~~~
+
+Constrain each demand's inventory candidates based on capacity check for
+available capacity of a list of VIMs
+
+Requirements are sent as a request to a vim controller. vim controllers are
+defined by plugins in Homing (e.g., multicloud).
+
+A vimcontroller plugin knows how to communicate with a particular endpoint
+(via HTTP/REST, DMaaP, etc.), obtain necessary information, and make a
+decision. The endpoint and credentials can be configured through plugin
+settings.
+
+
+**Schema**
+
++--------------+--------------------------------------------------------+
+| Property     | Value                                                  |
++==============+========================================================+
+| ``controller | Name of a vim controller. (e.g., multicloud)           |
++--------------+--------------------------------------------------------+
+| ``request``  | Opaque dictionary of key/value pairs. Values           |
+|              | must be strings or numbers. Encoded and sent           |
+|              | to the service provider via a plugin.                  |
++--------------+--------------------------------------------------------+
+
+.. code:: yaml
+
+    constraints:
+      check_cloud_capacity:
+        type: vim_fit
+        demands: [my_vnf_demand, my_other_vnf_demand]
+        properties:
+          controller: multicloud
+          request: REQUEST_DICT
 
 Inventory Group
 ~~~~~~~~~~~~~~~
