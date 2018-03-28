@@ -376,6 +376,7 @@ region.
 
 **Examples**
 
+**``Service Candidate``**
 .. code:: json
 
     {
@@ -396,7 +397,225 @@ region.
         "complex_name": "dalls_one",
         "cloud_owner": "att-aic",
         "cloud_region_version": "1.1",
-        "physical_location_id": "DLLSTX9A",
+        "physical_location_id": "DLLSTX9A"
+    }
+
+**``Cloud Candidate``**
+.. code:: json
+
+    {
+        "candidate_id": "NYCNY55",
+        "candidate_type": "cloud",
+        "inventory_type": "cloud",
+        "inventory_provider": "aai",
+        "cost": "100",
+        "location_id": "NYCNY55",
+        "location_type": "azure",
+        "latitude": "40.7128",
+        "longitude": "-74.0060",
+        "city": "New York",
+        "state": "NY",
+        "country": "USA",
+        "region": "US",
+        "complex_name": "ny_one",
+        "cloud_owner": "att-aic",
+        "cloud_region_version": "1.1",
+        "physical_location_id": "NYCNY55",
+        "flavors": {
+           "flavor":[
+              {
+                 "flavor-id":"9cf8220b-4d96-4c30-a426-2e9382f3fff2",
+                 "flavor-name":"flavor-numa-cpu-topology-instruction-set",
+                 "flavor-vcpus":64,
+                 "flavor-ram":65536,
+                 "flavor-disk":1048576,
+                 "flavor-ephemeral":128,
+                 "flavor-swap":"0",
+                 "flavor-is-public":false,
+                 "flavor-selflink":"pXtX",
+                 "flavor-disabled":false,
+                 "hpa-capabilities":{
+                    "hpa-capability":[
+                       {
+                          "hpa-capability-id":"01a4bfe1-1993-4fda-bd1c-ef333b4f76a9",
+                          "hpa-feature":"cpuInstructionSetExtensions",
+                          "hpa-version":"v1",
+                          "architecture":"Intel64",
+                          "resource-version":"1521306560982",
+                          "hpa-feature-attributes":[
+                             {
+                                "hpa-attribute-key":"instructionSetExtensions",
+                                "hpa-attribute-value":"{\"value\":{['AAA', 'BBB', 'CCC', 'DDD']}}",
+                                "resource-version":"1521306560989"
+                             }
+                          ]
+                       },
+                       {
+                          "hpa-capability-id":"167ad6a2-7d9c-4bf2-9a1b-30e5311b8c66",
+                          "hpa-feature":"numa",
+                          "hpa-version":"v1",
+                          "architecture":"generic",
+                          "resource-version":"1521306561020",
+                          "hpa-feature-attributes":[
+                             {
+                                "hpa-attribute-key":"numaCpu-1",
+                                "hpa-attribute-value":"{\"value\":4}",
+                                "resource-version":"1521306561060"
+                             },
+                             {
+                                "hpa-attribute-key":"numaNodes",
+                                "hpa-attribute-value":"{\"value\":2}",
+                                "resource-version":"1521306561088"
+                             },
+                             {
+                                "hpa-attribute-key":"numaCpu-0",
+                                "hpa-attribute-value":"{\"value\":2}",
+                                "resource-version":"1521306561028"
+                             },
+                             {
+                                "hpa-attribute-key":"numaMem-0",
+                                "hpa-attribute-value":"{\"value\":2, \"unit\":\"GB\" }",
+                                "resource-version":"1521306561044"
+                             },
+                             {
+                                "hpa-attribute-key":"numaMem-1",
+                                "hpa-attribute-value":"{\"value\":4, \"unit\":\"GB\" }",
+                                "resource-version":"1521306561074"
+                             }
+                          ]
+                       },
+                       {
+                          "hpa-capability-id":"13ec6d4d-7fee-48d8-9e4a-c598feb101ed",
+                          "hpa-feature":"basicCapabilities",
+                          "hpa-version":"v1",
+                          "architecture":"generic",
+                          "resource-version":"1521306560909",
+                          "hpa-feature-attributes":[
+                             {
+                                "hpa-attribute-key":"numVirtualCpu",
+                                "hpa-attribute-value":"{\"value\":64}",
+                                "resource-version":"1521306560932"
+                             },
+                             {
+                                "hpa-attribute-key":"virtualMemSize",
+                                "hpa-attribute-value":"{\"value\":65536, \"unit\":\"MB\" }",
+                                "resource-version":"1521306560954"
+                             }
+                          ]
+                       },
+                       {
+                          "hpa-capability-id":"8fa22e64-41b4-471f-96ad-6c4708635e4c",
+                          "hpa-feature":"cpuTopology",
+                          "hpa-version":"v1",
+                          "architecture":"generic",
+                          "resource-version":"1521306561109",
+                          "hpa-feature-attributes":[
+                             {
+                                "hpa-attribute-key":"numCpuCores",
+                                "hpa-attribute-value":"{\"value\":8}",
+                                "resource-version":"1521306561114"
+                             },
+                             {
+                                "hpa-attribute-key":"numCpuThreads",
+                                "hpa-attribute-value":"{\"value\":8}",
+                                "resource-version":"1521306561138"
+                             },
+                             {
+                                "hpa-attribute-key":"numCpuSockets",
+                                "hpa-attribute-value":"{\"value\":6}",
+                                "resource-version":"1521306561126"
+                             }
+                          ]
+                       }
+                    ]
+                 },
+                 "resource-version":"1521306560203"
+              },
+              {
+                 "flavor-id":"f5aa2b2e-3206-41b6-80d5-cf041b098c43",
+                 "flavor-name":"flavor-cpu-pinning-ovsdpdk-instruction-set",
+                 "flavor-vcpus":32,
+                 "flavor-ram":131072,
+                 "flavor-disk":2097152,
+                 "flavor-ephemeral":128,
+                 "flavor-swap":"0",
+                 "flavor-is-public":false,
+                 "flavor-selflink":"pXtX",
+                 "flavor-disabled":false,
+                 "hpa-capabilities":{
+                    "hpa-capability":[
+                       {
+                          "hpa-capability-id":"4d04f4d8-e257-4442-8417-19a525e56096",
+                          "hpa-feature":"cpuInstructionSetExtensions",
+                          "hpa-version":"v1",
+                          "architecture":"generic",
+                          "resource-version":"1521306561223",
+                          "hpa-feature-attributes":[
+                             {
+                                "hpa-attribute-key":"instructionSetExtensions",
+                                "hpa-attribute-value":"{\"value\":{['A11', 'B22']}}",
+                                "resource-version":"1521306561228"
+                             }
+                          ]
+                       },
+                       {
+                          "hpa-capability-id":"8d36a8fe-bfee-446a-bbcb-881ee66c8f78",
+                          "hpa-feature":"ovsDpdk",
+                          "hpa-version":"v1",
+                          "architecture":"generic",
+                          "resource-version":"1521306561170",
+                          "hpa-feature-attributes":[
+                             {
+                                "hpa-attribute-key":"dataProcessingAccelerationLibrary",
+                                "hpa-attribute-value":"{\"value\":\"v18.02\"}",
+                                "resource-version":"1521306561175"
+                             }
+                          ]
+                       },
+                       {
+                          "hpa-capability-id":"c140c945-1532-4908-86c9-d7f71416f1dd",
+                          "hpa-feature":"cpuPinning",
+                          "hpa-version":"v1",
+                          "architecture":"generic",
+                          "resource-version":"1521306561191",
+                          "hpa-feature-attributes":[
+                             {
+                                "hpa-attribute-key":"logicalCpuPinningPolicy",
+                                "hpa-attribute-value":"{\"value\":\"dedicated\"}",
+                                "resource-version":"1521306561196"
+                             },
+                             {
+                                "hpa-attribute-key":"logicalCpuThreadPinningPolicy",
+                                "hpa-attribute-value":"{value:\"prefer\"}",
+                                "resource-version":"1521306561206"
+                             }
+                          ]
+                       },
+                       {
+                          "hpa-capability-id":"4565615b-1077-4bb5-a340-c5be48db2aaa",
+                          "hpa-feature":"basicCapabilities",
+                          "hpa-version":"v1",
+                          "architecture":"generic",
+                          "resource-version":"1521306561244",
+                          "hpa-feature-attributes":[
+                             {
+                                "hpa-attribute-key":"numVirtualCpu",
+                                "hpa-attribute-value":"{\"value\":32}",
+                                "resource-version":"1521306561259"
+                             },
+                             {
+                                "hpa-attribute-key":"virtualMemSize",
+                                "hpa-attribute-value":"{\"value\":131072, \"unit\":\"MB\" }",
+                                "resource-version":"1521306561248"
+                             }
+                          ]
+                       }
+                    ]
+                 },
+                 "resource-version":"1521306561164"
+              }
+           ]
+        }
     }
 
 **Questions** \* Currently, candidates are either service instances or
@@ -546,6 +765,17 @@ Constraint Types
 |                                           | the granularities of     |
 |                                           | clouds/regions/availabil |
 |                                           | ity-zones.               |
++-------------------------------------------+--------------------------+
+| ``hpa``                                   | Constraint that          |
+|                                           | recommends cloud region  |
+|                                           | with an optimal flavor   |
+|                                           | based on required HPA    |
+|                                           | capabilities for an      |
+|                                           | incoming demand.         |
++-------------------------------------------+--------------------------+
+| ``vim_fit``                               | Constraint that checks if|
+|                                           | the incoming demand fits |
+|                                           | the VIM instance.        |         |
 +-------------------------------------------+--------------------------+
 | ``license`` (Deferred)                    | License availability     |
 |                                           | constraint.              |
@@ -849,6 +1079,194 @@ Or, to place two demands in the same region:
    Really, we are talking affinity/anti-affinity at the level of DCs,
    but these terms may cause confusion with affinity/anti-affinity in
    OpenStack.
+
+HPA
+~~~~
+
+Constrain each demand's inventory candidates based on cloud regions' Hardware
+platform capabilities (HPA)
+
+Requirements mapped to the inventory provider specified properties, referenced
+by the demands. For eg, properties could be hardware capabilities provided by
+the platform through flavors or cloud-region eg:(CPU-Pinning, NUMA), features
+supported by the services, etc.
+
+
+**Schema**
+
++-------------+--------------------------------------------------------+
+| Property    | Value                                                  |
++=============+========================================================+
+| ``evaluate  | List of flavorLabel, flavorProperties of each VM of the|
+| ``          | VNF demand.                                            |
++-------------+--------------------------------------------------------+
+
+.. code:: yaml
+
+    constraints:
+      hpa_constraint:
+        type: hpa
+        demands: [my_vnf_demand, my_other_vnf_demand]
+        properties:
+          evaluate:
+            - [ List of {flavorLabel : {flavor label name},
+                        flavorProperties: HPACapability DICT} ]
+    HPACapability DICT :
+      hpa-feature: basicCapabilities
+      hpa-version: v1
+      architecture: generic
+      hpa-feature-attributes:
+        - HPAFEATUREATTRIBUTES LIST
+
+    HPAFEATUREATTRIBUTES LIST:
+      hpa-attribute-key: String
+      hpa-attribute-value: String
+      operator: One of OPERATOR
+      unit: String
+    OPERATOR : ['=', '<', '>', '<=', '>=', 'ALL']
+
+**Example**
+
+.. code:: json
+    {
+        "hpa_constraint":{
+            "type":"hpa",
+            "demands":[
+               "vG"
+            ],
+            "properties":{
+               "evaluate":[
+                  {
+                     "flavorLabel":"flavor_label_1",
+                     "flavorProperties":[
+                        {
+                           "hpa-feature":"basicCapabilities",
+                           "hpa-version":"v1",
+                           "architecture":"generic",
+                           "mandatory": "True",
+                           "hpa-feature-attributes":[
+                              {
+                                 "hpa-attribute-key":"numVirtualCpu",
+                                 "hpa-attribute-value":"32",
+                                 "operator":"="
+                              },
+                              {
+                                 "hpa-attribute-key":"virtualMemSize",
+                                 "hpa-attribute-value":"64",
+                                 "operator":"=",
+                                 "unit":"GB"
+                              }
+                           ]
+                        },
+                        {
+                           "hpa-feature":"ovsDpdk",
+                           "hpa-version":"v1",
+                           "architecture":"generic",
+                           "mandatory": "False",
+                           "score": "10",
+                           "hpa-feature-attributes":[
+                              {
+                                 "hpa-attribute-key":"dataProcessingAccelerationLibrary",
+                                 "hpa-attribute-value":"v18.02",
+                                 "operator":"="
+                              }
+                           ]
+                        }
+                     ]
+                  },
+                  {
+                     "flavorLabel":"flavor_label_2",
+                     "flavorProperties":[
+                        {
+                           "hpa-feature":"basicCapabilities",
+                           "hpa-version":"v1",
+                           "architecture":"generic",
+                           "mandatory": "False",
+                           "score": "5",
+                           "hpa-feature-attributes":[
+                              {
+                                 "hpa-attribute-key":"numVirtualCpu",
+                                 "hpa-attribute-value":"8",
+                                 "operator":">="
+                              },
+                              {
+                                 "hpa-attribute-key":"virtualMemSize",
+                                 "hpa-attribute-value":"16",
+                                 "operator":">=",
+                                 "unit":"GB"
+                              }
+                           ]
+                        }
+                     ]
+                  }
+               ]
+            }
+         }
+      }
+
+VIM Fit
+~~~~~~~
+
+Constrain each demand's inventory candidates based on capacity check for
+available capacity at the VIM instances.
+
+Requirements are sent as an opaque request object understood by the VIM
+controllers or MultiCloud. Each controller is defined and implemented as a
+plugin in Conductor.
+
+A vim controller plugin knows how to communicate with a particular endpoint
+(via HTTP/REST, DMaaP, etc.), obtain necessary information, and make a
+decision. The endpoint and credentials can be configured through plugin
+settings.
+
+
+**Schema**
+
++--------------+--------------------------------------------------------+
+| Property     | Value                                                  |
++==============+========================================================+
+| ``controller | Name of a vim controller. (e.g., multicloud)           |
++--------------+--------------------------------------------------------+
+| ``request``  | Opaque dictionary of key/value pairs. Values           |
+|              | must be strings or numbers. Encoded and sent           |
+|              | to the vim controller via a plugin.                    |
++--------------+--------------------------------------------------------+
+
+.. code:: yaml
+
+    constraints:
+      check_cloud_capacity:
+        type: vim_fit
+        demands: [my_vnf_demand, my_other_vnf_demand]
+        properties:
+          controller: multicloud
+          request: REQUEST_DICT
+
+**Notes**
+
+-  For ONAP Beijing release the REQUEST_DICT is of the following format as
+   defined by the policy for vim_fit. The REQUEST_DICT is an opaque request
+   object defined through policy, so it is not restricted to this format. In
+   ONAP Beijing release MultiCloud supports the check_vim_capacity using the
+   following grammar.
+   .. code:: json
+       {
+         "request":{
+           "vCPU":10,
+           "Memory":{
+             "quantity":{
+               "get_param":"REQUIRED_MEM"
+             },
+             "unit":"GB"
+           },
+           "Storage":{
+             "quantity":{
+               "get_param":"REQUIRED_DISK"
+             },
+             "unit":"GB"
+           }
+         }
+       }
 
 Inventory Group
 ~~~~~~~~~~~~~~~
