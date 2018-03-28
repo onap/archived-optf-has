@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a93c517_b44a9181",
+        "filename": "conductor/conductor/solver/request/parser.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 342,
+      "author": {
+        "id": 1739
+      },
+      "writtenOn": "2018-03-28T17:21:04Z",
+      "side": 1,
+      "message": "Please move this above region_fit and instance first. These are expensive operations which we want to keep towards the end so they are applied to the least amount of candidates left.",
+      "revId": "6f26d1ba56188d7dfadec258f1a0a9b918014114",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
