@@ -107,8 +107,8 @@ CONSTRAINTS = {
 HPA_FEATURES = ['architecture', 'hpa-feature', 'hpa-feature-attributes',
                 'hpa-version', 'mandatory']
 HPA_OPTIONAL = ['score']
-HPA_ATTRIBUTES = ['hpa-attribute-key', 'hpa-attribute-value', 'operator',
-                  'unit']
+HPA_ATTRIBUTES = ['hpa-attribute-key', 'hpa-attribute-value', 'operator']
+HPA_ATTRIBUTES_OPTIONAL = ['unit']
 
 
 class TranslatorException(Exception):
@@ -584,16 +584,22 @@ class Translator(object):
                     if type(attr) is not dict:
                         raise TranslatorException(
                             "HPA feature attributes must be a dict")
-                    for name in attr.keys():
-                        if name not in HPA_ATTRIBUTES:
-                            raise TranslatorException(
-                                "Invalid attribute '{}' found inside HPA "
-                                "feature attributes".format(name))
-                    if list(attr.keys()) < ['hpa-attribute-key',
-                                            'hpa-attribute-value', 'operator']:
+
+                    # process mandatory hpa attribute parameter
+                    hpa_attr_mandatory = set(HPA_ATTRIBUTES).difference(
+                        attr.keys())
+                    if bool(hpa_attr_mandatory):
                         raise TranslatorException(
-                            "Lack of compulsory elements "
-                            "inside HPA feature attributes")
+                            "Lack of compulsory elements inside HPA "
+                            "feature atrributes")
+                    # process optional hpa attribute parameter
+                    hpa_attr_optional = set(attr.keys()).difference(
+                        HPA_ATTRIBUTES)
+                    if hpa_attr_optional and not hpa_attr_optional.issubset(
+                            HPA_ATTRIBUTES_OPTIONAL):
+                        raise TranslatorException(
+                            "Invalid attributes '{}' found inside HPA "
+                            "feature attributes".format(hpa_attr_optional))
 
     def parse_constraints(self, constraints):
         """Validate/prepare constraints for use by the solver."""

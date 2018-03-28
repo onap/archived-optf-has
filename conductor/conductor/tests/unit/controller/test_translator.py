@@ -392,23 +392,24 @@ class TestNoExceptionTranslator(unittest.TestCase):
                 ],
                 "properties": {
                     "evaluate": [
-                        {'flavorLabel': 'xx',
-                         'flavorProperties': [
-                             {
-                                 'hpa-feature': 'BasicCapabilities',
-                                 'hpa-version': 'v1',
-                                 'architecture': 'generic',
-                                 'mandatory': 'False',
-                                 'score': '5',
-                                 'hpa-feature-attributes': [
-                                     {
-                                         'hpa-attribute-key': 'numVirtualCpu',
-                                         'hpa-attribute-value': '4',
-
-                                     },
-                                 ]
-                             }
-                         ], }
+                        {
+                            "flavorLabel": "xx",
+                            "flavorProperties": [
+                                {
+                                    "hpa-feature": "BasicCapabilities",
+                                    "hpa-version": "v1",
+                                    "architecture": "generic",
+                                    "mandatory": "False",
+                                    "score": "5",
+                                    "hpa-feature-attributes": [
+                                        {
+                                            "hpa-attribute-key": "numVirtualCpu",
+                                            "hpa-attribute-value": "4"
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
                     ]
                 }
             }
