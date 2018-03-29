@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a93c517_f86c7f9f",
+        "filename": "docs/homingspecification.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 576,
+      "author": {
+        "id": 285
+      },
+      "writtenOn": "2018-03-29T19:36:24Z",
+      "side": 1,
+      "message": "how about - cloud region with an optimal flavor",
+      "range": {
+        "startLine": 575,
+        "startChar": 57,
+        "endLine": 576,
+        "endChar": 62
+      },
+      "revId": "8f829728a2e95ddca8c97e49f5e9a2910c5fdc96",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
