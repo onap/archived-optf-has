@@ -62,7 +62,10 @@ class HPA(constraint.Constraint):
             if response:
                 _candidate_list = response
             else:
-                LOG.error(_LE("Flavor mapping for label name {} already"
-                              "exists").format(label_name))
+                LOG.error(_LE("No matching candidates for HPA exists").format(
+                    label_name))
+                _candidate_list = response
+                break
+                # No need to continue.
 
         return _candidate_list

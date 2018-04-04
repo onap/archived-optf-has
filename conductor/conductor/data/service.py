@@ -454,10 +454,10 @@ class DataEndpoint(object):
             # exists. This is an invalid condition.
             if candidate.get("flavor_map") and candidate["flavor_map"].get(
                     label_name):
-                error = True
+                error = False
                 LOG.error(_LE("Flavor mapping for label name {} already"
                               "exists").format(label_name))
-                return {'response': None, 'error': error}
+                continue
 
             # RPC call to inventory provider for matching hpa capabilities
             results = self.ip_ext_manager.map_method(
