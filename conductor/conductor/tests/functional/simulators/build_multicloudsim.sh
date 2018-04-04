@@ -17,7 +17,6 @@
 #
 # -------------------------------------------------------------------------
 #
-docker stop aaisim
-docker rm aaisim
-docker rmi aaisim
+cd ./multicloudsim
+docker build -t multicloudsim .  
 

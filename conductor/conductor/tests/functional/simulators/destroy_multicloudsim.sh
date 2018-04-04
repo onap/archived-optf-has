@@ -17,7 +17,7 @@
 #
 # -------------------------------------------------------------------------
 #
-docker stop aaisim
-docker rm aaisim
-docker rmi aaisim
+docker stop multicloudsim
+docker rm multicloudsim
+docker rmi multicloudsim
 
