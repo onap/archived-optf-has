@@ -59,10 +59,11 @@ class HPA(constraint.Constraint):
             response = (cei.get_candidates_with_hpa(label_name,
                                                     _candidate_list,
                                                     flavorProperties))
-            if response:
-                _candidate_list = response
-            else:
-                LOG.error(_LE("Flavor mapping for label name {} already"
-                              "exists").format(label_name))
+            _candidate_list = response
+            if not response:
+                LOG.error(_LE("No matching candidates for HPA exists").format(
+                    label_name))
+                break
+                # No need to continue.
 
         return _candidate_list

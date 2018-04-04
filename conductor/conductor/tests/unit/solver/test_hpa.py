@@ -77,9 +77,9 @@ class TestHPA(unittest.TestCase):
         client_mock.call.return_value = None
         request_mock.cei = cei.ConstraintEngineInterface(client_mock)
 
-        self.assertEqual(self.candidate_list,
-                         self.hpa.solve(mock_decision_path,
-                                        self.candidate_list, request_mock))
+        self.assertEqual(None, self.hpa.solve(mock_decision_path,
+                                              self.candidate_list,
+                                              request_mock))
 
         client_mock.call.side_effect = [hpa_candidate_list_1,
                                         hpa_candidate_list_2]
