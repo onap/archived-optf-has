@@ -1,4 +1,4 @@
 docker stop aaisim
-docker rm aasim
+docker rm aaisim
 docker rmi aaisim
 
