@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "5a93c517_4c083e91",
+        "filename": "conductor/conductor/data/service.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 457,
+      "author": {
+        "id": 1361
+      },
+      "writtenOn": "2018-04-05T19:20:21Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5a93c517_78013c05",
+      "range": {
+        "startLine": 457,
+        "startChar": 15,
+        "endLine": 457,
+        "endChar": 29
+      },
+      "revId": "6cca0fc16c200a66e8e5626cb105421ff96686e0",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5a93c517_1b003200",
         "filename": "conductor/conductor/solver/optimizer/constraints/hpa.py",
         "patchSetId": 1
@@ -36,6 +60,30 @@
       "writtenOn": "2018-04-04T23:20:18Z",
       "side": 1,
       "message": "Logic can be consolidated",
+      "range": {
+        "startLine": 62,
+        "startChar": 11,
+        "endLine": 69,
+        "endChar": 38
+      },
+      "revId": "6cca0fc16c200a66e8e5626cb105421ff96686e0",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a93c517_ecfeea6a",
+        "filename": "conductor/conductor/solver/optimizer/constraints/hpa.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1361
+      },
+      "writtenOn": "2018-04-05T19:20:21Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5a93c517_1b003200",
       "range": {
         "startLine": 62,
         "startChar": 11,
