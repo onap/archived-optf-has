@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "5a93c517_ccc9ae7a",
+        "filename": "docs/homingspecification.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 403,
+      "author": {
+        "id": 1361
+      },
+      "writtenOn": "2018-04-05T19:20:35Z",
+      "side": 1,
+      "message": "Updated the Flavors and hpa capabilities contained in it.",
+      "parentUuid": "5a93c517_e06601bb",
+      "range": {
+        "startLine": 403,
+        "startChar": 4,
+        "endLine": 403,
+        "endChar": 9
+      },
+      "revId": "8f829728a2e95ddca8c97e49f5e9a2910c5fdc96",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5a93c517_f86c7f9f",
         "filename": "docs/homingspecification.rst",
         "patchSetId": 1
@@ -36,6 +60,30 @@
       "writtenOn": "2018-03-29T19:36:24Z",
       "side": 1,
       "message": "how about - cloud region with an optimal flavor",
+      "range": {
+        "startLine": 575,
+        "startChar": 57,
+        "endLine": 576,
+        "endChar": 62
+      },
+      "revId": "8f829728a2e95ddca8c97e49f5e9a2910c5fdc96",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a93c517_2c2db246",
+        "filename": "docs/homingspecification.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 576,
+      "author": {
+        "id": 1361
+      },
+      "writtenOn": "2018-04-05T19:20:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5a93c517_f86c7f9f",
       "range": {
         "startLine": 575,
         "startChar": 57,
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "5a93c517_8cfe46ad",
+        "filename": "docs/homingspecification.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 585,
+      "author": {
+        "id": 1361
+      },
+      "writtenOn": "2018-04-05T19:20:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5a93c517_8005bdc3",
+      "range": {
+        "startLine": 581,
+        "startChar": 46,
+        "endLine": 585,
+        "endChar": 54
+      },
+      "revId": "8f829728a2e95ddca8c97e49f5e9a2910c5fdc96",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5a93c517_e0704142",
         "filename": "docs/homingspecification.rst",
         "patchSetId": 1
@@ -82,6 +154,30 @@
       "writtenOn": "2018-04-02T01:21:51Z",
       "side": 1,
       "message": "Can we have an example perhaps ? It may end up being long, but I think it is worthwhile having an example for something as complex as the HPA.",
+      "range": {
+        "startLine": 890,
+        "startChar": 0,
+        "endLine": 890,
+        "endChar": 3
+      },
+      "revId": "8f829728a2e95ddca8c97e49f5e9a2910c5fdc96",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a93c517_6c1ada18",
+        "filename": "docs/homingspecification.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 890,
+      "author": {
+        "id": 1361
+      },
+      "writtenOn": "2018-04-05T19:20:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5a93c517_e0704142",
       "range": {
         "startLine": 890,
         "startChar": 0,
@@ -117,6 +213,30 @@
     },
     {
       "key": {
+        "uuid": "5a93c517_6c03bab8",
+        "filename": "docs/homingspecification.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 893,
+      "author": {
+        "id": 1361
+      },
+      "writtenOn": "2018-04-05T19:20:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5a93c517_a008f9d9",
+      "range": {
+        "startLine": 893,
+        "startChar": 54,
+        "endLine": 893,
+        "endChar": 63
+      },
+      "revId": "8f829728a2e95ddca8c97e49f5e9a2910c5fdc96",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5a93c517_209e2955",
         "filename": "docs/homingspecification.rst",
         "patchSetId": 1
@@ -128,6 +248,30 @@
       "writtenOn": "2018-04-02T01:21:51Z",
       "side": 1,
       "message": "This section is looking very good. We should add a subsection indicating what is supported by MultiCloud in the R2 version. I realize this is more relevant to MultiCloud given that the Requests object is supposed to be opaque to us, and the content in the object is coming from policy. However, we should add this just to make sure our users know what is supported by our downstream dependency.",
+      "range": {
+        "startLine": 935,
+        "startChar": 0,
+        "endLine": 935,
+        "endChar": 7
+      },
+      "revId": "8f829728a2e95ddca8c97e49f5e9a2910c5fdc96",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a93c517_ccf44ed1",
+        "filename": "docs/homingspecification.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 935,
+      "author": {
+        "id": 1361
+      },
+      "writtenOn": "2018-04-05T19:20:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5a93c517_209e2955",
       "range": {
         "startLine": 935,
         "startChar": 0,
@@ -163,6 +307,30 @@
     },
     {
       "key": {
+        "uuid": "5a93c517_acf9c2c9",
+        "filename": "docs/homingspecification.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 939,
+      "author": {
+        "id": 1361
+      },
+      "writtenOn": "2018-04-05T19:20:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5a93c517_808ffd22",
+      "range": {
+        "startLine": 938,
+        "startChar": 54,
+        "endLine": 939,
+        "endChar": 36
+      },
+      "revId": "8f829728a2e95ddca8c97e49f5e9a2910c5fdc96",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5a93c517_a0923949",
         "filename": "docs/homingspecification.rst",
         "patchSetId": 1
@@ -174,6 +342,30 @@
       "writtenOn": "2018-04-02T01:21:51Z",
       "side": 1,
       "message": "as an opaque request object understood by the VIM controllers or MultiCloud.",
+      "range": {
+        "startLine": 941,
+        "startChar": 22,
+        "endLine": 941,
+        "endChar": 34
+      },
+      "revId": "8f829728a2e95ddca8c97e49f5e9a2910c5fdc96",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a93c517_0c13160e",
+        "filename": "docs/homingspecification.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 941,
+      "author": {
+        "id": 1361
+      },
+      "writtenOn": "2018-04-05T19:20:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5a93c517_a0923949",
       "range": {
         "startLine": 941,
         "startChar": 22,
@@ -209,6 +401,30 @@
     },
     {
       "key": {
+        "uuid": "5a93c517_ec0fcadf",
+        "filename": "docs/homingspecification.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 942,
+      "author": {
+        "id": 1361
+      },
+      "writtenOn": "2018-04-05T19:20:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5a93c517_4099f56c",
+      "range": {
+        "startLine": 941,
+        "startChar": 56,
+        "endLine": 942,
+        "endChar": 48
+      },
+      "revId": "8f829728a2e95ddca8c97e49f5e9a2910c5fdc96",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5a93c517_609c315e",
         "filename": "docs/homingspecification.rst",
         "patchSetId": 1
@@ -220,6 +436,30 @@
       "writtenOn": "2018-04-02T01:21:51Z",
       "side": 1,
       "message": "Nice ! I like this - can we add similar notes for the instance/region fit constraints ?",
+      "range": {
+        "startLine": 944,
+        "startChar": 0,
+        "endLine": 947,
+        "endChar": 9
+      },
+      "revId": "8f829728a2e95ddca8c97e49f5e9a2910c5fdc96",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a93c517_4c303e9e",
+        "filename": "docs/homingspecification.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 947,
+      "author": {
+        "id": 1361
+      },
+      "writtenOn": "2018-04-05T19:20:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5a93c517_609c315e",
       "range": {
         "startLine": 944,
         "startChar": 0,
