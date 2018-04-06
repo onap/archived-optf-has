@@ -17,7 +17,5 @@
 #
 # -------------------------------------------------------------------------
 #
-docker stop aaisim
-docker rm aaisim
-docker rmi aaisim
+docker run -d --name multicloudsim -p 8082:8082  multicloudsim
 
