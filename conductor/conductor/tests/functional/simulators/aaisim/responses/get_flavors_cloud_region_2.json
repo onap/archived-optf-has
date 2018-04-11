@@ -1,0 +1,161 @@
+{
+    "flavor": [
+        {
+            "flavor-id": "acf8220b-4d96-4c30-a426-2e9382f3fff2",
+            "flavor-name": "flavor-cpu-topology-instruction-set",
+            "flavor-vcpus": 32,
+            "flavor-ram": 65536,
+            "flavor-disk": 1048576,
+            "flavor-ephemeral": 128,
+            "flavor-swap": "0",
+            "flavor-is-public": false,
+            "flavor-selflink": "pXtX",
+            "flavor-disabled": false,
+            "hpa-capabilities": {
+                "hpa-capability": [
+                    {
+                        "hpa-capability-id": "01a4bfe1-1993-4fda-bd1c-ef333b4f76a9",
+                        "hpa-feature": "instructionSetExtensions",
+                        "hpa-version": "v1",
+                        "architecture": "Intel64",
+                        "resource-version": "1522170267454",
+                        "hpa-feature-attributes": [
+                            {
+                                "hpa-attribute-key": "instructionSetExtensions",
+                                "hpa-attribute-value": "{\"value\": [\"aes\", \"sse\", \"avx\", \"smt\"]}",
+                                "resource-version": "1522170267458"
+                            }
+                        ]
+                    },
+                    {
+                        "hpa-capability-id": "9fa22e64-41b4-471f-96ad-6c4708635e4c",
+                        "hpa-feature": "cpuTopology",
+                        "hpa-version": "v1",
+                        "architecture": "generic",
+                        "resource-version": "1522170267472",
+                        "hpa-feature-attributes": [
+                            {
+                                "hpa-attribute-key": "numCpuCores",
+                                "hpa-attribute-value": "{\"value\":\"16\"}",
+                                "resource-version": "1522170267475"
+                            },
+                            {
+                                "hpa-attribute-key": "numCpuSockets",
+                                "hpa-attribute-value": "{\"value\":\"2\"}",
+                                "resource-version": "1522170267485"
+                            },
+                            {
+                                "hpa-attribute-key": "numCpuThreads",
+                                "hpa-attribute-value": "{\"value\":\"8\"}",
+                                "resource-version": "1522170267494"
+                            }
+                        ]
+                    },
+                    {
+                        "hpa-capability-id": "23ec6d4d-7fee-48d8-9e4a-c598feb101ed",
+                        "hpa-feature": "basicCapabilities",
+                        "hpa-version": "v1",
+                        "architecture": "generic",
+                        "resource-version": "1522170267426",
+                        "hpa-feature-attributes": [
+                            {
+                                "hpa-attribute-key": "virtualMemSize",
+                                "hpa-attribute-value": "{\"value\":\"65536\", \"unit\":\"MB\" }",
+                                "resource-version": "1522170267440"
+                            },
+                            {
+                                "hpa-attribute-key": "numVirtualCpu",
+                                "hpa-attribute-value": "{\"value\":\"32\"}",
+                                "resource-version": "1522170267431"
+                            }
+                        ]
+                    }
+                ]
+            },
+            "resource-version": "1522170267420"
+        },
+        {
+            "flavor-id": "e5aa2b2e-3206-41b6-80d5-cf041b098c43",
+            "flavor-name": "flavor-cpu-pinning-ovsdpdk-instruction-set",
+            "flavor-vcpus": 32,
+            "flavor-ram": 131072,
+            "flavor-disk": 2097152,
+            "flavor-ephemeral": 128,
+            "flavor-swap": "0",
+            "flavor-is-public": false,
+            "flavor-selflink": "pXtX",
+            "flavor-disabled": false,
+            "hpa-capabilities": {
+                "hpa-capability": [
+                    {
+                        "hpa-capability-id": "d140c945-1532-4908-86c9-d7f71416f1dd",
+                        "hpa-feature": "cpuPinning",
+                        "hpa-version": "v1",
+                        "architecture": "generic",
+                        "resource-version": "1522170267537",
+                        "hpa-feature-attributes": [
+                            {
+                                "hpa-attribute-key": "logicalCpuThreadPinningPolicy",
+                                "hpa-attribute-value": "{\"value\":\"prefer\"}",
+                                "resource-version": "1522170267550"
+                            },
+                            {
+                                "hpa-attribute-key": "logicalCpuPinningPolicy",
+                                "hpa-attribute-value": "{\"value\":\"dedicated\"}",
+                                "resource-version": "1522170267541"
+                            }
+                        ]
+                    },
+                    {
+                        "hpa-capability-id": "9d36a8fe-bfee-446a-bbcb-881ee66c8f78",
+                        "hpa-feature": "ovsDpdk",
+                        "hpa-version": "v1",
+                        "architecture": "generic",
+                        "resource-version": "1522170267519",
+                        "hpa-feature-attributes": [
+                            {
+                                "hpa-attribute-key": "dataProcessingAccelerationLibrary",
+                                "hpa-attribute-value": "{\"value\":\"v17.02\"}",
+                                "resource-version": "1522170267523"
+                            }
+                        ]
+                    },
+                    {
+                        "hpa-capability-id": "01a4bfe1-1993-4fda-bd1c-ef333b4f76a9",
+                        "hpa-feature": "instructionSetExtensions",
+                        "hpa-version": "v1",
+                        "architecture": "Intel64",
+                        "resource-version": "1522170267564",
+                        "hpa-feature-attributes": [
+                            {
+                                "hpa-attribute-key": "instructionSetExtensions",
+                                "hpa-attribute-value": "{\"value\": [\"avx\", \"smt\"]}",
+                                "resource-version": "1522170267568"
+                            }
+                        ]
+                    },
+                    {
+                        "hpa-capability-id": "5565615b-1077-4bb5-a340-c5be48db2aaa",
+                        "hpa-feature": "basicCapabilities",
+                        "hpa-version": "v1",
+                        "architecture": "generic",
+                        "resource-version": "1522170267582",
+                        "hpa-feature-attributes": [
+                            {
+                                "hpa-attribute-key": "numVirtualCpu",
+                                "hpa-attribute-value": "{\"value\":\"32\"}",
+                                "resource-version": "1522170267594"
+                            },
+                            {
+                                "hpa-attribute-key": "virtualMemSize",
+                                "hpa-attribute-value": "{\"value\":\"131072\", \"unit\":\"MB\" }",
+                                "resource-version": "1522170267585"
+                            }
+                        ]
+                    }
+                ]
+            },
+            "resource-version": "1522170267514"
+        }
+    ]
+}

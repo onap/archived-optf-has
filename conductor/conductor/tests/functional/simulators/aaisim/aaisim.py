@@ -28,6 +28,8 @@ urls = (
   '/healthcheck','healthcheck',
   '/aai/v13/cloud-infrastructure/cloud-regions/','get_regions',
   '/aai/v13/cloud-infrastructure/complexes/complex/DLLSTX233','get_complex_DLLSTX233',
+  '/aai/v13/cloud-infrastructure/cloud-regions/cloud-region/HPA-cloud/cloud-region-1/flavors/', 'get_flavors_region_1',
+  '/aai/v13/cloud-infrastructure/cloud-regions/cloud-region/HPA-cloud/cloud-region-2/flavors/', 'get_flavors_region_2',
 )
 
 
@@ -89,6 +91,40 @@ class get_complex_DLLSTX233:
     def GET(self):
         print ("------------------------------------------------------")
         replyfile = "get_onap_complex_DLLSTX233.json"
+        #replyToAaiGet (web, replydir, replyfile)
+        fullreply = replydir + replyfile
+        trid=web.ctx.env.get('X_TRANSACTIONID','111111')
+        #print ("X-TransactionId : {}".format(trid))
+        print ("this is the context : {}".format(web.ctx.fullpath))
+        with open(fullreply) as json_file:
+            json_data = json.load(json_file)
+            print(json_data)
+   
+        web.header('Content-Type', 'application/json')
+        web.header('X-TransactionId', trid)
+        return json.dumps(json_data)
+
+class get_flavors_region_1:
+    def GET(self):
+        print ("------------------------------------------------------")
+        replyfile = "get_flavors_cloud_region_1.json"
+        #replyToAaiGet (web, replydir, replyfile)
+        fullreply = replydir + replyfile
+        trid=web.ctx.env.get('X_TRANSACTIONID','111111')
+        #print ("X-TransactionId : {}".format(trid))
+        print ("this is the context : {}".format(web.ctx.fullpath))
+        with open(fullreply) as json_file:
+            json_data = json.load(json_file)
+            print(json_data)
+   
+        web.header('Content-Type', 'application/json')
+        web.header('X-TransactionId', trid)
+        return json.dumps(json_data)
+
+class get_flavors_region_2:
+    def GET(self):
+        print ("------------------------------------------------------")
+        replyfile = "get_flavors_cloud_region_2.json"
         #replyToAaiGet (web, replydir, replyfile)
         fullreply = replydir + replyfile
         trid=web.ctx.env.get('X_TRANSACTIONID','111111')
