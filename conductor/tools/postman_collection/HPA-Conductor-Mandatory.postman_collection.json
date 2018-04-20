@@ -1,0 +1,647 @@
+{
+	"info": {
+		"name": "HPA-Conductor-Mandatory",
+		"_postman_id": "7f99583e-e03b-95df-5e21-6ba9dcb49043",
+		"description": "",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Plans",
+			"item": [
+				{
+					"name": "Create Plan Sanity - Simple",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"var data = JSON.parse(responseBody);",
+									"postman.setEnvironmentVariable(\"plan_id\", data['id']);"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "X-Auth-Token",
+								"value": "{{auth_token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{  \r\n   \"name\":\"vCPE-Sanity1\",\r\n   \"template\":{  \r\n      \"homing_template_version\":\"2017-10-10\",\r\n      \"parameters\":{  \r\n         \"service_name\":\"Residential vCPE\",\r\n         \"service_id\":\"vcpe_service_id\",\r\n         \"customer_lat\":32.89748,\r\n         \"customer_long\":-97.040443,\r\n         \"REQUIRED_MEM\":4,\r\n         \"REQUIRED_DISK\":100,\r\n         \"pnf_id\":\"some_pnf_id\"\r\n      },\r\n      \"locations\":{  \r\n         \"customer_loc\":{  \r\n            \"latitude\":{  \r\n               \"get_param\":\"customer_lat\"\r\n            },\r\n            \"longitude\":{  \r\n               \"get_param\":\"customer_long\"\r\n            }\r\n         }\r\n      },\r\n      \"demands\":{  \r\n         \"vG\":[  \r\n            {  \r\n               \"inventory_provider\":\"aai\",\r\n               \"inventory_type\":\"cloud\"\r\n            }\r\n         ]\r\n      },\r\n      \"constraints\":{  \r\n         \"constraint_vg_customer\":{  \r\n            \"type\":\"distance_to_location\",\r\n            \"demands\":[  \r\n               \"vG\"\r\n            ],\r\n            \"properties\":{  \r\n               \"distance\":\"< 500 km\",\r\n               \"location\":\"customer_loc\"\r\n            }\r\n         }\r\n      },\r\n      \"optimization\":{  \r\n         \"minimize\":{  \r\n            \"sum\":[  \r\n               {  \r\n                  \"distance_between\":[  \r\n                     \"customer_loc\",\r\n                     \"vG\"\r\n                  ]\r\n               },\r\n               {  \r\n                  \"distance_between\":[  \r\n                     \"customer_loc\",\r\n                     \"vG\"\r\n                  ]\r\n               }\r\n            ]\r\n         }\r\n      }\r\n   },\r\n   \"timeout\":5,\r\n   \"limit\":3\r\n}"
+						},
+						"url": {
+							"raw": "{{conductor}}/plans",
+							"host": [
+								"{{conductor}}"
+							],
+							"path": [
+								"plans"
+							]
+						},
+						"description": "Plans"
+					},
+					"response": []
+				},
+				{
+					"name": "Create Plan VIM-fit",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"var data = JSON.parse(responseBody);",
+									"postman.setEnvironmentVariable(\"plan_id\", data['id']);"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "X-Auth-Token",
+								"value": "{{auth_token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{  \r\n   \"name\":\"vCPE-Sanity1\",\r\n   \"template\":{  \r\n      \"homing_template_version\":\"2017-10-10\",\r\n      \"parameters\":{  \r\n         \"service_name\":\"Residential vCPE\",\r\n         \"service_id\":\"vcpe_service_id\",\r\n         \"customer_lat\":32.89748,\r\n         \"customer_long\":-97.040443,\r\n         \"REQUIRED_MEM\":4,\r\n         \"REQUIRED_DISK\":100,\r\n         \"pnf_id\":\"some_pnf_id\"\r\n      },\r\n      \"locations\":{  \r\n         \"customer_loc\":{  \r\n            \"latitude\":{  \r\n               \"get_param\":\"customer_lat\"\r\n            },\r\n            \"longitude\":{  \r\n               \"get_param\":\"customer_long\"\r\n            }\r\n         }\r\n      },\r\n      \"demands\":{  \r\n         \"vG\":[  \r\n            {  \r\n               \"inventory_provider\":\"aai\",\r\n               \"inventory_type\":\"cloud\"\r\n            }\r\n         ]\r\n      },\r\n      \"constraints\":{  \r\n         \"constraint_vg_customer\":{  \r\n            \"type\":\"distance_to_location\",\r\n            \"demands\":[  \r\n               \"vG\"\r\n            ],\r\n            \"properties\":{  \r\n               \"distance\":\"< 5000 km\",\r\n               \"location\":\"customer_loc\"\r\n            }\r\n         },\r\n         \"check_cloud_capacity\":{  \r\n            \"type\":\"vim_fit\",\r\n            \"demands\":[  \r\n               \"vG\"\r\n            ],\r\n            \"properties\":{  \r\n               \"controller\":\"multicloud\",\r\n               \"request\":{  \r\n                  \"vCPU\":10,\r\n                  \"Memory\":{  \r\n                     \"quantity\":{  \r\n                        \"get_param\":\"REQUIRED_MEM\"\r\n                     },\r\n                     \"unit\":\"GB\"\r\n                  },\r\n                  \"Storage\":{  \r\n                     \"quantity\":{  \r\n                        \"get_param\":\"REQUIRED_DISK\"\r\n                     },\r\n                     \"unit\":\"GB\"\r\n                  }\r\n               }\r\n            }\r\n         }\r\n      },\r\n      \"optimization\":{  \r\n         \"minimize\":{  \r\n            \"sum\":[  \r\n               {  \r\n                  \"distance_between\":[  \r\n                     \"customer_loc\",\r\n                     \"vG\"\r\n                  ]\r\n               },\r\n               {  \r\n                  \"distance_between\":[  \r\n                     \"customer_loc\",\r\n                     \"vG\"\r\n                  ]\r\n               }\r\n            ]\r\n         }\r\n      }\r\n   },\r\n   \"timeout\":5,\r\n   \"limit\":3\r\n}"
+						},
+						"url": {
+							"raw": "{{conductor}}/plans",
+							"host": [
+								"{{conductor}}"
+							],
+							"path": [
+								"plans"
+							]
+						},
+						"description": "Plans"
+					},
+					"response": []
+				},
+				{
+					"name": "Create Plan with HPA",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"var data = JSON.parse(responseBody);",
+									"postman.setEnvironmentVariable(\"plan_id\", data['id']);"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "X-Auth-Token",
+								"value": "{{auth_token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{  \r\n   \"name\":\"vCPE-with-HPA\",\r\n   \"template\":{  \r\n      \"homing_template_version\":\"2017-10-10\",\r\n      \"parameters\":{  \r\n         \"service_name\":\"Residential vCPE\",\r\n         \"service_id\":\"vcpe_service_id\",\r\n         \"customer_lat\":32.89748,\r\n         \"customer_long\":-97.040443,\r\n         \"REQUIRED_MEM\":4,\r\n         \"REQUIRED_DISK\":100,\r\n         \"pnf_id\":\"some_pnf_id\"\r\n      },\r\n      \"locations\":{  \r\n         \"customer_loc\":{  \r\n            \"latitude\":{  \r\n               \"get_param\":\"customer_lat\"\r\n            },\r\n            \"longitude\":{  \r\n               \"get_param\":\"customer_long\"\r\n            }\r\n         },\r\n         \"brg_loc\":{  \r\n            \"pnf_host_name\":{  \r\n               \"get_param\":\"pnf_id\"\r\n            }\r\n         }\r\n      },\r\n      \"demands\":{  \r\n         \"vGMuxInfra\":[  \r\n            {  \r\n               \"inventory_provider\":\"aai\",\r\n               \"inventory_type\":\"service\",\r\n               \"attributes\":{  \r\n                  \"equipment_type\":\"vG_Mux\",\r\n                  \"customer_id\":\"some_company\"\r\n               },\r\n               \"excluded_candidates\":[  \r\n                  {  \r\n                     \"candidate_id\":\"1ac71fb8-ad43-4e16-9459-c3f372b8236d\"\r\n                  }\r\n               ],\r\n               \"existing_placement\":[  \r\n                  {  \r\n                     \"candidate_id\":\"21d5f3e8-e714-4383-8f99-cc480144505a\"\r\n                  }\r\n               ]\r\n            }\r\n         ],\r\n         \"vG\":[  \r\n            {  \r\n               \"inventory_provider\":\"aai\",\r\n               \"inventory_type\":\"cloud\"\r\n            }\r\n         ]\r\n      },\r\n      \"constraints\":{  \r\n         \"constraint_vgmux_customer\":{  \r\n            \"type\":\"distance_to_location\",\r\n            \"demands\":[  \r\n               \"vGMuxInfra\"\r\n            ],\r\n            \"properties\":{  \r\n               \"distance\":\"< 100 km\",\r\n               \"location\":\"customer_loc\"\r\n            }\r\n         },\r\n         \"colocation\":{  \r\n            \"type\":\"zone\",\r\n            \"demands\":[  \r\n               \"vGMuxInfra\",\r\n               \"vG\"\r\n            ],\r\n            \"properties\":{  \r\n               \"qualifier\":\"same\",\r\n               \"category\":\"region\"\r\n            }\r\n         },\r\n         \"hpa_constraint\":{  \r\n            \"type\":\"hpa\",\r\n            \"demands\":[  \r\n               \"vG\"\r\n            ],\r\n            \"properties\":{  \r\n               \"evaluate\":[  \r\n                  {  \r\n                     \"label\":\"flavor_label_1\",\r\n                     \"features\":[  \r\n                        {  \r\n                           \"hpa-feature\":\"basicCapabilities\",\r\n                           \"hpa-version\":\"v1\",\r\n                           \"architecture\":\"generic\",\r\n                           \"hpa-feature-attributes\":[  \r\n                              {  \r\n                                 \"hpa-attribute-key\":\"numVirtualCpu\",\r\n                                 \"hpa-attribute-value\":\"4\",\r\n                                 \"operator\":\"=\"\r\n                              },\r\n                              {  \r\n                                 \"hpa-attribute-key\":\"virtualMemSize\",\r\n                                 \"hpa-attribute-value\":\"4\",\r\n                                 \"operator\":\"=\",\r\n                                 \"unit\":\"GB\"\r\n                              }\r\n                           ]\r\n                        },\r\n                        {  \r\n                           \"hpa-feature\":\"numa\",\r\n                           \"hpa-version\":\"v1\",\r\n                           \"architecture\":\"generic\",\r\n                           \"hpa-feature-attributes\":[  \r\n                              {  \r\n                                 \"hpa-attribute-key\":\"numaNodes\",\r\n                                 \"hpa-attribute-value\":\"2\",\r\n                                 \"operator\":\"=\"\r\n                              },\r\n                              {  \r\n                                 \"hpa-attribute-key\":\"numaCpu-0\",\r\n                                 \"hpa-attribute-value\":\"2\",\r\n                                 \"operator\":\"=\"\r\n                              },\r\n                              {  \r\n                                 \"hpa-attribute-key\":\"numaCpu-1\",\r\n                                 \"hpa-attribute-value\":\"4\",\r\n                                 \"operator\":\"=\"\r\n                              },\r\n                              {  \r\n                                 \"hpa-attribute-key\":\"numaMem-0\",\r\n                                 \"hpa-attribute-value\":\"2\",\r\n                                 \"operator\":\"=\",\r\n                                 \"unit\":\"GB\"\r\n                              },\r\n                              {  \r\n                                 \"hpa-attribute-key\":\"numaMem-1\",\r\n                                 \"hpa-attribute-value\":\"4\",\r\n                                 \"operator\":\"=\",\r\n                                 \"unit\":\"GB\"\r\n                              }\r\n                           ]\r\n                        },\r\n                        {  \r\n                           \"hpa-feature\":\"cpuPinning\",\r\n                           \"hpa-version\":\"v1\",\r\n                           \"architecture\":\"generic\",\r\n                           \"hpa-feature-attributes\":[  \r\n                              {  \r\n                                 \"hpa-attribute-key\":\"logicalCpuThreadPinningPolicy\",\r\n                                 \"hpa-attribute-value\":\"prefer\",\r\n                                 \"operator\":\"=\"\r\n                              },\r\n                              {  \r\n                                 \"hpa-attribute-key\":\"logicalCpuPinningPolicy\",\r\n                                 \"hpa-attribute-value\":\"dedicated\",\r\n                                 \"operator\":\"=\"\r\n                              }\r\n                           ]\r\n                        }\r\n                     ]\r\n                  },\r\n                  {  \r\n                     \"label\":\"flavor_label_2\",\r\n                     \"features\":[  \r\n                        {  \r\n                           \"hpa-feature\":\"basicCapabilities\",\r\n                           \"hpa-version\":\"v1\",\r\n                           \"architecture\":\"generic\",\r\n                           \"hpa-feature-attributes\":[  \r\n                              {  \r\n                                 \"hpa-attribute-key\":\"numVirtualCpu\",\r\n                                 \"hpa-attribute-value\":\"8\",\r\n                                 \"operator\":\"=\"\r\n                              },\r\n                              {  \r\n                                 \"hpa-attribute-key\":\"virtualMemSize\",\r\n                                 \"hpa-attribute-value\":\"16\",\r\n                                 \"operator\":\"=\",\r\n                                 \"unit\":\"GB\"\r\n                              }\r\n                           ]\r\n                        },\r\n                        {  \r\n                           \"hpa-feature\":\"numa\",\r\n                           \"hpa-version\":\"v1\",\r\n                           \"architecture\":\"generic\",\r\n                           \"hpa-feature-attributes\":[  \r\n                              {  \r\n                                 \"hpa-attribute-key\":\"numaNodes\",\r\n                                 \"hpa-attribute-value\":\"2\",\r\n                                 \"operator\":\"=\"\r\n                              },\r\n                              {  \r\n                                 \"hpa-attribute-key\":\"numaCpu-0\",\r\n                                 \"hpa-attribute-value\":\"2\",\r\n                                 \"operator\":\"=\"\r\n                              },\r\n                              {  \r\n                                 \"hpa-attribute-key\":\"numaCpu-1\",\r\n                                 \"hpa-attribute-value\":\"4\",\r\n                                 \"operator\":\"=\"\r\n                              },\r\n                              {  \r\n                                 \"hpa-attribute-key\":\"numaMem-0\",\r\n                                 \"hpa-attribute-value\":\"2\",\r\n                                 \"operator\":\"=\",\r\n                                 \"unit\":\"GB\"\r\n                              },\r\n                              {  \r\n                                 \"hpa-attribute-key\":\"numaMem-1\",\r\n                                 \"hpa-attribute-value\":\"4\",\r\n                                 \"operator\":\"=\",\r\n                                 \"unit\":\"GB\"\r\n                              }\r\n                           ]\r\n                        },\r\n                        {  \r\n                           \"hpa-feature\":\"memoryPageSize\",\r\n                           \"hpa-version\":\"v1\",\r\n                           \"architecture\":\"generic\",\r\n                           \"hpa-feature-attributes\":[  \r\n                              {  \r\n                                 \"hpa-attribute-key\":\"memoryPageSize\",\r\n                                 \"hpa-attribute-value\":\"2\",\r\n                                 \"operator\":\"=\",\r\n                                 \"unit\":\"GB\"\r\n                              }\r\n                           ]\r\n                        }\r\n                     ]\r\n                  }\r\n               ]\r\n            }\r\n         }\r\n      },\r\n      \"optimization\":{  \r\n         \"minimize\":{  \r\n            \"sum\":[  \r\n               {  \r\n                  \"distance_between\":[  \r\n                     \"customer_loc\",\r\n                     \"vGMuxInfra\"\r\n                  ]\r\n               },\r\n               {  \r\n                  \"distance_between\":[  \r\n                     \"customer_loc\",\r\n                     \"vG\"\r\n                  ]\r\n               }\r\n            ]\r\n         }\r\n      }\r\n   },\r\n   \"timeout\":5,\r\n   \"limit\":3\r\n}"
+						},
+						"url": {
+							"raw": "{{conductor}}/plans",
+							"host": [
+								"{{conductor}}"
+							],
+							"path": [
+								"plans"
+							]
+						},
+						"description": "Plans"
+					},
+					"response": []
+				},
+				{
+					"name": "Create Plan with HPA unmatched requirements",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"var data = JSON.parse(responseBody);",
+									"postman.setEnvironmentVariable(\"plan_id\", data['id']);"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "X-Auth-Token",
+								"value": "{{auth_token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{  \r\n   \"name\":\"vCPE-with-HPA-unmatched-requirements\",\r\n   \"template\":{  \r\n      \"homing_template_version\":\"2017-10-10\",\r\n      \"parameters\":{  \r\n         \"service_name\":\"Residential vCPE\",\r\n         \"service_id\":\"vcpe_service_id\",\r\n         \"customer_lat\":32.89748,\r\n         \"customer_long\":-97.040443,\r\n         \"REQUIRED_MEM\":4,\r\n         \"REQUIRED_DISK\":100,\r\n         \"pnf_id\":\"some_pnf_id\"\r\n      },\r\n      \"locations\":{  \r\n         \"customer_loc\":{  \r\n            \"latitude\":{  \r\n               \"get_param\":\"customer_lat\"\r\n            },\r\n            \"longitude\":{  \r\n               \"get_param\":\"customer_long\"\r\n            }\r\n         }\r\n      },\r\n      \"demands\":{  \r\n         \"vG\":[  \r\n            {  \r\n               \"inventory_provider\":\"aai\",\r\n               \"inventory_type\":\"cloud\"\r\n            }\r\n         ]\r\n      },\r\n      \"constraints\":{  \r\n         \"constraint_vgmux_customer\":{  \r\n            \"type\":\"distance_to_location\",\r\n            \"demands\":[  \r\n               \"vG\"\r\n            ],\r\n            \"properties\":{  \r\n               \"distance\":\"< 100 km\",\r\n               \"location\":\"customer_loc\"\r\n            }\r\n         },\r\n         \"hpa_constraint\":{  \r\n            \"type\":\"hpa\",\r\n            \"demands\":[  \r\n               \"vG\"\r\n            ],\r\n            \"properties\":{  \r\n               \"evaluate\":[  \r\n                  {  \r\n                     \"flavorLabel\":\"flavor_label_1\",\r\n                     \"flavorProperties\":[  \r\n                        {  \r\n                           \"hpa-feature\":\"basicCapabilities\",\r\n                           \"hpa-version\":\"v1\",\r\n                           \"architecture\":\"generic\",\r\n                           \"mandatory\": \"True\",\r\n                           \"hpa-feature-attributes\":[  \r\n                              {  \r\n                                 \"hpa-attribute-key\":\"numVirtualCpu\",\r\n                                 \"hpa-attribute-value\":\"60\",\r\n                                 \"operator\":\"=\"\r\n                              },\r\n                              {  \r\n                                 \"hpa-attribute-key\":\"virtualMemSize\",\r\n                                 \"hpa-attribute-value\":\"64\",\r\n                                 \"operator\":\"=\",\r\n                                 \"unit\":\"GB\"\r\n                              }\r\n                           ]\r\n                        }\r\n                     ]\r\n                  },\r\n                  {  \r\n                     \"flavorLabel\":\"flavor_label_2\",\r\n                     \"flavorProperties\":[  \r\n                        {  \r\n                           \"hpa-feature\":\"basicCapabilities\",\r\n                           \"hpa-version\":\"v1\",\r\n                           \"architecture\":\"generic\",\r\n                           \"mandatory\":\"True\",\r\n                           \"hpa-feature-attributes\":[  \r\n                              {  \r\n                                 \"hpa-attribute-key\":\"numVirtualCpu\",\r\n                                 \"hpa-attribute-value\":\"30\",\r\n                                 \"operator\":\"=\"\r\n                              },\r\n                              {  \r\n                                 \"hpa-attribute-key\":\"virtualMemSize\",\r\n                                 \"hpa-attribute-value\":\"128\",\r\n                                 \"operator\":\"=\",\r\n                                 \"unit\":\"GB\"\r\n                              }\r\n                           ]\r\n                        }\r\n                     ]\r\n                  }\r\n               ]\r\n            }\r\n         }\r\n      },\r\n      \"optimization\":{  \r\n         \"minimize\":{  \r\n            \"sum\":[  \r\n               {  \r\n                  \"distance_between\":[  \r\n                     \"customer_loc\",\r\n                     \"vG\"\r\n                  ]\r\n               }\r\n            ]\r\n         }\r\n      }\r\n   },\r\n   \"timeout\":5,\r\n   \"limit\":3\r\n}"
+						},
+						"url": {
+							"raw": "{{conductor}}/plans",
+							"host": [
+								"{{conductor}}"
+							],
+							"path": [
+								"plans"
+							]
+						},
+						"description": "Plans"
+					},
+					"response": []
+				},
+				{
+					"name": "Create Plan with HPA requirement mandatory",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"var data = JSON.parse(responseBody);",
+									"postman.setEnvironmentVariable(\"plan_id\", data['id']);"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "X-Auth-Token",
+								"value": "{{auth_token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{  \r\n   \"name\":\"vCPE-with-HPA-requirement-mandatory\",\r\n   \"template\":{  \r\n      \"homing_template_version\":\"2017-10-10\",\r\n      \"parameters\":{  \r\n         \"service_name\":\"Residential vCPE\",\r\n         \"service_id\":\"vcpe_service_id\",\r\n         \"customer_lat\":32.89748,\r\n         \"customer_long\":-97.040443,\r\n         \"REQUIRED_MEM\":4,\r\n         \"REQUIRED_DISK\":100,\r\n         \"pnf_id\":\"some_pnf_id\"\r\n      },\r\n      \"locations\":{  \r\n         \"customer_loc\":{  \r\n            \"latitude\":{  \r\n               \"get_param\":\"customer_lat\"\r\n            },\r\n            \"longitude\":{  \r\n               \"get_param\":\"customer_long\"\r\n            }\r\n         }\r\n      },\r\n      \"demands\":{  \r\n         \"vG\":[  \r\n            {  \r\n               \"inventory_provider\":\"aai\",\r\n               \"inventory_type\":\"cloud\"\r\n            }\r\n         ]\r\n      },\r\n      \"constraints\":{  \r\n         \"constraint_vgmux_customer\":{  \r\n            \"type\":\"distance_to_location\",\r\n            \"demands\":[  \r\n               \"vG\"\r\n            ],\r\n            \"properties\":{  \r\n               \"distance\":\"< 100 km\",\r\n               \"location\":\"customer_loc\"\r\n            }\r\n         },\r\n         \"hpa_constraint\":{  \r\n            \"type\":\"hpa\",\r\n            \"demands\":[  \r\n               \"vG\"\r\n            ],\r\n            \"properties\":{  \r\n               \"evaluate\":[  \r\n                  {  \r\n                     \"flavorLabel\":\"flavor_label_1\",\r\n                     \"flavorProperties\":[  \r\n                        {  \r\n                           \"hpa-feature\":\"basicCapabilities\",\r\n                           \"hpa-version\":\"v1\",\r\n                           \"architecture\":\"generic\",\r\n                           \"mandatory\": \"True\",\r\n                           \"hpa-feature-attributes\":[  \r\n                              {  \r\n                                 \"hpa-attribute-key\":\"numVirtualCpu\",\r\n                                 \"hpa-attribute-value\":\"64\",\r\n                                 \"operator\":\"=\"\r\n                              },\r\n                              {  \r\n                                 \"hpa-attribute-key\":\"virtualMemSize\",\r\n                                 \"hpa-attribute-value\":\"64\",\r\n                                 \"operator\":\"=\",\r\n                                 \"unit\":\"GB\"\r\n                              }\r\n                           ]\r\n                        },\r\n                        {  \r\n                           \"hpa-feature\":\"numa\",\r\n                           \"hpa-version\":\"v1\",\r\n                           \"architecture\":\"generic\",\r\n                           \"mandatory\":\"True\",\r\n                           \"hpa-feature-attributes\":[  \r\n                              {  \r\n                                 \"hpa-attribute-key\":\"numaNodes\",\r\n                                 \"hpa-attribute-value\":\"2\",\r\n                                 \"operator\":\"=\"\r\n                              },\r\n                              {  \r\n                                 \"hpa-attribute-key\":\"numaCpu-0\",\r\n                                 \"hpa-attribute-value\":\"2\",\r\n                                 \"operator\":\"=\"\r\n                              },\r\n                              {  \r\n                                 \"hpa-attribute-key\":\"numaCpu-1\",\r\n                                 \"hpa-attribute-value\":\"4\",\r\n                                 \"operator\":\"=\"\r\n                              },\r\n                              {  \r\n                                 \"hpa-attribute-key\":\"numaMem-0\",\r\n                                 \"hpa-attribute-value\":\"2\",\r\n                                 \"operator\":\"=\",\r\n                                 \"unit\":\"GB\"\r\n                              },\r\n                              {  \r\n                                 \"hpa-attribute-key\":\"numaMem-1\",\r\n                                 \"hpa-attribute-value\":\"4\",\r\n                                 \"operator\":\"=\",\r\n                                 \"unit\":\"GB\"\r\n                              }\r\n                           ]\r\n                        }\r\n                     ]\r\n                  },\r\n                  {  \r\n                     \"flavorLabel\":\"flavor_label_2\",\r\n                     \"flavorProperties\":[  \r\n                        {  \r\n                           \"hpa-feature\":\"basicCapabilities\",\r\n                           \"hpa-version\":\"v1\",\r\n                           \"architecture\":\"generic\",\r\n                           \"mandatory\": \"True\",\r\n                           \"hpa-feature-attributes\":[  \r\n                              {  \r\n                                 \"hpa-attribute-key\":\"numVirtualCpu\",\r\n                                 \"hpa-attribute-value\":\"32\",\r\n                                 \"operator\":\"=\"\r\n                              },\r\n                              {  \r\n                                 \"hpa-attribute-key\":\"virtualMemSize\",\r\n                                 \"hpa-attribute-value\":\"128\",\r\n                                 \"operator\":\"=\",\r\n                                 \"unit\":\"GB\"\r\n                              }\r\n                           ]\r\n                        },\r\n                        {  \r\n                           \"hpa-feature\":\"ovsDpdk\",\r\n                           \"hpa-version\":\"v1\",\r\n                           \"architecture\":\"generic\",\r\n                           \"mandatory\": \"True\",\r\n                           \"hpa-feature-attributes\":[  \r\n                              {  \r\n                                 \"hpa-attribute-key\":\"dataProcessingAccelerationLibrary\",\r\n                                 \"hpa-attribute-value\":\"v18.02\",\r\n                                 \"operator\":\"=\"\r\n                              }\r\n                           ]\r\n                        }\r\n                     ]\r\n                  }\r\n               ]\r\n            }\r\n         }\r\n      },\r\n      \"optimization\":{  \r\n         \"minimize\":{  \r\n            \"sum\":[  \r\n               {  \r\n                  \"distance_between\":[  \r\n                     \"customer_loc\",\r\n                     \"vG\"\r\n                  ]\r\n               }\r\n            ]\r\n         }\r\n      }\r\n   },\r\n   \"timeout\":5,\r\n   \"limit\":3\r\n}"
+						},
+						"url": {
+							"raw": "{{conductor}}/plans",
+							"host": [
+								"{{conductor}}"
+							],
+							"path": [
+								"plans"
+							]
+						},
+						"description": "Plans"
+					},
+					"response": []
+				},
+				{
+					"name": "Create Plan with HPA requirement optional",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"var data = JSON.parse(responseBody);",
+									"postman.setEnvironmentVariable(\"plan_id\", data['id']);"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "X-Auth-Token",
+								"value": "{{auth_token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{  \r\n   \"name\":\"vCPE-with-HPA-requirement-optional\",\r\n   \"template\":{  \r\n      \"homing_template_version\":\"2017-10-10\",\r\n      \"parameters\":{  \r\n         \"service_name\":\"Residential vCPE\",\r\n         \"service_id\":\"vcpe_service_id\",\r\n         \"customer_lat\":32.89748,\r\n         \"customer_long\":-97.040443,\r\n         \"REQUIRED_MEM\":4,\r\n         \"REQUIRED_DISK\":100,\r\n         \"pnf_id\":\"some_pnf_id\"\r\n      },\r\n      \"locations\":{  \r\n         \"customer_loc\":{  \r\n            \"latitude\":{  \r\n               \"get_param\":\"customer_lat\"\r\n            },\r\n            \"longitude\":{  \r\n               \"get_param\":\"customer_long\"\r\n            }\r\n         }\r\n      },\r\n      \"demands\":{  \r\n         \"vG\":[  \r\n            {  \r\n               \"inventory_provider\":\"aai\",\r\n               \"inventory_type\":\"cloud\"\r\n            }\r\n         ]\r\n      },\r\n      \"constraints\":{  \r\n         \"constraint_vgmux_customer\":{  \r\n            \"type\":\"distance_to_location\",\r\n            \"demands\":[  \r\n               \"vG\"\r\n            ],\r\n            \"properties\":{  \r\n               \"distance\":\"< 100 km\",\r\n               \"location\":\"customer_loc\"\r\n            }\r\n         },\r\n         \"hpa_constraint\":{  \r\n            \"type\":\"hpa\",\r\n            \"demands\":[  \r\n               \"vG\"\r\n            ],\r\n            \"properties\":{  \r\n               \"evaluate\":[  \r\n                  {  \r\n                     \"flavorLabel\":\"flavor_label_1\",\r\n                     \"flavorProperties\":[  \r\n                        {  \r\n                           \"hpa-feature\":\"basicCapabilities\",\r\n                           \"hpa-version\":\"v1\",\r\n                           \"architecture\":\"generic\",\r\n                           \"mandatory\": \"True\",\r\n                           \"hpa-feature-attributes\":[  \r\n                              {  \r\n                                 \"hpa-attribute-key\":\"numVirtualCpu\",\r\n                                 \"hpa-attribute-value\":\"64\",\r\n                                 \"operator\":\"=\"\r\n                              },\r\n                              {  \r\n                                 \"hpa-attribute-key\":\"virtualMemSize\",\r\n                                 \"hpa-attribute-value\":\"64\",\r\n                                 \"operator\":\"=\",\r\n                                 \"unit\":\"GB\"\r\n                              }\r\n                           ]\r\n                        },\r\n                         {  \r\n                           \"hpa-feature\":\"instructionSetExtensions\",\r\n                           \"hpa-version\":\"v1\",\r\n                           \"architecture\":\"Intel64\",\r\n                           \"mandatory\": \"True\",\r\n                           \"hpa-feature-attributes\":[  \r\n                              {  \r\n                                 \"hpa-attribute-key\":\"instructionSetExtensions\",\r\n                                 \"hpa-attribute-value\":[\"aes\", \"sse\", \"avx\", \"smt\"],\r\n                                 \"operator\":\"ALL\",\r\n                                 \"unit\":\"\"\r\n                              }\r\n                           ]\r\n                        },\r\n                        {  \r\n                           \"hpa-feature\":\"cpuTopology\",\r\n                           \"hpa-version\":\"v1\",\r\n                           \"architecture\":\"generic\",\r\n                           \"mandatory\": \"False\",\r\n                           \"score\":\"5\",\r\n                           \"hpa-feature-attributes\":[  \r\n                              {  \r\n                                 \"hpa-attribute-key\":\"numCpuCores\",\r\n                                 \"hpa-attribute-value\":\"16\",\r\n                                 \"operator\":\"=\"\r\n                              },\r\n                              {  \r\n                                 \"hpa-attribute-key\":\"numCpuSockets\",\r\n                                 \"hpa-attribute-value\":\"2\",\r\n                                 \"operator\":\"=\"\r\n                              },\r\n                              {  \r\n                                 \"hpa-attribute-key\":\"numCpuThreads\",\r\n                                 \"hpa-attribute-value\":\"8\",\r\n                                 \"operator\":\"=\"\r\n                              }\r\n                           ]\r\n                        },\r\n                        {  \r\n                           \"hpa-feature\":\"numa\",\r\n                           \"hpa-version\":\"v1\",\r\n                           \"architecture\":\"generic\",\r\n                           \"mandatory\":\"False\",\r\n                           \"score\":\"3\",\r\n                           \"hpa-feature-attributes\":[  \r\n                              {  \r\n                                 \"hpa-attribute-key\":\"numaNodes\",\r\n                                 \"hpa-attribute-value\":\"2\",\r\n                                 \"operator\":\"=\"\r\n                              },\r\n                              {  \r\n                                 \"hpa-attribute-key\":\"numaCpu-0\",\r\n                                 \"hpa-attribute-value\":\"2\",\r\n                                 \"operator\":\"=\"\r\n                              },\r\n                              {  \r\n                                 \"hpa-attribute-key\":\"numaCpu-1\",\r\n                                 \"hpa-attribute-value\":\"4\",\r\n                                 \"operator\":\"=\"\r\n                              },\r\n                              {  \r\n                                 \"hpa-attribute-key\":\"numaMem-0\",\r\n                                 \"hpa-attribute-value\":\"2\",\r\n                                 \"operator\":\"=\",\r\n                                 \"unit\":\"GB\"\r\n                              },\r\n                              {  \r\n                                 \"hpa-attribute-key\":\"numaMem-1\",\r\n                                 \"hpa-attribute-value\":\"4\",\r\n                                 \"operator\":\"=\",\r\n                                 \"unit\":\"GB\"\r\n                              }\r\n                           ]\r\n                        }\r\n                     ]\r\n                  }\r\n               ]\r\n            }\r\n         }\r\n      },\r\n      \"optimization\":{  \r\n         \"minimize\":{  \r\n            \"sum\":[  \r\n               {  \r\n                  \"distance_between\":[  \r\n                     \"customer_loc\",\r\n                     \"vG\"\r\n                  ]\r\n               }\r\n            ]\r\n         }\r\n      }\r\n   },\r\n   \"timeout\":5,\r\n   \"limit\":3\r\n}"
+						},
+						"url": {
+							"raw": "{{conductor}}/plans",
+							"host": [
+								"{{conductor}}"
+							],
+							"path": [
+								"plans"
+							]
+						},
+						"description": "Plans"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Plans",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"var data = JSON.parse(responseBody);",
+									"postman.setEnvironmentVariable(\"plan_id\", data['plans'][0]['id']);"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "X-Auth-Token",
+								"value": "{{auth_token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{conductor}}/plans/",
+							"host": [
+								"{{conductor}}"
+							],
+							"path": [
+								"plans",
+								""
+							]
+						},
+						"description": "Plans"
+					},
+					"response": [
+						{
+							"id": "8c3be989-025d-44a2-87ec-5a573ca99fdc",
+							"name": "Get Plans_with false result",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "X-Auth-Token",
+										"value": "{{auth_token}}"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{conductor}}/plans/",
+									"host": [
+										"{{conductor}}"
+									],
+									"path": [
+										"plans",
+										""
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"_postman_previewtype": "text",
+							"header": [
+								{
+									"key": "Content-Length",
+									"value": "2211",
+									"name": "Content-Length",
+									"description": "The length of the response body in octets (8-bit bytes)"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json",
+									"name": "Content-Type",
+									"description": "The mime type of this content"
+								},
+								{
+									"key": "Date",
+									"value": "Fri, 30 Mar 2018 15:02:09 GMT",
+									"name": "Date",
+									"description": "The date and time that the message was sent"
+								},
+								{
+									"key": "Server",
+									"value": "WSGIServer/0.1 Python/2.7.12",
+									"name": "Server",
+									"description": "A name for the server"
+								}
+							],
+							"cookie": [],
+							"responseTime": 1081,
+							"body": "{\"plans\": [{\"status\": \"solved\", \"id\": \"cc3546b4-ee4a-49e4-b3d1-73518cba42f6\", \"name\": \"vCPE-with-HPA_32\", \"links\": [[{\"href\": \"http://localhost:8091/v1/plans/cc3546b4-ee4a-49e4-b3d1-73518cba42f6\", \"rel\": \"self\"}]], \"recommendations\": [{\"vG\": {\"attributes\": {\"flavors\": {\"flavor_label_2\": \"flavor-cpu-topology-instruction-set\"}, \"cloud_owner\": \"HPA-cloud\", \"physical-location-id\": \"DLLSTX233\", \"aic_version\": \"75919\"}, \"inventory_provider\": \"aai\", \"service_resource_id\": \"\", \"candidate\": {\"is_rehome\": \"true\", \"cloud_owner\": \"HPA-cloud\", \"inventory_type\": \"cloud\", \"vim-id\": \"HPA-cloud_cloud-region-2\", \"candidate_id\": \"cloud-region-2\", \"location_id\": \"cloud-region-2\", \"location_type\": \"att_aic\"}}}]}, {\"status\": \"solved\", \"id\": \"7852c924-b67b-4c59-8289-248ab5c0b892\", \"name\": \"vCPE-with-HPA_32_false\", \"links\": [[{\"href\": \"http://localhost:8091/v1/plans/7852c924-b67b-4c59-8289-248ab5c0b892\", \"rel\": \"self\"}]], \"recommendations\": [{\"vG\": {\"attributes\": {\"cloud_owner\": \"HPA-cloud\", \"physical-location-id\": \"DLLSTX233\", \"aic_version\": \"75919\"}, \"inventory_provider\": \"aai\", \"service_resource_id\": \"\", \"candidate\": {\"is_rehome\": \"true\", \"cloud_owner\": \"HPA-cloud\", \"inventory_type\": \"cloud\", \"vim-id\": \"HPA-cloud_cloud-region-1\", \"candidate_id\": \"cloud-region-1\", \"location_id\": \"cloud-region-1\", \"location_type\": \"att_aic\"}}}]}, {\"status\": \"error\", \"message\": \"Location brg_loc has an invalid key pnf_host_name\", \"name\": \"vCPE-with-HPA\", \"links\": [[{\"href\": \"http://localhost:8091/v1/plans/774a2fa5-b04b-42cb-8b3b-e958c648506e\", \"rel\": \"self\"}]], \"id\": \"774a2fa5-b04b-42cb-8b3b-e958c648506e\"}, {\"status\": \"solved\", \"id\": \"f1094be4-2c7d-4786-9bf8-b1e1f874a58d\", \"name\": \"vCPE-Sanity1\", \"links\": [[{\"href\": \"http://localhost:8091/v1/plans/f1094be4-2c7d-4786-9bf8-b1e1f874a58d\", \"rel\": \"self\"}]], \"recommendations\": [{\"vG\": {\"attributes\": {\"cloud_owner\": \"HPA-cloud\", \"physical-location-id\": \"DLLSTX233\", \"aic_version\": \"75919\"}, \"inventory_provider\": \"aai\", \"service_resource_id\": \"\", \"candidate\": {\"is_rehome\": \"true\", \"cloud_owner\": \"HPA-cloud\", \"inventory_type\": \"cloud\", \"vim-id\": \"HPA-cloud_cloud-region-1\", \"candidate_id\": \"cloud-region-1\", \"location_id\": \"cloud-region-1\", \"location_type\": \"att_aic\"}}}]}]}"
+						}
+					]
+				},
+				{
+					"name": "Delete Plan",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "X-Auth-Token",
+								"value": "{{auth_token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{conductor}}/plans/142c84f4-6252-41ad-ac44-98dab343a24a",
+							"host": [
+								"{{conductor}}"
+							],
+							"path": [
+								"plans",
+								"142c84f4-6252-41ad-ac44-98dab343a24a"
+							]
+						},
+						"description": "Plan"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Music",
+			"description": "Validate using MUSIC APIs",
+			"item": [
+				{
+					"name": "PLANS table",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{music}}/MUSIC/rest/keyspaces/conductor/tables/plans/rows/?id={{plan_id}}",
+							"host": [
+								"{{music}}"
+							],
+							"path": [
+								"MUSIC",
+								"rest",
+								"keyspaces",
+								"conductor",
+								"tables",
+								"plans",
+								"rows",
+								""
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "{{plan_id}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "PLANS table All Rows",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"url": {
+							"raw": "{{music}}/MUSIC/rest/keyspaces/conductor/tables/plans/rows/",
+							"host": [
+								"{{music}}"
+							],
+							"path": [
+								"MUSIC",
+								"rest",
+								"keyspaces",
+								"conductor",
+								"tables",
+								"plans",
+								"rows",
+								""
+							]
+						}
+					},
+					"response": [
+						{
+							"id": "13bd26e1-ec4e-4a34-ab4b-7a390aa74598",
+							"name": "PLANS table All Rows_row 0 false result",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"body": {},
+								"url": {
+									"raw": "{{music}}/MUSIC/rest/keyspaces/conductor/tables/plans/rows",
+									"host": [
+										"{{music}}"
+									],
+									"path": [
+										"MUSIC",
+										"rest",
+										"keyspaces",
+										"conductor",
+										"tables",
+										"plans",
+										"rows"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"_postman_previewtype": "text",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json",
+									"name": "Content-Type",
+									"description": "The mime type of this content"
+								},
+								{
+									"key": "Date",
+									"value": "Fri, 30 Mar 2018 15:03:59 GMT",
+									"name": "Date",
+									"description": "The date and time that the message was sent"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked",
+									"name": "Transfer-Encoding",
+									"description": "The form of encoding used to safely transfer the entity to the user. Currently defined methods are: chunked, compress, deflate, gzip, identity."
+								}
+							],
+							"cookie": [],
+							"responseTime": 53,
+							"body": "{\"row 0\":{\"template\":\"{\\\"parameters\\\": {\\\"REQUIRED_DISK\\\": 100, \\\"customer_lat\\\": 32.89748, \\\"service_name\\\": \\\"Residential vCPE\\\", \\\"customer_long\\\": -97.040443, \\\"service_id\\\": \\\"vcpe_service_id\\\", \\\"REQUIRED_MEM\\\": 4, \\\"pnf_id\\\": \\\"some_pnf_id\\\"}, \\\"demands\\\": {\\\"vG\\\": [{\\\"inventory_provider\\\": \\\"aai\\\", \\\"inventory_type\\\": \\\"cloud\\\"}]}, \\\"locations\\\": {\\\"customer_loc\\\": {\\\"latitude\\\": {\\\"get_param\\\": \\\"customer_lat\\\"}, \\\"longitude\\\": {\\\"get_param\\\": \\\"customer_long\\\"}}}, \\\"optimization\\\": {\\\"minimize\\\": {\\\"sum\\\": [{\\\"distance_between\\\": [\\\"customer_loc\\\", \\\"vG\\\"]}]}}, \\\"homing_template_version\\\": \\\"2017-10-10\\\", \\\"constraints\\\": {\\\"constraint_vgmux_customer\\\": {\\\"type\\\": \\\"distance_to_location\\\", \\\"properties\\\": {\\\"distance\\\": \\\"< 100 km\\\", \\\"location\\\": \\\"customer_loc\\\"}, \\\"demands\\\": [\\\"vG\\\"]}, \\\"hpa_constraint\\\": {\\\"type\\\": \\\"hpa\\\", \\\"properties\\\": {\\\"evaluate\\\": [{\\\"flavorProperties\\\": [{\\\"hpa-version\\\": \\\"v1\\\", \\\"mandatory\\\": \\\"True\\\", \\\"hpa-feature-attributes\\\": [{\\\"operator\\\": \\\"=\\\", \\\"hpa-attribute-key\\\": \\\"numVirtualCpu\\\", \\\"hpa-attribute-value\\\": \\\"30\\\"}, {\\\"operator\\\": \\\"=\\\", \\\"hpa-attribute-key\\\": \\\"virtualMemSize\\\", \\\"unit\\\": \\\"GB\\\", \\\"hpa-attribute-value\\\": \\\"64\\\"}], \\\"architecture\\\": \\\"generic\\\", \\\"hpa-feature\\\": \\\"basicCapabilities\\\"}, {\\\"hpa-version\\\": \\\"v1\\\", \\\"mandatory\\\": \\\"True\\\", \\\"hpa-feature-attributes\\\": [{\\\"operator\\\": \\\"=\\\", \\\"hpa-attribute-key\\\": \\\"numCpuCores\\\", \\\"hpa-attribute-value\\\": \\\"16\\\"}, {\\\"operator\\\": \\\"=\\\", \\\"hpa-attribute-key\\\": \\\"numCpuSockets\\\", \\\"hpa-attribute-value\\\": \\\"2\\\"}, {\\\"operator\\\": \\\"=\\\", \\\"hpa-attribute-key\\\": \\\"numCpuThreads\\\", \\\"hpa-attribute-value\\\": \\\"8\\\"}], \\\"architecture\\\": \\\"generic\\\", \\\"hpa-feature\\\": \\\"cpuTopolgy\\\"}, {\\\"hpa-version\\\": \\\"v1\\\", \\\"mandatory\\\": \\\"True\\\", \\\"hpa-feature-attributes\\\": [{\\\"operator\\\": \\\"=\\\", \\\"hpa-attribute-key\\\": \\\"logicalCpuThreadPinningPolicy\\\", \\\"hpa-attribute-value\\\": \\\"prefer\\\"}, {\\\"operator\\\": \\\"=\\\", \\\"hpa-attribute-key\\\": \\\"logicalCpuPinningPolicy\\\", \\\"hpa-attribute-value\\\": \\\"dedicated\\\"}], \\\"architecture\\\": \\\"generic\\\", \\\"hpa-feature\\\": \\\"cpuPinning\\\"}], \\\"flavorLabel\\\": \\\"flavor_label_1\\\"}, {\\\"flavorProperties\\\": [{\\\"hpa-version\\\": \\\"v1\\\", \\\"mandatory\\\": \\\"True\\\", \\\"hpa-feature-attributes\\\": [{\\\"operator\\\": \\\"=\\\", \\\"hpa-attribute-key\\\": \\\"numVirtualCpu\\\", \\\"hpa-attribute-value\\\": \\\"30\\\"}, {\\\"operator\\\": \\\"=\\\", \\\"hpa-attribute-key\\\": \\\"virtualMemSize\\\", \\\"unit\\\": \\\"GB\\\", \\\"hpa-attribute-value\\\": \\\"64\\\"}], \\\"architecture\\\": \\\"generic\\\", \\\"hpa-feature\\\": \\\"basicCapabilities\\\"}], \\\"flavorLabel\\\": \\\"flavor_label_2\\\"}]}, \\\"demands\\\": [\\\"vG\\\"]}}}\",\"translation_counter\":1,\"created\":1522422111130,\"message\":\"\",\"solver_owner\":\"shci-pci-2\",\"timeout\":5,\"translation_owner\":\"shci-pci-2\",\"solution\":\"{\\\"recommendations\\\": [{\\\"vG\\\": {\\\"attributes\\\": {\\\"cloud_owner\\\": \\\"HPA-cloud\\\", \\\"physical-location-id\\\": \\\"DLLSTX233\\\", \\\"aic_version\\\": \\\"75919\\\"}, \\\"inventory_provider\\\": \\\"aai\\\", \\\"service_resource_id\\\": \\\"\\\", \\\"candidate\\\": {\\\"is_rehome\\\": \\\"true\\\", \\\"cloud_owner\\\": \\\"HPA-cloud\\\", \\\"inventory_type\\\": \\\"cloud\\\", \\\"vim-id\\\": \\\"HPA-cloud_cloud-region-1\\\", \\\"candidate_id\\\": \\\"cloud-region-1\\\", \\\"location_id\\\": \\\"cloud-region-1\\\", \\\"location_type\\\": \\\"att_aic\\\"}}}]}\",\"recommend_max\":3,\"solver_counter\":1,\"name\":\"vCPE-with-HPA_32_false\",\"reservation_counter\":0,\"translation\":\"{\\\"conductor_solver\\\": {\\\"plan_id\\\": \\\"7852c924-b67b-4c59-8289-248ab5c0b892\\\", \\\"demands\\\": {\\\"vG\\\": {\\\"candidates\\\": [{\\\"flavors\\\": {\\\"flavor\\\": [{\\\"hpa-capabilities\\\": {\\\"hpa-capability\\\": [{\\\"hpa-feature-attributes\\\": [{\\\"hpa-attribute-key\\\": \\\"numCpuCores\\\", \\\"resource-version\\\": \\\"1522168579404\\\", \\\"hpa-attribute-value\\\": \\\"{\\\\\\\"value\\\\\\\":\\\\\\\"8\\\\\\\"}\\\"}, {\\\"hpa-attribute-key\\\": \\\"numCpuSockets\\\", \\\"resource-version\\\": \\\"1522168579415\\\", \\\"hpa-attribute-value\\\": \\\"{\\\\\\\"value\\\\\\\":\\\\\\\"6\\\\\\\"}\\\"}, {\\\"hpa-attribute-key\\\": \\\"numCpuThreads\\\", \\\"resource-version\\\": \\\"1522168579426\\\", \\\"hpa-attribute-value\\\": \\\"{\\\\\\\"value\\\\\\\":\\\\\\\"8\\\\\\\"}\\\"}], \\\"hpa-feature\\\": \\\"cpuTopology\\\", \\\"hpa-capability-id\\\": \\\"8fa22e64-41b4-471f-96ad-6c4708635e4c\\\", \\\"hpa-version\\\": \\\"v1\\\", \\\"architecture\\\": \\\"generic\\\", \\\"resource-version\\\": \\\"1522168579400\\\"}, {\\\"hpa-feature-attributes\\\": [{\\\"hpa-attribute-key\\\": \\\"numaCpu-0\\\", \\\"resource-version\\\": \\\"1522168579335\\\", \\\"hpa-attribute-value\\\": \\\"{\\\\\\\"value\\\\\\\":\\\\\\\"2\\\\\\\"}\\\"}, {\\\"hpa-attribute-key\\\": \\\"numaMem-0\\\", \\\"resource-version\\\": \\\"1522168579345\\\", \\\"hpa-attribute-value\\\": \\\"{\\\\\\\"value\\\\\\\":\\\\\\\"2\\\\\\\", \\\\\\\"unit\\\\\\\":\\\\\\\"GB\\\\\\\" }\\\"}, {\\\"hpa-attribute-key\\\": \\\"numaNodes\\\", \\\"resource-version\\\": \\\"1522168579382\\\", \\\"hpa-attribute-value\\\": \\\"{\\\\\\\"value\\\\\\\":\\\\\\\"2\\\\\\\"}\\\"}, {\\\"hpa-attribute-key\\\": \\\"numaMem-1\\\", \\\"resource-version\\\": \\\"1522168579369\\\", \\\"hpa-attribute-value\\\": \\\"{\\\\\\\"value\\\\\\\":\\\\\\\"4\\\\\\\", \\\\\\\"unit\\\\\\\":\\\\\\\"GB\\\\\\\" }\\\"}, {\\\"hpa-attribute-key\\\": \\\"numaCpu-1\\\", \\\"resource-version\\\": \\\"1522168579357\\\", \\\"hpa-attribute-value\\\": \\\"{\\\\\\\"value\\\\\\\":\\\\\\\"4\\\\\\\"}\\\"}], \\\"hpa-feature\\\": \\\"numa\\\", \\\"hpa-capability-id\\\": \\\"167ad6a2-7d9c-4bf2-9a1b-30e5311b8c66\\\", \\\"hpa-version\\\": \\\"v1\\\", \\\"architecture\\\": \\\"generic\\\", \\\"resource-version\\\": \\\"1522168579329\\\"}, {\\\"hpa-feature-attributes\\\": [{\\\"hpa-attribute-key\\\": \\\"instructionSetExtensions\\\", \\\"resource-version\\\": \\\"1522168579312\\\", \\\"hpa-attribute-value\\\": \\\"{\\\\\\\"value\\\\\\\": [\\\\\\\"aes\\\\\\\", \\\\\\\"sse\\\\\\\", \\\\\\\"avx\\\\\\\", \\\\\\\"smt\\\\\\\"]}\\\"}], \\\"hpa-feature\\\": \\\"instructionSetExtensions\\\", \\\"hpa-capability-id\\\": \\\"01a4bfe1-1993-4fda-bd1c-ef333b4f76a9\\\", \\\"hpa-version\\\": \\\"v1\\\", \\\"architecture\\\": \\\"Intel64\\\", \\\"resource-version\\\": \\\"1522168579307\\\"}, {\\\"hpa-feature-attributes\\\": [{\\\"hpa-attribute-key\\\": \\\"numVirtualCpu\\\", \\\"resource-version\\\": \\\"1522168579267\\\", \\\"hpa-attribute-value\\\": \\\"{\\\\\\\"value\\\\\\\":\\\\\\\"64\\\\\\\"}\\\"}, {\\\"hpa-attribute-key\\\": \\\"virtualMemSize\\\", \\\"resource-version\\\": \\\"1522168579287\\\", \\\"hpa-attribute-value\\\": \\\"{\\\\\\\"value\\\\\\\":\\\\\\\"65536\\\\\\\", \\\\\\\"unit\\\\\\\":\\\\\\\"MB\\\\\\\" }\\\"}], \\\"hpa-feature\\\": \\\"basicCapabilities\\\", \\\"hpa-capability-id\\\": \\\"13ec6d4d-7fee-48d8-9e4a-c598feb101ed\\\", \\\"hpa-version\\\": \\\"v1\\\", \\\"architecture\\\": \\\"generic\\\", \\\"resource-version\\\": \\\"1522168579230\\\"}]}, \\\"flavor-is-public\\\": false, \\\"flavor-disabled\\\": false, \\\"flavor-id\\\": \\\"9cf8220b-4d96-4c30-a426-2e9382f3fff2\\\", \\\"flavor-vcpus\\\": 64, \\\"flavor-swap\\\": \\\"0\\\", \\\"flavor-ephemeral\\\": 128, \\\"resource-version\\\": \\\"1522168579162\\\", \\\"flavor-ram\\\": 65536, \\\"flavor-name\\\": \\\"flavor-numa-cpu-topology-instruction-set\\\", \\\"flavor-selflink\\\": \\\"pXtX\\\", \\\"flavor-disk\\\": 1048576}, {\\\"hpa-capabilities\\\": {\\\"hpa-capability\\\": [{\\\"hpa-feature-attributes\\\": [{\\\"hpa-attribute-key\\\": \\\"virtualMemSize\\\", \\\"resource-version\\\": \\\"1522168580345\\\", \\\"hpa-attribute-value\\\": \\\"{\\\\\\\"value\\\\\\\":\\\\\\\"131072\\\\\\\", \\\\\\\"unit\\\\\\\":\\\\\\\"MB\\\\\\\" }\\\"}, {\\\"hpa-attribute-key\\\": \\\"numVirtualCpu\\\", \\\"resource-version\\\": \\\"1522168580370\\\", \\\"hpa-attribute-value\\\": \\\"{\\\\\\\"value\\\\\\\":\\\\\\\"32\\\\\\\"}\\\"}], \\\"hpa-feature\\\": \\\"basicCapabilities\\\", \\\"hpa-capability-id\\\": \\\"4565615b-1077-4bb5-a340-c5be48db2aaa\\\", \\\"hpa-version\\\": \\\"v1\\\", \\\"architecture\\\": \\\"generic\\\", \\\"resource-version\\\": \\\"1522168580334\\\"}, {\\\"hpa-feature-attributes\\\": [{\\\"hpa-attribute-key\\\": \\\"dataProcessingAccelerationLibrary\\\", \\\"resource-version\\\": \\\"1522168580148\\\", \\\"hpa-attribute-value\\\": \\\"{\\\\\\\"value\\\\\\\":\\\\\\\"v18.02\\\\\\\"}\\\"}], \\\"hpa-feature\\\": \\\"ovsDpdk\\\", \\\"hpa-capability-id\\\": \\\"8d36a8fe-bfee-446a-bbcb-881ee66c8f78\\\", \\\"hpa-version\\\": \\\"v1\\\", \\\"architecture\\\": \\\"generic\\\", \\\"resource-version\\\": \\\"1522168580135\\\"}, {\\\"hpa-feature-attributes\\\": [{\\\"hpa-attribute-key\\\": \\\"instructionSetExtensions\\\", \\\"resource-version\\\": \\\"1522168580282\\\", \\\"hpa-attribute-value\\\": \\\"{\\\\\\\"value\\\\\\\":[\\\\\\\"aes\\\\\\\", \\\\\\\"avx\\\\\\\"]}\\\"}], \\\"hpa-feature\\\": \\\"instructionSetExtensions\\\", \\\"hpa-capability-id\\\": \\\"4d04f4d8-e257-4442-8417-19a525e56096\\\", \\\"hpa-version\\\": \\\"v1\\\", \\\"architecture\\\": \\\"generic\\\", \\\"resource-version\\\": \\\"1522168580249\\\"}, {\\\"hpa-feature-attributes\\\": [{\\\"hpa-attribute-key\\\": \\\"logicalCpuPinningPolicy\\\", \\\"resource-version\\\": \\\"1522168580205\\\", \\\"hpa-attribute-value\\\": \\\"{\\\\\\\"value\\\\\\\":\\\\\\\"dedicated\\\\\\\"}\\\"}, {\\\"hpa-attribute-key\\\": \\\"logicalCpuThreadPinningPolicy\\\", \\\"resource-version\\\": \\\"1522168580223\\\", \\\"hpa-attribute-value\\\": \\\"{value:\\\\\\\"prefer\\\\\\\"}\\\"}], \\\"hpa-feature\\\": \\\"cpuPinning\\\", \\\"hpa-capability-id\\\": \\\"c140c945-1532-4908-86c9-d7f71416f1dd\\\", \\\"hpa-version\\\": \\\"v1\\\", \\\"architecture\\\": \\\"generic\\\", \\\"resource-version\\\": \\\"1522168580195\\\"}]}, \\\"flavor-is-public\\\": false, \\\"flavor-disabled\\\": false, \\\"flavor-id\\\": \\\"f5aa2b2e-3206-41b6-80d5-cf041b098c43\\\", \\\"flavor-vcpus\\\": 32, \\\"flavor-swap\\\": \\\"0\\\", \\\"flavor-ephemeral\\\": 128, \\\"resource-version\\\": \\\"1522168579450\\\", \\\"flavor-ram\\\": 131072, \\\"flavor-name\\\": \\\"flavor-cpu-pinning-ovsdpdk-instruction-set\\\", \\\"flavor-selflink\\\": \\\"pXtX\\\", \\\"flavor-disk\\\": 2097152}]}, \\\"city\\\": \\\"Dallas\\\", \\\"service_resource_id\\\": \\\"\\\", \\\"existing_placement\\\": \\\"false\\\", \\\"country\\\": \\\"USA\\\", \\\"inventory_provider\\\": \\\"aai\\\", \\\"inventory_type\\\": \\\"cloud\\\", \\\"longitude\\\": \\\"-97.045443\\\", \\\"sriov_automation\\\": \\\"false\\\", \\\"state\\\": \\\"TX\\\", \\\"cost\\\": \\\"2\\\", \\\"vim-id\\\": \\\"HPA-cloud_cloud-region-1\\\", \\\"candidate_id\\\": \\\"cloud-region-1\\\", \\\"cloud_region_version\\\": \\\"75919\\\", \\\"latitude\\\": \\\"32.89948\\\", \\\"cloud_owner\\\": \\\"HPA-cloud\\\", \\\"complex_name\\\": \\\"example-complex-name-val-62100\\\", \\\"region\\\": \\\"USA\\\", \\\"location_id\\\": \\\"cloud-region-1\\\", \\\"location_type\\\": \\\"att_aic\\\", \\\"physical_location_id\\\": \\\"DLLSTX233\\\"}, {\\\"flavors\\\": {\\\"flavor\\\": [{\\\"hpa-capabilities\\\": {\\\"hpa-capability\\\": [{\\\"hpa-feature-attributes\\\": [{\\\"hpa-attribute-key\\\": \\\"virtualMemSize\\\", \\\"resource-version\\\": \\\"1522168631596\\\", \\\"hpa-attribute-value\\\": \\\"{\\\\\\\"value\\\\\\\":\\\\\\\"65536\\\\\\\", \\\\\\\"unit\\\\\\\":\\\\\\\"MB\\\\\\\" }\\\"}, {\\\"hpa-attribute-key\\\": \\\"numVirtualCpu\\\", \\\"resource-version\\\": \\\"1522168631587\\\", \\\"hpa-attribute-value\\\": \\\"{\\\\\\\"value\\\\\\\":\\\\\\\"32\\\\\\\"}\\\"}], \\\"hpa-feature\\\": \\\"basicCapabilities\\\", \\\"hpa-capability-id\\\": \\\"23ec6d4d-7fee-48d8-9e4a-c598feb101ed\\\", \\\"hpa-version\\\": \\\"v1\\\", \\\"architecture\\\": \\\"generic\\\", \\\"resource-version\\\": \\\"1522168631582\\\"}, {\\\"hpa-feature-attributes\\\": [{\\\"hpa-attribute-key\\\": \\\"numCpuSockets\\\", \\\"resource-version\\\": \\\"1522168631642\\\", \\\"hpa-attribute-value\\\": \\\"{\\\\\\\"value\\\\\\\":\\\\\\\"2\\\\\\\"}\\\"}, {\\\"hpa-attribute-key\\\": \\\"numCpuCores\\\", \\\"resource-version\\\": \\\"1522168631633\\\", \\\"hpa-attribute-value\\\": \\\"{\\\\\\\"value\\\\\\\":\\\\\\\"16\\\\\\\"}\\\"}, {\\\"hpa-attribute-key\\\": \\\"numCpuThreads\\\", \\\"resource-version\\\": \\\"1522168631652\\\", \\\"hpa-attribute-value\\\": \\\"{\\\\\\\"value\\\\\\\":\\\\\\\"8\\\\\\\"}\\\"}], \\\"hpa-feature\\\": \\\"cpuTopology\\\", \\\"hpa-capability-id\\\": \\\"9fa22e64-41b4-471f-96ad-6c4708635e4c\\\", \\\"hpa-version\\\": \\\"v1\\\", \\\"architecture\\\": \\\"generic\\\", \\\"resource-version\\\": \\\"1522168631630\\\"}, {\\\"hpa-feature-attributes\\\": [{\\\"hpa-attribute-key\\\": \\\"instructionSetExtensions\\\", \\\"resource-version\\\": \\\"1522168631615\\\", \\\"hpa-attribute-value\\\": \\\"{\\\\\\\"value\\\\\\\": [\\\\\\\"aes\\\\\\\", \\\\\\\"sse\\\\\\\", \\\\\\\"avx\\\\\\\", \\\\\\\"smt\\\\\\\"]}\\\"}], \\\"hpa-feature\\\": \\\"instructionSetExtensions\\\", \\\"hpa-capability-id\\\": \\\"01a4bfe1-1993-4fda-bd1c-ef333b4f76a9\\\", \\\"hpa-version\\\": \\\"v1\\\", \\\"architecture\\\": \\\"Intel64\\\", \\\"resource-version\\\": \\\"1522168631611\\\"}]}, \\\"flavor-is-public\\\": false, \\\"flavor-disabled\\\": false, \\\"flavor-id\\\": \\\"acf8220b-4d96-4c30-a426-2e9382f3fff2\\\", \\\"flavor-vcpus\\\": 32, \\\"flavor-swap\\\": \\\"0\\\", \\\"flavor-ephemeral\\\": 128, \\\"resource-version\\\": \\\"1522168631576\\\", \\\"flavor-ram\\\": 65536, \\\"flavor-name\\\": \\\"flavor-cpu-topology-instruction-set\\\", \\\"flavor-selflink\\\": \\\"pXtX\\\", \\\"flavor-disk\\\": 1048576}, {\\\"hpa-capabilities\\\": {\\\"hpa-capability\\\": [{\\\"hpa-feature-attributes\\\": [{\\\"hpa-attribute-key\\\": \\\"dataProcessingAccelerationLibrary\\\", \\\"resource-version\\\": \\\"1522168631678\\\", \\\"hpa-attribute-value\\\": \\\"{\\\\\\\"value\\\\\\\":\\\\\\\"v17.02\\\\\\\"}\\\"}], \\\"hpa-feature\\\": \\\"ovsDpdk\\\", \\\"hpa-capability-id\\\": \\\"9d36a8fe-bfee-446a-bbcb-881ee66c8f78\\\", \\\"hpa-version\\\": \\\"v1\\\", \\\"architecture\\\": \\\"generic\\\", \\\"resource-version\\\": \\\"1522168631675\\\"}, {\\\"hpa-feature-attributes\\\": [{\\\"hpa-attribute-key\\\": \\\"logicalCpuThreadPinningPolicy\\\", \\\"resource-version\\\": \\\"1522168631704\\\", \\\"hpa-attribute-value\\\": \\\"{value:\\\\\\\"prefer\\\\\\\"}\\\"}, {\\\"hpa-attribute-key\\\": \\\"logicalCpuPinningPolicy\\\", \\\"resource-version\\\": \\\"1522168631695\\\", \\\"hpa-attribute-value\\\": \\\"{\\\\\\\"value\\\\\\\":\\\\\\\"dedicated\\\\\\\"}\\\"}], \\\"hpa-feature\\\": \\\"cpuPinning\\\", \\\"hpa-capability-id\\\": \\\"d140c945-1532-4908-86c9-d7f71416f1dd\\\", \\\"hpa-version\\\": \\\"v1\\\", \\\"architecture\\\": \\\"generic\\\", \\\"resource-version\\\": \\\"1522168631691\\\"}, {\\\"hpa-feature-attributes\\\": [{\\\"hpa-attribute-key\\\": \\\"instructionSetExtensions\\\", \\\"resource-version\\\": \\\"1522168631721\\\", \\\"hpa-attribute-value\\\": \\\"{\\\\\\\"value\\\\\\\": [\\\\\\\"avx\\\\\\\", \\\\\\\"smt\\\\\\\"]}\\\"}], \\\"hpa-feature\\\": \\\"instructionSetExtensions\\\", \\\"hpa-capability-id\\\": \\\"01a4bfe1-1993-4fda-bd1c-ef333b4f76a9\\\", \\\"hpa-version\\\": \\\"v1\\\", \\\"architecture\\\": \\\"Intel64\\\", \\\"resource-version\\\": \\\"1522168631718\\\"}, {\\\"hpa-feature-attributes\\\": [{\\\"hpa-attribute-key\\\": \\\"virtualMemSize\\\", \\\"resource-version\\\": \\\"1522168631739\\\", \\\"hpa-attribute-value\\\": \\\"{\\\\\\\"value\\\\\\\":\\\\\\\"131072\\\\\\\", \\\\\\\"unit\\\\\\\":\\\\\\\"MB\\\\\\\" }\\\"}, {\\\"hpa-attribute-key\\\": \\\"numVirtualCpu\\\", \\\"resource-version\\\": \\\"1522168631747\\\", \\\"hpa-attribute-value\\\": \\\"{\\\\\\\"value\\\\\\\":\\\\\\\"32\\\\\\\"}\\\"}], \\\"hpa-feature\\\": \\\"basicCapabilities\\\", \\\"hpa-capability-id\\\": \\\"5565615b-1077-4bb5-a340-c5be48db2aaa\\\", \\\"hpa-version\\\": \\\"v1\\\", \\\"architecture\\\": \\\"generic\\\", \\\"resource-version\\\": \\\"1522168631735\\\"}]}, \\\"flavor-is-public\\\": false, \\\"flavor-disabled\\\": false, \\\"flavor-id\\\": \\\"e5aa2b2e-3206-41b6-80d5-cf041b098c43\\\", \\\"flavor-vcpus\\\": 32, \\\"flavor-swap\\\": \\\"0\\\", \\\"flavor-ephemeral\\\": 128, \\\"resource-version\\\": \\\"1522168631670\\\", \\\"flavor-ram\\\": 131072, \\\"flavor-name\\\": \\\"flavor-cpu-pinning-ovsdpdk-instruction-set\\\", \\\"flavor-selflink\\\": \\\"pXtX\\\", \\\"flavor-disk\\\": 2097152}]}, \\\"city\\\": \\\"Dallas\\\", \\\"service_resource_id\\\": \\\"\\\", \\\"existing_placement\\\": \\\"false\\\", \\\"country\\\": \\\"USA\\\", \\\"inventory_provider\\\": \\\"aai\\\", \\\"inventory_type\\\": \\\"cloud\\\", \\\"longitude\\\": \\\"-97.045443\\\", \\\"sriov_automation\\\": \\\"false\\\", \\\"state\\\": \\\"TX\\\", \\\"cost\\\": \\\"2\\\", \\\"vim-id\\\": \\\"HPA-cloud_cloud-region-2\\\", \\\"candidate_id\\\": \\\"cloud-region-2\\\", \\\"cloud_region_version\\\": \\\"75919\\\", \\\"latitude\\\": \\\"32.89948\\\", \\\"cloud_owner\\\": \\\"HPA-cloud\\\", \\\"complex_name\\\": \\\"example-complex-name-val-62100\\\", \\\"region\\\": \\\"USA\\\", \\\"location_id\\\": \\\"cloud-region-2\\\", \\\"location_type\\\": \\\"att_aic\\\", \\\"physical_location_id\\\": \\\"DLLSTX233\\\"}]}}, \\\"reservations\\\": {}, \\\"locations\\\": {\\\"customer_loc\\\": {\\\"latitude\\\": 32.89748, \\\"longitude\\\": -97.040443}}, \\\"request_type\\\": \\\"\\\", \\\"version\\\": \\\"2017-10-10\\\", \\\"objective\\\": {\\\"operation\\\": \\\"sum\\\", \\\"goal\\\": \\\"min\\\", \\\"operands\\\": [{\\\"function\\\": \\\"distance_between\\\", \\\"function_param\\\": [\\\"customer_loc\\\", \\\"vG\\\"], \\\"operation\\\": \\\"product\\\", \\\"weight\\\": 1.0}]}, \\\"constraints\\\": {\\\"hpa_constraint_vG\\\": {\\\"demands\\\": \\\"vG\\\", \\\"type\\\": \\\"hpa\\\", \\\"properties\\\": {\\\"evaluate\\\": [{\\\"flavorProperties\\\": [{\\\"hpa-version\\\": \\\"v1\\\", \\\"mandatory\\\": \\\"True\\\", \\\"hpa-feature-attributes\\\": [{\\\"operator\\\": \\\"=\\\", \\\"hpa-attribute-key\\\": \\\"numVirtualCpu\\\", \\\"hpa-attribute-value\\\": \\\"30\\\"}, {\\\"operator\\\": \\\"=\\\", \\\"hpa-attribute-key\\\": \\\"virtualMemSize\\\", \\\"unit\\\": \\\"GB\\\", \\\"hpa-attribute-value\\\": \\\"64\\\"}], \\\"architecture\\\": \\\"generic\\\", \\\"hpa-feature\\\": \\\"basicCapabilities\\\"}, {\\\"hpa-version\\\": \\\"v1\\\", \\\"mandatory\\\": \\\"True\\\", \\\"hpa-feature-attributes\\\": [{\\\"operator\\\": \\\"=\\\", \\\"hpa-attribute-key\\\": \\\"numCpuCores\\\", \\\"hpa-attribute-value\\\": \\\"16\\\"}, {\\\"operator\\\": \\\"=\\\", \\\"hpa-attribute-key\\\": \\\"numCpuSockets\\\", \\\"hpa-attribute-value\\\": \\\"2\\\"}, {\\\"operator\\\": \\\"=\\\", \\\"hpa-attribute-key\\\": \\\"numCpuThreads\\\", \\\"hpa-attribute-value\\\": \\\"8\\\"}], \\\"architecture\\\": \\\"generic\\\", \\\"hpa-feature\\\": \\\"cpuTopolgy\\\"}, {\\\"hpa-version\\\": \\\"v1\\\", \\\"mandatory\\\": \\\"True\\\", \\\"hpa-feature-attributes\\\": [{\\\"operator\\\": \\\"=\\\", \\\"hpa-attribute-key\\\": \\\"logicalCpuThreadPinningPolicy\\\", \\\"hpa-attribute-value\\\": \\\"prefer\\\"}, {\\\"operator\\\": \\\"=\\\", \\\"hpa-attribute-key\\\": \\\"logicalCpuPinningPolicy\\\", \\\"hpa-attribute-value\\\": \\\"dedicated\\\"}], \\\"architecture\\\": \\\"generic\\\", \\\"hpa-feature\\\": \\\"cpuPinning\\\"}], \\\"flavorLabel\\\": \\\"flavor_label_1\\\"}, {\\\"flavorProperties\\\": [{\\\"hpa-version\\\": \\\"v1\\\", \\\"mandatory\\\": \\\"True\\\", \\\"hpa-feature-attributes\\\": [{\\\"operator\\\": \\\"=\\\", \\\"hpa-attribute-key\\\": \\\"numVirtualCpu\\\", \\\"hpa-attribute-value\\\": \\\"30\\\"}, {\\\"operator\\\": \\\"=\\\", \\\"hpa-attribute-key\\\": \\\"virtualMemSize\\\", \\\"unit\\\": \\\"GB\\\", \\\"hpa-attribute-value\\\": \\\"64\\\"}], \\\"architecture\\\": \\\"generic\\\", \\\"hpa-feature\\\": \\\"basicCapabilities\\\"}], \\\"flavorLabel\\\": \\\"flavor_label_2\\\"}]}, \\\"name\\\": \\\"hpa_constraint\\\"}, \\\"constraint_vgmux_customer_vG\\\": {\\\"demands\\\": \\\"vG\\\", \\\"type\\\": \\\"distance_to_location\\\", \\\"properties\\\": {\\\"distance\\\": {\\\"operator\\\": \\\"<\\\", \\\"units\\\": \\\"km\\\", \\\"value\\\": 100.0}, \\\"location\\\": \\\"customer_loc\\\"}, \\\"name\\\": \\\"constraint_vgmux_customer\\\"}}}}\",\"id\":\"7852c924-b67b-4c59-8289-248ab5c0b892\",\"updated\":1522422121566,\"reservation_owner\":\"{}\",\"status\":\"solved\"},\"row 1\":{\"template\":\"{\\\"parameters\\\": {\\\"REQUIRED_DISK\\\": 100, \\\"customer_lat\\\": 32.89748, \\\"service_name\\\": \\\"Residential vCPE\\\", \\\"customer_long\\\": -97.040443, \\\"service_id\\\": \\\"vcpe_service_id\\\", \\\"REQUIRED_MEM\\\": 4, \\\"pnf_id\\\": \\\"some_pnf_id\\\"}, \\\"demands\\\": {\\\"vG\\\": [{\\\"inventory_provider\\\": \\\"aai\\\", \\\"inventory_type\\\": \\\"cloud\\\"}]}, \\\"locations\\\": {\\\"customer_loc\\\": {\\\"latitude\\\": {\\\"get_param\\\": \\\"customer_lat\\\"}, \\\"longitude\\\": {\\\"get_param\\\": \\\"customer_long\\\"}}}, \\\"optimization\\\": {\\\"minimize\\\": {\\\"sum\\\": [{\\\"distance_between\\\": [\\\"customer_loc\\\", \\\"vG\\\"]}]}}, \\\"homing_template_version\\\": \\\"2017-10-10\\\", \\\"constraints\\\": {\\\"constraint_vgmux_customer\\\": {\\\"type\\\": \\\"distance_to_location\\\", \\\"properties\\\": {\\\"distance\\\": \\\"< 100 km\\\", \\\"location\\\": \\\"customer_loc\\\"}, \\\"demands\\\": [\\\"vG\\\"]}, \\\"hpa_constraint\\\": {\\\"type\\\": \\\"hpa\\\", \\\"properties\\\": {\\\"evaluate\\\": [{\\\"flavorProperties\\\": [{\\\"hpa-version\\\": \\\"v1\\\", \\\"mandatory\\\": \\\"True\\\", \\\"hpa-feature-attributes\\\": [{\\\"operator\\\": \\\"=\\\", \\\"hpa-attribute-key\\\": \\\"numVirtualCpu\\\", \\\"hpa-attribute-value\\\": \\\"32\\\"}, {\\\"operator\\\": \\\"=\\\", \\\"hpa-attribute-key\\\": \\\"virtualMemSize\\\", \\\"unit\\\": \\\"GB\\\", \\\"hpa-attribute-value\\\": \\\"64\\\"}], \\\"architecture\\\": \\\"generic\\\", \\\"hpa-feature\\\": \\\"basicCapabilities\\\"}, {\\\"hpa-version\\\": \\\"v1\\\", \\\"mandatory\\\": \\\"True\\\", \\\"hpa-feature-attributes\\\": [{\\\"operator\\\": \\\"=\\\", \\\"hpa-attribute-key\\\": \\\"numCpuCores\\\", \\\"hpa-attribute-value\\\": \\\"16\\\"}, {\\\"operator\\\": \\\"=\\\", \\\"hpa-attribute-key\\\": \\\"numCpuSockets\\\", \\\"hpa-attribute-value\\\": \\\"2\\\"}, {\\\"operator\\\": \\\"=\\\", \\\"hpa-attribute-key\\\": \\\"numCpuThreads\\\", \\\"hpa-attribute-value\\\": \\\"8\\\"}], \\\"architecture\\\": \\\"generic\\\", \\\"hpa-feature\\\": \\\"cpuTopolgy\\\"}, {\\\"hpa-version\\\": \\\"v1\\\", \\\"mandatory\\\": \\\"True\\\", \\\"hpa-feature-attributes\\\": [{\\\"operator\\\": \\\"=\\\", \\\"hpa-attribute-key\\\": \\\"logicalCpuThreadPinningPolicy\\\", \\\"hpa-attribute-value\\\": \\\"prefer\\\"}, {\\\"operator\\\": \\\"=\\\", \\\"hpa-attribute-key\\\": \\\"logicalCpuPinningPolicy\\\", \\\"hpa-attribute-value\\\": \\\"dedicated\\\"}], \\\"architecture\\\": \\\"generic\\\", \\\"hpa-feature\\\": \\\"cpuPinning\\\"}], \\\"flavorLabel\\\": \\\"flavor_label_1\\\"}, {\\\"flavorProperties\\\": [{\\\"hpa-version\\\": \\\"v1\\\", \\\"mandatory\\\": \\\"True\\\", \\\"hpa-feature-attributes\\\": [{\\\"operator\\\": \\\"=\\\", \\\"hpa-attribute-key\\\": \\\"numVirtualCpu\\\", \\\"hpa-attribute-value\\\": \\\"32\\\"}, {\\\"operator\\\": \\\"=\\\", \\\"hpa-attribute-key\\\": \\\"virtualMemSize\\\", \\\"unit\\\": \\\"GB\\\", \\\"hpa-attribute-value\\\": \\\"64\\\"}], \\\"architecture\\\": \\\"generic\\\", \\\"hpa-feature\\\": \\\"basicCapabilities\\\"}], \\\"flavorLabel\\\": \\\"flavor_label_2\\\"}]}, \\\"demands\\\": [\\\"vG\\\"]}}}\",\"translation_counter\":1,\"created\":1522422026321,\"message\":\"\",\"solver_owner\":\"shci-pci-2\",\"timeout\":5,\"translation_owner\":\"shci-pci-2\",\"solution\":\"{\\\"recommendations\\\": [{\\\"vG\\\": {\\\"attributes\\\": {\\\"flavors\\\": {\\\"flavor_label_2\\\": \\\"flavor-cpu-topology-instruction-set\\\"}, \\\"cloud_owner\\\": \\\"HPA-cloud\\\", \\\"physical-location-id\\\": \\\"DLLSTX233\\\", \\\"aic_version\\\": \\\"75919\\\"}, \\\"inventory_provider\\\": \\\"aai\\\", \\\"service_resource_id\\\": \\\"\\\", \\\"candidate\\\": {\\\"is_rehome\\\": \\\"true\\\", \\\"cloud_owner\\\": \\\"HPA-cloud\\\", \\\"inventory_type\\\": \\\"cloud\\\", \\\"vim-id\\\": \\\"HPA-cloud_cloud-region-2\\\", \\\"candidate_id\\\": \\\"cloud-region-2\\\", \\\"location_id\\\": \\\"cloud-region-2\\\", \\\"location_type\\\": \\\"att_aic\\\"}}}]}\",\"recommend_max\":3,\"solver_counter\":1,\"name\":\"vCPE-with-HPA_32\",\"reservation_counter\":0,\"translation\":\"{\\\"conductor_solver\\\": {\\\"plan_id\\\": \\\"cc3546b4-ee4a-49e4-b3d1-73518cba42f6\\\", \\\"demands\\\": {\\\"vG\\\": {\\\"candidates\\\": [{\\\"flavors\\\": {\\\"flavor\\\": [{\\\"hpa-capabilities\\\": {\\\"hpa-capability\\\": [{\\\"hpa-feature-attributes\\\": [{\\\"hpa-attribute-key\\\": \\\"numCpuCores\\\", \\\"resource-version\\\": \\\"1522168579404\\\", \\\"hpa-attribute-value\\\": \\\"{\\\\\\\"value\\\\\\\":\\\\\\\"8\\\\\\\"}\\\"}, {\\\"hpa-attribute-key\\\": \\\"numCpuSockets\\\", \\\"resource-version\\\": \\\"1522168579415\\\", \\\"hpa-attribute-value\\\": \\\"{\\\\\\\"value\\\\\\\":\\\\\\\"6\\\\\\\"}\\\"}, {\\\"hpa-attribute-key\\\": \\\"numCpuThreads\\\", \\\"resource-version\\\": \\\"1522168579426\\\", \\\"hpa-attribute-value\\\": \\\"{\\\\\\\"value\\\\\\\":\\\\\\\"8\\\\\\\"}\\\"}], \\\"hpa-feature\\\": \\\"cpuTopology\\\", \\\"hpa-capability-id\\\": \\\"8fa22e64-41b4-471f-96ad-6c4708635e4c\\\", \\\"hpa-version\\\": \\\"v1\\\", \\\"architecture\\\": \\\"generic\\\", \\\"resource-version\\\": \\\"1522168579400\\\"}, {\\\"hpa-feature-attributes\\\": [{\\\"hpa-attribute-key\\\": \\\"numaCpu-0\\\", \\\"resource-version\\\": \\\"1522168579335\\\", \\\"hpa-attribute-value\\\": \\\"{\\\\\\\"value\\\\\\\":\\\\\\\"2\\\\\\\"}\\\"}, {\\\"hpa-attribute-key\\\": \\\"numaMem-0\\\", \\\"resource-version\\\": \\\"1522168579345\\\", \\\"hpa-attribute-value\\\": \\\"{\\\\\\\"value\\\\\\\":\\\\\\\"2\\\\\\\", \\\\\\\"unit\\\\\\\":\\\\\\\"GB\\\\\\\" }\\\"}, {\\\"hpa-attribute-key\\\": \\\"numaNodes\\\", \\\"resource-version\\\": \\\"1522168579382\\\", \\\"hpa-attribute-value\\\": \\\"{\\\\\\\"value\\\\\\\":\\\\\\\"2\\\\\\\"}\\\"}, {\\\"hpa-attribute-key\\\": \\\"numaMem-1\\\", \\\"resource-version\\\": \\\"1522168579369\\\", \\\"hpa-attribute-value\\\": \\\"{\\\\\\\"value\\\\\\\":\\\\\\\"4\\\\\\\", \\\\\\\"unit\\\\\\\":\\\\\\\"GB\\\\\\\" }\\\"}, {\\\"hpa-attribute-key\\\": \\\"numaCpu-1\\\", \\\"resource-version\\\": \\\"1522168579357\\\", \\\"hpa-attribute-value\\\": \\\"{\\\\\\\"value\\\\\\\":\\\\\\\"4\\\\\\\"}\\\"}], \\\"hpa-feature\\\": \\\"numa\\\", \\\"hpa-capability-id\\\": \\\"167ad6a2-7d9c-4bf2-9a1b-30e5311b8c66\\\", \\\"hpa-version\\\": \\\"v1\\\", \\\"architecture\\\": \\\"generic\\\", \\\"resource-version\\\": \\\"1522168579329\\\"}, {\\\"hpa-feature-attributes\\\": [{\\\"hpa-attribute-key\\\": \\\"instructionSetExtensions\\\", \\\"resource-version\\\": \\\"1522168579312\\\", \\\"hpa-attribute-value\\\": \\\"{\\\\\\\"value\\\\\\\": [\\\\\\\"aes\\\\\\\", \\\\\\\"sse\\\\\\\", \\\\\\\"avx\\\\\\\", \\\\\\\"smt\\\\\\\"]}\\\"}], \\\"hpa-feature\\\": \\\"instructionSetExtensions\\\", \\\"hpa-capability-id\\\": \\\"01a4bfe1-1993-4fda-bd1c-ef333b4f76a9\\\", \\\"hpa-version\\\": \\\"v1\\\", \\\"architecture\\\": \\\"Intel64\\\", \\\"resource-version\\\": \\\"1522168579307\\\"}, {\\\"hpa-feature-attributes\\\": [{\\\"hpa-attribute-key\\\": \\\"numVirtualCpu\\\", \\\"resource-version\\\": \\\"1522168579267\\\", \\\"hpa-attribute-value\\\": \\\"{\\\\\\\"value\\\\\\\":\\\\\\\"64\\\\\\\"}\\\"}, {\\\"hpa-attribute-key\\\": \\\"virtualMemSize\\\", \\\"resource-version\\\": \\\"1522168579287\\\", \\\"hpa-attribute-value\\\": \\\"{\\\\\\\"value\\\\\\\":\\\\\\\"65536\\\\\\\", \\\\\\\"unit\\\\\\\":\\\\\\\"MB\\\\\\\" }\\\"}], \\\"hpa-feature\\\": \\\"basicCapabilities\\\", \\\"hpa-capability-id\\\": \\\"13ec6d4d-7fee-48d8-9e4a-c598feb101ed\\\", \\\"hpa-version\\\": \\\"v1\\\", \\\"architecture\\\": \\\"generic\\\", \\\"resource-version\\\": \\\"1522168579230\\\"}]}, \\\"flavor-is-public\\\": false, \\\"flavor-disabled\\\": false, \\\"flavor-id\\\": \\\"9cf8220b-4d96-4c30-a426-2e9382f3fff2\\\", \\\"flavor-vcpus\\\": 64, \\\"flavor-swap\\\": \\\"0\\\", \\\"flavor-ephemeral\\\": 128, \\\"resource-version\\\": \\\"1522168579162\\\", \\\"flavor-ram\\\": 65536, \\\"flavor-name\\\": \\\"flavor-numa-cpu-topology-instruction-set\\\", \\\"flavor-selflink\\\": \\\"pXtX\\\", \\\"flavor-disk\\\": 1048576}, {\\\"hpa-capabilities\\\": {\\\"hpa-capability\\\": [{\\\"hpa-feature-attributes\\\": [{\\\"hpa-attribute-key\\\": \\\"virtualMemSize\\\", \\\"resource-version\\\": \\\"1522168580345\\\", \\\"hpa-attribute-value\\\": \\\"{\\\\\\\"value\\\\\\\":\\\\\\\"131072\\\\\\\", \\\\\\\"unit\\\\\\\":\\\\\\\"MB\\\\\\\" }\\\"}, {\\\"hpa-attribute-key\\\": \\\"numVirtualCpu\\\", \\\"resource-version\\\": \\\"1522168580370\\\", \\\"hpa-attribute-value\\\": \\\"{\\\\\\\"value\\\\\\\":\\\\\\\"32\\\\\\\"}\\\"}], \\\"hpa-feature\\\": \\\"basicCapabilities\\\", \\\"hpa-capability-id\\\": \\\"4565615b-1077-4bb5-a340-c5be48db2aaa\\\", \\\"hpa-version\\\": \\\"v1\\\", \\\"architecture\\\": \\\"generic\\\", \\\"resource-version\\\": \\\"1522168580334\\\"}, {\\\"hpa-feature-attributes\\\": [{\\\"hpa-attribute-key\\\": \\\"dataProcessingAccelerationLibrary\\\", \\\"resource-version\\\": \\\"1522168580148\\\", \\\"hpa-attribute-value\\\": \\\"{\\\\\\\"value\\\\\\\":\\\\\\\"v18.02\\\\\\\"}\\\"}], \\\"hpa-feature\\\": \\\"ovsDpdk\\\", \\\"hpa-capability-id\\\": \\\"8d36a8fe-bfee-446a-bbcb-881ee66c8f78\\\", \\\"hpa-version\\\": \\\"v1\\\", \\\"architecture\\\": \\\"generic\\\", \\\"resource-version\\\": \\\"1522168580135\\\"}, {\\\"hpa-feature-attributes\\\": [{\\\"hpa-attribute-key\\\": \\\"instructionSetExtensions\\\", \\\"resource-version\\\": \\\"1522168580282\\\", \\\"hpa-attribute-value\\\": \\\"{\\\\\\\"value\\\\\\\":[\\\\\\\"aes\\\\\\\", \\\\\\\"avx\\\\\\\"]}\\\"}], \\\"hpa-feature\\\": \\\"instructionSetExtensions\\\", \\\"hpa-capability-id\\\": \\\"4d04f4d8-e257-4442-8417-19a525e56096\\\", \\\"hpa-version\\\": \\\"v1\\\", \\\"architecture\\\": \\\"generic\\\", \\\"resource-version\\\": \\\"1522168580249\\\"}, {\\\"hpa-feature-attributes\\\": [{\\\"hpa-attribute-key\\\": \\\"logicalCpuPinningPolicy\\\", \\\"resource-version\\\": \\\"1522168580205\\\", \\\"hpa-attribute-value\\\": \\\"{\\\\\\\"value\\\\\\\":\\\\\\\"dedicated\\\\\\\"}\\\"}, {\\\"hpa-attribute-key\\\": \\\"logicalCpuThreadPinningPolicy\\\", \\\"resource-version\\\": \\\"1522168580223\\\", \\\"hpa-attribute-value\\\": \\\"{value:\\\\\\\"prefer\\\\\\\"}\\\"}], \\\"hpa-feature\\\": \\\"cpuPinning\\\", \\\"hpa-capability-id\\\": \\\"c140c945-1532-4908-86c9-d7f71416f1dd\\\", \\\"hpa-version\\\": \\\"v1\\\", \\\"architecture\\\": \\\"generic\\\", \\\"resource-version\\\": \\\"1522168580195\\\"}]}, \\\"flavor-is-public\\\": false, \\\"flavor-disabled\\\": false, \\\"flavor-id\\\": \\\"f5aa2b2e-3206-41b6-80d5-cf041b098c43\\\", \\\"flavor-vcpus\\\": 32, \\\"flavor-swap\\\": \\\"0\\\", \\\"flavor-ephemeral\\\": 128, \\\"resource-version\\\": \\\"1522168579450\\\", \\\"flavor-ram\\\": 131072, \\\"flavor-name\\\": \\\"flavor-cpu-pinning-ovsdpdk-instruction-set\\\", \\\"flavor-selflink\\\": \\\"pXtX\\\", \\\"flavor-disk\\\": 2097152}]}, \\\"city\\\": \\\"Dallas\\\", \\\"service_resource_id\\\": \\\"\\\", \\\"existing_placement\\\": \\\"false\\\", \\\"country\\\": \\\"USA\\\", \\\"inventory_provider\\\": \\\"aai\\\", \\\"inventory_type\\\": \\\"cloud\\\", \\\"longitude\\\": \\\"-97.045443\\\", \\\"sriov_automation\\\": \\\"false\\\", \\\"state\\\": \\\"TX\\\", \\\"cost\\\": 2.0, \\\"vim-id\\\": \\\"HPA-cloud_cloud-region-1\\\", \\\"candidate_id\\\": \\\"cloud-region-1\\\", \\\"cloud_region_version\\\": \\\"75919\\\", \\\"latitude\\\": \\\"32.89948\\\", \\\"cloud_owner\\\": \\\"HPA-cloud\\\", \\\"complex_name\\\": \\\"example-complex-name-val-62100\\\", \\\"region\\\": \\\"USA\\\", \\\"location_id\\\": \\\"cloud-region-1\\\", \\\"location_type\\\": \\\"att_aic\\\", \\\"physical_location_id\\\": \\\"DLLSTX233\\\"}, {\\\"flavors\\\": {\\\"flavor\\\": [{\\\"hpa-capabilities\\\": {\\\"hpa-capability\\\": [{\\\"hpa-feature-attributes\\\": [{\\\"hpa-attribute-key\\\": \\\"virtualMemSize\\\", \\\"resource-version\\\": \\\"1522168631596\\\", \\\"hpa-attribute-value\\\": \\\"{\\\\\\\"value\\\\\\\":\\\\\\\"65536\\\\\\\", \\\\\\\"unit\\\\\\\":\\\\\\\"MB\\\\\\\" }\\\"}, {\\\"hpa-attribute-key\\\": \\\"numVirtualCpu\\\", \\\"resource-version\\\": \\\"1522168631587\\\", \\\"hpa-attribute-value\\\": \\\"{\\\\\\\"value\\\\\\\":\\\\\\\"32\\\\\\\"}\\\"}], \\\"hpa-feature\\\": \\\"basicCapabilities\\\", \\\"hpa-capability-id\\\": \\\"23ec6d4d-7fee-48d8-9e4a-c598feb101ed\\\", \\\"hpa-version\\\": \\\"v1\\\", \\\"architecture\\\": \\\"generic\\\", \\\"resource-version\\\": \\\"1522168631582\\\"}, {\\\"hpa-feature-attributes\\\": [{\\\"hpa-attribute-key\\\": \\\"numCpuSockets\\\", \\\"resource-version\\\": \\\"1522168631642\\\", \\\"hpa-attribute-value\\\": \\\"{\\\\\\\"value\\\\\\\":\\\\\\\"2\\\\\\\"}\\\"}, {\\\"hpa-attribute-key\\\": \\\"numCpuCores\\\", \\\"resource-version\\\": \\\"1522168631633\\\", \\\"hpa-attribute-value\\\": \\\"{\\\\\\\"value\\\\\\\":\\\\\\\"16\\\\\\\"}\\\"}, {\\\"hpa-attribute-key\\\": \\\"numCpuThreads\\\", \\\"resource-version\\\": \\\"1522168631652\\\", \\\"hpa-attribute-value\\\": \\\"{\\\\\\\"value\\\\\\\":\\\\\\\"8\\\\\\\"}\\\"}], \\\"hpa-feature\\\": \\\"cpuTopology\\\", \\\"hpa-capability-id\\\": \\\"9fa22e64-41b4-471f-96ad-6c4708635e4c\\\", \\\"hpa-version\\\": \\\"v1\\\", \\\"architecture\\\": \\\"generic\\\", \\\"resource-version\\\": \\\"1522168631630\\\"}, {\\\"hpa-feature-attributes\\\": [{\\\"hpa-attribute-key\\\": \\\"instructionSetExtensions\\\", \\\"resource-version\\\": \\\"1522168631615\\\", \\\"hpa-attribute-value\\\": \\\"{\\\\\\\"value\\\\\\\": [\\\\\\\"aes\\\\\\\", \\\\\\\"sse\\\\\\\", \\\\\\\"avx\\\\\\\", \\\\\\\"smt\\\\\\\"]}\\\"}], \\\"hpa-feature\\\": \\\"instructionSetExtensions\\\", \\\"hpa-capability-id\\\": \\\"01a4bfe1-1993-4fda-bd1c-ef333b4f76a9\\\", \\\"hpa-version\\\": \\\"v1\\\", \\\"architecture\\\": \\\"Intel64\\\", \\\"resource-version\\\": \\\"1522168631611\\\"}]}, \\\"flavor-is-public\\\": false, \\\"flavor-disabled\\\": false, \\\"flavor-id\\\": \\\"acf8220b-4d96-4c30-a426-2e9382f3fff2\\\", \\\"flavor-vcpus\\\": 32, \\\"flavor-swap\\\": \\\"0\\\", \\\"flavor-ephemeral\\\": 128, \\\"resource-version\\\": \\\"1522168631576\\\", \\\"flavor-ram\\\": 65536, \\\"flavor-name\\\": \\\"flavor-cpu-topology-instruction-set\\\", \\\"flavor-selflink\\\": \\\"pXtX\\\", \\\"flavor-disk\\\": 1048576}, {\\\"hpa-capabilities\\\": {\\\"hpa-capability\\\": [{\\\"hpa-feature-attributes\\\": [{\\\"hpa-attribute-key\\\": \\\"dataProcessingAccelerationLibrary\\\", \\\"resource-version\\\": \\\"1522168631678\\\", \\\"hpa-attribute-value\\\": \\\"{\\\\\\\"value\\\\\\\":\\\\\\\"v17.02\\\\\\\"}\\\"}], \\\"hpa-feature\\\": \\\"ovsDpdk\\\", \\\"hpa-capability-id\\\": \\\"9d36a8fe-bfee-446a-bbcb-881ee66c8f78\\\", \\\"hpa-version\\\": \\\"v1\\\", \\\"architecture\\\": \\\"generic\\\", \\\"resource-version\\\": \\\"1522168631675\\\"}, {\\\"hpa-feature-attributes\\\": [{\\\"hpa-attribute-key\\\": \\\"logicalCpuThreadPinningPolicy\\\", \\\"resource-version\\\": \\\"1522168631704\\\", \\\"hpa-attribute-value\\\": \\\"{value:\\\\\\\"prefer\\\\\\\"}\\\"}, {\\\"hpa-attribute-key\\\": \\\"logicalCpuPinningPolicy\\\", \\\"resource-version\\\": \\\"1522168631695\\\", \\\"hpa-attribute-value\\\": \\\"{\\\\\\\"value\\\\\\\":\\\\\\\"dedicated\\\\\\\"}\\\"}], \\\"hpa-feature\\\": \\\"cpuPinning\\\", \\\"hpa-capability-id\\\": \\\"d140c945-1532-4908-86c9-d7f71416f1dd\\\", \\\"hpa-version\\\": \\\"v1\\\", \\\"architecture\\\": \\\"generic\\\", \\\"resource-version\\\": \\\"1522168631691\\\"}, {\\\"hpa-feature-attributes\\\": [{\\\"hpa-attribute-key\\\": \\\"instructionSetExtensions\\\", \\\"resource-version\\\": \\\"1522168631721\\\", \\\"hpa-attribute-value\\\": \\\"{\\\\\\\"value\\\\\\\": [\\\\\\\"avx\\\\\\\", \\\\\\\"smt\\\\\\\"]}\\\"}], \\\"hpa-feature\\\": \\\"instructionSetExtensions\\\", \\\"hpa-capability-id\\\": \\\"01a4bfe1-1993-4fda-bd1c-ef333b4f76a9\\\", \\\"hpa-version\\\": \\\"v1\\\", \\\"architecture\\\": \\\"Intel64\\\", \\\"resource-version\\\": \\\"1522168631718\\\"}, {\\\"hpa-feature-attributes\\\": [{\\\"hpa-attribute-key\\\": \\\"virtualMemSize\\\", \\\"resource-version\\\": \\\"1522168631739\\\", \\\"hpa-attribute-value\\\": \\\"{\\\\\\\"value\\\\\\\":\\\\\\\"131072\\\\\\\", \\\\\\\"unit\\\\\\\":\\\\\\\"MB\\\\\\\" }\\\"}, {\\\"hpa-attribute-key\\\": \\\"numVirtualCpu\\\", \\\"resource-version\\\": \\\"1522168631747\\\", \\\"hpa-attribute-value\\\": \\\"{\\\\\\\"value\\\\\\\":\\\\\\\"32\\\\\\\"}\\\"}], \\\"hpa-feature\\\": \\\"basicCapabilities\\\", \\\"hpa-capability-id\\\": \\\"5565615b-1077-4bb5-a340-c5be48db2aaa\\\", \\\"hpa-version\\\": \\\"v1\\\", \\\"architecture\\\": \\\"generic\\\", \\\"resource-version\\\": \\\"1522168631735\\\"}]}, \\\"flavor-is-public\\\": false, \\\"flavor-disabled\\\": false, \\\"flavor-id\\\": \\\"e5aa2b2e-3206-41b6-80d5-cf041b098c43\\\", \\\"flavor-vcpus\\\": 32, \\\"flavor-swap\\\": \\\"0\\\", \\\"flavor-ephemeral\\\": 128, \\\"resource-version\\\": \\\"1522168631670\\\", \\\"flavor-ram\\\": 131072, \\\"flavor-name\\\": \\\"flavor-cpu-pinning-ovsdpdk-instruction-set\\\", \\\"flavor-selflink\\\": \\\"pXtX\\\", \\\"flavor-disk\\\": 2097152}]}, \\\"city\\\": \\\"Dallas\\\", \\\"service_resource_id\\\": \\\"\\\", \\\"existing_placement\\\": \\\"false\\\", \\\"country\\\": \\\"USA\\\", \\\"inventory_provider\\\": \\\"aai\\\", \\\"inventory_type\\\": \\\"cloud\\\", \\\"longitude\\\": \\\"-97.045443\\\", \\\"sriov_automation\\\": \\\"false\\\", \\\"state\\\": \\\"TX\\\", \\\"cost\\\": 2.0, \\\"vim-id\\\": \\\"HPA-cloud_cloud-region-2\\\", \\\"candidate_id\\\": \\\"cloud-region-2\\\", \\\"cloud_region_version\\\": \\\"75919\\\", \\\"latitude\\\": \\\"32.89948\\\", \\\"cloud_owner\\\": \\\"HPA-cloud\\\", \\\"complex_name\\\": \\\"example-complex-name-val-62100\\\", \\\"region\\\": \\\"USA\\\", \\\"location_id\\\": \\\"cloud-region-2\\\", \\\"location_type\\\": \\\"att_aic\\\", \\\"physical_location_id\\\": \\\"DLLSTX233\\\"}]}}, \\\"reservations\\\": {}, \\\"locations\\\": {\\\"customer_loc\\\": {\\\"latitude\\\": 32.89748, \\\"longitude\\\": -97.040443}}, \\\"request_type\\\": \\\"\\\", \\\"version\\\": \\\"2017-10-10\\\", \\\"objective\\\": {\\\"operation\\\": \\\"sum\\\", \\\"goal\\\": \\\"min\\\", \\\"operands\\\": [{\\\"function\\\": \\\"distance_between\\\", \\\"function_param\\\": [\\\"customer_loc\\\", \\\"vG\\\"], \\\"operation\\\": \\\"product\\\", \\\"weight\\\": 1.0}]}, \\\"constraints\\\": {\\\"hpa_constraint_vG\\\": {\\\"demands\\\": \\\"vG\\\", \\\"type\\\": \\\"hpa\\\", \\\"properties\\\": {\\\"evaluate\\\": [{\\\"flavorProperties\\\": [{\\\"hpa-version\\\": \\\"v1\\\", \\\"mandatory\\\": \\\"True\\\", \\\"hpa-feature-attributes\\\": [{\\\"operator\\\": \\\"=\\\", \\\"hpa-attribute-key\\\": \\\"numVirtualCpu\\\", \\\"hpa-attribute-value\\\": \\\"32\\\"}, {\\\"operator\\\": \\\"=\\\", \\\"hpa-attribute-key\\\": \\\"virtualMemSize\\\", \\\"unit\\\": \\\"GB\\\", \\\"hpa-attribute-value\\\": \\\"64\\\"}], \\\"architecture\\\": \\\"generic\\\", \\\"hpa-feature\\\": \\\"basicCapabilities\\\"}, {\\\"hpa-version\\\": \\\"v1\\\", \\\"mandatory\\\": \\\"True\\\", \\\"hpa-feature-attributes\\\": [{\\\"operator\\\": \\\"=\\\", \\\"hpa-attribute-key\\\": \\\"numCpuCores\\\", \\\"hpa-attribute-value\\\": \\\"16\\\"}, {\\\"operator\\\": \\\"=\\\", \\\"hpa-attribute-key\\\": \\\"numCpuSockets\\\", \\\"hpa-attribute-value\\\": \\\"2\\\"}, {\\\"operator\\\": \\\"=\\\", \\\"hpa-attribute-key\\\": \\\"numCpuThreads\\\", \\\"hpa-attribute-value\\\": \\\"8\\\"}], \\\"architecture\\\": \\\"generic\\\", \\\"hpa-feature\\\": \\\"cpuTopolgy\\\"}, {\\\"hpa-version\\\": \\\"v1\\\", \\\"mandatory\\\": \\\"True\\\", \\\"hpa-feature-attributes\\\": [{\\\"operator\\\": \\\"=\\\", \\\"hpa-attribute-key\\\": \\\"logicalCpuThreadPinningPolicy\\\", \\\"hpa-attribute-value\\\": \\\"prefer\\\"}, {\\\"operator\\\": \\\"=\\\", \\\"hpa-attribute-key\\\": \\\"logicalCpuPinningPolicy\\\", \\\"hpa-attribute-value\\\": \\\"dedicated\\\"}], \\\"architecture\\\": \\\"generic\\\", \\\"hpa-feature\\\": \\\"cpuPinning\\\"}], \\\"flavorLabel\\\": \\\"flavor_label_1\\\"}, {\\\"flavorProperties\\\": [{\\\"hpa-version\\\": \\\"v1\\\", \\\"mandatory\\\": \\\"True\\\", \\\"hpa-feature-attributes\\\": [{\\\"operator\\\": \\\"=\\\", \\\"hpa-attribute-key\\\": \\\"numVirtualCpu\\\", \\\"hpa-attribute-value\\\": \\\"32\\\"}, {\\\"operator\\\": \\\"=\\\", \\\"hpa-attribute-key\\\": \\\"virtualMemSize\\\", \\\"unit\\\": \\\"GB\\\", \\\"hpa-attribute-value\\\": \\\"64\\\"}], \\\"architecture\\\": \\\"generic\\\", \\\"hpa-feature\\\": \\\"basicCapabilities\\\"}], \\\"flavorLabel\\\": \\\"flavor_label_2\\\"}]}, \\\"name\\\": \\\"hpa_constraint\\\"}, \\\"constraint_vgmux_customer_vG\\\": {\\\"demands\\\": \\\"vG\\\", \\\"type\\\": \\\"distance_to_location\\\", \\\"properties\\\": {\\\"distance\\\": {\\\"operator\\\": \\\"<\\\", \\\"units\\\": \\\"km\\\", \\\"value\\\": 100.0}, \\\"location\\\": \\\"customer_loc\\\"}, \\\"name\\\": \\\"constraint_vgmux_customer\\\"}}}}\",\"id\":\"cc3546b4-ee4a-49e4-b3d1-73518cba42f6\",\"updated\":1522422035785,\"reservation_owner\":\"{}\",\"status\":\"solved\"},\"row 2\":{\"template\":\"{\\\"parameters\\\": {\\\"REQUIRED_DISK\\\": 100, \\\"customer_lat\\\": 32.89748, \\\"service_name\\\": \\\"Residential vCPE\\\", \\\"customer_long\\\": -97.040443, \\\"service_id\\\": \\\"vcpe_service_id\\\", \\\"REQUIRED_MEM\\\": 4, \\\"pnf_id\\\": \\\"some_pnf_id\\\"}, \\\"demands\\\": {\\\"vG\\\": [{\\\"inventory_provider\\\": \\\"aai\\\", \\\"inventory_type\\\": \\\"cloud\\\"}]}, \\\"locations\\\": {\\\"customer_loc\\\": {\\\"latitude\\\": {\\\"get_param\\\": \\\"customer_lat\\\"}, \\\"longitude\\\": {\\\"get_param\\\": \\\"customer_long\\\"}}}, \\\"optimization\\\": {\\\"minimize\\\": {\\\"sum\\\": [{\\\"distance_between\\\": [\\\"customer_loc\\\", \\\"vG\\\"]}, {\\\"distance_between\\\": [\\\"customer_loc\\\", \\\"vG\\\"]}]}}, \\\"homing_template_version\\\": \\\"2017-10-10\\\", \\\"constraints\\\": {\\\"constraint_vg_customer\\\": {\\\"type\\\": \\\"distance_to_location\\\", \\\"properties\\\": {\\\"distance\\\": \\\"< 5000 km\\\", \\\"location\\\": \\\"customer_loc\\\"}, \\\"demands\\\": [\\\"vG\\\"]}}}\",\"translation_counter\":1,\"created\":1522335418548,\"message\":\"\",\"solver_owner\":\"shci-pci-2\",\"timeout\":10,\"translation_owner\":\"shci-pci-2\",\"solution\":\"{\\\"recommendations\\\": [{\\\"vG\\\": {\\\"attributes\\\": {\\\"cloud_owner\\\": \\\"HPA-cloud\\\", \\\"physical-location-id\\\": \\\"DLLSTX233\\\", \\\"aic_version\\\": \\\"75919\\\"}, \\\"inventory_provider\\\": \\\"aai\\\", \\\"service_resource_id\\\": \\\"\\\", \\\"candidate\\\": {\\\"is_rehome\\\": \\\"true\\\", \\\"cloud_owner\\\": \\\"HPA-cloud\\\", \\\"inventory_type\\\": \\\"cloud\\\", \\\"vim-id\\\": \\\"HPA-cloud_cloud-region-1\\\", \\\"candidate_id\\\": \\\"cloud-region-1\\\", \\\"location_id\\\": \\\"cloud-region-1\\\", \\\"location_type\\\": \\\"att_aic\\\"}}}]}\",\"recommend_max\":3,\"solver_counter\":1,\"name\":\"vCPE-Sanity1\",\"reservation_counter\":0,\"translation\":\"{\\\"conductor_solver\\\": {\\\"plan_id\\\": \\\"f1094be4-2c7d-4786-9bf8-b1e1f874a58d\\\", \\\"demands\\\": {\\\"vG\\\": {\\\"candidates\\\": [{\\\"flavors\\\": {\\\"flavor\\\": [{\\\"hpa-capabilities\\\": {\\\"hpa-capability\\\": [{\\\"hpa-feature-attributes\\\": [{\\\"hpa-attribute-key\\\": \\\"numCpuCores\\\", \\\"resource-version\\\": \\\"1522168579404\\\", \\\"hpa-attribute-value\\\": \\\"{\\\\\\\"value\\\\\\\":\\\\\\\"8\\\\\\\"}\\\"}, {\\\"hpa-attribute-key\\\": \\\"numCpuSockets\\\", \\\"resource-version\\\": \\\"1522168579415\\\", \\\"hpa-attribute-value\\\": \\\"{\\\\\\\"value\\\\\\\":\\\\\\\"6\\\\\\\"}\\\"}, {\\\"hpa-attribute-key\\\": \\\"numCpuThreads\\\", \\\"resource-version\\\": \\\"1522168579426\\\", \\\"hpa-attribute-value\\\": \\\"{\\\\\\\"value\\\\\\\":\\\\\\\"8\\\\\\\"}\\\"}], \\\"hpa-feature\\\": \\\"cpuTopology\\\", \\\"hpa-capability-id\\\": \\\"8fa22e64-41b4-471f-96ad-6c4708635e4c\\\", \\\"hpa-version\\\": \\\"v1\\\", \\\"architecture\\\": \\\"generic\\\", \\\"resource-version\\\": \\\"1522168579400\\\"}, {\\\"hpa-feature-attributes\\\": [{\\\"hpa-attribute-key\\\": \\\"numaCpu-0\\\", \\\"resource-version\\\": \\\"1522168579335\\\", \\\"hpa-attribute-value\\\": \\\"{\\\\\\\"value\\\\\\\":\\\\\\\"2\\\\\\\"}\\\"}, {\\\"hpa-attribute-key\\\": \\\"numaMem-0\\\", \\\"resource-version\\\": \\\"1522168579345\\\", \\\"hpa-attribute-value\\\": \\\"{\\\\\\\"value\\\\\\\":\\\\\\\"2\\\\\\\", \\\\\\\"unit\\\\\\\":\\\\\\\"GB\\\\\\\" }\\\"}, {\\\"hpa-attribute-key\\\": \\\"numaNodes\\\", \\\"resource-version\\\": \\\"1522168579382\\\", \\\"hpa-attribute-value\\\": \\\"{\\\\\\\"value\\\\\\\":\\\\\\\"2\\\\\\\"}\\\"}, {\\\"hpa-attribute-key\\\": \\\"numaMem-1\\\", \\\"resource-version\\\": \\\"1522168579369\\\", \\\"hpa-attribute-value\\\": \\\"{\\\\\\\"value\\\\\\\":\\\\\\\"4\\\\\\\", \\\\\\\"unit\\\\\\\":\\\\\\\"GB\\\\\\\" }\\\"}, {\\\"hpa-attribute-key\\\": \\\"numaCpu-1\\\", \\\"resource-version\\\": \\\"1522168579357\\\", \\\"hpa-attribute-value\\\": \\\"{\\\\\\\"value\\\\\\\":\\\\\\\"4\\\\\\\"}\\\"}], \\\"hpa-feature\\\": \\\"numa\\\", \\\"hpa-capability-id\\\": \\\"167ad6a2-7d9c-4bf2-9a1b-30e5311b8c66\\\", \\\"hpa-version\\\": \\\"v1\\\", \\\"architecture\\\": \\\"generic\\\", \\\"resource-version\\\": \\\"1522168579329\\\"}, {\\\"hpa-feature-attributes\\\": [{\\\"hpa-attribute-key\\\": \\\"instructionSetExtensions\\\", \\\"resource-version\\\": \\\"1522168579312\\\", \\\"hpa-attribute-value\\\": \\\"{\\\\\\\"value\\\\\\\": [\\\\\\\"aes\\\\\\\", \\\\\\\"sse\\\\\\\", \\\\\\\"avx\\\\\\\", \\\\\\\"smt\\\\\\\"]}\\\"}], \\\"hpa-feature\\\": \\\"instructionSetExtensions\\\", \\\"hpa-capability-id\\\": \\\"01a4bfe1-1993-4fda-bd1c-ef333b4f76a9\\\", \\\"hpa-version\\\": \\\"v1\\\", \\\"architecture\\\": \\\"Intel64\\\", \\\"resource-version\\\": \\\"1522168579307\\\"}, {\\\"hpa-feature-attributes\\\": [{\\\"hpa-attribute-key\\\": \\\"numVirtualCpu\\\", \\\"resource-version\\\": \\\"1522168579267\\\", \\\"hpa-attribute-value\\\": \\\"{\\\\\\\"value\\\\\\\":\\\\\\\"64\\\\\\\"}\\\"}, {\\\"hpa-attribute-key\\\": \\\"virtualMemSize\\\", \\\"resource-version\\\": \\\"1522168579287\\\", \\\"hpa-attribute-value\\\": \\\"{\\\\\\\"value\\\\\\\":\\\\\\\"65536\\\\\\\", \\\\\\\"unit\\\\\\\":\\\\\\\"MB\\\\\\\" }\\\"}], \\\"hpa-feature\\\": \\\"basicCapabilities\\\", \\\"hpa-capability-id\\\": \\\"13ec6d4d-7fee-48d8-9e4a-c598feb101ed\\\", \\\"hpa-version\\\": \\\"v1\\\", \\\"architecture\\\": \\\"generic\\\", \\\"resource-version\\\": \\\"1522168579230\\\"}]}, \\\"flavor-is-public\\\": false, \\\"flavor-disabled\\\": false, \\\"flavor-id\\\": \\\"9cf8220b-4d96-4c30-a426-2e9382f3fff2\\\", \\\"flavor-vcpus\\\": 64, \\\"flavor-swap\\\": \\\"0\\\", \\\"flavor-ephemeral\\\": 128, \\\"resource-version\\\": \\\"1522168579162\\\", \\\"flavor-ram\\\": 65536, \\\"flavor-name\\\": \\\"flavor-numa-cpu-topology-instruction-set\\\", \\\"flavor-selflink\\\": \\\"pXtX\\\", \\\"flavor-disk\\\": 1048576}, {\\\"hpa-capabilities\\\": {\\\"hpa-capability\\\": [{\\\"hpa-feature-attributes\\\": [{\\\"hpa-attribute-key\\\": \\\"virtualMemSize\\\", \\\"resource-version\\\": \\\"1522168580345\\\", \\\"hpa-attribute-value\\\": \\\"{\\\\\\\"value\\\\\\\":\\\\\\\"131072\\\\\\\", \\\\\\\"unit\\\\\\\":\\\\\\\"MB\\\\\\\" }\\\"}, {\\\"hpa-attribute-key\\\": \\\"numVirtualCpu\\\", \\\"resource-version\\\": \\\"1522168580370\\\", \\\"hpa-attribute-value\\\": \\\"{\\\\\\\"value\\\\\\\":\\\\\\\"32\\\\\\\"}\\\"}], \\\"hpa-feature\\\": \\\"basicCapabilities\\\", \\\"hpa-capability-id\\\": \\\"4565615b-1077-4bb5-a340-c5be48db2aaa\\\", \\\"hpa-version\\\": \\\"v1\\\", \\\"architecture\\\": \\\"generic\\\", \\\"resource-version\\\": \\\"1522168580334\\\"}, {\\\"hpa-feature-attributes\\\": [{\\\"hpa-attribute-key\\\": \\\"dataProcessingAccelerationLibrary\\\", \\\"resource-version\\\": \\\"1522168580148\\\", \\\"hpa-attribute-value\\\": \\\"{\\\\\\\"value\\\\\\\":\\\\\\\"v18.02\\\\\\\"}\\\"}], \\\"hpa-feature\\\": \\\"ovsDpdk\\\", \\\"hpa-capability-id\\\": \\\"8d36a8fe-bfee-446a-bbcb-881ee66c8f78\\\", \\\"hpa-version\\\": \\\"v1\\\", \\\"architecture\\\": \\\"generic\\\", \\\"resource-version\\\": \\\"1522168580135\\\"}, {\\\"hpa-feature-attributes\\\": [{\\\"hpa-attribute-key\\\": \\\"instructionSetExtensions\\\", \\\"resource-version\\\": \\\"1522168580282\\\", \\\"hpa-attribute-value\\\": \\\"{\\\\\\\"value\\\\\\\":[\\\\\\\"aes\\\\\\\", \\\\\\\"avx\\\\\\\"]}\\\"}], \\\"hpa-feature\\\": \\\"instructionSetExtensions\\\", \\\"hpa-capability-id\\\": \\\"4d04f4d8-e257-4442-8417-19a525e56096\\\", \\\"hpa-version\\\": \\\"v1\\\", \\\"architecture\\\": \\\"generic\\\", \\\"resource-version\\\": \\\"1522168580249\\\"}, {\\\"hpa-feature-attributes\\\": [{\\\"hpa-attribute-key\\\": \\\"logicalCpuPinningPolicy\\\", \\\"resource-version\\\": \\\"1522168580205\\\", \\\"hpa-attribute-value\\\": \\\"{\\\\\\\"value\\\\\\\":\\\\\\\"dedicated\\\\\\\"}\\\"}, {\\\"hpa-attribute-key\\\": \\\"logicalCpuThreadPinningPolicy\\\", \\\"resource-version\\\": \\\"1522168580223\\\", \\\"hpa-attribute-value\\\": \\\"{value:\\\\\\\"prefer\\\\\\\"}\\\"}], \\\"hpa-feature\\\": \\\"cpuPinning\\\", \\\"hpa-capability-id\\\": \\\"c140c945-1532-4908-86c9-d7f71416f1dd\\\", \\\"hpa-version\\\": \\\"v1\\\", \\\"architecture\\\": \\\"generic\\\", \\\"resource-version\\\": \\\"1522168580195\\\"}]}, \\\"flavor-is-public\\\": false, \\\"flavor-disabled\\\": false, \\\"flavor-id\\\": \\\"f5aa2b2e-3206-41b6-80d5-cf041b098c43\\\", \\\"flavor-vcpus\\\": 32, \\\"flavor-swap\\\": \\\"0\\\", \\\"flavor-ephemeral\\\": 128, \\\"resource-version\\\": \\\"1522168579450\\\", \\\"flavor-ram\\\": 131072, \\\"flavor-name\\\": \\\"flavor-cpu-pinning-ovsdpdk-instruction-set\\\", \\\"flavor-selflink\\\": \\\"pXtX\\\", \\\"flavor-disk\\\": 2097152}]}, \\\"city\\\": \\\"Dallas\\\", \\\"service_resource_id\\\": \\\"\\\", \\\"existing_placement\\\": \\\"false\\\", \\\"country\\\": \\\"USA\\\", \\\"inventory_provider\\\": \\\"aai\\\", \\\"inventory_type\\\": \\\"cloud\\\", \\\"longitude\\\": \\\"-97.045443\\\", \\\"sriov_automation\\\": \\\"false\\\", \\\"state\\\": \\\"TX\\\", \\\"cost\\\": \\\"2\\\", \\\"vim-id\\\": \\\"HPA-cloud_cloud-region-1\\\", \\\"candidate_id\\\": \\\"cloud-region-1\\\", \\\"cloud_region_version\\\": \\\"75919\\\", \\\"latitude\\\": \\\"32.89948\\\", \\\"cloud_owner\\\": \\\"HPA-cloud\\\", \\\"complex_name\\\": \\\"example-complex-name-val-62100\\\", \\\"region\\\": \\\"USA\\\", \\\"location_id\\\": \\\"cloud-region-1\\\", \\\"location_type\\\": \\\"att_aic\\\", \\\"physical_location_id\\\": \\\"DLLSTX233\\\"}, {\\\"flavors\\\": {\\\"flavor\\\": [{\\\"hpa-capabilities\\\": {\\\"hpa-capability\\\": [{\\\"hpa-feature-attributes\\\": [{\\\"hpa-attribute-key\\\": \\\"virtualMemSize\\\", \\\"resource-version\\\": \\\"1522168631596\\\", \\\"hpa-attribute-value\\\": \\\"{\\\\\\\"value\\\\\\\":\\\\\\\"65536\\\\\\\", \\\\\\\"unit\\\\\\\":\\\\\\\"MB\\\\\\\" }\\\"}, {\\\"hpa-attribute-key\\\": \\\"numVirtualCpu\\\", \\\"resource-version\\\": \\\"1522168631587\\\", \\\"hpa-attribute-value\\\": \\\"{\\\\\\\"value\\\\\\\":\\\\\\\"32\\\\\\\"}\\\"}], \\\"hpa-feature\\\": \\\"basicCapabilities\\\", \\\"hpa-capability-id\\\": \\\"23ec6d4d-7fee-48d8-9e4a-c598feb101ed\\\", \\\"hpa-version\\\": \\\"v1\\\", \\\"architecture\\\": \\\"generic\\\", \\\"resource-version\\\": \\\"1522168631582\\\"}, {\\\"hpa-feature-attributes\\\": [{\\\"hpa-attribute-key\\\": \\\"numCpuSockets\\\", \\\"resource-version\\\": \\\"1522168631642\\\", \\\"hpa-attribute-value\\\": \\\"{\\\\\\\"value\\\\\\\":\\\\\\\"2\\\\\\\"}\\\"}, {\\\"hpa-attribute-key\\\": \\\"numCpuCores\\\", \\\"resource-version\\\": \\\"1522168631633\\\", \\\"hpa-attribute-value\\\": \\\"{\\\\\\\"value\\\\\\\":\\\\\\\"16\\\\\\\"}\\\"}, {\\\"hpa-attribute-key\\\": \\\"numCpuThreads\\\", \\\"resource-version\\\": \\\"1522168631652\\\", \\\"hpa-attribute-value\\\": \\\"{\\\\\\\"value\\\\\\\":\\\\\\\"8\\\\\\\"}\\\"}], \\\"hpa-feature\\\": \\\"cpuTopology\\\", \\\"hpa-capability-id\\\": \\\"9fa22e64-41b4-471f-96ad-6c4708635e4c\\\", \\\"hpa-version\\\": \\\"v1\\\", \\\"architecture\\\": \\\"generic\\\", \\\"resource-version\\\": \\\"1522168631630\\\"}, {\\\"hpa-feature-attributes\\\": [{\\\"hpa-attribute-key\\\": \\\"instructionSetExtensions\\\", \\\"resource-version\\\": \\\"1522168631615\\\", \\\"hpa-attribute-value\\\": \\\"{\\\\\\\"value\\\\\\\": [\\\\\\\"aes\\\\\\\", \\\\\\\"sse\\\\\\\", \\\\\\\"avx\\\\\\\", \\\\\\\"smt\\\\\\\"]}\\\"}], \\\"hpa-feature\\\": \\\"instructionSetExtensions\\\", \\\"hpa-capability-id\\\": \\\"01a4bfe1-1993-4fda-bd1c-ef333b4f76a9\\\", \\\"hpa-version\\\": \\\"v1\\\", \\\"architecture\\\": \\\"Intel64\\\", \\\"resource-version\\\": \\\"1522168631611\\\"}]}, \\\"flavor-is-public\\\": false, \\\"flavor-disabled\\\": false, \\\"flavor-id\\\": \\\"acf8220b-4d96-4c30-a426-2e9382f3fff2\\\", \\\"flavor-vcpus\\\": 32, \\\"flavor-swap\\\": \\\"0\\\", \\\"flavor-ephemeral\\\": 128, \\\"resource-version\\\": \\\"1522168631576\\\", \\\"flavor-ram\\\": 65536, \\\"flavor-name\\\": \\\"flavor-cpu-topology-instruction-set\\\", \\\"flavor-selflink\\\": \\\"pXtX\\\", \\\"flavor-disk\\\": 1048576}, {\\\"hpa-capabilities\\\": {\\\"hpa-capability\\\": [{\\\"hpa-feature-attributes\\\": [{\\\"hpa-attribute-key\\\": \\\"dataProcessingAccelerationLibrary\\\", \\\"resource-version\\\": \\\"1522168631678\\\", \\\"hpa-attribute-value\\\": \\\"{\\\\\\\"value\\\\\\\":\\\\\\\"v17.02\\\\\\\"}\\\"}], \\\"hpa-feature\\\": \\\"ovsDpdk\\\", \\\"hpa-capability-id\\\": \\\"9d36a8fe-bfee-446a-bbcb-881ee66c8f78\\\", \\\"hpa-version\\\": \\\"v1\\\", \\\"architecture\\\": \\\"generic\\\", \\\"resource-version\\\": \\\"1522168631675\\\"}, {\\\"hpa-feature-attributes\\\": [{\\\"hpa-attribute-key\\\": \\\"logicalCpuThreadPinningPolicy\\\", \\\"resource-version\\\": \\\"1522168631704\\\", \\\"hpa-attribute-value\\\": \\\"{value:\\\\\\\"prefer\\\\\\\"}\\\"}, {\\\"hpa-attribute-key\\\": \\\"logicalCpuPinningPolicy\\\", \\\"resource-version\\\": \\\"1522168631695\\\", \\\"hpa-attribute-value\\\": \\\"{\\\\\\\"value\\\\\\\":\\\\\\\"dedicated\\\\\\\"}\\\"}], \\\"hpa-feature\\\": \\\"cpuPinning\\\", \\\"hpa-capability-id\\\": \\\"d140c945-1532-4908-86c9-d7f71416f1dd\\\", \\\"hpa-version\\\": \\\"v1\\\", \\\"architecture\\\": \\\"generic\\\", \\\"resource-version\\\": \\\"1522168631691\\\"}, {\\\"hpa-feature-attributes\\\": [{\\\"hpa-attribute-key\\\": \\\"instructionSetExtensions\\\", \\\"resource-version\\\": \\\"1522168631721\\\", \\\"hpa-attribute-value\\\": \\\"{\\\\\\\"value\\\\\\\": [\\\\\\\"avx\\\\\\\", \\\\\\\"smt\\\\\\\"]}\\\"}], \\\"hpa-feature\\\": \\\"instructionSetExtensions\\\", \\\"hpa-capability-id\\\": \\\"01a4bfe1-1993-4fda-bd1c-ef333b4f76a9\\\", \\\"hpa-version\\\": \\\"v1\\\", \\\"architecture\\\": \\\"Intel64\\\", \\\"resource-version\\\": \\\"1522168631718\\\"}, {\\\"hpa-feature-attributes\\\": [{\\\"hpa-attribute-key\\\": \\\"virtualMemSize\\\", \\\"resource-version\\\": \\\"1522168631739\\\", \\\"hpa-attribute-value\\\": \\\"{\\\\\\\"value\\\\\\\":\\\\\\\"131072\\\\\\\", \\\\\\\"unit\\\\\\\":\\\\\\\"MB\\\\\\\" }\\\"}, {\\\"hpa-attribute-key\\\": \\\"numVirtualCpu\\\", \\\"resource-version\\\": \\\"1522168631747\\\", \\\"hpa-attribute-value\\\": \\\"{\\\\\\\"value\\\\\\\":\\\\\\\"32\\\\\\\"}\\\"}], \\\"hpa-feature\\\": \\\"basicCapabilities\\\", \\\"hpa-capability-id\\\": \\\"5565615b-1077-4bb5-a340-c5be48db2aaa\\\", \\\"hpa-version\\\": \\\"v1\\\", \\\"architecture\\\": \\\"generic\\\", \\\"resource-version\\\": \\\"1522168631735\\\"}]}, \\\"flavor-is-public\\\": false, \\\"flavor-disabled\\\": false, \\\"flavor-id\\\": \\\"e5aa2b2e-3206-41b6-80d5-cf041b098c43\\\", \\\"flavor-vcpus\\\": 32, \\\"flavor-swap\\\": \\\"0\\\", \\\"flavor-ephemeral\\\": 128, \\\"resource-version\\\": \\\"1522168631670\\\", \\\"flavor-ram\\\": 131072, \\\"flavor-name\\\": \\\"flavor-cpu-pinning-ovsdpdk-instruction-set\\\", \\\"flavor-selflink\\\": \\\"pXtX\\\", \\\"flavor-disk\\\": 2097152}]}, \\\"city\\\": \\\"Dallas\\\", \\\"service_resource_id\\\": \\\"\\\", \\\"existing_placement\\\": \\\"false\\\", \\\"country\\\": \\\"USA\\\", \\\"inventory_provider\\\": \\\"aai\\\", \\\"inventory_type\\\": \\\"cloud\\\", \\\"longitude\\\": \\\"-97.045443\\\", \\\"sriov_automation\\\": \\\"false\\\", \\\"state\\\": \\\"TX\\\", \\\"cost\\\": \\\"2\\\", \\\"vim-id\\\": \\\"HPA-cloud_cloud-region-2\\\", \\\"candidate_id\\\": \\\"cloud-region-2\\\", \\\"cloud_region_version\\\": \\\"75919\\\", \\\"latitude\\\": \\\"32.89948\\\", \\\"cloud_owner\\\": \\\"HPA-cloud\\\", \\\"complex_name\\\": \\\"example-complex-name-val-62100\\\", \\\"region\\\": \\\"USA\\\", \\\"location_id\\\": \\\"cloud-region-2\\\", \\\"location_type\\\": \\\"att_aic\\\", \\\"physical_location_id\\\": \\\"DLLSTX233\\\"}]}}, \\\"reservations\\\": {}, \\\"locations\\\": {\\\"customer_loc\\\": {\\\"latitude\\\": 32.89748, \\\"longitude\\\": -97.040443}}, \\\"request_type\\\": \\\"\\\", \\\"version\\\": \\\"2017-10-10\\\", \\\"objective\\\": {\\\"operation\\\": \\\"sum\\\", \\\"goal\\\": \\\"min\\\", \\\"operands\\\": [{\\\"function\\\": \\\"distance_between\\\", \\\"function_param\\\": [\\\"customer_loc\\\", \\\"vG\\\"], \\\"operation\\\": \\\"product\\\", \\\"weight\\\": 1.0}, {\\\"function\\\": \\\"distance_between\\\", \\\"function_param\\\": [\\\"customer_loc\\\", \\\"vG\\\"], \\\"operation\\\": \\\"product\\\", \\\"weight\\\": 1.0}]}, \\\"constraints\\\": {\\\"constraint_vg_customer_vG\\\": {\\\"demands\\\": \\\"vG\\\", \\\"type\\\": \\\"distance_to_location\\\", \\\"properties\\\": {\\\"distance\\\": {\\\"operator\\\": \\\"<\\\", \\\"units\\\": \\\"km\\\", \\\"value\\\": 5000.0}, \\\"location\\\": \\\"customer_loc\\\"}, \\\"name\\\": \\\"constraint_vg_customer\\\"}}}}\",\"id\":\"f1094be4-2c7d-4786-9bf8-b1e1f874a58d\",\"updated\":1522335424402,\"reservation_owner\":\"{}\",\"status\":\"solved\"},\"row 3\":{\"template\":\"{\\\"parameters\\\": {\\\"REQUIRED_DISK\\\": 100, \\\"customer_lat\\\": 32.89748, \\\"service_name\\\": \\\"Residential vCPE\\\", \\\"customer_long\\\": -97.040443, \\\"service_id\\\": \\\"vcpe_service_id\\\", \\\"REQUIRED_MEM\\\": 4, \\\"pnf_id\\\": \\\"some_pnf_id\\\"}, \\\"demands\\\": {\\\"vGMuxInfra\\\": [{\\\"excluded_candidates\\\": [{\\\"candidate_id\\\": \\\"1ac71fb8-ad43-4e16-9459-c3f372b8236d\\\"}], \\\"attributes\\\": {\\\"equipment_type\\\": \\\"vG_Mux\\\", \\\"customer_id\\\": \\\"some_company\\\"}, \\\"inventory_provider\\\": \\\"aai\\\", \\\"inventory_type\\\": \\\"service\\\", \\\"existing_placement\\\": [{\\\"candidate_id\\\": \\\"21d5f3e8-e714-4383-8f99-cc480144505a\\\"}]}], \\\"vG\\\": [{\\\"inventory_provider\\\": \\\"aai\\\", \\\"inventory_type\\\": \\\"cloud\\\"}]}, \\\"locations\\\": {\\\"brg_loc\\\": {\\\"pnf_host_name\\\": {\\\"get_param\\\": \\\"pnf_id\\\"}}, \\\"customer_loc\\\": {\\\"latitude\\\": {\\\"get_param\\\": \\\"customer_lat\\\"}, \\\"longitude\\\": {\\\"get_param\\\": \\\"customer_long\\\"}}}, \\\"optimization\\\": {\\\"minimize\\\": {\\\"sum\\\": [{\\\"distance_between\\\": [\\\"customer_loc\\\", \\\"vGMuxInfra\\\"]}, {\\\"distance_between\\\": [\\\"customer_loc\\\", \\\"vG\\\"]}]}}, \\\"homing_template_version\\\": \\\"2017-10-10\\\", \\\"constraints\\\": {\\\"colocation\\\": {\\\"type\\\": \\\"zone\\\", \\\"properties\\\": {\\\"category\\\": \\\"region\\\", \\\"qualifier\\\": \\\"same\\\"}, \\\"demands\\\": [\\\"vGMuxInfra\\\", \\\"vG\\\"]}, \\\"constraint_vgmux_customer\\\": {\\\"type\\\": \\\"distance_to_location\\\", \\\"properties\\\": {\\\"distance\\\": \\\"< 100 km\\\", \\\"location\\\": \\\"customer_loc\\\"}, \\\"demands\\\": [\\\"vGMuxInfra\\\"]}, \\\"hpa_constraint\\\": {\\\"type\\\": \\\"hpa\\\", \\\"properties\\\": {\\\"evaluate\\\": [{\\\"flavorProperties\\\": [{\\\"hpa-version\\\": \\\"v1\\\", \\\"hpa-feature-attributes\\\": [{\\\"operator\\\": \\\"=\\\", \\\"hpa-attribute-key\\\": \\\"numVirtualCpu\\\", \\\"hpa-attribute-value\\\": \\\"4\\\"}, {\\\"operator\\\": \\\"=\\\", \\\"hpa-attribute-key\\\": \\\"virtualMemSize\\\", \\\"unit\\\": \\\"GB\\\", \\\"hpa-attribute-value\\\": \\\"4\\\"}], \\\"architecture\\\": \\\"generic\\\", \\\"hpa-feature\\\": \\\"basicCapabilities\\\"}, {\\\"hpa-version\\\": \\\"v1\\\", \\\"hpa-feature-attributes\\\": [{\\\"operator\\\": \\\"=\\\", \\\"hpa-attribute-key\\\": \\\"numaNodes\\\", \\\"hpa-attribute-value\\\": \\\"2\\\"}, {\\\"operator\\\": \\\"=\\\", \\\"hpa-attribute-key\\\": \\\"numaCpu-0\\\", \\\"hpa-attribute-value\\\": \\\"2\\\"}, {\\\"operator\\\": \\\"=\\\", \\\"hpa-attribute-key\\\": \\\"numaCpu-1\\\", \\\"hpa-attribute-value\\\": \\\"4\\\"}, {\\\"operator\\\": \\\"=\\\", \\\"hpa-attribute-key\\\": \\\"numaMem-0\\\", \\\"unit\\\": \\\"GB\\\", \\\"hpa-attribute-value\\\": \\\"2\\\"}, {\\\"operator\\\": \\\"=\\\", \\\"hpa-attribute-key\\\": \\\"numaMem-1\\\", \\\"unit\\\": \\\"GB\\\", \\\"hpa-attribute-value\\\": \\\"4\\\"}], \\\"architecture\\\": \\\"generic\\\", \\\"hpa-feature\\\": \\\"numa\\\"}, {\\\"hpa-version\\\": \\\"v1\\\", \\\"hpa-feature-attributes\\\": [{\\\"operator\\\": \\\"=\\\", \\\"hpa-attribute-key\\\": \\\"logicalCpuThreadPinningPolicy\\\", \\\"hpa-attribute-value\\\": \\\"prefer\\\"}, {\\\"operator\\\": \\\"=\\\", \\\"hpa-attribute-key\\\": \\\"logicalCpuPinningPolicy\\\", \\\"hpa-attribute-value\\\": \\\"dedicated\\\"}], \\\"architecture\\\": \\\"generic\\\", \\\"hpa-feature\\\": \\\"cpuPinning\\\"}], \\\"flavorLabel\\\": \\\"flavor_label_1\\\"}, {\\\"flavorProperties\\\": [{\\\"hpa-version\\\": \\\"v1\\\", \\\"hpa-feature-attributes\\\": [{\\\"operator\\\": \\\"=\\\", \\\"hpa-attribute-key\\\": \\\"numVirtualCpu\\\", \\\"hpa-attribute-value\\\": \\\"8\\\"}, {\\\"operator\\\": \\\"=\\\", \\\"hpa-attribute-key\\\": \\\"virtualMemSize\\\", \\\"unit\\\": \\\"GB\\\", \\\"hpa-attribute-value\\\": \\\"16\\\"}], \\\"architecture\\\": \\\"generic\\\", \\\"hpa-feature\\\": \\\"basicCapabilities\\\"}, {\\\"hpa-version\\\": \\\"v1\\\", \\\"hpa-feature-attributes\\\": [{\\\"operator\\\": \\\"=\\\", \\\"hpa-attribute-key\\\": \\\"numaNodes\\\", \\\"hpa-attribute-value\\\": \\\"2\\\"}, {\\\"operator\\\": \\\"=\\\", \\\"hpa-attribute-key\\\": \\\"numaCpu-0\\\", \\\"hpa-attribute-value\\\": \\\"2\\\"}, {\\\"operator\\\": \\\"=\\\", \\\"hpa-attribute-key\\\": \\\"numaCpu-1\\\", \\\"hpa-attribute-value\\\": \\\"4\\\"}, {\\\"operator\\\": \\\"=\\\", \\\"hpa-attribute-key\\\": \\\"numaMem-0\\\", \\\"unit\\\": \\\"GB\\\", \\\"hpa-attribute-value\\\": \\\"2\\\"}, {\\\"operator\\\": \\\"=\\\", \\\"hpa-attribute-key\\\": \\\"numaMem-1\\\", \\\"unit\\\": \\\"GB\\\", \\\"hpa-attribute-value\\\": \\\"4\\\"}], \\\"architecture\\\": \\\"generic\\\", \\\"hpa-feature\\\": \\\"numa\\\"}, {\\\"hpa-version\\\": \\\"v1\\\", \\\"hpa-feature-attributes\\\": [{\\\"operator\\\": \\\"=\\\", \\\"hpa-attribute-key\\\": \\\"memoryPageSize\\\", \\\"unit\\\": \\\"GB\\\", \\\"hpa-attribute-value\\\": \\\"2\\\"}], \\\"architecture\\\": \\\"generic\\\", \\\"hpa-feature\\\": \\\"memoryPageSize\\\"}], \\\"flavorLabel\\\": \\\"flavor_label_2\\\"}]}, \\\"demands\\\": [\\\"vG\\\"]}}}\",\"translation_counter\":1,\"created\":1522336266482,\"message\":\"Location brg_loc has an invalid key pnf_host_name\",\"solver_owner\":\"{}\",\"timeout\":5,\"translation_owner\":\"shci-pci-2\",\"solution\":\"{}\",\"recommend_max\":3,\"solver_counter\":0,\"name\":\"vCPE-with-HPA\",\"reservation_counter\":0,\"translation\":\"{}\",\"id\":\"774a2fa5-b04b-42cb-8b3b-e958c648506e\",\"updated\":1522336269153,\"reservation_owner\":\"{}\",\"status\":\"error\"}}"
+						}
+					]
+				},
+				{
+					"name": "Version Test",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{music}}/MUSIC/rest/version",
+							"host": [
+								"{{music}}"
+							],
+							"path": [
+								"MUSIC",
+								"rest",
+								"version"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"auth": {
+		"type": "basic",
+		"basic": [
+			{
+				"key": "password",
+				"value": "plan.15",
+				"type": "string"
+			},
+			{
+				"key": "username",
+				"value": "admin1",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"id": "d43e4971-494a-467a-b867-c544f609df40",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"id": "64aca1f5-a33a-446e-9f67-7c3bdfbc0a36",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"id": "d7f1f115-6ac0-4d58-a8ae-46a0a7da31fe",
+			"key": "conductor_root",
+			"value": "http://{{host}}:{{port}}",
+			"type": "string"
+		},
+		{
+			"id": "4048fa49-8223-471a-a6d6-981597e9d80b",
+			"key": "music",
+			"value": "http://{{music_host}}:{{music_port}}",
+			"type": "string"
+		},
+		{
+			"id": "afb0f26e-5782-447d-ab31-0337337d4154",
+			"key": "conductor",
+			"value": "{{conductor_root}}/{{version}}",
+			"type": "string"
+		},
+		{
+			"id": "a420ddaa-cc65-4a49-ba05-18f0fad559f8",
+			"key": "version",
+			"value": "v1",
+			"type": "string"
+		},
+		{
+			"id": "507cb8bf-0048-4ea8-8c4e-eecd8b6597a4",
+			"key": "Accept",
+			"value": "application/json",
+			"type": "string"
+		},
+		{
+			"id": "74aa1443-2e9e-45f3-a1fa-f54dfbc47b01",
+			"key": "host",
+			"value": "localhost",
+			"type": "string"
+		},
+		{
+			"id": "ded8d618-c747-4976-b3a8-86adc9d6f968",
+			"key": "port",
+			"value": "8091",
+			"type": "string"
+		},
+		{
+			"id": "1d1c6892-96cd-498e-9065-1ae693670acc",
+			"key": "music_host",
+			"value": "localhost",
+			"type": "string"
+		},
+		{
+			"id": "c19944d3-dbb2-4e6a-bf93-a4295e4dc1ab",
+			"key": "music_port",
+			"value": "8081",
+			"type": "string"
+		}
+	]
+}
