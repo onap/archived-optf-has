@@ -2,12 +2,12 @@
 
 Optimization Framework: Homing and Allocation
 =============================================
-Shankaranarayanan Puzhavakath Narayanan
-Apr 30 10:52 PM
+
 OOF-HAS is an policy-driven placement optimizing service (or homing service) that allows ONAP to 
 deploy services automatically across multiple sites and multiple clouds. 
 It enables placement based on a wide variety of policy constraints including capacity, 
 location, platform capabilities, and other service specific constraints. 
+
 HAS is a distributed resource broker that enables automated policy-driven optimized placement of 
 services on a global heterogeneous platform using ONAP. Given a set of service components 
 (based on SO decomposition flows) and requirements for placing these components 
