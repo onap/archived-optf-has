@@ -1,8 +1,13 @@
 .. This work is licensed under a Creative Commons Attribution 4.0 International License.
+
+Offered APIs
+=============================================
+
+.. This work is licensed under a Creative Commons Attribution 4.0 International License.
 .. Copyright (C) 2017-2018 AT&T Intellectual Property. All rights reserved.
 
 Homing API v1
-=============
+------------------
 
 *Updated: 28 Feb 2018*
 
@@ -10,7 +15,7 @@ This document describes the Homing API, provided by the Homing and Allocation se
 It is a work in progress and subject to frequent revision.
 
 General API Information
-=======================
+------------------
 
 Authenticated calls that target a known URI but that use an HTTP method
 the implementation does not support return a 405 Method Not Allowed
@@ -20,7 +25,7 @@ HTTP methods. See the API Errors section for more information about the
 error response structure.
 
 API versions
-============
+------------------
 
 List all Homing API versions
 ----------------------------
@@ -61,7 +66,7 @@ List all Homing API versions
 This operation does not accept a request body.
 
 Plans
-=====
+------------------
 
 Create a plan
 -------------
