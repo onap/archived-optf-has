@@ -71,6 +71,12 @@ AAI_OPTS = [
                help='Certificate Authority Bundle file in pem format. '
                     'Must contain the appropriate trust chain for the '
                     'Certificate file.'),
+    cfg.StrOpt('username',
+               default='OOF',
+               help='Username for AAI.'),
+    cfg.StrOpt('password',
+               default='OOF',
+               help='Password for AAI.'),
 ]
 
 CONF.register_opts(AAI_OPTS, group='aai')
@@ -97,6 +103,8 @@ class AAI(base.InventoryProviderBase):
         self.complex_last_refresh_time = None
         self.timeout = self.conf.aai.aai_rest_timeout
         self.retries = self.conf.aai.aai_retries
+        self.username = self.conf.aai.username
+        self.password = self.conf.aai.password
 
         # Cache is initially empty
         self._aai_cache = {}
@@ -172,6 +180,8 @@ class AAI(base.InventoryProviderBase):
         kwargs = {
             "server_url": self.base,
             "retries": self.retries,
+            "username": self.username,
+            "password": self.password,
             "cert_file": self.cert,
             "cert_key_file": self.key,
             "ca_bundle_file": self.verify,
