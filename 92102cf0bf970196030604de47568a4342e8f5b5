@@ -72,6 +72,24 @@
     },
     {
       "key": {
+        "uuid": "5a93c517_6697db3a",
+        "filename": "run-dockers.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 285
+      },
+      "writtenOn": "2018-05-11T19:08:06Z",
+      "side": 1,
+      "message": "This is not AAI cert as such but it is AAF root CA key. But it is used with AAI as you mentioned. I\u0027m ok with any names OOF team decides but the original name makes it obvious as to what is being done here. Other projects are also doing something similar.",
+      "parentUuid": "5a93c517_c6a6efc0",
+      "revId": "92102cf0bf970196030604de47568a4342e8f5b5",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5a93c517_06137701",
         "filename": "run-dockers.sh",
         "patchSetId": 2
