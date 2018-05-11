@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a93c517_6624bb5f",
+        "filename": "conductor/conductor/data/plugins/inventory_provider/aai.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 1739
+      },
+      "writtenOn": "2018-05-11T18:45:25Z",
+      "side": 1,
+      "message": "Please remove username/passwords from code. Properly handle in cases where these are not provided in the conductor.conf file.",
+      "revId": "92102cf0bf970196030604de47568a4342e8f5b5",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a93c517_26223352",
+        "filename": "run-dockers.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1739
+      },
+      "writtenOn": "2018-05-11T18:45:25Z",
+      "side": 1,
+      "message": "Is this new CERT file for AAI?",
+      "revId": "92102cf0bf970196030604de47568a4342e8f5b5",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a93c517_06137701",
+        "filename": "run-dockers.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1739
+      },
+      "writtenOn": "2018-05-11T18:45:25Z",
+      "side": 1,
+      "message": "This new cert file is for AAI? The data component needs AAI cert.",
+      "revId": "92102cf0bf970196030604de47568a4342e8f5b5",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
