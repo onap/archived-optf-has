@@ -54,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "5a93c517_c6a6efc0",
+        "filename": "run-dockers.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1739
+      },
+      "writtenOn": "2018-05-11T19:01:39Z",
+      "side": 1,
+      "message": "So this \u0027IS\u0027 an AAI cert. Can we not keep the older name to be explicit? Extension may change (assuming certs are tested and data will work with .cer extension as well) - can we not keep the same aai_ca_bundle name for this file? The older file may be overriden (if that is the question in mind).",
+      "parentUuid": "5a93c517_86dea73c",
+      "revId": "92102cf0bf970196030604de47568a4342e8f5b5",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5a93c517_06137701",
         "filename": "run-dockers.sh",
         "patchSetId": 2
