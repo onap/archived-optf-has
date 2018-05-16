@@ -74,8 +74,8 @@ class HpaMatchProvider(object):
             try:
                 flavor_cap_list = flavor['hpa-capabilities']
             except KeyError:
-                LOG.info(_LI("invalid JSON "))
-                return None
+                LOG.info(_LI("hpa-capabilities not found in flavor "))
+                continue
             for capability in CapabilityDataParser.get_item(flavor_cap_list,
                                                             'hpa-capability'):
                 hpa_list = {k: capability.item[k] \
