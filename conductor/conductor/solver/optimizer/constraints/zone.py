@@ -34,6 +34,7 @@ class Zone(Constraint):
 
         self.qualifier = _qualifier  # different or same
         self.category = _category  # disaster, region, or update
+        self.location = _location
         self.comparison_operator = None
 
         if self.qualifier == "same":
