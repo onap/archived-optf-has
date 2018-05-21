@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a93c517_b17428ff",
+        "filename": "conductor/conductor/data/plugins/inventory_provider/aai.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 1171,
+      "author": {
+        "id": 2041
+      },
+      "writtenOn": "2018-05-21T19:56:31Z",
+      "side": 1,
+      "message": "LOG.error perhaps ? Since this would already mean ps_link was absent and the cloud region information is also missing.",
+      "range": {
+        "startLine": 1171,
+        "startChar": 40,
+        "endLine": 1171,
+        "endChar": 45
+      },
+      "revId": "3a5acb2841f9b9da14586fd76ef67b5c00f9d32d",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a93c517_f16ab01a",
+        "filename": "conductor/conductor/data/plugins/inventory_provider/aai.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 1185,
+      "author": {
+        "id": 2041
+      },
+      "writtenOn": "2018-05-21T19:56:31Z",
+      "side": 1,
+      "message": "Please confirm that the body looking similar in terms of the complex and other structures that we look for within it: \n\nEspecially, \n(a) related_to \u003d \"complex\"\n search_key \u003d \"complex.physical-location-id\"\n\n(b) It has no more than one complex. If it has more than one complex it will trigger the following block:\n\nif len(complex_list) \u003e 1:\n                            if not self.match_vserver_attribute(complex_list):\n                                self._log_multiple_item_error(\n                                    name, service_type, related_to, search_key,\n                                    \"GENERIC-VNF\", vnf)\n                                continue",
+      "range": {
+        "startLine": 1185,
+        "startChar": 32,
+        "endLine": 1185,
+        "endChar": 36
+      },
+      "revId": "3a5acb2841f9b9da14586fd76ef67b5c00f9d32d",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
