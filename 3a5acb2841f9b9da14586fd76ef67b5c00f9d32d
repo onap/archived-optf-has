@@ -45,6 +45,30 @@
       "revId": "3a5acb2841f9b9da14586fd76ef67b5c00f9d32d",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a93c517_715ea07b",
+        "filename": "conductor/conductor/data/plugins/inventory_provider/aai.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 1185,
+      "author": {
+        "id": 285
+      },
+      "writtenOn": "2018-05-21T20:02:29Z",
+      "side": 1,
+      "message": "Hi Shankar for a) the body looks like what you mentioned.\nb) Yes this is an issue. I don\u0027t see a good solution for this. This would also mean that this workaround will not work in that situation as we have no way to determine which complex to pick",
+      "parentUuid": "5a93c517_f16ab01a",
+      "range": {
+        "startLine": 1185,
+        "startChar": 32,
+        "endLine": 1185,
+        "endChar": 36
+      },
+      "revId": "3a5acb2841f9b9da14586fd76ef67b5c00f9d32d",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
     }
   ]
 }
