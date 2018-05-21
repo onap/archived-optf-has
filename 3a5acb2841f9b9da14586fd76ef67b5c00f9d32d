@@ -69,6 +69,30 @@
       "revId": "3a5acb2841f9b9da14586fd76ef67b5c00f9d32d",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a93c517_515da478",
+        "filename": "conductor/conductor/data/plugins/inventory_provider/aai.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 1185,
+      "author": {
+        "id": 2041
+      },
+      "writtenOn": "2018-05-21T20:08:28Z",
+      "side": 1,
+      "message": "Logically, there shouldn\u0027t be more than one complex per cloud-region (this is basically an openstack instance), since a cloud-region resides within a complex in the AAI hierarchy. So I\u0027m guessing we can go with this assumption for now.",
+      "parentUuid": "5a93c517_715ea07b",
+      "range": {
+        "startLine": 1185,
+        "startChar": 32,
+        "endLine": 1185,
+        "endChar": 36
+      },
+      "revId": "3a5acb2841f9b9da14586fd76ef67b5c00f9d32d",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
     }
   ]
 }
