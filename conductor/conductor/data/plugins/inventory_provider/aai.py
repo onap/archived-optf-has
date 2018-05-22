@@ -1027,7 +1027,8 @@ class AAI(base.InventoryProviderBase):
                         for i in range(0, len(rl_data_list)):
                             vs_link_list.append(rl_data_list[i].get('link'))
 
-                        candidate['cloud_owner'] = rl_data.get('d_value')
+                        cloud_owner = rl_data.get('d_value')
+                        candidate['cloud_owner'] = cloud_owner
 
                         search_key = "cloud-region.cloud-region-id"
 
@@ -1163,22 +1164,38 @@ class AAI(base.InventoryProviderBase):
 
                             # Third level query to get cloud region from pserver
                             if not ps_link:
-                                LOG.error(_LE("{} pserver related link "
-                                              "not found in A&AI: {}").
+                                LOG.debug(_LE("{} pserver related link "
+                                              "not found in A&AI: {} using cloud-region ").
                                           format(name, rl_data))
-                                continue
-                            ps_path = self._get_aai_path_from_link(ps_link)
-                            if not ps_path:
-                                LOG.error(_LE("{} pserver path information "
-                                              "not found in A&AI: {}").
-                                          format(name, ps_link))
-                                continue  # move ahead with the next vnf
-                            path = self._aai_versioned_path(ps_path)
-                            response = self._request(
-                                path=path, context="PSERVER", value=ps_path)
-                            if response is None or response.status_code != 200:
-                                continue
-                            body = response.json()
+                                if not (cloud_owner and cloud_region_id):
+                                    LOG.debug("{} cloud-owner or cloud-region not "
+                                              "available from A&AI".
+                                              format(name))
+                                    continue  # move ahead with the next vnf
+                                cloud_region_uri = \
+                                    '/cloud-infrastructure/cloud-regions/cloud-region' \
+                                    '/?cloud-owner=' + cloud_owner\
+                                    + '&cloud-region-id=' + cloud_region_id
+                                path = self._aai_versioned_path(cloud_region_uri)
+                                response = self._request('get',
+                                                         path=path,
+                                                         data=None)
+                                if response is None or response.status_code != 200:
+                                    continue
+                                body = response.json()
+                            else:
+                                ps_path = self._get_aai_path_from_link(ps_link)
+                                if not ps_path:
+                                    LOG.error(_LE("{} pserver path information "
+                                                  "not found in A&AI: {}").
+                                              format(name, ps_link))
+                                    continue  # move ahead with the next vnf
+                                path = self._aai_versioned_path(ps_path)
+                                response = self._request(
+                                    path=path, context="PSERVER", value=ps_path)
+                                if response is None or response.status_code != 200:
+                                    continue
+                                body = response.json()
 
                             related_to = "complex"
                             search_key = "complex.physical-location-id"
