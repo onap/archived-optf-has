@@ -37,7 +37,7 @@ LOG = log.getLogger(__name__)
 
 CONF = cfg.CONF
 
-VERSIONS = ["2016-11-01", "2017-10-10"]
+VERSIONS = ["2016-11-01", "2017-10-10", "2018-02-01"]
 LOCATION_KEYS = ['latitude', 'longitude', 'host_name', 'clli_code']
 INVENTORY_PROVIDERS = ['aai']
 INVENTORY_TYPES = ['cloud', 'service', 'transport']
