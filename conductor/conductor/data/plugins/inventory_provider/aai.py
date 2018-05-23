@@ -741,6 +741,9 @@ class AAI(base.InventoryProviderBase):
                                           attribute_key == 'model-version-id'):
                 continue
 
+            if not attribute_values:
+                continue
+
             match_type = 'any'
             if type(attribute_values) is dict:
                 if 'any' in attribute_values:
