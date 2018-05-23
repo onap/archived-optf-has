@@ -22,6 +22,30 @@
       "revId": "4d7952a6082d3bad5c5a931c491b94fa563b44a6",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a93c517_f5b3734b",
+        "filename": "conductor/conductor/data/plugins/inventory_provider/aai.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 744,
+      "author": {
+        "id": 285
+      },
+      "writtenOn": "2018-05-23T16:45:16Z",
+      "side": 1,
+      "message": "This check covers attribute value\u003d\"\" case. That is the only case I tested.",
+      "parentUuid": "5a93c517_3a1b081e",
+      "range": {
+        "startLine": 744,
+        "startChar": 12,
+        "endLine": 744,
+        "endChar": 36
+      },
+      "revId": "4d7952a6082d3bad5c5a931c491b94fa563b44a6",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
     }
   ]
 }
