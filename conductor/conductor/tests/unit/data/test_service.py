@@ -295,22 +295,27 @@ class TestDataEndpoint(unittest.TestCase):
             hpa_json["conductor_solver"]["constraints"][2].items()[0]
         vim_request = constraint_info['properties']['request']
         ctxt = {}
-        args = {"candidate_list": candidate_list,
+        candidate_list_copy = list(copy.deepcopy(candidate_list))
+        args = {"candidate_list": [candidate_list_copy[1]],
                 "request": vim_request}
-        vim_mock.return_value = ['att-aic_DLLSTX55']
-        self.assertEqual({'response': candidate_list, 'error': False},
-                         self.data_ep.get_candidates_with_vim_capacity(ctxt,
-                                                                       args))
-        vim_mock.return_value = ['att-aic_NYCNY33']
-        self.assertEqual({'response': [candidate_list[0]], 'error': False},
+        vim_mock.return_value = [['att-aic_NYCNY55']]
+        self.assertEqual({'response': [candidate_list[1]], 'error': False},
                          self.data_ep.get_candidates_with_vim_capacity(ctxt,
                                                                        args))
         vim_mock.return_value = []
-        self.assertEqual({'response': candidate_list, 'error': True},
+        self.assertEqual({'response': [candidate_list[1]], 'error': True},
+                         self.data_ep.get_candidates_with_vim_capacity(ctxt,
+                                                                       args))
+        vim_mock.return_value = [None]
+        self.assertEqual({'response': [candidate_list[1]], 'error': True},
                          self.data_ep.get_candidates_with_vim_capacity(ctxt,
                                                                        args))
         vim_mock.return_value = None
-        self.assertEqual({'response': candidate_list, 'error': True},
+        self.assertEqual({'response': [candidate_list[1]], 'error': True},
+                         self.data_ep.get_candidates_with_vim_capacity(ctxt,
+                                                                       args))
+        vim_mock.return_value = [[]]
+        self.assertEqual({'response': [], 'error': False},
                          self.data_ep.get_candidates_with_vim_capacity(ctxt,
                                                                        args))
 
