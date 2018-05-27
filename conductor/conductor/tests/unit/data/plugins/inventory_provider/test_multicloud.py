@@ -85,7 +85,7 @@ class TestMultiCloud(unittest.TestCase):
         response.text = {"VIMs": []}
         response.json.return_value = response.text
         rest_mock.return_value = response
-        self.assertEqual(None, self.mc_ep.check_vim_capacity(vim_request))
+        self.assertEqual([], self.mc_ep.check_vim_capacity(vim_request))
         response.text = {"VIMs": None}
         response.json.return_value = response.text
         rest_mock.return_value = response

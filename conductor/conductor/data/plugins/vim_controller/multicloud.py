@@ -129,15 +129,14 @@ class MULTICLOUD(base.VimControllerBase):
 
         if body:
             vims = body.get("VIMs")
-            if vims:
-                return vims
-            else:
+            if vims is None:
                 LOG.error(_LE(
                     "Unable to get VIMs with cpu-{}, memory-{}, disk-{}")
                           .format(data['vCPU'],
                                   data['Memory'],
                                   data['Storage']))
-                return None
+
+            return vims
         else:
             LOG.error(_LE("Unable to get VIMs from Multicloud with "
                           "requirement {}").format(data))

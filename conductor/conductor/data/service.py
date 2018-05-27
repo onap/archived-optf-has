@@ -518,7 +518,7 @@ class DataEndpoint(object):
             vim_request
         )
 
-        if vims_result and len(vims_result) > 0:
+        if vims_result and len(vims_result) > 0 and vims_result[0] is not None:
             vims_set = set(vims_result[0])
             for candidate in candidate_list:
                 # perform this check only for cloud candidates
