@@ -15,7 +15,7 @@ This document describes the Homing API, provided by the Homing and Allocation se
 It is a work in progress and subject to frequent revision.
 
 General API Information
-------------------
+-------------------------
 
 Authenticated calls that target a known URI but that use an HTTP method
 the implementation does not support return a 405 Method Not Allowed

@@ -6,6 +6,9 @@ Installation
 Installing from the Source Code
 ------------------------------------
 Get HAS seed code from the Linux Foundation Projects page
+
+.. code-block:: bash
+
     $ git clone https://gerrit.onap.org/r/optf/has
 
 Use python virtual environment (https://virtualenv.pypa.io/en/stable/) to create and manage libraries and dependencies for HAS project.

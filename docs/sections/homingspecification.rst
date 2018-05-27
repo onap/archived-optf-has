@@ -376,8 +376,9 @@ region.
 
 **Examples**
 
-**``Service Candidate``**
-.. code:: json
+**Service Candidate**
+
+.. code-block:: json
 
     {
         "candidate_id": "1ac71fb8-ad43-4e16-9459-c3f372b8236d",
@@ -400,8 +401,9 @@ region.
         "physical_location_id": "DLLSTX9A"
     }
 
-**``Cloud Candidate``**
-.. code:: json
+**Cloud Candidate**
+
+.. code-block:: json
 
     {
         "candidate_id": "NYCNY55",
@@ -775,7 +777,7 @@ Constraint Types
 +-------------------------------------------+--------------------------+
 | ``vim_fit``                               | Constraint that checks if|
 |                                           | the incoming demand fits |
-|                                           | the VIM instance.        |         |
+|                                           | the VIM instance.        |
 +-------------------------------------------+--------------------------+
 | ``license`` (Deferred)                    | License availability     |
 |                                           | constraint.              |
@@ -832,13 +834,13 @@ CPU-Pinning, NUMA), features supported by the services, etc.
 
 **Schema**
 
-+------------+---------------------------------------------------------+
-| Property   | Value                                                   |
-+============+=========================================================+
-| ``evaluate | Opaque dictionary of attribute name and value pairs.    |
-| ``         | Values must be strings or numbers. Encoded and sent to  |
-|            | the service provider via a plugin.                      |
-+------------+---------------------------------------------------------+
++--------------+---------------------------------------------------------+
+| Property     | Value                                                   |
++==============+=========================================================+
+| ``evaluate`` | Opaque dictionary of attribute name and value pairs.    |
+|              | Values must be strings or numbers. Encoded and sent to  |
+|              | the service provider via a plugin.                      |
++--------------+---------------------------------------------------------+
 
 *Note: Attribute values are not detected/parsed as thresholds by the
 Homing framework. Such interpretations and evaluations are inventory
@@ -1038,15 +1040,15 @@ being constrained.
 
 **Schema**
 
-+-------------+--------------------------------------------------------+
-| Property    | Value                                                  |
-+=============+========================================================+
-| ``qualifier | Zone qualifier. One of ``same`` or ``different``.      |
-| ``          |                                                        |
-+-------------+--------------------------------------------------------+
-| ``category` | Zone category. One of ``disaster``, ``region``,        |
-| `           | ``complex``, ``time``, or ``maintenance``.             |
-+-------------+--------------------------------------------------------+
++---------------+--------------------------------------------------------+
+| Property      | Value                                                  |
++===============+========================================================+
+| ``qualifier`` | Zone qualifier. One of ``same`` or ``different``.      |
+|               |                                                        |
++---------------+--------------------------------------------------------+
+| ``category``  | Zone category. One of ``disaster``, ``region``,        |
+|               | ``complex``, ``time``, or ``maintenance``.             |
++---------------+--------------------------------------------------------+
 
 For example, to place two demands in different disaster zones:
 
@@ -1094,12 +1096,12 @@ supported by the services, etc.
 
 **Schema**
 
-+-------------+--------------------------------------------------------+
-| Property    | Value                                                  |
-+=============+========================================================+
-| ``evaluate  | List of flavorLabel, flavorProperties of each VM of the|
-| ``          | VNF demand.                                            |
-+-------------+--------------------------------------------------------+
++---------------+--------------------------------------------------------+
+| Property      | Value                                                  |
++===============+========================================================+
+| ``evaluate``  | List of flavorLabel, flavorProperties of each VM of the|
+|               | VNF demand.                                            |
++---------------+--------------------------------------------------------+
 
 .. code:: yaml
 
@@ -1127,7 +1129,9 @@ supported by the services, etc.
 
 **Example**
 
-.. code:: json
+
+.. code-block:: json
+
     {
         "hpa_constraint":{
             "type":"hpa",
@@ -1222,15 +1226,15 @@ settings.
 
 **Schema**
 
-+--------------+--------------------------------------------------------+
-| Property     | Value                                                  |
-+==============+========================================================+
-| ``controller | Name of a vim controller. (e.g., multicloud)           |
-+--------------+--------------------------------------------------------+
-| ``request``  | Opaque dictionary of key/value pairs. Values           |
-|              | must be strings or numbers. Encoded and sent           |
-|              | to the vim controller via a plugin.                    |
-+--------------+--------------------------------------------------------+
++----------------+--------------------------------------------------------+
+| Property       | Value                                                  |
++================+========================================================+
+| ``controller`` | Name of a vim controller. (e.g., multicloud)           |
++----------------+--------------------------------------------------------+
+| ``request``    | Opaque dictionary of key/value pairs. Values           |
+|                | must be strings or numbers. Encoded and sent           |
+|                | to the vim controller via a plugin.                    |
++----------------+--------------------------------------------------------+
 
 .. code:: yaml
 
@@ -1249,7 +1253,9 @@ settings.
    object defined through policy, so it is not restricted to this format. In
    ONAP Beijing release MultiCloud supports the check_vim_capacity using the
    following grammar.
-   .. code:: json
+   
+   .. code-block:: json
+   
        {
          "request":{
            "vCPU":10,
@@ -1408,26 +1414,26 @@ environment.
 
 **Schema**
 
-+------------+---------------------------------------------------------+
-| Property   | Value                                                   |
-+============+=========================================================+
-| ``specific | Indicates the kind of specification being provided in   |
-| ation``    | the properties. Must be ``heat``. Future values may     |
-|            | include ``tosca``, ``Homing``, etc.                     |
-+------------+---------------------------------------------------------+
-| ``template | For specifications of type ``heat``, a single stack in  |
-| ``         | OpenStack Heat Orchestration Template (HOT) format.     |
-|            | Stacks may be expressed as a URI reference or a string  |
-|            | of well-formed YAML/JSON. Templates are validated by    |
-|            | the Heat service configured for use by HAS. Nested      |
-|            | stack references are unsupported.                       |
-+------------+---------------------------------------------------------+
-| ``environm | For specifications of type ``heat``, an optional Heat   |
-| ent``      | environment. Environments may be expressed as a URI     |
-| (Optional) | reference or a string of well-formed YAML/JSON.         |
-|            | Environments are validated by the Heat service          |
-|            | configured for use by Homing.                           |
-+------------+---------------------------------------------------------+
++-------------------+---------------------------------------------------------+
+| Property          | Value                                                   |
++===================+=========================================================+
+| ``specification`` | Indicates the kind of specification being provided in   |
+|                   | the properties. Must be ``heat``. Future values may     |
+|                   | include ``tosca``, ``Homing``, etc.                     |
++-------------------+---------------------------------------------------------+
+| ``template``      | For specifications of type ``heat``, a single stack in  |
+|                   | OpenStack Heat Orchestration Template (HOT) format.     |
+|                   | Stacks may be expressed as a URI reference or a string  |
+|                   | of well-formed YAML/JSON. Templates are validated by    |
+|                   | the Heat service configured for use by HAS. Nested      |
+|                   | stack references are unsupported.                       |
++-------------------+---------------------------------------------------------+
+| ``environment``   | For specifications of type ``heat``, an optional Heat   |
+|                   | environment. Environments may be expressed as a URI     |
+| (Optional)        | reference or a string of well-formed YAML/JSON.         |
+|                   | Environments are validated by the Heat service          |
+|                   | configured for use by Homing.                           |
++-------------------+---------------------------------------------------------+
 
 .. code:: yaml
 
