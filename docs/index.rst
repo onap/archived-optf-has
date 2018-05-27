@@ -21,18 +21,33 @@ for wider range of services, e.g., DCAE micro-services, ECOMP control loops, ser
 Finally, HAS provides an traceable mechanism for what-if analysis which is critical for ease of 
 understanding a homing recommendation and resolving infeasibility scenarios.
 
+OF-HAS is the implementation of the ONAP Homing Service. The formal project name in ONAP is *OF-HAS*. 
+The informal name for the project is *Conductor* (inherited from the seed-code), which is interchangeably 
+used through the project.
+
+Given the description of what needs to be deployed (demands) and the placement requirements (constraints), 
+Conductor determines placement candidates that meet all constraints while optimizing the resource usage 
+of the AIC infrastructure. A customer request may be satisfied by deploying new VMs in AIC (AIC inventory) 
+or by using existing service instances with enough remaining capacity (service inventory).
+
+From a canonical standpoint, Conductor is known as a *homing service*, in the same way OpenStack Heat 
+is an orchestration service, or Nova is a compute service.
+
+
 .. toctree::
    :maxdepth: 1
 
    ./sections/architecture.rst
-   ./sections/homingspecification.rst
    ./sections/offeredapis.rst
+   ./sections/homingspecification.rst
    ./sections/consumedapis.rst
-   ./sections/delivery.rst
+   Distribution <./sections/distribution.rst>
    ./sections/logging.rst
    ./sections/installation.rst
    ./sections/configuration.rst
    ./sections/administration.rst
    ./sections/humaninterfaces.rst
+   ./sections/glossary.rst
+   Example Homing Templates <./sections/example.rst>
    ./sections/release-notes.rst
 
