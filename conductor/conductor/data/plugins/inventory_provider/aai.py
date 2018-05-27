@@ -1032,6 +1032,8 @@ class AAI(base.InventoryProviderBase):
 
                         cloud_owner = rl_data.get('d_value')
                         candidate['cloud_owner'] = cloud_owner
+                        if not cloud_owner:
+                            continue
 
                         search_key = "cloud-region.cloud-region-id"
 
