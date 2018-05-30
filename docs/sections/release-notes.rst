@@ -53,7 +53,15 @@ None. Initial release R2 Beijing. No previous versions
 
 Known Issues
 ------------
-None. 
+
+    * [OPTFRA-179] - Error solution for HPA
+
+    * [OPTFRA-205] - Onboarding to Music error
+
+    * [OPTFRA-210] - Generated conductor.conf missing configurations
+
+    * [OPTFRA-211] - Remove Extraneous Flavor Information from cloud-region cache
+
 
 Security Issues
 ---------------
