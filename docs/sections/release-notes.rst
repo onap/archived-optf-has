@@ -13,7 +13,6 @@ Version: 1.1.1
 :Release Date: 2018-06-07 (Beijing Release)
 
 **New Features**
------------------
 
 The ONAP Optimization Framework (OOF) is new in Beijing. A summary of features incldues: 
 
@@ -47,12 +46,11 @@ The Beijing release for OOF delivered the following Epics.
     * [OPTFRA-105] - All Documentation Related User Stories and Tasks
 
 
-Bug Fixes
----------
+**Bug Fixes**
+
 None. Initial release R2 Beijing. No previous versions  
 
-Known Issues
-------------
+**Known Issues**
 
     * [OPTFRA-179] - Error solution for HPA
 
@@ -63,18 +61,20 @@ Known Issues
     * [OPTFRA-211] - Remove Extraneous Flavor Information from cloud-region cache
 
 
-Security Issues
----------------
-None. 
+**Security Issues**
 
-Upgrade Notes
--------------
+OPTFRA code has been formally scanned during build time using NexusIQ and no Critical vulnerability was found.
+
+Quick Links:
+ 	- `OPTFRA project page <https://wiki.onap.org/display/DW/Optimization+Framework+Project>`_
+ 	
+ 	- `Passing Badge information for OPTFRA <https://bestpractices.coreinfrastructure.org/en/projects/1720>`_
+
+**Upgrade Notes**
 None. Initial release R2 Beijing. No previous versions  
 
-Deprecation Notes
------------------
+**Deprecation Notes**
 None. Initial release R2 Beijing. No previous versions  
 
-Other
------
+**Other**
 None
