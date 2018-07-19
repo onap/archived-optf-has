@@ -26,6 +26,7 @@ apt-get install -y unzip && \
 apt-get install -y curl && \
 apt-get install -y wget 
 
-RUN git clone https://gerrit.onap.org/r/optf/has
+RUN git clone https://gerrit.onap.org/r/optf/has \
+    && git checkout beijing
 RUN cd ./has/conductor/ && pip install -e .
 COPY api_paste.ini /usr/local/bin/api_paste.ini

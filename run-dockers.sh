@@ -5,7 +5,6 @@
 BUILD_ARGS="--no-cache"
 ORG="onap"
 VERSION="1.1.1"
-STAGING="1.1.1-STAGING"
 PROJECT="optf-has"
 DOCKER_REPOSITORY="nexus3.onap.org:10003"
 IMAGE_NAME="${DOCKER_REPOSITORY}/${ORG}/${PROJECT}"
@@ -51,6 +50,7 @@ function get_from_arguments_or_default(){
         exit 0;
     fi
 }
+
 #conductor.conf
 if [ -z "$1" ]
   then
@@ -86,9 +86,9 @@ fi
 echo Value is .... $COND_CONF $LOG_FILE
 echo Attempting to run multiple containers on image .... ${IMAGE_NAME}
 docker login -u anonymous -p anonymous ${DOCKER_REPOSITORY}
-docker run -d --name controller -v $COND_CONF:/usr/local/bin/conductor.conf -v $LOG_CONF:/usr/local/bin/log.conf ${IMAGE_NAME}:latest python /usr/local/bin/conductor-controller --config-file=/usr/local/bin/conductor.conf
-docker run -d --name api -p "8091:8091" -v $COND_CONF:/usr/local/bin/conductor.conf -v $LOG_CONF:/usr/local/bin/log.conf ${IMAGE_NAME}:latest python /usr/local/bin/conductor-api --port=8091 -- --config-file=/usr/local/bin/conductor.conf
-docker run -d --name solver -v $COND_CONF:/usr/local/bin/conductor.conf -v $LOG_CONF:/usr/local/bin/log.conf ${IMAGE_NAME}:latest python /usr/local/bin/conductor-solver --config-file=/usr/local/bin/conductor.conf
-docker run -d --name reservation -v $COND_CONF:/usr/local/bin/conductor.conf -v $LOG_CONF:/usr/local/bin/log.conf ${IMAGE_NAME}:latest python /usr/local/bin/conductor-reservation --config-file=/usr/local/bin/conductor.conf
-docker run -d --name data -v $COND_CONF:/usr/local/bin/conductor.conf -v $LOG_CONF:/usr/local/bin/log.conf -v $CERT:/usr/local/bin/aai_cert.cer -v $KEY:/usr/local/bin/aai_key.key -v $BUNDLE:/usr/local/bin/AAF_RootCA.cer ${IMAGE_NAME}:latest python /usr/local/bin/conductor-data --config-file=/usr/local/bin/conductor.conf
+docker run -d --name controller -v $COND_CONF:/usr/local/bin/conductor.conf -v $LOG_CONF:/usr/local/bin/log.conf ${IMAGE_NAME}:${VERSION} python /usr/local/bin/conductor-controller --config-file=/usr/local/bin/conductor.conf
+docker run -d --name api -p "8091:8091" -v $COND_CONF:/usr/local/bin/conductor.conf -v $LOG_CONF:/usr/local/bin/log.conf ${IMAGE_NAME}:${VERSION} python /usr/local/bin/conductor-api --port=8091 -- --config-file=/usr/local/bin/conductor.conf
+docker run -d --name solver -v $COND_CONF:/usr/local/bin/conductor.conf -v $LOG_CONF:/usr/local/bin/log.conf ${IMAGE_NAME}:${VERSION} python /usr/local/bin/conductor-solver --config-file=/usr/local/bin/conductor.conf
+docker run -d --name reservation -v $COND_CONF:/usr/local/bin/conductor.conf -v $LOG_CONF:/usr/local/bin/log.conf ${IMAGE_NAME}:${VERSION} python /usr/local/bin/conductor-reservation --config-file=/usr/local/bin/conductor.conf
+docker run -d --name data -v $COND_CONF:/usr/local/bin/conductor.conf -v $LOG_CONF:/usr/local/bin/log.conf -v $CERT:/usr/local/bin/aai_cert.cer -v $KEY:/usr/local/bin/aai_key.key -v $BUNDLE:/usr/local/bin/AAF_RootCA.cer ${IMAGE_NAME}:${VERSION} python /usr/local/bin/conductor-data --config-file=/usr/local/bin/conductor.conf
 
