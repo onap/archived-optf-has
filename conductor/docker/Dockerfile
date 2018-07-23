@@ -16,17 +16,26 @@
 # -------------------------------------------------------------------------
 
 FROM python:2.7
+
+ARG HTTP_PROXY=${HTTP_PROXY}
+ARG HTTPS_PROXY=${HTTPS_PROXY}
+
+ENV http_proxy $HTTP_PROXY
+ENV https_proxy $HTTPS_PROXY
 ENV CON_ADDR "127.0.0.1"
 ENV CON_PORT "8091"
 
-EXPOSE 8091
+EXPOSE ${CON_PORT}
 
 RUN apt-get update && apt-get --assume-yes install python-setuptools && \
-apt-get install -y unzip && \
-apt-get install -y curl && \
-apt-get install -y wget 
+apt-get install -y unzip curl wget git vim
 
-RUN git clone https://gerrit.onap.org/r/optf/has \
-    && git checkout beijing
-RUN cd ./has/conductor/ && pip install -e .
+# HAS
+WORKDIR /opt/has
+RUN wget -O /opt/has.zip "https://nexus.onap.org/service/local/artifact/maven/redirect?r=snapshots&g=org.onap.optf.has&a=optf-has-conductor&e=zip&v=LATEST" && \
+    unzip -q -o -B /opt/has.zip -d /opt/has && \
+    rm -f /opt/has.zip
+RUN mkdir -p /var/log/onap/optf/has/
+
+RUN cd /opt/has/conductor/ && git init && pip install -e .
 COPY api_paste.ini /usr/local/bin/api_paste.ini
