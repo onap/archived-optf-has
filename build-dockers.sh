@@ -33,6 +33,7 @@ function log_ts() {  # Log message with timestamp
 
 function get_artifact_version() {
     log_ts Get Maven Artifact version from pom.xml
+    apt-get install libxml2-utils
     MVN_ARTIFACT_VERSION=`echo -e "setns x=http://maven.apache.org/POM/4.0.0 \n  xpath /x:project/x:version/text() "| xmllint --shell conductor/pom.xml | grep content | sed 's/.*content=//'`
     log_ts Maven artifact version for HAS is $MVN_ARTIFACT_VERSION
     if [[ "$MVN_ARTIFACT_VERSION" =~ SNAPSHOT ]]; then
