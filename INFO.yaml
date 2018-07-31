@@ -23,11 +23,6 @@ meetings:
       time: '15:00 UTC'
 committers:
     - <<: *onap_releng_ptl
-    - name: 'Ankitkumar Patel'
-      email: 'ankit@research.att.com'
-      company: 'ATT'
-      id: 'ankit7453'
-      timezone: 'America/Bedminster'
     - name: 'Shankaranarayanan Puzhavakath Narayanan'
       email: 'snarayanan@research.att.com'
       company: 'ATT'
@@ -58,3 +53,6 @@ tsc:
           name: 'ramki krishnan'
           name: 'Dileep Ranganathan'
           link: 'https://lists.onap.org/g/ONAP-TSC/message/3205'
+        - type: 'Removal'
+          name: 'Ankitkumar Patel'
+          link: 'https://lists.onap.org/g/ONAP-TSC/message/3550'
