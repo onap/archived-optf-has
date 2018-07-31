@@ -1,0 +1,8 @@
+Verified+1: ONAP Jobbuilder <onap-jobbuilder@jenkins.onap.org>
+Code-Review+2: Dileep Ranganathan <dileep.ranganathan@intel.com>
+Code-Review+2: Shankaranarayanan Puzhavakath Narayanan <snarayanan@research.att.com>
+Submitted-by: Shankaranarayanan Puzhavakath Narayanan <snarayanan@research.att.com>
+Submitted-at: Tue, 31 Jul 2018 15:22:52 +0000
+Reviewed-on: https://gerrit.onap.org/r/58165
+Project: optf/has
+Branch: refs/heads/master
