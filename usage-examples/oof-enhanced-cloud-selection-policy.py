@@ -4,10 +4,10 @@
 
 from jsonschema import validate
 
-oof_enhanced_cloud_selection_policy_schema = {
+oof_cloud_selection_policy_schema = {
 	"service": {"type": "string"},
 	"policyName": {"type": "string"},
-	"description": {"type": "string"},
+	"policyDescription": {"type": "string"},
 	"templateVersion": {"type": "string"},
 	"version": {"type": "string"},
 	"priority": {"type": "string"},
@@ -15,51 +15,53 @@ oof_enhanced_cloud_selection_policy_schema = {
 	"riskLevel": {"type": "string"},
 	"guard": {"type": "string"},
 
-    "content": {"type" : "object"},
-    "properties" : {
-
-        # vnfc is not used in the OOF->MC path for R3, this is kept to be consistent 
-        # with the SO-> MC path
-		"vnfc": {"type": "string"}, 
-
-		# evaluate cloud cost if set 
-		# cost is fixed per cloud type for all workloads -- simplifying assumption for R3
-		# cost specified in the respective plugin through a configuration file 
-        "cost-intent" : {"type" : "boolean"}, 
-
-		"deployment-intent": {"type": "object"},
+	"content": {
+		"type": "object",
+		"required": ["cost-intent", "deployment-intent"],
 		"properties" : {
 
-			# Azure, K8S, OpenStack, VMware VIO, Wind River Titanium
-			"Cloud Type (Cloud Provider)": {"type", "string"},
+			# vnfc is not used in the OOF->MC path for R3, this is kept to be consistent 
+			# with the SO-> MC path
+			"vnfc": {"type": "string"}, 
 
-			"Infrastructure High Availability for VNF": {"type", "boolean"},
+			# evaluate cloud cost if set 
+			# cost is fixed per cloud type for all workloads -- simplifying assumption for R3
+			# cost specified in the respective plugin through a configuration file 
+			"cost-intent" : {"type" : "boolean"}, 
 
-			"Infrastructure Resource Isolation for VNF": {"type", "string"},
+			"deployment-intent": {"type": "object"},
+			"properties" : {
 
-			# Infrastructure Resource Isolation for VNF
-			# Only certain pre-defined over-subscription values are allowed to 
-			# reflect practical deployment and simplify implementation for R3
-			"Infrastructure Resource Isolation for VNF - Burstable QoS Oversubscription Percentage": {"type": "int"},
+				# Azure, K8S, OpenStack, VMware VIO, Wind River Titanium
+				"Cloud Type (Cloud Provider)": {"type", "string"},
+
+				"Infrastructure High Availability for VNF": {"type", "boolean"},
+
+				"Infrastructure Resource Isolation for VNF": {"type", "string"},
+
+				# Infrastructure Resource Isolation for VNF
+				# Only certain pre-defined over-subscription values are allowed to 
+				# reflect practical deployment and simplify implementation for R3
+				"Infrastructure Resource Isolation for VNF - Burstable QoS Oversubscription Percentage": {"type": "int"},
+			},
 		},
 	},
-	"required": ["cost-intent", "deployment-intent"], 
 
 	"resources": {"type", "array"}, #"vgw" is also interchangeably used as "vg"
 	"applicableResources": {"type", "string"},
 	"identity": {"type", "string"},
 	"policyScope": {"type", "array"},
-	"policyType": {"type", "string"},
+	"policyType": {"type", "string"}
 }
 
 #
 #Example 1: vCPE, Burstable QoS
 #vCPE: Infrastructure Resource Isolation for VNF with Burstable QoS
 #
-oof_mc_policy_api_instance1 = {
+oof_cloud_selection_policy_instance1 = {
 	"service": "cloudSelectionPolicy",
 	"policyName": "oofMulti-cloudCasablanca.cloudSelectionPolicy_vCPE_VNF",
-	"description": "Cloud Selection Policy for vCPE VNFs",
+	"policyDescription": "Cloud Selection Policy for vCPE VNFs",
 	"templateVersion": "0.0.1",
 	"version": "oofMulti-cloudCasablanca",
 	"priority": "3",
@@ -71,9 +73,9 @@ oof_mc_policy_api_instance1 = {
 		"vnfc": "vgw",
 		"cost-intent": True,
 		"deployment-intent": {
-			"Cloud Type (Cloud Provider)": "VMware VIO",
-			"Infrastructure Resource Isolation for VNF": "Burstable QoS",
-			"Infrastructure Resource Isolation for VNF - Burstable QoS Oversubscription Percentage": 25,
+            "Infrastructure Resource Isolation for VNF": "Burstable QoS",
+            "Infrastructure Resource Isolation for VNF - Burstable QoS Oversubscription Percentage": 25,
+
 		},
 	},
 
@@ -88,10 +90,10 @@ oof_mc_policy_api_instance1 = {
 #Example 2:
 #vCPE: Infrastructure Resource Isolation for VNF with Guaranteed QoS
 #
-oof_mc_policy_api_instance2 = {
+oof_cloud_selection_policy_instance2 = {
 	"service": "cloudSelectionPolicy",
 	"policyName": "oofMulti-cloudCasablanca.cloudSelectionPolicy_vCPE_VNF",
-	"description": "Cloud Selection Policy for vCPE VNFs",
+	"policyDescription": "Cloud Selection Policy for vCPE VNFs",
 	"templateVersion": "0.0.1",
 	"version": "oofMulti-cloudCasablanca",
 	"priority": "3",
@@ -118,10 +120,10 @@ oof_mc_policy_api_instance2 = {
 #Example 3:
 #vDNS: Infrastructure HA for VNF & Infrastructure Resource Isolation for VNF with Burstable QoS
 #
-oof_mc_policy_api_instance3 = {
+oof_cloud_selection_policy_instance3 = {
 	"service": "cloudSelectionPolicy",
 	"policyName": "oofMulti-cloudCasablanca.cloudSelectionPolicy_vDNS_VNF",
-	"description": "Cloud Selection Policy for vDNS VNFs",
+	"policyDescription": "Cloud Selection Policy for vDNS VNFs",
 	"templateVersion": "0.0.1",
 	"version": "oofMulti-cloudCasablanca",
 	"priority": "3",
@@ -152,10 +154,10 @@ oof_mc_policy_api_instance3 = {
 # vDNS: Infrastructure HA for VNF & Infrastructure Resource Isolation for VNF 
 # with Guaranteed QoS
 #
-oof_mc_policy_api_instance4 = {
+oof_cloud_selection_policy_instance4 = {
 	"service": "cloudSelectionPolicy",
 	"policyName": "oofMulti-cloudCasablanca.cloudSelectionPolicy_vDNS_VNF",
-	"description": "Cloud Selection Policy for vDNS VNFs",
+	"policyDescription": "Cloud Selection Policy for vDNS VNFs",
 	"templateVersion": "0.0.1",
 	"version": "oofMulti-cloudCasablanca",
 	"priority": "3",
@@ -178,3 +180,8 @@ oof_mc_policy_api_instance4 = {
 	"policyScope": ["vDNS", "US", "INTERNATIONAL", "vDNS"],
 	"policyType": "AllPolicy"
 }
+
+validate(oof_cloud_selection_policy_instance1, oof_cloud_selection_policy_schema)
+validate(oof_cloud_selection_policy_instance2, oof_cloud_selection_policy_schema)
+validate(oof_cloud_selection_policy_instance3, oof_cloud_selection_policy_schema)
+validate(oof_cloud_selection_policy_instance4, oof_cloud_selection_policy_schema)
