@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a76adc5_399315a5",
+        "filename": "usage-examples/oof-mc-r3-interface-examples.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 2041
+      },
+      "writtenOn": "2018-08-06T13:24:08Z",
+      "side": 1,
+      "message": "We should have a list of 0 or more \u003ccloud-region-id, cloud-provider\u003e or \u003cvim-id\u003e in the request to MC, consistent with our current APIs to all constraints/inventory sources. That way, this interface would allow MC to potentially return a reduced subset of VIMs. Also, I think we should move to the consistent use of cloud-region -id proposed in R3.",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 32
+      },
+      "revId": "ac3420061f5c34a799aafbd1a3fb7ce3ad3cdb2d",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a76adc5_596e11cb",
+        "filename": "usage-examples/oof-mc-r3-interface-examples.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 2041
+      },
+      "writtenOn": "2018-08-06T13:24:08Z",
+      "side": 1,
+      "message": "Since this is a placeholder field, can we have a generic name for this ? I\u0027m wondering if our modeling efforts will take this along the direction of being an ID. In fact, w e currently use the model-id to pair the policies associated with a VNF.",
+      "range": {
+        "startLine": 13,
+        "startChar": 3,
+        "endLine": 13,
+        "endChar": 7
+      },
+      "revId": "ac3420061f5c34a799aafbd1a3fb7ce3ad3cdb2d",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a76adc5_59a5b102",
+        "filename": "usage-examples/oof-mc-r3-interface-examples.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 2041
+      },
+      "writtenOn": "2018-08-06T13:24:08Z",
+      "side": 1,
+      "message": "In the spec we should mention that this is an opaque-dict from the view of OOF. Need to make sure OOF doesn\u0027t interpret the content within the intent block.",
+      "range": {
+        "startLine": 20,
+        "startChar": 3,
+        "endLine": 20,
+        "endChar": 20
+      },
+      "revId": "ac3420061f5c34a799aafbd1a3fb7ce3ad3cdb2d",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a76adc5_d961c1d4",
+        "filename": "usage-examples/oof-mc-r3-interface-examples.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 2041
+      },
+      "writtenOn": "2018-08-06T13:24:08Z",
+      "side": 1,
+      "message": "Maybe it is the indentation, but should this be within the deployment-intent ?",
+      "range": {
+        "startLine": 21,
+        "startChar": 2,
+        "endLine": 21,
+        "endChar": 18
+      },
+      "revId": "ac3420061f5c34a799aafbd1a3fb7ce3ad3cdb2d",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
