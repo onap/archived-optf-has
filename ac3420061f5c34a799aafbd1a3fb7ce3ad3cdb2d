@@ -91,6 +91,29 @@
       "revId": "ac3420061f5c34a799aafbd1a3fb7ce3ad3cdb2d",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a76adc5_1a3ddd8f",
+        "filename": "usage-examples/oof-mc-r3-interface-examples.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 399
+      },
+      "writtenOn": "2018-08-08T23:56:15Z",
+      "side": 1,
+      "message": "What do you expect MultiCloud to do with these information? 25% base on what ?",
+      "range": {
+        "startLine": 26,
+        "startChar": 0,
+        "endLine": 33,
+        "endChar": 108
+      },
+      "revId": "ac3420061f5c34a799aafbd1a3fb7ce3ad3cdb2d",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
     }
   ]
 }
