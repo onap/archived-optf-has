@@ -486,6 +486,11 @@ class DataEndpoint(object):
                     # Create flavor mapping for label_name to flavor
                     flavor_name = flavor_info.get("flavor-name")
                     candidate["flavor_map"][label_name] = flavor_name
+                    # If hpa_score is not defined then initialize value 0
+                    # hpa_score = sum of scores of each vnfc hpa requirement score
+                    if not candidate.get("hpa_score"):
+                        candidate["hpa_score"] = 0
+                    candidate["hpa_score"] += flavor_info.get("score")
 
         # return candidates not in discard set
         candidate_list[:] = [c for c in candidate_list

@@ -649,7 +649,7 @@ class Translator(object):
                                 "No value specified for property '{}' in "
                                 "constraint named '{}'".format(
                                     req_prop, name))
-                            # For HPA constraints
+                        # For HPA constraints
                         if constraint_type == 'hpa':
                             self.validate_hpa_constraints(req_prop, value)
 
@@ -794,6 +794,13 @@ class Translator(object):
                         elif product_op.keys() == ['aic_version']:
                             function = 'aic_version'
                             args = product_op.get('aic_version')
+                        elif product_op.keys() == ['hpa_score']:
+                            function = 'hpa_score'
+                            args = product_op.get('hpa_score')
+                            if not self.is_hpa_policy_exists(args):
+                                raise TranslatorException(
+                                    "HPA Score Optimization must include a "
+                                    "HPA Policy constraint ")
                         elif product_op.keys() == ['sum']:
                             nested = True
                             nested_operands = product_op.get('sum')
@@ -844,6 +851,18 @@ class Translator(object):
                 )
         return parsed
 
+    def is_hpa_policy_exists(self, demand_list):
+        # Check if a HPA constraint exist for the demands in the demand list.
+        constraints_copy = copy.deepcopy(self._constraints)
+        for demand in demand_list:
+            for name, constraint in constraints_copy.items():
+                constraint_type = constraint.get('type')
+                if constraint_type == 'hpa':
+                    hpa_demands = constraint.get('demands')
+                    if demand in hpa_demands:
+                        return True
+        return False
+
     def parse_reservations(self, reservations):
         demands = self._demands
         if type(reservations) is not dict:
@@ -880,7 +899,6 @@ class Translator(object):
                 "request_type": request_type,
                 "locations": self.parse_locations(self._locations),
                 "demands": self.parse_demands(self._demands),
-                "objective": self.parse_optimization(self._optmization),
                 "constraints": self.parse_constraints(self._constraints),
                 "objective": self.parse_optimization(self._optmization),
                 "reservations": self.parse_reservations(self._reservations),
