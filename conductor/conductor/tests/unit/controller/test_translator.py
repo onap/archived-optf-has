@@ -573,6 +573,43 @@ class TestNoExceptionTranslator(unittest.TestCase):
                 opt), expected_parse)
 
     @patch('conductor.controller.translator.Translator.create_components')
+    def test_parse_optimization_multi_objective(self, mock_create):
+        expected_parse = {'goal': 'min',
+                          'operands': [{'function': 'distance_between',
+                                        'function_param': ['customer_loc',
+                                                           'vGMuxInfra'],
+                                        'operation': 'product',
+                                        'weight': 2.0},
+                                       {'function': 'distance_between',
+                                        'function_param': ['customer_loc',
+                                                           'vG'],
+                                        'operation': 'product',
+                                        'weight': 4.0},
+                                       {'function': 'hpa_score',
+                                        'function_param': ['vG'],
+                                        'operation': 'product',
+                                        'weight': 8.0},
+                                       ],
+                          'operation': 'sum'
+                          }
+
+        opt = {'minimize': {
+            'sum': [{'product': [2.0, {'distance_between': ['customer_loc', 'vGMuxInfra']}]},
+                    {'product': [4.0, {'distance_between': ['customer_loc', 'vG']}]},
+                    {'product': [8.0, {'hpa_score': ['vG']}]}
+                    ]}}
+        self.Translator._demands = {'vG': '',
+                                    'vGMuxInfra': '',
+                                    'customer_loc': ''}
+        self.Translator._locations = {'vG': '',
+                                      'vGMuxInfra': '',
+                                      'customer_loc': ''}
+        self.maxDiff = None
+        self.assertEquals(
+            self.Translator.parse_optimization(
+                opt), expected_parse)
+
+    @patch('conductor.controller.translator.Translator.create_components')
     def test_parse_reservation(self, mock_create):
         expected_resv = {'counter': 0, 'demands': {
             'instance_vG': {'demands': {'vG': 'null'},

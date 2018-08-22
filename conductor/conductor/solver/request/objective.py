@@ -109,6 +109,10 @@ class Operand(object):
             for demand_name, candidate_info in _decision_path.decisions.items():
                 value += float(candidate_info['cost'])
 
+        elif self.function.func_type == "hpa_score":
+            for demand_name, candidate_info in _decision_path.decisions.items():
+                value += float(candidate_info['hpa_score'])
+
         if self.operation == "product":
             value *= self.weight
 

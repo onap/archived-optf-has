@@ -241,13 +241,15 @@ class TestDataEndpoint(unittest.TestCase):
         label_name = hpa_constraint['evaluate'][0]['flavorLabel']
         ext_mock1.return_value = ['aai']
         flavor_info = {"flavor-id": "vim-flavor-id1",
-                       "flavor-name": "vim-flavor-name1"}
+                       "flavor-name": "vim-flavor-name1",
+                       "score": 0}
         hpa_mock.return_value = [flavor_info]
         self.maxDiff = None
         args = generate_args(candidate_list, flavorProperties, label_name)
         hpa_candidate_list = copy.deepcopy(candidate_list)
         hpa_candidate_list[1]['flavor_map'] = {}
         hpa_candidate_list[1]['flavor_map'][label_name] = "vim-flavor-name1"
+        hpa_candidate_list[1]['hpa_score'] = 0
         expected_response = {'response': hpa_candidate_list, 'error': False}
         self.assertEqual(expected_response,
                          self.data_ep.get_candidates_with_hpa(None, args))

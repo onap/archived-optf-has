@@ -41,6 +41,7 @@ from conductor.solver.request import objective
 from conductor.solver.request.functions import aic_version
 from conductor.solver.request.functions import cost
 from conductor.solver.request.functions import distance_between
+from conductor.solver.request.functions import hpa_score
 from oslo_log import log
 
 # from conductor.solver.request.functions import distance_between
@@ -262,6 +263,9 @@ class Parser(object):
                 elif operand_data["function"] == "cost":
                     func = cost.Cost("cost")
                     func.loc = operand_data["function_param"]
+                    operand.function = func
+                elif operand_data["function"] == "hpa_score":
+                    func = hpa_score.HPAScore("hpa_score")
                     operand.function = func
 
                 self.objective.operand_list.append(operand)
