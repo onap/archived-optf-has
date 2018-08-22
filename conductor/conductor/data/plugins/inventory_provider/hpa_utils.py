@@ -90,7 +90,8 @@ class HpaMatchProvider(object):
                     if score > max_score:
                         max_score = score
                         flavor_map = {"flavor-id": flavor['flavor-id'],
-                                  "flavor-name": flavor['flavor-name']}
+                                      "flavor-name": flavor['flavor-name'],
+                                      "score": max_score}
         return flavor_map
 
 

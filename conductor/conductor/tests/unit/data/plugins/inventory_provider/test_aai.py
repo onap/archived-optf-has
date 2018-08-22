@@ -311,13 +311,15 @@ class TestAAI(unittest.TestCase):
         candidate_json['candidate_list'][1]['flavors'] = flavor_json
 
         flavor_map = {"flavor-id": "f5aa2b2e-3206-41b6-80d5-cf041b098c43",
-                      "flavor-name": "flavor-cpu-pinning-ovsdpdk-instruction-set"}
+                      "flavor-name": "flavor-cpu-pinning-ovsdpdk-instruction-set",
+                      "score": 0}
         self.assertEqual(flavor_map,
                          self.aai_ep.match_hpa(candidate_json['candidate_list'][1],
                                                feature_json[0]))
 
         flavor_map = {"flavor-id": "f5aa2b2e-3206-41b6-80d5-cf041b098c43",
-                      "flavor-name": "flavor-cpu-ovsdpdk-instruction-set" }
+                      "flavor-name": "flavor-cpu-ovsdpdk-instruction-set",
+                      "score": 10}
         self.assertEqual(flavor_map,
              self.aai_ep.match_hpa(candidate_json['candidate_list'][1],
                                    feature_json[1]))

@@ -794,6 +794,9 @@ class Translator(object):
                         elif product_op.keys() == ['aic_version']:
                             function = 'aic_version'
                             args = product_op.get('aic_version')
+                        elif product_op.keys() == ['hpa_score']:
+                            function = 'hpa_score'
+                            args = product_op.get('hpa_score')
                         elif product_op.keys() == ['sum']:
                             nested = True
                             nested_operands = product_op.get('sum')
