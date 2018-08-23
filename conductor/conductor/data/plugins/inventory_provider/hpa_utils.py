@@ -66,7 +66,8 @@ class HpaMatchProvider(object):
             if capability.item['mandatory'] == 'True':
                 hpa_list = {k: capability.item[k] \
                             for k in hpa_keys if k in capability.item}
-                req_filter_list.append(hpa_list)
+                if hpa_list not in req_filter_list:
+                    req_filter_list.append(hpa_list)
         max_score = -1
         flavor_map = None
         for flavor in self.flavors_list:
