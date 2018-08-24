@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a76adc5_2b4cc89d",
+        "filename": "conductor/conductor/data/plugins/inventory_provider/hpa_utils.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 2041
+      },
+      "writtenOn": "2018-08-24T14:16:18Z",
+      "side": 1,
+      "message": "Where was req_filter_list being populated before this fix ?",
+      "range": {
+        "startLine": 69,
+        "startChar": 11,
+        "endLine": 70,
+        "endChar": 52
+      },
+      "revId": "dda38c4849be077910df86cbe40f59db7a67b0c8",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
