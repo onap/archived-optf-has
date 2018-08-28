@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a76adc5_ae277463",
+        "filename": "conductor/conductor/solver/request/objective.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 114,
+      "author": {
+        "id": 2041
+      },
+      "writtenOn": "2018-08-28T17:26:13Z",
+      "side": 1,
+      "message": "Please make it so that this doesn\u0027t throw an exception if the candidate info doesn\u0027t have a spa_score. Typically candidate_info.get() would be better, but in this case we\u0027d probably need an explicit if/else block due to the float().",
+      "range": {
+        "startLine": 114,
+        "startChar": 31,
+        "endLine": 114,
+        "endChar": 58
+      },
+      "revId": "3ad0c78fe8811fbdc460f5475a7c2ae777c5d398",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
