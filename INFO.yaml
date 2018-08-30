@@ -38,6 +38,11 @@ committers:
       company: 'Intel'
       id: 'dileep.ranganathan'
       timezone: 'America/Los_Angeles'
+    - name: 'Vikas Varma'
+      email: 'vikas.varma@att.com'
+      company: 'ATT'
+      id: 'vrvarma'
+      timezone: 'America/New_York'
 tsc:
     approval: 'https://lists.onap.org/pipermail/onap-tsc'
     changes:
@@ -56,3 +61,7 @@ tsc:
         - type: 'Removal'
           name: 'Ankitkumar Patel'
           link: 'https://lists.onap.org/g/ONAP-TSC/message/3550'
+        - type: 'Addition'
+          name: 'Vikas Varma'
+          link: 'http://ircbot.wl.linuxfoundation.org/meetings/onap-meeting/2018/onap-meeting.2018-08-30-13.57.log.txt'
+
