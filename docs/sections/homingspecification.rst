@@ -1082,11 +1082,12 @@ Or, to place two demands in the same region:
    but these terms may cause confusion with affinity/anti-affinity in
    OpenStack.
 
-HPA
-~~~~
+HPA & Cloud Agnostic Intent
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Constrain each demand's inventory candidates based on cloud regions' Hardware
-platform capabilities (HPA)
+platform capabilities (HPA) and also intent support. Note that currently HPA
+the cloud agnostic constraints will use the same schema.
 
 Requirements mapped to the inventory provider specified properties, referenced
 by the demands. For eg, properties could be hardware capabilities provided by
@@ -1099,8 +1100,8 @@ supported by the services, etc.
 +---------------+--------------------------------------------------------+
 | Property      | Value                                                  |
 +===============+========================================================+
-| ``evaluate``  | List of flavorLabel, flavorProperties of each VM of the|
-|               | VNF demand.                                            |
+| ``evaluate``  | List of id, type, directives and flavorProperties of   |
+|               | each VM of the VNF demand.                             |
 +---------------+--------------------------------------------------------+
 
 .. code:: yaml
@@ -1111,14 +1112,27 @@ supported by the services, etc.
         demands: [my_vnf_demand, my_other_vnf_demand]
         properties:
           evaluate:
-            - [ List of {flavorLabel : {flavor label name},
+            - [ List of {id: {vdu Name},
+                        type: {type of VF }
+                        directives: {DIRECTIVES LIST},
                         flavorProperties: HPACapability DICT} ]
     HPACapability DICT :
       hpa-feature: basicCapabilities
       hpa-version: v1
       architecture: generic
+      directives:
+        - DIRECTIVES LIST
       hpa-feature-attributes:
         - HPAFEATUREATTRIBUTES LIST
+
+    DIRECTIVES LIST:
+      type: String
+      attributes:
+        - ATTRIBUTES LIST
+
+    ATTRIBUTES LIST:
+      attribute_name: String,
+      attribute_value: String
 
     HPAFEATUREATTRIBUTES LIST:
       hpa-attribute-key: String
@@ -1141,7 +1155,17 @@ supported by the services, etc.
             "properties":{
                "evaluate":[
                   {
-                     "flavorLabel":"flavor_label_1",
+                     "directives": [
+                        {
+                         "type":"flavor",
+                         "attributes":[
+                            {
+                             "attribute_name":" oof_returned_flavor_label_for_firewall ", //Admin needs to ensure that this value is same as flavor parameter in HOT
+                             "attribute_value": "<Blank>"
+                            }
+                         ]
+                        }
+                     ],
                      "flavorProperties":[
                         {
                            "hpa-feature":"basicCapabilities",
@@ -1153,7 +1177,15 @@ supported by the services, etc.
                                  "hpa-attribute-key":"numVirtualCpu",
                                  "hpa-attribute-value":"32",
                                  "operator":"="
-                              },
+                              }
+                           ]
+                        },
+                        {
+                           "hpa-feature":"basicCapabilities",
+                           "hpa-version":"v1",
+                           "architecture":"generic",
+                           "mandatory": "True",
+                           "hpa-feature-attributes":[
                               {
                                  "hpa-attribute-key":"virtualMemSize",
                                  "hpa-attribute-value":"64",
@@ -1192,12 +1224,54 @@ supported by the services, etc.
                                  "hpa-attribute-key":"numVirtualCpu",
                                  "hpa-attribute-value":"8",
                                  "operator":">="
-                              },
+                              }
+                           ]
+                        },
+                        {
+                           "hpa-feature":"basicCapabilities",
+                           "hpa-version":"v1",
+                           "architecture":"generic",
+                           "mandatory": "False",
+                           "score": "5",
+                           "hpa-feature-attributes":[
                               {
                                  "hpa-attribute-key":"virtualMemSize",
                                  "hpa-attribute-value":"16",
                                  "operator":">=",
                                  "unit":"GB"
+                              }
+                           ]
+                        },
+                        {
+                           "hpa-feature":"sriovNICNetwork",
+                           "hpa-version":"v1",
+                           "architecture":"generic",
+                           "mandatory": "True",
+                           "directives": [
+                              {
+                                "type": "sriovNICNetwork_directive",
+                                "attributes": [
+                                   { "attribute_name": "oof_returned_vnic_type_for_firewall_unprotected",
+                                     "attribute_value": "direct"
+                                   },
+                                   { "attribute_name": "oof_returned_provider_network_for_firewall_unprotected",
+                                     "attribute_value": "physnet2"
+                                   }
+                                ]
+                              }
+                           ],
+                           "hpa-feature-attributes":[
+                              {
+                                 "hpa-attribute-key":"pciVendorId",
+                                 "hpa-attribute-value":"8086",
+                                 "operator":"=",
+                                 "unit":""
+                              },
+                              {
+                                 "hpa-attribute-key":"pciDeviceId",
+                                 "hpa-attribute-value":"0443",
+                                 "operator":"=",
+                                 "unit":""
                               }
                            ]
                         }
