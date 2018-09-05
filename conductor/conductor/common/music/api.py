@@ -18,16 +18,15 @@
 #
 
 """Music Data Store API"""
-
+import base64
 import copy
 import logging
 import time
 
-from oslo_config import cfg
-from oslo_log import log
-
 from conductor.common import rest
 from conductor.i18n import _LE, _LI  # pylint: disable=W0212
+from oslo_config import cfg
+from oslo_log import log
 
 LOG = log.getLogger(__name__)
 
@@ -130,13 +129,12 @@ class MusicAPI(object):
         self.rest = rest.REST(**kwargs)
 
         if(CONF.music_api.music_new_version):
-            MUSIC_version = CONF.music_api.music_version.split(".")
-
             self.rest.session.headers['content-type'] = 'application/json'
-            self.rest.session.headers['X-patchVersion'] = MUSIC_version[2]
             self.rest.session.headers['ns'] = CONF.music_api.aafns
-            self.rest.session.headers['userId'] = CONF.music_api.aafuser
-            self.rest.session.headers['password'] = CONF.music_api.aafpass
+            auth_str = 'Basic {}'.format(base64.encodestring(
+                '{}:{}'.format(CONF.music_api.aafuser,
+                               CONF.music_api.aafpass)).strip())
+            self.rest.session.headers['Authorization'] = auth_str
 
         self.lock_ids = {}
 
