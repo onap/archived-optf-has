@@ -1,0 +1,341 @@
+{
+  "swagger" : "2.0",
+  "info" : {
+    "description" : "This is the ONAP OOF HAS (Homing and Allocation Service) API",
+    "version" : "1.0.0",
+    "title" : "HAS API",
+    "contact" : {
+      "email" : "frank.sandoval@oamtechnologies.com"
+    },
+    "license" : {
+      "name" : "Apache 2.0",
+      "url" : "http://www.apache.org/licenses/LICENSE-2.0.html"
+    }
+  },
+  "securityDefinitions" : {
+    "basicAuth" : {
+      "type" : "basic",
+      "description" : "HTTP Basic Auth"
+    }
+  },
+  "security" : [ {
+    "basicAuth" : [ ]
+  } ],
+  "paths" : {
+    "/" : {
+      "get" : {
+        "summary" : "retrieve versions",
+        "operationId" : "retrieveVersions",
+        "description" : "retrieve supported versions of the API",
+        "security" : [ ],
+        "produces" : [ "application/json" ],
+        "responses" : {
+          "200" : {
+            "description" : "list of supported versions",
+            "schema" : {
+              "type" : "array",
+              "items" : {
+                "$ref" : "#/definitions/Versions"
+              }
+            }
+          },
+          "400" : {
+            "description" : "bad request",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          },
+          "401" : {
+            "description" : "unauthorized request"
+          }
+        }
+      }
+    },
+    "/v1/plans" : {
+      "post" : {
+        "summary" : "create a plan",
+        "operationId" : "createPlan",
+        "description" : "creates a plan from one or more service demands",
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "demand",
+          "description" : "service demand",
+          "schema" : {
+            "$ref" : "#/definitions/Demand"
+          }
+        } ],
+        "responses" : {
+          "201" : {
+            "description" : "plan created",
+            "schema" : {
+              "items" : {
+                "$ref" : "#/definitions/Plan"
+              }
+            }
+          },
+          "400" : {
+            "description" : "bad request",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          },
+          "401" : {
+            "description" : "unauthorized request"
+          }
+        }
+      }
+    },
+    "/v1/plans/{plan_id}" : {
+      "get" : {
+        "summary" : "retreive a plan",
+        "operationId" : "getPlan",
+        "description" : "retrieve a plan",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "in" : "path",
+          "name" : "plan_id",
+          "description" : "UUID of plan identifier",
+          "required" : true,
+          "type" : "string",
+          "format" : "uuid"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "retrieve a plan",
+            "schema" : {
+              "type" : "array",
+              "items" : {
+                "$ref" : "#/definitions/Plan"
+              }
+            }
+          },
+          "400" : {
+            "description" : "bad request",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          },
+          "401" : {
+            "description" : "unauthorized request"
+          },
+          "500" : {
+            "description" : "Internal Server Error"
+          }
+        }
+      },
+      "delete" : {
+        "summary" : "delete a plan",
+        "operationId" : "deletePlan",
+        "description" : "delete a plan",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "in" : "path",
+          "name" : "plan_id",
+          "description" : "UUID of plan identifier",
+          "required" : true,
+          "type" : "string",
+          "format" : "uuid"
+        } ],
+        "responses" : {
+          "204" : {
+            "description" : "deleted a plan"
+          },
+          "400" : {
+            "description" : "bad request",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          },
+          "401" : {
+            "description" : "unauthorized request"
+          }
+        }
+      }
+    }
+  },
+  "definitions" : {
+    "Demand" : {
+      "type" : "object",
+      "required" : [ "transaction_id", "template" ],
+      "properties" : {
+        "name" : {
+          "type" : "string"
+        },
+        "id" : {
+          "type" : "string",
+          "format" : "uuid"
+        },
+        "transaction_id" : {
+          "type" : "string",
+          "format" : "uuid",
+          "example" : "d290f1ee-6c54-4b01-90e6-d701748f0851"
+        },
+        "template" : {
+          "type" : "string",
+          "externalDocs" : {
+            "description" : "See here for template format",
+            "url" : "http://onap.readthedocs.io/en/latest/submodules/optf/has.git/docs/sections/homingspecification.html"
+          }
+        }
+      }
+    },
+    "Plan" : {
+      "type" : "object",
+      "required" : [ "plan", "id", "transaction_id", "name", "status", "message", "links", "recommendations" ],
+      "properties" : {
+        "plan" : {
+          "type" : "string",
+          "example" : "JSON string describing plan",
+          "externalDocs" : {
+            "description" : "See here for plan format",
+            "url" : "http://onap.readthedocs.io/en/latest/submodules/optf/has.git/docs/sections/offeredapis.html"
+          }
+        },
+        "id" : {
+          "type" : "string",
+          "format" : "uuid",
+          "example" : "d290f1ee-6c54-4b01-90e6-d701748f0851"
+        },
+        "transaction_id" : {
+          "type" : "string",
+          "format" : "uuid",
+          "example" : "d290f1ee-6c54-4b01-90e6-d701748f0851"
+        },
+        "name" : {
+          "type" : "string",
+          "example" : "name of plan"
+        },
+        "status" : {
+          "type" : "string",
+          "enum" : [ "template", "translated", "solving", "solved", "not found", "error" ]
+        },
+        "message" : {
+          "type" : "string",
+          "example" : "Additional context, if any, around the message status"
+        },
+        "links" : {
+          "type" : "array",
+          "items" : {
+            "$ref" : "#/definitions/Link"
+          },
+          "externalDocs" : {
+            "description" : "See here for links description",
+            "url" : "http://onap.readthedocs.io/en/latest/submodules/optf/has.git/docs/sections/offeredapis.html"
+          }
+        },
+        "recommendations" : {
+          "type" : "array",
+          "items" : {
+            "$ref" : "#/definitions/Recommendation"
+          },
+          "externalDocs" : {
+            "description" : "Refer to the Demand candidate schema in the Homing Template Guide for further details",
+            "url" : "http://onap.readthedocs.io/en/latest/submodules/optf/has.git/docs/sections/homingspecification.html"
+          }
+        }
+      }
+    },
+    "Link" : {
+      "required" : [ "href", "rel" ],
+      "properties" : {
+        "href" : {
+          "type" : "string",
+          "example" : "http://localhost:8091/v1"
+        },
+        "rel" : {
+          "type" : "string",
+          "example" : "self"
+        }
+      }
+    },
+    "Recommendation" : {
+      "required" : [ "recommendation" ],
+      "properties" : {
+        "recommendation" : {
+          "type" : "string",
+          "description" : "JSON string, see description of Plan.recommendations",
+          "example" : "JSON string describing recommendation"
+        }
+      }
+    },
+    "MediaTypes" : {
+      "required" : [ "base", "type" ],
+      "properties" : {
+        "base" : {
+          "type" : "string",
+          "example" : "application/json"
+        },
+        "rel" : {
+          "type" : "string",
+          "example" : "application/vnd.onap.has-v1+json"
+        }
+      }
+    },
+    "Versions" : {
+      "required" : [ "name", "links", "media_types", "status", "updated" ],
+      "properties" : {
+        "id" : {
+          "type" : "string",
+          "example" : "v1"
+        },
+        "links" : {
+          "type" : "array",
+          "items" : {
+            "$ref" : "#/definitions/Link"
+          }
+        },
+        "media-types" : {
+          "type" : "array",
+          "items" : {
+            "$ref" : "#/definitions/MediaTypes"
+          }
+        },
+        "status" : {
+          "type" : "string",
+          "example" : "EXPERIMENTAL"
+        },
+        "updated" : {
+          "type" : "string",
+          "example" : "2016-11-01T00:00:00Z"
+        }
+      }
+    },
+    "Error" : {
+      "properties" : {
+        "title" : {
+          "type" : "string",
+          "example" : "Bad Request"
+        },
+        "explanation" : {
+          "type" : "string",
+          "example" : "pl an did not pass validation against callable"
+        },
+        "code" : {
+          "type" : "integer",
+          "example" : 400
+        },
+        "error" : {
+          "properties" : {
+            "message" : {
+              "type" : "string",
+              "example" : "message"
+            },
+            "traceback" : {
+              "type" : "string",
+              "example" : "traceback"
+            },
+            "errortype" : {
+              "type" : "string",
+              "example" : "type"
+            }
+          }
+        }
+      }
+    }
+  },
+  "schemes" : [ "https" ],
+  "host" : "virtserver.swaggerhub.com",
+  "basePath" : "/onap_oof/has/1.0.0"
+}
