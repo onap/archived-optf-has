@@ -129,12 +129,18 @@ class MusicAPI(object):
         self.rest = rest.REST(**kwargs)
 
         if(CONF.music_api.music_new_version):
+            MUSIC_version = CONF.music_api.music_version.split(".")
+
             self.rest.session.headers['content-type'] = 'application/json'
+            self.rest.session.headers['X-patchVersion'] = MUSIC_version[2]
             self.rest.session.headers['ns'] = CONF.music_api.aafns
-            auth_str = 'Basic {}'.format(base64.encodestring(
-                '{}:{}'.format(CONF.music_api.aafuser,
-                               CONF.music_api.aafpass)).strip())
-            self.rest.session.headers['Authorization'] = auth_str
+            # auth_str = 'Basic {}'.format(base64.encodestring(
+            #     '{}:{}'.format(CONF.music_api.aafuser,
+            #                    CONF.music_api.aafpass)).strip())
+            # self.rest.session.headers['Authorization'] = auth_str
+
+            self.rest.session.headers['userId'] = CONF.music_api.aafuser
+            self.rest.session.headers['password'] = CONF.music_api.aafpass
 
         self.lock_ids = {}
 
