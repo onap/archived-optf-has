@@ -110,8 +110,17 @@ class Operand(object):
                 value += float(candidate_info['cost'])
 
         elif self.function.func_type == "hpa_score":
+            # Currently only minimize objective goal is supported
+            # Higher the HPA score the better.
+            # Invert HPA Score if goal is minimize
+            invert = -1
+
+            #
+            # if self.function.goal == "max":
+            #     invert = 1
+
             for demand_name, candidate_info in _decision_path.decisions.items():
-                hpa_score = float(candidate_info.get('hpa_score', 0))
+                hpa_score = invert * float(candidate_info.get('hpa_score', 0))
                 value += hpa_score
 
         if self.operation == "product":
