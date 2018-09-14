@@ -297,6 +297,134 @@
       "resource-version": "1520943439264"
     },
     {
+      "flavor-id": "f5aa2b2e-3206-41b6-19d5-cf6t2b098c43",
+      "flavor-name": "flavor-ovsdpdk-cpu-pinning-double-sriov-NIC-Network-set",
+      "flavor-vcpus": 32,
+      "flavor-ram": 131072,
+      "flavor-disk": 2097152,
+      "flavor-ephemeral": 128,
+      "flavor-swap": "0",
+      "flavor-is-public": false,
+      "flavor-selflink": "pXtX",
+      "flavor-disabled": false,
+      "hpa-capabilities": {
+        "hpa-capability": [
+          {
+            "hpa-capability-id": "8d36a8fe-bfee-446a-bbcb-881ee66c8f78",
+            "hpa-feature": "ovsDpdk",
+            "hpa-version": "v1",
+            "architecture": "generic",
+            "resource-version": "1520943846328",
+            "hpa-feature-attributes": [
+              {
+                "hpa-attribute-key": "dataProcessingAccelerationLibrary",
+                "hpa-attribute-value": "{\"value\":\"v18.02\"}",
+                "resource-version": "1520943846346"
+              }
+            ]
+          },
+          {
+            "hpa-capability-id": "c140c945-1532-4908-86c9-d7f71416f1dd",
+            "hpa-feature": "cpuPinning",
+            "hpa-version": "v1",
+            "architecture": "generic",
+            "resource-version": "1520943846297",
+            "hpa-feature-attributes": [
+              {
+                "hpa-attribute-key": "logicalCpuPinningPolicy",
+                "hpa-attribute-value": "{\"value\":\"dedicated\"}",
+                "resource-version": "1520943846312"
+              },
+              {
+                "hpa-attribute-key": "logicalCpuThreadPinningPolicy",
+                "hpa-attribute-value": "{\"value\":\"prefer\"}",
+                "resource-version": "1520943846301"
+              }
+            ]
+          },
+          {
+            "hpa-capability-id": "4565615b-1077-4bb5-a340-c5be48db2aaa",
+            "hpa-feature": "basicCapabilities",
+            "hpa-version": "v1",
+            "architecture": "generic",
+            "resource-version": "1520943846269",
+            "hpa-feature-attributes": [
+              {
+                "hpa-attribute-key": "virtualMemSize",
+                "hpa-attribute-value": "{\"value\":\"16\", \"unit\":\"GB\" }",
+                "resource-version": "1520943846282"
+              },
+              {
+                "hpa-attribute-key": "numVirtualCpu",
+                "hpa-attribute-value": "{\"value\":\"8\"}",
+                "resource-version": "1520943846272"
+              }
+            ]
+          },
+          {
+            "hpa-capability-id": "8fa22e64-41b4-471f-96ad-6c470868eo4c",
+            "hpa-feature": "sriovNICNetwork",
+            "hpa-version": "v1",
+            "architecture": "generic",
+            "resource-version": "1520943845443",
+            "hpa-feature-attributes": [
+              {
+                "hpa-attribute-key": "pciCount",
+                "hpa-attribute-value": "{\"value\":\"1\"}",
+                "resource-version": "1520943845870"
+              },
+              {
+                "hpa-attribute-key": "pciVendorId",
+                "hpa-attribute-value": "{\"value\": \"8086\"}",
+                "resource-version": "1520943845764"
+              },
+              {
+                "hpa-attribute-key": "pciDeviceId",
+                "hpa-attribute-value": "{\"value\": \"1234\"}",
+                "resource-version": "1520943847729"
+              },
+              {
+                "hpa-attribute-key": "physicalNetwork",
+                "hpa-attribute-value": "{\"value\": \"physnet1\"}",
+                "resource-version": "1520943871129"
+              }
+            ]
+          },
+          {
+            "hpa-capability-id": "86y7ee64-41b4-471f-96ad-6c470868eo4c",
+            "hpa-feature": "sriovNICNetwork",
+            "hpa-version": "v1",
+            "architecture": "generic",
+            "resource-version": "1520943845443",
+            "hpa-feature-attributes": [
+              {
+                "hpa-attribute-key": "pciCount",
+                "hpa-attribute-value": "{\"value\":\"1\"}",
+                "resource-version": "1520943845870"
+              },
+              {
+                "hpa-attribute-key": "pciVendorId",
+                "hpa-attribute-value": "{\"value\": \"8086\"}",
+                "resource-version": "1520943845764"
+              },
+              {
+                "hpa-attribute-key": "pciDeviceId",
+                "hpa-attribute-value": "{\"value\": \"4321\"}",
+                "resource-version": "1520943847729"
+              },
+              {
+                "hpa-attribute-key": "physicalNetwork",
+                "hpa-attribute-value": "{\"value\": \"physnet2\"}",
+                "resource-version": "1520943871129"
+              }
+            ]
+          }
+
+        ]
+      },
+      "resource-version": "1520943439264"
+    },
+    {
       "flavor-id": "f5aa2b2e-3206-41b6-80d5-cf041b098c43",
       "flavor-name": "flavor-cpu-pinning-ovsdpdk-instruction-set",
       "flavor-vcpus": 32,
