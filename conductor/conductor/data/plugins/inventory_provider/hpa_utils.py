@@ -211,12 +211,14 @@ class HpaMatchProvider(object):
 
     # for the feature get the capabilty feature attribute list
     def _get_flavor_cfa_list(self, feature, flavor_cap_list):
+        feature_attr_list = []
         for capability in CapabilityDataParser.get_item(flavor_cap_list,
                                                         'hpa-capability'):
             flavor_feature, feature_attributes = capability.get_fields()
-            # Multiple features will match this condition as we have pre-filtered
+            # Multiple features that match this condition will be filtered
             if feature == flavor_feature:
-                return feature_attributes
+                feature_attr_list.append(feature_attributes)
+        return feature_attr_list
 
     # flavor has all the required capabilties
     # For each required capability find capability in flavor
@@ -229,23 +231,33 @@ class HpaMatchProvider(object):
             feature_directive = capability.get_directives()
             if feature_directive:
                 feature_directive[:] = [d for d in feature_directive
-                                            if d.get("type") != ""]
+                                        if d.get("type") != ""]
                 for item in feature_directive:
                     directives.append(item)
             flavor_cfa_list = self._get_flavor_cfa_list(hpa_feature, flavor_cap_list)
+            req_flag = False
             if flavor_cfa_list is not None:
-                for req_feature_attr in req_cfa_list:
-                    req_attr_key = req_feature_attr['hpa-attribute-key']
-                    # filter to get the attribute being compared
-                    flavor_feature_attr = \
-                        filter(lambda ele: ele['hpa-attribute-key'] == \
-                                req_attr_key, flavor_cfa_list)
-                    if not flavor_feature_attr and capability.item['mandatory'] == 'True':
-                        return False, 0, None
-                    if not self._compare_attribute(flavor_feature_attr[0], req_feature_attr) \
-                            and capability.item['mandatory'] == 'True':
-                        return False, 0, None
-            if flavor_cfa_list is not None and capability.item['mandatory'] == 'False':
+                for flavor_cfa in flavor_cfa_list:
+                    flavor_flag = True
+                    for req_feature_attr in req_cfa_list:
+                        req_attr_key = req_feature_attr['hpa-attribute-key']
+                        # filter to get the attribute being compared
+                        flavor_feature_attr = \
+                            filter(lambda ele: ele['hpa-attribute-key'] ==
+                                               req_attr_key, flavor_cfa)
+                        if not flavor_feature_attr:
+                            flavor_flag = False
+                        if not self._compare_attribute(flavor_feature_attr[0],
+                                                       req_feature_attr):
+                           flavor_flag = False
+                    if not flavor_flag:
+                        continue
+                    else:
+                        req_flag = True
+                        break
+            if not req_flag and capability.item['mandatory'] == 'True':
+                return False, 0, None
+            if req_flag and capability.item['mandatory'] == 'False':
                 score = score + int(capability.item['score'])
         return True, score, directives
 
