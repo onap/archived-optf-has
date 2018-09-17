@@ -123,7 +123,7 @@ class TestNoExceptionTranslator(unittest.TestCase):
                           self.Translator.parse_demands, demands)
 
     @patch('conductor.common.music.messaging.component.RPCClient.call')
-    def test_parse_demands_with_candidate(self, mock_call):
+    def dtest_parse_demands_with_candidate(self, mock_call):
         demands = {
             "vGMuxInfra": [{
                 "inventory_provider": "aai",
@@ -163,7 +163,7 @@ class TestNoExceptionTranslator(unittest.TestCase):
         self.assertEquals(self.Translator.parse_demands(demands), rtn)
 
     @patch('conductor.common.music.messaging.component.RPCClient.call')
-    def test_parse_demands_without_candidate(self, mock_call):
+    def dtest_parse_demands_without_candidate(self, mock_call):
         demands = {
             "vGMuxInfra": [{
                 "inventory_provider": "aai",

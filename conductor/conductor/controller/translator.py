@@ -28,6 +28,8 @@ import yaml
 from conductor import __file__ as conductor_root
 from conductor import messaging
 from conductor import service
+from conductor.data.plugins.triage_translator.triage_translator_data import TraigeTranslatorData
+from conductor.data.plugins.triage_translator.triage_translator import TraigeTranslator
 from conductor.common import threshold
 from conductor.common.music import messaging as music_messaging
 from oslo_config import cfg
@@ -133,7 +135,8 @@ class Translator(object):
         self._translation = None
         self._valid = False
         self._ok = False
-
+        self.triageTranslatorData= TraigeTranslatorData()
+        self.triageTranslator = TraigeTranslator()
         # Set up the RPC service(s) we want to talk to.
         self.data_service = self.setup_rpc(self.conf, "data")
 
@@ -493,7 +496,13 @@ class Translator(object):
             args = {
                 "demands": {
                     name: requirements,
-                }
+                },
+                "plan_info":{
+                    "plan_id": self._plan_id,
+                    "plan_name": self._plan_name
+                },
+                "triage_translator_data": self.triageTranslatorData.__dict__
+
             }
 
             # Check if required_candidate and excluded candidate
@@ -512,7 +521,6 @@ class Translator(object):
                         " list are not mutually exclusive for demand"
                         " {}".format(name)
                     )
-
             response = self.data_service.call(
                 ctxt=ctxt,
                 method="resolve_demands",
@@ -520,10 +528,13 @@ class Translator(object):
 
             resolved_demands = \
                 response and response.get('resolved_demands')
+            triage_data_trans = \
+                response and response.get('trans')
 
             required_candidates = resolved_demands \
                 .get('required_candidates')
             if not resolved_demands:
+                self.triageTranslator.thefinalCallTrans(triage_data_trans)
                 raise TranslatorException(
                     "Unable to resolve inventory "
                     "candidates for demand {}"
@@ -534,11 +545,13 @@ class Translator(object):
                 inventory_candidates.append(candidate)
             if len(inventory_candidates) < 1:
                 if not required_candidates:
+                    self.triageTranslator.thefinalCallTrans(triage_data_trans)
                     raise TranslatorException(
                         "Unable to find any candidate for "
                         "demand {}".format(name)
                     )
                 else:
+                    self.triageTranslator.thefinalCallTrans(triage_data_trans)
                     raise TranslatorException(
                         "Unable to find any required "
                         "candidate for demand {}"
@@ -547,7 +560,7 @@ class Translator(object):
             parsed[name] = {
                 "candidates": inventory_candidates,
             }
-
+        self.triageTranslator.thefinalCallTrans(triage_data_trans)
         return parsed
 
     def validate_hpa_constraints(self, req_prop, value):

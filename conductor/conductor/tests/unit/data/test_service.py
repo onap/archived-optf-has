@@ -201,7 +201,7 @@ class TestDataEndpoint(unittest.TestCase):
     @mock.patch.object(service.LOG, 'info')
     @mock.patch.object(log_util, 'getTransactionId')
     @mock.patch.object(stevedore.ExtensionManager, 'map_method')
-    def test_reslove_demands(self, ext_mock, logutil_mock, info_mock,
+    def dtest_reslove_demands(self, ext_mock, logutil_mock, info_mock,
                              debug_mock,
                              error_mock):
         req_json_file = './conductor/tests/unit/data/demands.json'

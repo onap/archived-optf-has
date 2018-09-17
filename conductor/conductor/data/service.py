@@ -73,6 +73,7 @@ class DataServiceLauncher(object):
         self.conf = conf
         self.init_extension_managers(conf)
 
+
     def init_extension_managers(self, conf):
         """Initialize extension managers."""
         self.ip_ext_manager = (
@@ -112,6 +113,11 @@ class DataEndpoint(object):
         self.vc_ext_manager = vc_ext_manager
         self.sc_ext_manager = sc_ext_manager
         self.plugin_cache = {}
+        self.triage_data_trans = {
+            'plan_id': None,
+            'plan_name': None,
+            'translator_triage': []
+        }
 
     def get_candidate_location(self, ctx, arg):
         # candidates should have lat long info already
@@ -552,18 +558,36 @@ class DataEndpoint(object):
 
         error = False
         demands = arg.get('demands')
+        plan_info = arg.get('plan_info')
+        triage_translator_data = arg.get('triage_translator_data')
         resolved_demands = None
         results = self.ip_ext_manager.map_method(
             'resolve_demands',
-            demands
+            demands, plan_info, triage_translator_data
         )
         if results and len(results) > 0:
             resolved_demands = results[0]
+            if self.triage_data_trans['plan_id']== None :
+                self.triage_data_trans['plan_name'] = triage_translator_data['plan_name']
+                self.triage_data_trans['plan_id'] = triage_translator_data['plan_id']
+                self.triage_data_trans['translator_triage'].append(triage_translator_data['dropped_candidates'])
+            elif (not self.triage_data_trans['plan_id'] == triage_translator_data['plan_id']) :
+                self.triage_data_trans = {
+                    'plan_id': None,
+                    'plan_name': None,
+                    'translator_triage': []
+                }
+                self.triage_data_trans['plan_name']  = triage_translator_data['plan_name']
+                self.triage_data_trans['plan_id'] = triage_translator_data['plan_id']
+                self.triage_data_trans['translator_triage'].append(triage_translator_data['dropped_candidates'])
+            else:
+                self.triage_data_trans['translator_triage'].append(triage_translator_data['dropped_candidates'])
         else:
             error = True
 
-        return {'response': {'resolved_demands': resolved_demands},
-                'error': error}
+        return {'response': {'resolved_demands': resolved_demands,
+                             'trans': self.triage_data_trans},
+                'error': error  }
 
     def resolve_location(self, ctx, arg):
 

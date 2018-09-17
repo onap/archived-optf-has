@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 #
 # -------------------------------------------------------------------------
 #   Copyright (c) 2015-2017 AT&T Intellectual Property
@@ -17,7 +16,6 @@
 #
 # -------------------------------------------------------------------------
 #
-
 
 """Existing service instance in a region"""
 
@@ -44,11 +42,9 @@ class Service(object):
         self.last_update = 0
 
     """update resource capacity after allocating demand"""
-
     def update_capacity(self):
         pass
 
     """for logging"""
-
     def get_json_summary(self):
         pass

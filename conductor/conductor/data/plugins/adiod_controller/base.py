@@ -1,6 +1,6 @@
 #
 # -------------------------------------------------------------------------
-#   Copyright (c) 2018 Intel Corporation Intellectual Property
+#   Copyright (c) 2015-2017 AT&T Intellectual Property
 #
 #   Licensed under the Apache License, Version 2.0 (the "License");
 #   you may not use this file except in compliance with the License.
@@ -17,22 +17,25 @@
 # -------------------------------------------------------------------------
 #
 
-import json
+import abc
 
-import yaml
+from oslo_log import log
+import six
+
+from conductor.data.plugins import base
+
+LOG = log.getLogger(__name__)
 
 
-def load_config_file(config_file, child_name="dockerConfiguration"):
-    """
-    Load YAML/JSON configuration from a file
-    :param config_file:  path to config file (.yaml or .json).
-    :param child_name: if present, return only that child node
-    :return: config (all or specific child node)
-    """
-    with open(config_file, 'r') as fid:
-        res = {}
-        if config_file.endswith(".yaml"):
-            res = yaml.load(fid)
-        elif config_file.endswith(".json") or config_file.endswith("json"):
-            res = json.load(fid)
-    return res.get(child_name, res) if child_name else res
+@six.add_metaclass(abc.ABCMeta)
+class AdoidControllerBase(base.DataPlugin):
+    """Base class for ADIOD Controller plugins"""
+
+    @abc.abstractmethod
+    def name(self):
+        """Return human-readable name."""
+        pass
+
+    @abc.abstractmethod
+    def call_reservation_operation(self, candidate):
+        pass

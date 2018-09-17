@@ -31,13 +31,22 @@ class RandomPick(search.Search):
         search.Search.__init__(self, conf)
 
     def search(self, _demand_list, _request):
+
         decision_path = dpath.DecisionPath()
         decision_path.set_decisions({})
+
         return self._find_current_best(_demand_list, decision_path, _request)
 
     def _find_current_best(self, _demand_list, _decision_path, _request):
+
         for demand in _demand_list:
-            r_index = randint(0, len(demand.resources) - 1)
-            best_resource = demand.resources[demand.resources.keys()[r_index]]
+            # apply the constraints on all candidates first
+            _decision_path.current_demand = demand
+            candidate_list = self._solve_constraints(_decision_path, _request)
+
+            # random pick one candidate
+            r_index = randint(0, len(candidate_list) - 1)
+            best_resource = candidate_list[r_index]
             _decision_path.decisions[demand.name] = best_resource
+
         return _decision_path
