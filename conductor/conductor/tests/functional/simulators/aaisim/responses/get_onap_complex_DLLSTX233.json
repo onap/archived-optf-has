@@ -21,7 +21,7 @@
                     {
                         "related-to": "cloud-region",
                         "relationship-label": "org.onap.relationships.inventory.LocatedIn",
-                        "related-link": "/aai/v13/cloud-infrastructure/cloud-regions/cloud-region/HPA-cloud/cloud-region-1",
+                        "related-link": "/aai/v14/cloud-infrastructure/cloud-regions/cloud-region/HPA-cloud/cloud-region-1",
                         "relationship-data": [
                             {
                                 "relationship-key": "cloud-region.cloud-owner",
@@ -42,7 +42,7 @@
                     {
                         "related-to": "cloud-region",
                         "relationship-label": "org.onap.relationships.inventory.LocatedIn",
-                        "related-link": "/aai/v13/cloud-infrastructure/cloud-regions/cloud-region/HPA-cloud/cloud-region-2",
+                        "related-link": "/aai/v14/cloud-infrastructure/cloud-regions/cloud-region/HPA-cloud/cloud-region-2",
                         "relationship-data": [
                             {
                                 "relationship-key": "cloud-region.cloud-owner",

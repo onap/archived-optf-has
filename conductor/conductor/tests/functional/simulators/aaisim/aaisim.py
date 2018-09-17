@@ -16,20 +16,17 @@
 #
 # -------------------------------------------------------------------------
 #
-import web
-import web.webapi
 import json
 
-from subprocess import Popen, PIPE
-from xml.dom import minidom
-
+import web
+import web.webapi
 
 urls = (
   '/healthcheck','healthcheck',
-  '/aai/v13/cloud-infrastructure/cloud-regions/','get_regions',
-  '/aai/v13/cloud-infrastructure/complexes/complex/DLLSTX233','get_complex_DLLSTX233',
-  '/aai/v13/cloud-infrastructure/cloud-regions/cloud-region/HPA-cloud/cloud-region-1/flavors/', 'get_flavors_region_1',
-  '/aai/v13/cloud-infrastructure/cloud-regions/cloud-region/HPA-cloud/cloud-region-2/flavors/', 'get_flavors_region_2',
+  '/aai/v14/cloud-infrastructure/cloud-regions/','get_regions',
+  '/aai/v14/cloud-infrastructure/complexes/complex/DLLSTX233','get_complex_DLLSTX233',
+  '/aai/v14/cloud-infrastructure/cloud-regions/cloud-region/HPA-cloud/cloud-region-1/flavors/', 'get_flavors_region_1',
+  '/aai/v14/cloud-infrastructure/cloud-regions/cloud-region/HPA-cloud/cloud-region-2/flavors/', 'get_flavors_region_2',
 )
 
 
