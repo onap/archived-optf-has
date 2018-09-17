@@ -347,10 +347,9 @@ class SolverService(cotyledon.Service):
                         rec["candidate"]["host_id"] = resource.get("host_id")
 
                     if rec["candidate"]["inventory_type"] == "cloud":
-                        if resource.get("flavor_map"):
-                            rec["attributes"]["flavors"] = resource.get(
-                                "flavor_map")
-
+                        if resource.get("all_directives") and resource.get("flavor_map"):
+                            rec["attributes"]["directives"] = self.set_flavor(resource.get("flavor_map"), resource.get(
+                                "all_directives"))
                     # TODO(snarayanan): Add total value to recommendations?
                     # msg = "--- total value of decision = {}"
                     # LOG.debug(msg.format(_best_path.total_value))
@@ -387,3 +386,12 @@ class SolverService(cotyledon.Service):
         """Reload"""
         LOG.debug("%s" % self.__class__.__name__)
         self._restart()
+
+    def set_flavor(self, flavor_map, directives):
+        for ele in directives.get("directives"):
+            for item in ele.get("directives"):
+                if "flavor_directives" in item.get("type"):
+                    for attr in item.get("attributes"):
+                         for key, value in flavor_map.items():
+                             attr["attribute_value"] = value if key == attr.get("attribute_name") else ""
+        return directives

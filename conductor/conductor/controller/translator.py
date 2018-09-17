@@ -105,7 +105,7 @@ CONSTRAINTS = {
     },
 }
 HPA_FEATURES = ['architecture', 'hpa-feature', 'hpa-feature-attributes',
-                'hpa-version', 'mandatory']
+                'hpa-version', 'mandatory', 'directives']
 HPA_OPTIONAL = ['score']
 HPA_ATTRIBUTES = ['hpa-attribute-key', 'hpa-attribute-value', 'operator']
 HPA_ATTRIBUTES_OPTIONAL = ['unit']
@@ -553,14 +553,18 @@ class Translator(object):
     def validate_hpa_constraints(self, req_prop, value):
         for para in value.get(req_prop):
             # Make sure there is at least one
-            # set of flavorLabel and flavorProperties
-            if not para.get('flavorLabel') \
+            # set of id, type, directives and flavorProperties
+            if not para.get('id') \
+                    or not para.get('type') \
+                    or not para.get('directives') \
                     or not para.get('flavorProperties') \
-                    or para.get('flavorLabel') == '' \
+                    or para.get('id') == '' \
+                    or para.get('type') == '' \
+                    or not isinstance(para.get('directives'), list)  \
                     or para.get('flavorProperties') == '':
                 raise TranslatorException(
                     "HPA requirements need at least "
-                    "one set of flavorLabel and flavorProperties"
+                    "one set of id, type, directives and flavorProperties"
                 )
             for feature in para.get('flavorProperties'):
                 if type(feature) is not dict:
@@ -574,7 +578,7 @@ class Translator(object):
                 hpa_optional = set(feature.keys()).difference(HPA_FEATURES)
                 if hpa_optional and not hpa_optional.issubset(HPA_OPTIONAL):
                     raise TranslatorException(
-                        "Lack of compulsory elements inside HPA feature")
+                        "Got unrecognized elements inside HPA feature")
                 if feature.get('mandatory') == 'False' and not feature.get(
                         'score'):
                     raise TranslatorException(
@@ -591,7 +595,7 @@ class Translator(object):
                     if bool(hpa_attr_mandatory):
                         raise TranslatorException(
                             "Lack of compulsory elements inside HPA "
-                            "feature atrributes")
+                            "feature attributes")
                     # process optional hpa attribute parameter
                     hpa_attr_optional = set(attr.keys()).difference(
                         HPA_ATTRIBUTES)
@@ -649,7 +653,7 @@ class Translator(object):
                                 "No value specified for property '{}' in "
                                 "constraint named '{}'".format(
                                     req_prop, name))
-                        # For HPA constraints
+                            # For HPA constraints
                         if constraint_type == 'hpa':
                             self.validate_hpa_constraints(req_prop, value)
 
@@ -794,13 +798,6 @@ class Translator(object):
                         elif product_op.keys() == ['aic_version']:
                             function = 'aic_version'
                             args = product_op.get('aic_version')
-                        elif product_op.keys() == ['hpa_score']:
-                            function = 'hpa_score'
-                            args = product_op.get('hpa_score')
-                            if not self.is_hpa_policy_exists(args):
-                                raise TranslatorException(
-                                    "HPA Score Optimization must include a "
-                                    "HPA Policy constraint ")
                         elif product_op.keys() == ['sum']:
                             nested = True
                             nested_operands = product_op.get('sum')
@@ -851,18 +848,6 @@ class Translator(object):
                 )
         return parsed
 
-    def is_hpa_policy_exists(self, demand_list):
-        # Check if a HPA constraint exist for the demands in the demand list.
-        constraints_copy = copy.deepcopy(self._constraints)
-        for demand in demand_list:
-            for name, constraint in constraints_copy.items():
-                constraint_type = constraint.get('type')
-                if constraint_type == 'hpa':
-                    hpa_demands = constraint.get('demands')
-                    if demand in hpa_demands:
-                        return True
-        return False
-
     def parse_reservations(self, reservations):
         demands = self._demands
         if type(reservations) is not dict:
@@ -899,6 +884,7 @@ class Translator(object):
                 "request_type": request_type,
                 "locations": self.parse_locations(self._locations),
                 "demands": self.parse_demands(self._demands),
+                "objective": self.parse_optimization(self._optmization),
                 "constraints": self.parse_constraints(self._constraints),
                 "objective": self.parse_optimization(self._optmization),
                 "reservations": self.parse_reservations(self._reservations),

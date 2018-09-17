@@ -69,7 +69,7 @@ class HpaMatchProvider(object):
                 if hpa_list not in req_filter_list:
                     req_filter_list.append(hpa_list)
         max_score = -1
-        flavor_map = None
+        directives = None
         for flavor in self.flavors_list:
             flavor_filter_list = []
             try:
@@ -84,7 +84,7 @@ class HpaMatchProvider(object):
                 flavor_filter_list.append(hpa_list)
             # if flavor has the matching capability compare attributes
             if self._is_cap_supported(flavor_filter_list, req_filter_list):
-                match_found, score = self._compare_feature_attributes(flavor_cap_list)
+                match_found, score, req_directives = self._compare_feature_attributes(flavor_cap_list)
                 if match_found:
                     LOG.info(_LI("Matching Flavor found '{}' for request - {}").
                              format(flavor['flavor-name'], self.req_cap_list))
@@ -93,7 +93,9 @@ class HpaMatchProvider(object):
                         flavor_map = {"flavor-id": flavor['flavor-id'],
                                       "flavor-name": flavor['flavor-name'],
                                       "score": max_score}
-        return flavor_map
+                        directives = {"flavor_map": flavor_map,
+                                      "directives": req_directives}
+        return directives
 
 
     def _is_cap_supported(self, flavor, cap):
@@ -212,8 +214,10 @@ class HpaMatchProvider(object):
         for capability in CapabilityDataParser.get_item(flavor_cap_list,
                                                         'hpa-capability'):
             flavor_feature, feature_attributes = capability.get_fields()
-            # One feature will match this condition as we have pre-filtered
+            #feature_attr_list = []
+            # Multiple features will match this condition as we have pre-filtered
             if feature == flavor_feature:
+                #feature_attr_list.append(feature_attributes)
                 return feature_attributes
 
     # flavor has all the required capabilties
@@ -221,24 +225,29 @@ class HpaMatchProvider(object):
     # and compare each attribute
     def _compare_feature_attributes(self, flavor_cap_list):
         score = 0
+        directives = []
         for capability in CapabilityDataParser.get_item(self.req_cap_list, None):
-            hpa_feature, req_cfa_list = capability.get_fields()
+            hpa_feature, req_cfa_list= capability.get_fields()
+            feature_directive = capability.get_directives()
+            if feature_directive:
+                for item in feature_directive:
+                    directives.append(item)
             flavor_cfa_list = self._get_flavor_cfa_list(hpa_feature, flavor_cap_list)
             if flavor_cfa_list is not None:
                 for req_feature_attr in req_cfa_list:
                     req_attr_key = req_feature_attr['hpa-attribute-key']
-                     # filter to get the attribute being compared
+                    # filter to get the attribute being compared
                     flavor_feature_attr = \
                         filter(lambda ele: ele['hpa-attribute-key'] == \
-                               req_attr_key, flavor_cfa_list)
-                    if not flavor_feature_attr:
-                        return False, 0
+                                req_attr_key, flavor_cfa_list)
+                    if not flavor_feature_attr and capability.item['mandatory'] == 'True':
+                        return False, 0, None
                     if not self._compare_attribute(flavor_feature_attr[0],
-                                                   req_feature_attr):
-                        return False, 0
+                                                       req_feature_attr) and capability.item['mandatory'] == 'True':
+                        return False, 0, None
             if flavor_cfa_list is not None and capability.item['mandatory'] == 'False':
                 score = score + int(capability.item['score'])
-        return True, score
+        return True, score, directives
 
 
 class CapabilityDataParser(object):
@@ -269,3 +278,6 @@ class CapabilityDataParser(object):
 
     def get_feature(self):
         return self.item.get('hpa-feature')
+
+    def get_directives(self):
+        return self.item.get('directives')

@@ -52,13 +52,13 @@ DATA_OPTS = [
                      'mode. When set to False, data will flush any abandoned '
                      'messages at startup.'),
     cfg.FloatOpt('existing_placement_cost',
-               default=-8000.0,
-               help='Default value is -8000, which is the diameter of the earth. '
-                    'The distance cannot larger than this value'),
+                 default=-8000.0,
+                 help='Default value is -8000, which is the diameter of the earth. '
+                      'The distance cannot larger than this value'),
     cfg.FloatOpt('cloud_candidate_cost',
-               default=2.0),
+                 default=2.0),
     cfg.FloatOpt('service_candidate_cost',
-               default=1.0),
+                 default=1.0),
 ]
 
 CONF.register_opts(DATA_OPTS, group='data')
@@ -223,7 +223,7 @@ class DataEndpoint(object):
                     discard_set.add(candidate.get("candidate_id"))
         return discard_set
 
-    #(TODO:Larry) merge this function with the "get_candidate_discard_set"
+    # (TODO:Larry) merge this function with the "get_candidate_discard_set"
     def get_candidate_discard_set_by_cloud_region(self, value, candidate_list, value_attrib):
         discard_set = set()
 
@@ -239,9 +239,7 @@ class DataEndpoint(object):
                     (candidate.get(value_attrib) not in service_requests):
                 discard_set.add(candidate.get("candidate_id"))
 
-
         return discard_set
-
 
     def get_inventory_group_candidates(self, ctx, arg):
         candidate_list = arg["candidate_list"]
@@ -375,7 +373,7 @@ class DataEndpoint(object):
                     if host_id:
                         results = self.ip_ext_manager.map_method(
                             'check_candidate_role',
-                            host_id = host_id
+                            host_id=host_id
                         )
 
                         if not results or len(results) < 1:
@@ -442,18 +440,22 @@ class DataEndpoint(object):
         '''
         error = False
         candidate_list = arg["candidate_list"]
-        label_name = arg["label_name"]
+        id = arg["id"]
+        type = arg["type"]
+        directives = arg["directives"]
+        attr = directives[0].get("attributes")
+        label_name = attr[0].get("attribute_name")
         flavorProperties = arg["flavorProperties"]
         discard_set = set()
-        for candidate in candidate_list:
+        for i in range(len(candidate_list)):
             # perform this check only for cloud candidates
-            if candidate["inventory_type"] != "cloud":
+            if candidate_list[i]["inventory_type"] != "cloud":
                 continue
 
             # Check if flavor mapping for current label_name already
             # exists. This is an invalid condition.
-            if candidate.get("flavor_map") and candidate["flavor_map"].get(
-                    label_name):
+            if candidate_list[i].get("directives") and attr[0].get(
+                    "attribute_value") != "":
                 LOG.error(_LE("Flavor mapping for label name {} already"
                               "exists").format(label_name))
                 continue
@@ -461,36 +463,47 @@ class DataEndpoint(object):
             # RPC call to inventory provider for matching hpa capabilities
             results = self.ip_ext_manager.map_method(
                 'match_hpa',
-                candidate=candidate,
+                candidate=candidate_list[i],
                 features=flavorProperties
             )
 
-            if results and len(results) > 0:
-                flavor_info = results[0]
+            flavor_name = None
+            if results and len(results) > 0 and results[0] is not None:
+                LOG.debug("Find results {} and results length {}".format(results, len(results)))
+                flavor_info = results[0].get("flavor_map")
+                req_directives = results[0].get("directives")
+                LOG.debug("Get directives {}".format(req_directives))
+
             else:
                 flavor_info = None
                 LOG.info(
                     _LW("No flavor mapping returned by "
                         "inventory provider: {} for candidate: {}").format(
                         self.ip_ext_manager.names()[0],
-                        candidate.get("candidate_id")))
+                        candidate_list[i].get("candidate_id")))
             if not flavor_info:
-                discard_set.add(candidate.get("candidate_id"))
+                discard_set.add(candidate_list[i].get("candidate_id"))
             else:
                 if not flavor_info.get("flavor-name"):
-                    discard_set.add(candidate.get("candidate_id"))
+                    discard_set.add(candidate_list[i].get("candidate_id"))
                 else:
-                    # Create flavor_map if not exist already
-                    if not candidate.get("flavor_map"):
-                        candidate["flavor_map"] = {}
+                    if not candidate_list[i].get("flavor_map"):
+                        candidate_list[i]["flavor_map"] = {}
                     # Create flavor mapping for label_name to flavor
                     flavor_name = flavor_info.get("flavor-name")
-                    candidate["flavor_map"][label_name] = flavor_name
-                    # If hpa_score is not defined then initialize value 0
-                    # hpa_score = sum of scores of each vnfc hpa requirement score
-                    if not candidate.get("hpa_score"):
-                        candidate["hpa_score"] = 0
-                    candidate["hpa_score"] += flavor_info.get("score")
+                    candidate_list[i]["flavor_map"][label_name] = flavor_name
+                    # Create directives if not exist already
+                    if not candidate_list[i].get("all_directives"):
+                        candidate_list[i]["all_directives"] = {}
+                        candidate_list[i]["all_directives"]["directives"] = []
+                    # Create flavor mapping and merge directives
+                    #LOG.debug("Now got candidate['all_directives]['directives'] {}".format(candidate_list[i]["all_directives"]["directives"]))
+                    self.merge_directives(candidate_list, i, id, type, directives, req_directives)
+                    #LOG.debug("Find flavor {} in region {} with directives {}".format(flavor_name, candidate_list[i]["vim-id"],
+                    #                                                                  candidate_list[i]["all_directives"]["directives"]))
+                    if not candidate_list[i].get("hpa_score"):
+                        candidate_list[i]["hpa_score"] = 0
+                    candidate_list[i]["hpa_score"] += flavor_info.get("score")
 
         # return candidates not in discard set
         candidate_list[:] = [c for c in candidate_list
@@ -500,6 +513,24 @@ class DataEndpoint(object):
             "inventory provider: {}").format(candidate_list,
                                              self.ip_ext_manager.names()[0]))
         return {'response': candidate_list, 'error': error}
+
+    def merge_directives(self, candidate_list, index, id, type, directives, feature_directives):
+        directive= {"id": id,
+                    "type": type,
+                    "directives": ""}
+        for ele in directives:
+            if "flavor_directives" in ele.get("type"):
+                flag = True
+                break
+            else:
+                flag = False
+        if not flag:
+            LOG.error("No flavor directives found in {}".format(id))
+        for item in feature_directives:
+            if item and item not in directives:
+                directives.append(item)
+        directive["directives"] = directives
+        candidate_list[index]["all_directives"]["directives"].append(directive)
 
     def get_candidates_with_vim_capacity(self, ctx, arg):
         '''
