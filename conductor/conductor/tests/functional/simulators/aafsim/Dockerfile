@@ -1,0 +1,39 @@
+#
+# -------------------------------------------------------------------------
+#   Copyright (c) 2018 AT&T Intellectual Property
+#
+#   Licensed under the Apache License, Version 2.0 (the "License");
+#   you may not use this file except in compliance with the License.
+#   You may obtain a copy of the License at
+#
+#       http://www.apache.org/licenses/LICENSE-2.0
+#
+#   Unless required by applicable law or agreed to in writing, software
+#   distributed under the License is distributed on an "AS IS" BASIS,
+#   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+#   See the License for the specific language governing permissions and
+#   limitations under the License.
+#
+# -------------------------------------------------------------------------
+#
+# Use an official Python runtime as a parent image
+FROM python:2.7
+
+# Set the working directory to /su/python/webpy-rest-dockerized
+WORKDIR /opt/aafsim
+
+# Copy the current directory contents into the container at /app
+ADD ./  /opt/aafsim
+
+# Install any needed packages specified in requirements.txt
+RUN pip install web.py
+
+# Make port 80 available to the world outside this container
+EXPOSE 8081
+
+# Define environment variable
+ENV NAME aafsim
+
+# Run aafsim.py when the container launches
+CMD ["/bin/sh", "-c", "python -u aafsim.py 8081 > /tmp/aafsim.log 2>&1"]
+

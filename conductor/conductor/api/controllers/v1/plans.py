@@ -16,7 +16,6 @@
 #
 # -------------------------------------------------------------------------
 #
-
 import six
 import yaml
 import base64
@@ -34,8 +33,9 @@ from conductor.api.controllers import validator
 from conductor.i18n import _, _LI
 from oslo_config import cfg
 
-CONF = cfg.CONF
+from conductor.api.adapters.aaf import aaf_authentication as aaf_auth
 
+CONF = cfg.CONF
 
 LOG = log.getLogger(__name__)
 
@@ -44,14 +44,14 @@ CONDUCTOR_API_OPTS = [
                default='',
                help='Base URL for plans.'),
     cfg.StrOpt('username',
-               default='admin1',
+               default='',
                help='username for plans.'),
     cfg.StrOpt('password',
-               default='plan.15',
+               default='',
                help='password for plans.'),
     cfg.BoolOpt('basic_auth_secure',
-               default=True,
-               help='auth toggling.')
+                default=True,
+                help='auth toggling.'),
 ]
 
 CONF.register_opts(CONDUCTOR_API_OPTS, group='conductor_api')
@@ -61,7 +61,6 @@ CREATE_SCHEMA = (
     (decorators.optional('id'), types.string),
     (decorators.optional('limit'), types.integer),
     (decorators.optional('name'), types.string),
-    (decorators.optional('num_solution'), types.string),
     ('template', string_or_dict),
     (decorators.optional('template_url'), types.string),
     (decorators.optional('timeout'), types.integer),
@@ -86,11 +85,12 @@ class PlansBaseController(object):
 
     def plans_get(self, plan_id=None):
 
-        basic_auth_flag = CONF.conductor_api.basic_auth_secure
+        auth_flag = CONF.conductor_api.basic_auth_secure or CONF.aaf_authentication.is_aaf_enabled
 
+        # TBD - is healthcheck properly supported?
         if plan_id == 'healthcheck' or \
-        not basic_auth_flag or \
-        (basic_auth_flag and check_basic_auth()):
+                not auth_flag or \
+                (auth_flag and check_auth()):
             return self.plan_getid(plan_id)
 
     def plan_getid(self, plan_id):
@@ -147,6 +147,7 @@ class PlansBaseController(object):
             args.get('name')))
 
         client = pecan.request.controller
+
         transaction_id = pecan.request.headers.get('transaction-id')
         if transaction_id:
             args['template']['transaction-id'] = transaction_id
@@ -290,12 +291,13 @@ class PlansController(PlansBaseController):
         if args and args['name']:
             LOG.info('Plan name: {}'.format(args['name']))
 
-        basic_auth_flag = CONF.conductor_api.basic_auth_secure
+        auth_flag = CONF.conductor_api.basic_auth_secure or CONF.aaf_authentication.is_aaf_enabled
 
-        # Create the plan only when the basic authentication is disabled or pass the authentication check
-        if not basic_auth_flag or \
-        (basic_auth_flag and check_basic_auth()):
+        # Create the plan only when the basic authentication is disabled or pass the authenticaiton check
+        if not auth_flag or \
+                (auth_flag and check_auth()):
             plan = self.plan_create(args)
+
         if not plan:
             error('/errors/server_error', _('Unable to create Plan.'))
         else:
@@ -307,11 +309,13 @@ class PlansController(PlansBaseController):
         """Pecan subcontroller routing callback"""
         return PlansItemController(uuid4), remainder
 
-def check_basic_auth():
+
+def check_auth():
     """
     Returns True/False if the username/password of Basic Auth match/not match
+    Will also check role-based access controls if AAF integration configured
     :return boolean value
-     """
+    """
 
     try:
         if pecan.request.headers['Authorization'] and verify_user(pecan.request.headers['Authorization']):
@@ -323,19 +327,22 @@ def check_basic_auth():
             user_pw = auth_str.split(' ')[1]
             decode_user_pw = base64.b64decode(user_pw)
             list_id_pw = decode_user_pw.split(':')
-            LOG.error("Incorrect username={}/password={}".format(list_id_pw[0],list_id_pw[1]))
+            LOG.error("Incorrect username={} / password={}".format(list_id_pw[0], list_id_pw[1]))
     except:
         error('/errors/basic_auth_error', _('Unauthorized: The request does not '
                                             'provide any HTTP authentication (basic authentication)'))
+        plan = False
 
     if not plan:
         error('/errors/authentication_error', _('Invalid credentials: username or password is incorrect'))
+
     return plan
 
 
 def verify_user(authstr):
     """
-    authenticate user as per config file
+    authenticate user as per config file or AAF authentication service
+    :param authstr:
     :return boolean value
     """
     user_dict = dict()
@@ -347,7 +354,17 @@ def verify_user(authstr):
     user_dict['password'] = list_id_pw[1]
     password = CONF.conductor_api.password
     username = CONF.conductor_api.username
-    if username == user_dict['username'] and password == user_dict['password']:
-        return True
+
+#    print ("plans.verify_user(): Expected username/password: {}/{}".format(username, password))
+#    print ("plans.verify_user(): Provided username/password: {}/{}".format(user_dict['username'], user_dict['password']))
+
+    retVal = False
+
+    if CONF.aaf_authentication.is_aaf_enabled:
+        retVal = aaf_auth.authenticate(user_dict['username'], user_dict['password'])
     else:
-        return False
+        if username == user_dict['username'] and password == user_dict['password']:
+            retVal = True
+
+    return retVal
+
