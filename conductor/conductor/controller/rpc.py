@@ -100,3 +100,58 @@ class ControllerRPCEndpoint(object):
             'response': {"plans": plan_list},
             'error': False}
         return rtn
+
+    #  (ecomp2onap-feature2) endpoint for triage_tool feature
+    def triage_get(self, ctx, arg):
+        id = arg.get('id')
+        if id:
+            triage_data = self.TriageToolService._get_plans_by_id(id)
+        if not  triage_data.triage_solver == None or type(triage_data.triage_solver) == "NoneType":
+            triage_solver = json.loads(triage_data.triage_solver)
+        else:
+            triage_solver = triage_data.triage_solver
+
+        triage_data_list =[]
+        triage_data_json = {
+            "id":triage_data.id,
+            "name":triage_data.name,
+            "solver_triage": triage_solver,
+            "translator_triage":triage_data.triage_translator,
+            "optimization_type": json.loads(triage_data.optimization_type)
+        }
+        if hasattr(triage_data, 'message'):
+            triage_data_json["message"] = triage_data.message
+
+        triage_data_list.append(triage_data_json)
+
+        rtn = {
+            'response': {"triageData": triage_data_list},
+            'error': False}
+        return rtn
+
+    # (ecomp2onap-feature2) endpoint for orders locking feature
+    def release_orders(self, ctx, arg):
+        rehome_decisions = []
+        release_orders = arg.get("release-locks")
+        LOG.info("Following Orders were received in this release call from MSO:{}".format(release_orders))
+
+        for release_order in release_orders:
+            rehome_decisions = self.OrdersLockingService.rehomes_for_service_resource(release_order['status'],
+                                                                                      release_order['service-resource-id'],
+                                                                                      rehome_decisions)
+
+        self.OrdersLockingService.do_rehome(rehome_decisions)
+
+        if not rehome_decisions:
+            response_msg = "Orders have been released, but no plans are effected in Conductor"
+        else:
+            response_msg = rehome_decisions
+
+        LOG.info(response_msg)
+        rtn = {
+            'response': {
+                "status": "success",
+                "message": response_msg
+            }
+        }
+        return rtn

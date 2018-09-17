@@ -1,4 +1,3 @@
-#!/bin/python
 #
 # -------------------------------------------------------------------------
 #   Copyright (c) 2015-2017 AT&T Intellectual Property
@@ -75,7 +74,22 @@ class Search(object):
             else:
                 c["cost"] = "2"
         _candidate_list[:] = sorted(_candidate_list, key=itemgetter("cost"))
-
+    def dropped_candidate(self,candidates_before, candidate_after, constraint_name, demand_name):
+        dropped_candidate = []
+        for dc in candidates_before:
+            if dc not in candidate_after:
+                dropped_details={}
+                dropped_details['constraint_name_dropped'] = constraint_name
+                dropped_details['name'] = demand_name
+                dc['constraints'].append(dropped_details)
+                dropped_candidate.append(dc)
+        self.triageSolver.droppedCadidatesStatus(dropped_candidate)
+    def assignNodeId(self, candidate_list, demand_name):
+        for cr in candidate_list:
+            if not 'node_id' in cr:
+                cr['name'] = demand_name
+                cr['node_id'] = (demand_name + '|' + cr['candidate_id'])
+                cr['constraints'] = []
     def print_decisions(self, _best_path):
         if _best_path:
             msg = "--- demand = {}, chosen resource = {} at {}"
