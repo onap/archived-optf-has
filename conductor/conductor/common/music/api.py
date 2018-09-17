@@ -368,6 +368,12 @@ class MusicAPI(object):
             LOG.debug("Reading row with pk_value {} from table "
                       "{}, keyspace {}".format(pk_value, table, keyspace))
         response = self.rest.request(path=path)
+
+        # (ecomp2onap-feature1) New Music Response Changes
+        if response is not None and CONF.music_api.music_new_version:
+            result = response.json().get('result') or {}
+            return result
+
         return response and response.json()
 
     def row_delete(self, keyspace, table, pk_name, pk_value, atomic=False):

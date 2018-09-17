@@ -1,4 +1,3 @@
-#!/bin/python
 #
 # -------------------------------------------------------------------------
 #   Copyright (c) 2015-2017 AT&T Intellectual Property
@@ -121,7 +120,7 @@ class Optimizer(object):
                         _request.demands[dk].sort_base = 1
                         open_demand_list.append(_request.demands[dk])
         for op in _request.objective.operand_list:
-            if op.function.func_type == "distance_between":
+            if op.function.func_type == "latency_between" or op.function.func_type == "distance_between":
                 if isinstance(op.function.loc_a, demand.Location):
                     if _request.demands[op.function.loc_z.name].sort_base != 1:
                         _request.demands[op.function.loc_z.name].sort_base = 1
