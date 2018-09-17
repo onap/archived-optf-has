@@ -1,4 +1,3 @@
-#!/bin/python
 #
 # -------------------------------------------------------------------------
 #   Copyright (c) 2015-2017 AT&T Intellectual Property
@@ -45,6 +44,7 @@ class FitFirst(search.Search):
     def _find_current_best(self, _demand_list, _objective,
                            _decision_path, _request, _begin_time):
 
+        self.triageSolver.getSortedDemand(_demand_list)
         _current_time = int(round(time.time()))
         if (_current_time - _begin_time) > self.conf.solver.solver_timeout:
             return None

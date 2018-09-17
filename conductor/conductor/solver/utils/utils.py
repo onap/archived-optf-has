@@ -20,7 +20,9 @@
 
 
 import math
+from oslo_log import log
 
+LOG = log.getLogger(__name__)
 
 def compute_air_distance(_src, _dst):
     """Compute Air Distance
@@ -47,6 +49,19 @@ def compute_air_distance(_src, _dst):
 
     return distance
 
+def compute_latency_score(_src,_dst, _region_group):
+    """Compute the Network latency score between src and dst"""
+    earth_half_circumference = 20000
+    region_group_weight = _region_group.get(_dst[2])
+
+    if region_group_weight == 0 or region_group_weight is None :
+        LOG.debug("Computing the latency score based on distance between : ")
+        latency_score = compute_air_distance(_src,_dst)
+    elif _region_group > 0 :
+        LOG.debug("Computing the latency score ")
+        latency_score = compute_air_distance(_src, _dst) + region_group_weight * earth_half_circumference
+    LOG.debug("Finished Computing the latency score: "+str(latency_score))
+    return latency_score
 
 def convert_km_to_miles(_km):
     return _km * 0.621371

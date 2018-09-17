@@ -34,7 +34,7 @@ class Manager(stevedore.named.NamedExtensionManager):
     def __init__(self, conf, namespace):
         super(Manager, self).__init__(
             namespace, conf.service_controller.extensions,
-            invoke_on_load=True, name_order=True)
+            invoke_on_load=True, name_order=True, propagate_map_exceptions=True)
         LOG.info(_LI("Loaded service controller extensions: %s"), self.names())
 
     def initialize(self):
