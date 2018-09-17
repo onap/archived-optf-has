@@ -5,6 +5,7 @@
          "hpa-version":"v1",
          "architecture":"generic",
          "mandatory":"True",
+         "directives": [],
          "hpa-feature-attributes":[
             {
                "hpa-attribute-key":"numVirtualCpu",
@@ -24,6 +25,7 @@
          "hpa-version":"v1",
          "architecture":"generic",
          "mandatory":"True",
+         "directives": [],
          "hpa-feature-attributes":[
             {
                "hpa-attribute-key":"logicalCpuThreadPinningPolicy",
@@ -42,6 +44,7 @@
          "hpa-version":"v1",
          "mandatory":"True",
          "architecture":"generic",
+         "directives":[],
          "hpa-feature-attributes":[
             {
                "hpa-attribute-key":"numCpuSockets",
@@ -88,6 +91,7 @@
          "hpa-version":"v1",
          "architecture":"generic",
          "mandatory":"True",
+         "directives":[],
          "hpa-feature-attributes":[
             {
                "hpa-attribute-key":"numVirtualCpu",
@@ -108,6 +112,7 @@
          "architecture":"generic",
          "mandatory":"False",
          "score":"5",
+         "directives":[],
          "hpa-feature-attributes":[
             {
                "hpa-attribute-key":"dataProcessingAccelerationLibrary",
@@ -122,6 +127,7 @@
          "architecture":"generic",
          "mandatory":"False",
          "score":"1",
+         "directives":[],
          "hpa-feature-attributes":[
             {
                "hpa-attribute-key":"logicalCpuThreadPinningPolicy",
@@ -141,6 +147,7 @@
          "architecture":"Intel64",
          "mandatory":"False",
          "score":"5",
+         "directives":[],
          "hpa-feature-attributes":[
             {
                "hpa-attribute-key":"instructionSetExtensions",
@@ -157,6 +164,7 @@
          "hpa-version":"v1",
          "mandatory":"True",
          "architecture":"generic",
+         "directives":[],
          "hpa-feature-attributes":[
             {
                "hpa-attribute-key":"numCpuSockets",
