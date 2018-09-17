@@ -473,7 +473,7 @@
                {
                   "related-to": "complex",
                   "relationship-label": "org.onap.relationships.inventory.LocatedIn",
-                  "related-link": "/aai/v13/cloud-infrastructure/complexes/complex/DLLSTX233",
+                  "related-link": "/aai/v14/cloud-infrastructure/complexes/complex/DLLSTX233",
                   "relationship-data": [
                      {
                         "relationship-key": "complex.physical-location-id",
@@ -965,7 +965,7 @@
                {
                   "related-to": "complex",
                   "relationship-label": "org.onap.relationships.inventory.LocatedIn",
-                  "related-link": "/aai/v13/cloud-infrastructure/complexes/complex/DLLSTX233",
+                  "related-link": "/aai/v14/cloud-infrastructure/complexes/complex/DLLSTX233",
                   "relationship-data": [
                      {
                         "relationship-key": "complex.physical-location-id",
