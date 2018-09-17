@@ -232,12 +232,25 @@ class TestNoExceptionTranslator(unittest.TestCase):
                 ],
                 "properties": {
                     "evaluate": [
-                        {'flavorLabel': 'xx',
+                        {'id': 'vg_0',
+                         'type': 'vnfc',
+                         'directives': [
+                             {
+                                 "type": "flavor_directives",
+                                 "attributes": [
+                                     {
+                                         "attribute_name": "label_0",
+                                         "attribute_value": ""
+                                     }
+                                 ]
+                             }
+                         ],
                          'flavorProperties': [{
                              'hpa-feature': 'BasicCapabilities',
                              'hpa-version': 'v1',
                              'architecture': 'generic',
                              'mandatory': 'False',
+                             'directives': [],
                              'score': '5',
                              'hpa-feature-attributes': [
                                  {
@@ -264,6 +277,7 @@ class TestNoExceptionTranslator(unittest.TestCase):
                         {'architecture': 'generic',
                          'mandatory': 'False',
                          'score': '5',
+                         'directives': [],
                          'hpa-feature': 'BasicCapabilities',
                          'hpa-feature-attributes': [
                              {
@@ -279,7 +293,20 @@ class TestNoExceptionTranslator(unittest.TestCase):
                              }
                          ],
                          'hpa-version': 'v1'}],
-                    'flavorLabel': 'xx'}]},
+                    'id': 'vg_0',
+                    'type': 'vnfc',
+                    'directives': [
+                        {
+                            'type': 'flavor_directives',
+                            'attributes': [
+                                {
+                                    'attribute_name': 'label_0',
+                                    'attribute_value': ''
+                                }
+                            ]
+                        }
+                    ]
+                }]},
                 'type': 'hpa'
             }
         }
@@ -295,12 +322,25 @@ class TestNoExceptionTranslator(unittest.TestCase):
                 ],
                 "properties": {
                     "evaluate": [
-                        {'flavorLabel': 'xx',
+                        {'id': 'vg_0',
+                         'type': 'vnfc',
+                         'directives': [
+                            {
+                                'type': 'flavor_directives',
+                                'attributes': [
+                                    {
+                                        'attribute_name': 'label_0',
+                                        'attribute_value': ''
+                                    }
+                                ]
+                            }
+                         ],
                          'flavorProperties': [{
                              'hpa-feature': 'BasicCapabilities',
                              'hpa-version': 'v1',
                              'architecture': 'generic',
                              'mandatory': 'True',
+                             'directives': [],
                              'hpa-feature-attributes': [
                                  {
                                      'hpa-attribute-key': 'numVirtualCpu',
@@ -325,6 +365,7 @@ class TestNoExceptionTranslator(unittest.TestCase):
                     'flavorProperties': [
                         {'architecture': 'generic',
                          'mandatory': 'True',
+                         'directives': [],
                          'hpa-feature': 'BasicCapabilities',
                          'hpa-feature-attributes': [
                              {
@@ -340,7 +381,19 @@ class TestNoExceptionTranslator(unittest.TestCase):
                              }
                          ],
                          'hpa-version': 'v1'}],
-                    'flavorLabel': 'xx'}]},
+                    'id': 'vg_0',
+                    'type': 'vnfc',
+                    'directives': [
+                        {
+                            'type': 'flavor_directives',
+                            'attributes': [
+                                {
+                                    'attribute_name': 'label_0',
+                                    'attribute_value': ''
+                                }
+                            ]
+                        }
+                    ]}]},
                 'type': 'hpa'
             }
         }
@@ -356,7 +409,7 @@ class TestNoExceptionTranslator(unittest.TestCase):
                     "vG"
                 ],
                 "properties": {
-                    "evaluate": [{'flavor': 'xx',
+                    "evaluate": [{'id': 'xx',
                                   'flavorProperties': []}]
                 }
             }
@@ -369,7 +422,8 @@ class TestNoExceptionTranslator(unittest.TestCase):
                 ],
                 "properties": {
                     "evaluate": [
-                        {'flavorLabel': 'xx',
+                        {'id': 'xx',
+                         'type': 'xx',
                          'flavorProperties': [
                              {
                                  'hpa-feature': '',
@@ -393,7 +447,9 @@ class TestNoExceptionTranslator(unittest.TestCase):
                 "properties": {
                     "evaluate": [
                         {
-                            "flavorLabel": "xx",
+                            "id": "xx",
+                            "type": 'xx',
+                            "directives": [],
                             "flavorProperties": [
                                 {
                                     "hpa-feature": "BasicCapabilities",
@@ -422,7 +478,9 @@ class TestNoExceptionTranslator(unittest.TestCase):
                     "vG"
                 ],
                 "properties": {
-                    "evaluate": [{'flavorLabel': 'xx',
+                    "evaluate": [{'id': 'xx',
+                                  "type": 'xx',
+                                  "directives": [],
                                   'flavorProperties': [{
                                       'hpa-feature': '',
                                       'architecture': '',
@@ -571,62 +629,6 @@ class TestNoExceptionTranslator(unittest.TestCase):
         self.assertEquals(
             self.Translator.parse_optimization(
                 opt), expected_parse)
-
-    @patch('conductor.controller.translator.Translator.create_components')
-    def test_parse_optimization_multi_objective(self, mock_create):
-        hpa_json_file = './conductor/tests/unit/controller/hpa_constraints.json'
-        hpa_json = yaml.safe_load(open(hpa_json_file).read())
-        expected_parse = {'goal': 'min',
-                          'operands': [{'function': 'distance_between',
-                                        'function_param': ['customer_loc',
-                                                           'vGMuxInfra'],
-                                        'operation': 'product',
-                                        'weight': 2.0},
-                                       {'function': 'distance_between',
-                                        'function_param': ['customer_loc',
-                                                           'vG'],
-                                        'operation': 'product',
-                                        'weight': 4.0},
-                                       {'function': 'hpa_score',
-                                        'function_param': ['vG'],
-                                        'operation': 'product',
-                                        'weight': 8.0},
-                                       ],
-                          'operation': 'sum'
-                          }
-
-        opt = {'minimize': {
-            'sum': [{'product': [2.0, {'distance_between': ['customer_loc', 'vGMuxInfra']}]},
-                    {'product': [4.0, {'distance_between': ['customer_loc', 'vG']}]},
-                    {'product': [8.0, {'hpa_score': ['vG']}]}
-                    ]}}
-        self.Translator._demands = {'vG': '',
-                                    'vGMuxInfra': '',
-                                    'customer_loc': ''}
-        self.Translator._locations = {'vG': '',
-                                      'vGMuxInfra': '',
-                                      'customer_loc': ''}
-        self.Translator._constraints = hpa_json["HAS_Template"]["constraints"]
-        self.maxDiff = None
-        self.assertEquals(
-            self.Translator.parse_optimization(
-                opt), expected_parse)
-
-        # No HPA Policy test
-        non_hpa_dict = dict(hpa_json["HAS_Template"]["constraints"])
-        non_hpa_dict.pop("hpa_constraint_vG")
-        self.Translator._constraints = non_hpa_dict
-        self.maxDiff = None
-        self.assertRaises(TranslatorException,
-                          self.Translator.parse_optimization, opt)
-
-        # HPA Policy Exists but not for the demand in objective function
-        hpa_wrong_demand_dict = dict(hpa_json["HAS_Template"]["constraints"])
-        hpa_wrong_demand_dict["hpa_constraint_vG"]["demands"] = ["vGMuxInfra"]
-        self.Translator._constraints = hpa_wrong_demand_dict
-        self.maxDiff = None
-        self.assertRaises(TranslatorException,
-                          self.Translator.parse_optimization, opt)
 
     @patch('conductor.controller.translator.Translator.create_components')
     def test_parse_reservation(self, mock_create):
