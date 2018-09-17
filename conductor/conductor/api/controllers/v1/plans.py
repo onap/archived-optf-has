@@ -34,6 +34,8 @@ from conductor.api.controllers import validator
 from conductor.i18n import _, _LI
 from oslo_config import cfg
 
+from conductor.api.adapters.aaf import aaf_authentication as aaf_auth
+
 CONF = cfg.CONF
 
 LOG = log.getLogger(__name__)
@@ -50,7 +52,7 @@ CONDUCTOR_API_OPTS = [
                help='password for plans.'),
     cfg.BoolOpt('basic_auth_secure',
                 default=True,
-                help='auth toggling.')
+                help='auth toggling.'),
 ]
 
 CONF.register_opts(CONDUCTOR_API_OPTS, group='conductor_api')
@@ -84,11 +86,12 @@ class PlansBaseController(object):
 
     def plans_get(self, plan_id=None):
 
-        basic_auth_flag = CONF.conductor_api.basic_auth_secure
+        auth_flag = CONF.conductor_api.basic_auth_secure or CONF.aaf_authentication.is_aaf_enabled
 
+        # TBD - is healthcheck properly supported?
         if plan_id == 'healthcheck' or \
-                not basic_auth_flag or \
-                (basic_auth_flag and check_basic_auth()):
+                not auth_flag or \
+                (auth_flag and check_auth()):
             return self.plan_getid(plan_id)
 
     def plan_getid(self, plan_id):
@@ -289,11 +292,11 @@ class PlansController(PlansBaseController):
         if args and args['name']:
             LOG.info('Plan name: {}'.format(args['name']))
 
-        basic_auth_flag = CONF.conductor_api.basic_auth_secure
+        auth_flag = CONF.conductor_api.basic_auth_secure or CONF.aaf_authentication.is_aaf_enabled
 
         # Create the plan only when the basic authentication is disabled or pass the authenticaiton check
-        if not basic_auth_flag or \
-                (basic_auth_flag and check_basic_auth()):
+        if not auth_flag or \
+                (auth_flag and check_auth()):
             plan = self.plan_create(args)
 
         if not plan:
@@ -308,9 +311,10 @@ class PlansController(PlansBaseController):
         return PlansItemController(uuid4), remainder
 
 
-def check_basic_auth():
+def check_auth():
     """
     Returns True/False if the username/password of Basic Auth match/not match
+    Will also check role-based access controls if AAF integration configured
     :return boolean value
     """
 
@@ -338,7 +342,7 @@ def check_basic_auth():
 
 def verify_user(authstr):
     """
-    authenticate user as per config file
+    authenticate user as per config file or AAF authentication service
     :param authstr:
     :return boolean value
     """
@@ -352,9 +356,15 @@ def verify_user(authstr):
     password = CONF.conductor_api.password
     username = CONF.conductor_api.username
 
-    print ("Expected username/password: {}/{}".format(username, password))
+#    print ("plans.verify_user(): Expected username/password: {}/{}".format(username, password))
+#    print ("plans.verify_user(): Provided username/password: {}/{}".format(user_dict['username'], user_dict['password']))
 
-    if username == user_dict['username'] and password == user_dict['password']:
-        return True
+    retVal = False
+
+    if CONF.aaf_authentication.is_aaf_enabled:
+        retVal = aaf_auth.authenticate(user_dict['username'], user_dict['password'])
     else:
-        return False
+        if username == user_dict['username'] and password == user_dict['password']:
+            retVal = True
+
+    return retVal
