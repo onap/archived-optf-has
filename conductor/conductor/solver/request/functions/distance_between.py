@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 #
 # -------------------------------------------------------------------------
 #   Copyright (c) 2015-2017 AT&T Intellectual Property

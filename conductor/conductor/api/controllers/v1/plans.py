@@ -60,6 +60,7 @@ CREATE_SCHEMA = (
     (decorators.optional('id'), types.string),
     (decorators.optional('limit'), types.integer),
     (decorators.optional('name'), types.string),
+    (decorators.optional('num_solution'), types.string),
     ('template', string_or_dict),
     (decorators.optional('template_url'), types.string),
     (decorators.optional('timeout'), types.integer),
@@ -291,7 +292,7 @@ class PlansController(PlansBaseController):
 
         basic_auth_flag = CONF.conductor_api.basic_auth_secure
 
-        # Create the plan only when the basic authentication is disabled or pass the authenticaiton check
+        # Create the plan only when the basic authentication is disabled or pass the authentication check
         if not basic_auth_flag or \
                 (basic_auth_flag and check_basic_auth()):
             plan = self.plan_create(args)
@@ -331,7 +332,9 @@ def check_basic_auth():
         plan = False
 
     if not plan:
-        error('/errors/authentication_error', _('Invalid credentials: username or password is incorrect'))
+        error('/errors/basic_auth_error', _('Unauthorized: The request does not '
+                                            'provide any HTTP authentication (basic authentication)'))
+        plan = False
 
     return plan
 
@@ -351,9 +354,6 @@ def verify_user(authstr):
     user_dict['password'] = list_id_pw[1]
     password = CONF.conductor_api.password
     username = CONF.conductor_api.username
-
-    print ("Expected username/password: {}/{}".format(username, password))
-
     if username == user_dict['username'] and password == user_dict['password']:
         return True
     else:
