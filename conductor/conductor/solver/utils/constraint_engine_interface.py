@@ -117,7 +117,7 @@ class ConstraintEngineInterface(object):
         # response is a list of (candidate, cost) tuples
         return response
 
-    def get_candidates_with_hpa(self, label_name, candidate_list,
+    def get_candidates_with_hpa(self, id, type, directives, candidate_list,
                                 flavorProperties):
         '''
         Returns the candidate_list with an addition of flavor_mapping for
@@ -130,7 +130,9 @@ class ConstraintEngineInterface(object):
         ctxt = {}
         args = {"candidate_list": candidate_list,
                 "flavorProperties": flavorProperties,
-                "label_name": label_name}
+                "id": id,
+                "type": type,
+                "directives": directives}
         response = self.client.call(ctxt=ctxt,
                                     method="get_candidates_with_hpa",
                                     args=args)

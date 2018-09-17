@@ -238,25 +238,38 @@ class TestDataEndpoint(unittest.TestCase):
             hpa_json["conductor_solver"]["constraints"][0].items()[0]
         hpa_constraint = constraint_info['properties']
         flavorProperties = hpa_constraint['evaluate'][0]['flavorProperties']
-        label_name = hpa_constraint['evaluate'][0]['flavorLabel']
+        id = hpa_constraint['evaluate'][0]['id']
+        type = hpa_constraint['evaluate'][0]['type']
+        directives = hpa_constraint['evaluate'][0]['directives']
+        attr = directives[0].get("attributes")
+        label_name = attr[0].get("attribute_name")
         ext_mock1.return_value = ['aai']
         flavor_info = {"flavor-id": "vim-flavor-id1",
-                       "flavor-name": "vim-flavor-name1",
-                       "score": 0}
+                       "flavor-name": "vim-flavor-name1"}
+        directive = [
+            {
+                "id": id,
+                "type": type,
+                "directives": directives
+            }
+        ]
         hpa_mock.return_value = [flavor_info]
         self.maxDiff = None
-        args = generate_args(candidate_list, flavorProperties, label_name)
+        args = generate_args(candidate_list, flavorProperties, id, type, directives)
         hpa_candidate_list = copy.deepcopy(candidate_list)
         hpa_candidate_list[1]['flavor_map'] = {}
         hpa_candidate_list[1]['flavor_map'][label_name] = "vim-flavor-name1"
-        hpa_candidate_list[1]['hpa_score'] = 0
-        expected_response = {'response': hpa_candidate_list, 'error': False}
+        hpa_candidate_list[1]['all_directives'] = {}
+        hpa_candidate_list[1]['all_directives']['directives'] = directive
+        hpa_candidate_list1 = []
+        hpa_candidate_list1.append(hpa_candidate_list[0])
+        expected_response = {'response': hpa_candidate_list1, 'error': False}
         self.assertEqual(expected_response,
                          self.data_ep.get_candidates_with_hpa(None, args))
 
         hpa_candidate_list2 = list()
         hpa_candidate_list2.append(copy.deepcopy(candidate_list[0]))
-        args = generate_args(candidate_list, flavorProperties, label_name)
+        args = generate_args(candidate_list, flavorProperties, id, type, directives)
         hpa_mock.return_value = []
         expected_response = {'response': hpa_candidate_list2, 'error': False}
         self.assertEqual(expected_response,
@@ -322,11 +335,13 @@ class TestDataEndpoint(unittest.TestCase):
                                                                        args))
 
 
-def generate_args(candidate_list, flavorProperties, label_name):
+def generate_args(candidate_list, flavorProperties, vf_id, model_type, directives):
     arg_candidate_list = copy.deepcopy(candidate_list)
     args = {"candidate_list": arg_candidate_list,
             "flavorProperties": flavorProperties,
-            "label_name": label_name}
+            "id": vf_id,
+            "type": model_type,
+            "directives": directives}
     return args
 
 def ip_ext_sideeffect(*args, **kwargs):

@@ -105,7 +105,7 @@ CONSTRAINTS = {
     },
 }
 HPA_FEATURES = ['architecture', 'hpa-feature', 'hpa-feature-attributes',
-                'hpa-version', 'mandatory']
+                'hpa-version', 'mandatory', 'directives']
 HPA_OPTIONAL = ['score']
 HPA_ATTRIBUTES = ['hpa-attribute-key', 'hpa-attribute-value', 'operator']
 HPA_ATTRIBUTES_OPTIONAL = ['unit']
@@ -553,14 +553,18 @@ class Translator(object):
     def validate_hpa_constraints(self, req_prop, value):
         for para in value.get(req_prop):
             # Make sure there is at least one
-            # set of flavorLabel and flavorProperties
-            if not para.get('flavorLabel') \
+            # set of id, type, directives and flavorProperties
+            if not para.get('id') \
+                    or not para.get('type') \
+                    or not para.get('directives') \
                     or not para.get('flavorProperties') \
-                    or para.get('flavorLabel') == '' \
+                    or para.get('id') == '' \
+                    or para.get('type') == '' \
+                    or not isinstance(para.get('directives'), list)  \
                     or para.get('flavorProperties') == '':
                 raise TranslatorException(
                     "HPA requirements need at least "
-                    "one set of flavorLabel and flavorProperties"
+                    "one set of id, type, directives and flavorProperties"
                 )
             for feature in para.get('flavorProperties'):
                 if type(feature) is not dict:
@@ -574,7 +578,7 @@ class Translator(object):
                 hpa_optional = set(feature.keys()).difference(HPA_FEATURES)
                 if hpa_optional and not hpa_optional.issubset(HPA_OPTIONAL):
                     raise TranslatorException(
-                        "Lack of compulsory elements inside HPA feature")
+                        "Got unrecognized elements inside HPA feature")
                 if feature.get('mandatory') == 'False' and not feature.get(
                         'score'):
                     raise TranslatorException(
@@ -591,7 +595,7 @@ class Translator(object):
                     if bool(hpa_attr_mandatory):
                         raise TranslatorException(
                             "Lack of compulsory elements inside HPA "
-                            "feature atrributes")
+                            "feature attributes")
                     # process optional hpa attribute parameter
                     hpa_attr_optional = set(attr.keys()).difference(
                         HPA_ATTRIBUTES)
@@ -649,7 +653,7 @@ class Translator(object):
                                 "No value specified for property '{}' in "
                                 "constraint named '{}'".format(
                                     req_prop, name))
-                        # For HPA constraints
+                            # For HPA constraints
                         if constraint_type == 'hpa':
                             self.validate_hpa_constraints(req_prop, value)
 

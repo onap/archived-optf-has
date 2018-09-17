@@ -232,12 +232,25 @@ class TestNoExceptionTranslator(unittest.TestCase):
                 ],
                 "properties": {
                     "evaluate": [
-                        {'flavorLabel': 'xx',
+                        {'id': 'vg_0',
+                         'type': 'vnfc',
+                         'directives': [
+                             {
+                                 "type": "flavor_directives",
+                                 "attributes": [
+                                     {
+                                         "attribute_name": "label_0",
+                                         "attribute_value": ""
+                                     }
+                                 ]
+                             }
+                         ],
                          'flavorProperties': [{
                              'hpa-feature': 'BasicCapabilities',
                              'hpa-version': 'v1',
                              'architecture': 'generic',
                              'mandatory': 'False',
+                             'directives': [],
                              'score': '5',
                              'hpa-feature-attributes': [
                                  {
@@ -264,6 +277,7 @@ class TestNoExceptionTranslator(unittest.TestCase):
                         {'architecture': 'generic',
                          'mandatory': 'False',
                          'score': '5',
+                         'directives': [],
                          'hpa-feature': 'BasicCapabilities',
                          'hpa-feature-attributes': [
                              {
@@ -279,7 +293,20 @@ class TestNoExceptionTranslator(unittest.TestCase):
                              }
                          ],
                          'hpa-version': 'v1'}],
-                    'flavorLabel': 'xx'}]},
+                    'id': 'vg_0',
+                    'type': 'vnfc',
+                    'directives': [
+                        {
+                            'type': 'flavor_directives',
+                            'attributes': [
+                                {
+                                    'attribute_name': 'label_0',
+                                    'attribute_value': ''
+                                }
+                            ]
+                        }
+                    ]
+                }]},
                 'type': 'hpa'
             }
         }
@@ -295,12 +322,25 @@ class TestNoExceptionTranslator(unittest.TestCase):
                 ],
                 "properties": {
                     "evaluate": [
-                        {'flavorLabel': 'xx',
+                        {'id': 'vg_0',
+                         'type': 'vnfc',
+                         'directives': [
+                            {
+                                'type': 'flavor_directives',
+                                'attributes': [
+                                    {
+                                        'attribute_name': 'label_0',
+                                        'attribute_value': ''
+                                    }
+                                ]
+                            }
+                         ],
                          'flavorProperties': [{
                              'hpa-feature': 'BasicCapabilities',
                              'hpa-version': 'v1',
                              'architecture': 'generic',
                              'mandatory': 'True',
+                             'directives': [],
                              'hpa-feature-attributes': [
                                  {
                                      'hpa-attribute-key': 'numVirtualCpu',
@@ -325,6 +365,7 @@ class TestNoExceptionTranslator(unittest.TestCase):
                     'flavorProperties': [
                         {'architecture': 'generic',
                          'mandatory': 'True',
+                         'directives': [],
                          'hpa-feature': 'BasicCapabilities',
                          'hpa-feature-attributes': [
                              {
@@ -340,7 +381,19 @@ class TestNoExceptionTranslator(unittest.TestCase):
                              }
                          ],
                          'hpa-version': 'v1'}],
-                    'flavorLabel': 'xx'}]},
+                    'id': 'vg_0',
+                    'type': 'vnfc',
+                    'directives': [
+                        {
+                            'type': 'flavor_directives',
+                            'attributes': [
+                                {
+                                    'attribute_name': 'label_0',
+                                    'attribute_value': ''
+                                }
+                            ]
+                        }
+                    ]}]},
                 'type': 'hpa'
             }
         }
@@ -356,7 +409,7 @@ class TestNoExceptionTranslator(unittest.TestCase):
                     "vG"
                 ],
                 "properties": {
-                    "evaluate": [{'flavor': 'xx',
+                    "evaluate": [{'id': 'xx',
                                   'flavorProperties': []}]
                 }
             }
@@ -369,7 +422,8 @@ class TestNoExceptionTranslator(unittest.TestCase):
                 ],
                 "properties": {
                     "evaluate": [
-                        {'flavorLabel': 'xx',
+                        {'id': 'xx',
+                         'type': 'xx',
                          'flavorProperties': [
                              {
                                  'hpa-feature': '',
@@ -393,7 +447,9 @@ class TestNoExceptionTranslator(unittest.TestCase):
                 "properties": {
                     "evaluate": [
                         {
-                            "flavorLabel": "xx",
+                            "id": "xx",
+                            "type": 'xx',
+                            "directives": [],
                             "flavorProperties": [
                                 {
                                     "hpa-feature": "BasicCapabilities",
@@ -422,7 +478,9 @@ class TestNoExceptionTranslator(unittest.TestCase):
                     "vG"
                 ],
                 "properties": {
-                    "evaluate": [{'flavorLabel': 'xx',
+                    "evaluate": [{'id': 'xx',
+                                  "type": 'xx',
+                                  "directives": [],
                                   'flavorProperties': [{
                                       'hpa-feature': '',
                                       'architecture': '',
