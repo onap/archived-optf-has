@@ -1,0 +1,6 @@
+{"perm": [{"instance": "plans", "action": "POST", "type": "org.onap.oof"},
+         {"instance": "plans", "action": "GET", "type": "org.onap.oof"}]
+}
+                 
+
+
