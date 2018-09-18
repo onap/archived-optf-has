@@ -1,0 +1,136 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a76adc5_4fcf5956",
+        "filename": "conductor/conductor/data/plugins/inventory_provider/hpa_utils.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 230,
+      "author": {
+        "id": 1361
+      },
+      "writtenOn": "2018-09-18T00:00:41Z",
+      "side": 1,
+      "message": "minor nit. pep8 space needed here.",
+      "revId": "94607bc1e8db17019006286bd61293063d209b25",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a76adc5_8fe9f1b8",
+        "filename": "conductor/conductor/data/plugins/inventory_provider/hpa_utils.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 248,
+      "author": {
+        "id": 1361
+      },
+      "writtenOn": "2018-09-18T00:00:41Z",
+      "side": 1,
+      "message": "minor nit. 80 characters.",
+      "range": {
+        "startLine": 248,
+        "startChar": 55,
+        "endLine": 248,
+        "endChar": 116
+      },
+      "revId": "94607bc1e8db17019006286bd61293063d209b25",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a76adc5_0fd5e1e3",
+        "filename": "conductor/conductor/data/service.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 376,
+      "author": {
+        "id": 1361
+      },
+      "writtenOn": "2018-09-18T00:00:41Z",
+      "side": 1,
+      "message": "revert?",
+      "range": {
+        "startLine": 376,
+        "startChar": 35,
+        "endLine": 376,
+        "endChar": 36
+      },
+      "revId": "94607bc1e8db17019006286bd61293063d209b25",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a76adc5_cf0a8989",
+        "filename": "conductor/conductor/data/service.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 514,
+      "author": {
+        "id": 1361
+      },
+      "writtenOn": "2018-09-18T00:00:41Z",
+      "side": 1,
+      "message": "Can u add function description comment?",
+      "range": {
+        "startLine": 514,
+        "startChar": 8,
+        "endLine": 514,
+        "endChar": 96
+      },
+      "revId": "94607bc1e8db17019006286bd61293063d209b25",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a76adc5_2ffbfd79",
+        "filename": "conductor/conductor/solver/service.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 351,
+      "author": {
+        "id": 1361
+      },
+      "writtenOn": "2018-09-18T00:00:41Z",
+      "side": 1,
+      "message": "minor nit. Pep8 80 character limit",
+      "range": {
+        "startLine": 351,
+        "startChar": 101,
+        "endLine": 351,
+        "endChar": 119
+      },
+      "revId": "94607bc1e8db17019006286bd61293063d209b25",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a76adc5_0fec01ba",
+        "filename": "conductor/conductor/solver/service.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 390,
+      "author": {
+        "id": 1361
+      },
+      "writtenOn": "2018-09-18T00:00:41Z",
+      "side": 1,
+      "message": "What does this funcution do? Can you add comments? Does it add only flavor directive?",
+      "range": {
+        "startLine": 390,
+        "startChar": 8,
+        "endLine": 390,
+        "endChar": 18
+      },
+      "revId": "94607bc1e8db17019006286bd61293063d209b25",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
