@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a76adc5_d588d872",
+        "filename": "conductor/conductor/data/plugins/inventory_provider/hpa_utils.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1361
+      },
+      "writtenOn": "2018-09-18T06:33:15Z",
+      "side": 1,
+      "message": "please fix the unit tests. Add new test case if needed for negative scenario.",
+      "range": {
+        "startLine": 98,
+        "startChar": 15,
+        "endLine": 98,
+        "endChar": 25
+      },
+      "revId": "6a75f01218609865ef0004d337adee4ed9bf8b8d",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a76adc5_757b047b",
+        "filename": "conductor/conductor/data/plugins/inventory_provider/hpa_utils.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 262,
+      "author": {
+        "id": 1361
+      },
+      "writtenOn": "2018-09-18T06:33:15Z",
+      "side": 1,
+      "message": "I think it is better to add/update unit tests. It will be better if we can cover some edge cases through tests.",
+      "range": {
+        "startLine": 261,
+        "startChar": 8,
+        "endLine": 262,
+        "endChar": 38
+      },
+      "revId": "6a75f01218609865ef0004d337adee4ed9bf8b8d",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
