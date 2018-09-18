@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "1a76adc5_cf1e0970",
+        "filename": "conductor/conductor/controller/translator.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 803,
+      "author": {
+        "id": 2977
+      },
+      "writtenOn": "2018-09-18T01:19:11Z",
+      "side": 0,
+      "message": "Done",
+      "parentUuid": "1a76adc5_afe06dcd",
+      "range": {
+        "startLine": 797,
+        "startChar": 22,
+        "endLine": 803,
+        "endChar": 61
+      },
+      "revId": "ed0d638fa01566ab5f9d71c1035e29ee5661f8ea",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a76adc5_cfe369d7",
         "filename": "conductor/conductor/controller/translator.py",
         "patchSetId": 2
