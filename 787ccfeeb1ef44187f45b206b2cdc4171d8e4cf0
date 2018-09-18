@@ -1,0 +1,457 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a76adc5_241a3cc6",
+        "filename": "conductor/conductor/api/controllers/v1/latency_country_rules_loader.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 1361
+      },
+      "writtenOn": "2018-09-18T18:30:50Z",
+      "side": 1,
+      "message": "Can you fix the license headers?",
+      "range": {
+        "startLine": 3,
+        "startChar": 18,
+        "endLine": 3,
+        "endChar": 54
+      },
+      "revId": "787ccfeeb1ef44187f45b206b2cdc4171d8e4cf0",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a76adc5_84b5507f",
+        "filename": "conductor/conductor/common/utils/basic_auth_util.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1361
+      },
+      "writtenOn": "2018-09-18T18:30:50Z",
+      "side": 1,
+      "message": "use strip() to remove the dangling newline character",
+      "range": {
+        "startLine": 32,
+        "startChar": 17,
+        "endLine": 32,
+        "endChar": 44
+      },
+      "revId": "787ccfeeb1ef44187f45b206b2cdc4171d8e4cf0",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a76adc5_a43decde",
+        "filename": "conductor/conductor/data/plugins/adiod_controller/SNIRO_callback.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1361
+      },
+      "writtenOn": "2018-09-18T18:30:50Z",
+      "side": 1,
+      "message": "IS it meant as part of sdnc group?",
+      "range": {
+        "startLine": 49,
+        "startChar": 36,
+        "endLine": 49,
+        "endChar": 37
+      },
+      "revId": "787ccfeeb1ef44187f45b206b2cdc4171d8e4cf0",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a76adc5_c41b487f",
+        "filename": "conductor/conductor/data/plugins/inventory_provider/aai.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 526,
+      "author": {
+        "id": 1361
+      },
+      "writtenOn": "2018-09-18T18:30:50Z",
+      "side": 1,
+      "message": "self assignment?",
+      "range": {
+        "startLine": 526,
+        "startChar": 8,
+        "endLine": 526,
+        "endChar": 41
+      },
+      "revId": "787ccfeeb1ef44187f45b206b2cdc4171d8e4cf0",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a76adc5_f82dc48f",
+        "filename": "conductor/conductor/solver/request/objective.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 114,
+      "author": {
+        "id": 1361
+      },
+      "writtenOn": "2018-09-18T18:30:50Z",
+      "side": 1,
+      "message": "Missing some code changes related to hpa_score inversion",
+      "range": {
+        "startLine": 112,
+        "startChar": 0,
+        "endLine": 114,
+        "endChar": 34
+      },
+      "revId": "787ccfeeb1ef44187f45b206b2cdc4171d8e4cf0",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a76adc5_38ad7ce9",
+        "filename": "conductor/conductor/solver/request/parser.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 256,
+      "author": {
+        "id": 1361
+      },
+      "writtenOn": "2018-09-18T18:30:50Z",
+      "side": 1,
+      "message": "typo",
+      "range": {
+        "startLine": 256,
+        "startChar": 39,
+        "endLine": 256,
+        "endChar": 57
+      },
+      "revId": "787ccfeeb1ef44187f45b206b2cdc4171d8e4cf0",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a76adc5_18752063",
+        "filename": "conductor/conductor/solver/service.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 498,
+      "author": {
+        "id": 1361
+      },
+      "writtenOn": "2018-09-18T18:30:50Z",
+      "side": 1,
+      "message": "nit. Whitespace",
+      "range": {
+        "startLine": 498,
+        "startChar": 0,
+        "endLine": 498,
+        "endChar": 28
+      },
+      "revId": "787ccfeeb1ef44187f45b206b2cdc4171d8e4cf0",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a76adc5_18fc40b7",
+        "filename": "conductor/conductor/solver/service.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 683,
+      "author": {
+        "id": 1361
+      },
+      "writtenOn": "2018-09-18T18:30:50Z",
+      "side": 1,
+      "message": "Can this be split into functions?",
+      "range": {
+        "startLine": 520,
+        "startChar": 3,
+        "endLine": 683,
+        "endChar": 70
+      },
+      "revId": "787ccfeeb1ef44187f45b206b2cdc4171d8e4cf0",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a76adc5_d801e8af",
+        "filename": "conductor/conductor/solver/tests/Candiate_Weight.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1361
+      },
+      "writtenOn": "2018-09-18T18:30:50Z",
+      "side": 1,
+      "message": "Missing license header",
+      "revId": "787ccfeeb1ef44187f45b206b2cdc4171d8e4cf0",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a76adc5_7828d432",
+        "filename": "conductor/conductor/solver/tests/Candiate_Weight.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1361
+      },
+      "writtenOn": "2018-09-18T18:30:50Z",
+      "side": 1,
+      "message": "Move the tests to the tests folder and convert to unit tests with Asserts?",
+      "revId": "787ccfeeb1ef44187f45b206b2cdc4171d8e4cf0",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a76adc5_381edc0c",
+        "filename": "conductor/conductor/solver/tests/latency_reduction_test.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1361
+      },
+      "writtenOn": "2018-09-18T18:30:50Z",
+      "side": 1,
+      "message": "License and move to unit tests or appropriate test folder.",
+      "revId": "787ccfeeb1ef44187f45b206b2cdc4171d8e4cf0",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a76adc5_f81384fe",
+        "filename": "conductor/conductor/solver/tests/latency_test.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1361
+      },
+      "writtenOn": "2018-09-18T18:30:50Z",
+      "side": 1,
+      "message": "License and move to unit tests or appropriate test folder.",
+      "revId": "787ccfeeb1ef44187f45b206b2cdc4171d8e4cf0",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a76adc5_787e946b",
+        "filename": "conductor/conductor/solver/triage_tool/traige_latency.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1361
+      },
+      "writtenOn": "2018-09-18T18:30:50Z",
+      "side": 1,
+      "message": "License header missing.",
+      "revId": "787ccfeeb1ef44187f45b206b2cdc4171d8e4cf0",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a76adc5_d88ec878",
+        "filename": "conductor/conductor/solver/triage_tool/traige_latency.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1361
+      },
+      "writtenOn": "2018-09-18T18:30:50Z",
+      "side": 1,
+      "message": "typo",
+      "range": {
+        "startLine": 19,
+        "startChar": 13,
+        "endLine": 19,
+        "endChar": 24
+      },
+      "revId": "787ccfeeb1ef44187f45b206b2cdc4171d8e4cf0",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a76adc5_38949c89",
+        "filename": "conductor/conductor/solver/triage_tool/traige_latency.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1361
+      },
+      "writtenOn": "2018-09-18T18:30:50Z",
+      "side": 1,
+      "message": "typo",
+      "range": {
+        "startLine": 23,
+        "startChar": 8,
+        "endLine": 23,
+        "endChar": 26
+      },
+      "revId": "787ccfeeb1ef44187f45b206b2cdc4171d8e4cf0",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a76adc5_f889446f",
+        "filename": "conductor/conductor/solver/triage_tool/traige_latency.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1361
+      },
+      "writtenOn": "2018-09-18T18:30:50Z",
+      "side": 1,
+      "message": "typo",
+      "range": {
+        "startLine": 23,
+        "startChar": 33,
+        "endLine": 23,
+        "endChar": 48
+      },
+      "revId": "787ccfeeb1ef44187f45b206b2cdc4171d8e4cf0",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a76adc5_98ecd02b",
+        "filename": "conductor/conductor/solver/triage_tool/traige_latency.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1361
+      },
+      "writtenOn": "2018-09-18T18:30:50Z",
+      "side": 1,
+      "message": "typo",
+      "range": {
+        "startLine": 27,
+        "startChar": 8,
+        "endLine": 27,
+        "endChar": 24
+      },
+      "revId": "787ccfeeb1ef44187f45b206b2cdc4171d8e4cf0",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a76adc5_18ea00db",
+        "filename": "conductor/conductor/tests/unit/controller/test_translator.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 126,
+      "author": {
+        "id": 1361
+      },
+      "writtenOn": "2018-09-18T18:30:50Z",
+      "side": 1,
+      "message": "why is this changed? Is this test failing?",
+      "range": {
+        "startLine": 126,
+        "startChar": 8,
+        "endLine": 126,
+        "endChar": 9
+      },
+      "revId": "787ccfeeb1ef44187f45b206b2cdc4171d8e4cf0",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a76adc5_d8efa8e7",
+        "filename": "conductor/conductor/tests/unit/controller/test_translator.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 166,
+      "author": {
+        "id": 1361
+      },
+      "writtenOn": "2018-09-18T18:30:50Z",
+      "side": 1,
+      "message": "why is this changed? Is this test failing?",
+      "range": {
+        "startLine": 166,
+        "startChar": 8,
+        "endLine": 166,
+        "endChar": 9
+      },
+      "revId": "787ccfeeb1ef44187f45b206b2cdc4171d8e4cf0",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a76adc5_f8eaa4d6",
+        "filename": "conductor/conductor/tests/unit/data/plugins/inventory_provider/test_aai.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1361
+      },
+      "writtenOn": "2018-09-18T18:30:50Z",
+      "side": 1,
+      "message": "why is this changed? Is this test failing?",
+      "range": {
+        "startLine": 98,
+        "startChar": 8,
+        "endLine": 98,
+        "endChar": 10
+      },
+      "revId": "787ccfeeb1ef44187f45b206b2cdc4171d8e4cf0",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a76adc5_b8c0ac50",
+        "filename": "conductor/conductor/tests/unit/data/test_service.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 204,
+      "author": {
+        "id": 1361
+      },
+      "writtenOn": "2018-09-18T18:30:50Z",
+      "side": 1,
+      "message": "why is this changed? Is this test failing?",
+      "range": {
+        "startLine": 204,
+        "startChar": 8,
+        "endLine": 204,
+        "endChar": 9
+      },
+      "revId": "787ccfeeb1ef44187f45b206b2cdc4171d8e4cf0",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
