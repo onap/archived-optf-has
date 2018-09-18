@@ -1,0 +1,412 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a76adc5_84a47008",
+        "filename": "conductor/conductor/api/adapters/aaf/__init__.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1361
+      },
+      "writtenOn": "2018-09-18T17:22:10Z",
+      "side": 1,
+      "message": "Missing license header",
+      "revId": "45644d5bfc60ffb1662581558e6373d4f8e0a2f9",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a76adc5_64cfd456",
+        "filename": "conductor/conductor/api/adapters/aaf/aaf_authentication.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1361
+      },
+      "writtenOn": "2018-09-18T17:22:10Z",
+      "side": 1,
+      "message": "Can you correct the license header info in all files?",
+      "range": {
+        "startLine": 2,
+        "startChar": 17,
+        "endLine": 2,
+        "endChar": 27
+      },
+      "revId": "45644d5bfc60ffb1662581558e6373d4f8e0a2f9",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a76adc5_c429088b",
+        "filename": "conductor/conductor/api/adapters/aaf/aaf_authentication.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1361
+      },
+      "writtenOn": "2018-09-18T17:22:10Z",
+      "side": 1,
+      "message": "unused import",
+      "range": {
+        "startLine": 20,
+        "startChar": 0,
+        "endLine": 20,
+        "endChar": 9
+      },
+      "revId": "45644d5bfc60ffb1662581558e6373d4f8e0a2f9",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a76adc5_e42c449b",
+        "filename": "conductor/conductor/api/adapters/aaf/aaf_authentication.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1361
+      },
+      "writtenOn": "2018-09-18T17:22:10Z",
+      "side": 1,
+      "message": "unused import. pep8",
+      "range": {
+        "startLine": 22,
+        "startChar": 0,
+        "endLine": 22,
+        "endChar": 25
+      },
+      "revId": "45644d5bfc60ffb1662581558e6373d4f8e0a2f9",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a76adc5_043380f6",
+        "filename": "conductor/conductor/api/adapters/aaf/aaf_authentication.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1361
+      },
+      "writtenOn": "2018-09-18T17:22:10Z",
+      "side": 1,
+      "message": "reorder imports based on pep8. Pycharm/Idea can format the code.",
+      "range": {
+        "startLine": 19,
+        "startChar": 0,
+        "endLine": 24,
+        "endChar": 33
+      },
+      "revId": "45644d5bfc60ffb1662581558e6373d4f8e0a2f9",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a76adc5_490f5137",
+        "filename": "conductor/conductor/api/adapters/aaf/aaf_authentication.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1361
+      },
+      "writtenOn": "2018-09-18T17:22:10Z",
+      "side": 1,
+      "message": "Can the default URL be set to the ONAP namespace used in OOM? Otherwise we have to change this in OOM.",
+      "range": {
+        "startLine": 41,
+        "startChar": 31,
+        "endLine": 41,
+        "endChar": 40
+      },
+      "revId": "45644d5bfc60ffb1662581558e6373d4f8e0a2f9",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a76adc5_e453e414",
+        "filename": "conductor/conductor/api/adapters/aaf/aaf_authentication.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1361
+      },
+      "writtenOn": "2018-09-18T17:22:10Z",
+      "side": 1,
+      "message": "I am wondering if this value is too high?",
+      "range": {
+        "startLine": 47,
+        "startChar": 24,
+        "endLine": 47,
+        "endChar": 27
+      },
+      "revId": "45644d5bfc60ffb1662581558e6373d4f8e0a2f9",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a76adc5_841f905a",
+        "filename": "conductor/conductor/api/adapters/aaf/aaf_authentication.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 121,
+      "author": {
+        "id": 1361
+      },
+      "writtenOn": "2018-09-18T17:22:10Z",
+      "side": 1,
+      "message": "nit. whitespace.",
+      "range": {
+        "startLine": 121,
+        "startChar": 0,
+        "endLine": 121,
+        "endChar": 4
+      },
+      "revId": "45644d5bfc60ffb1662581558e6373d4f8e0a2f9",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a76adc5_443df8c2",
+        "filename": "conductor/conductor/api/adapters/aaf/aaf_authentication.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 142,
+      "author": {
+        "id": 1361
+      },
+      "writtenOn": "2018-09-18T17:22:10Z",
+      "side": 1,
+      "message": "import missing",
+      "range": {
+        "startLine": 142,
+        "startChar": 18,
+        "endLine": 142,
+        "endChar": 21
+      },
+      "revId": "45644d5bfc60ffb1662581558e6373d4f8e0a2f9",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a76adc5_643834d3",
+        "filename": "conductor/conductor/api/adapters/aaf/aaf_authentication.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 147,
+      "author": {
+        "id": 1361
+      },
+      "writtenOn": "2018-09-18T17:22:10Z",
+      "side": 1,
+      "message": "unresolved reference server_url.",
+      "range": {
+        "startLine": 147,
+        "startChar": 25,
+        "endLine": 147,
+        "endChar": 35
+      },
+      "revId": "45644d5bfc60ffb1662581558e6373d4f8e0a2f9",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a76adc5_c485885a",
+        "filename": "conductor/conductor/api/controllers/v1/plans.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1361
+      },
+      "writtenOn": "2018-09-18T17:22:10Z",
+      "side": 1,
+      "message": "Is this config intended in the [conductor_api] group? There is another is_aaf_enabled defined in the [aaf_authentication] group?",
+      "range": {
+        "startLine": 56,
+        "startChar": 17,
+        "endLine": 56,
+        "endChar": 31
+      },
+      "revId": "45644d5bfc60ffb1662581558e6373d4f8e0a2f9",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a76adc5_a49bac64",
+        "filename": "conductor/conductor/tests/functional/simulators/aafsim/aafsim.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1361
+      },
+      "writtenOn": "2018-09-18T17:22:10Z",
+      "side": 1,
+      "message": "unused imports",
+      "range": {
+        "startLine": 25,
+        "startChar": 0,
+        "endLine": 26,
+        "endChar": 27
+      },
+      "revId": "45644d5bfc60ffb1662581558e6373d4f8e0a2f9",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a76adc5_04c38038",
+        "filename": "conductor/conductor/tests/functional/simulators/aafsim/aafsim.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1361
+      },
+      "writtenOn": "2018-09-18T17:22:10Z",
+      "side": 1,
+      "message": "Can this be changed to added to logger instead of print?",
+      "range": {
+        "startLine": 45,
+        "startChar": 8,
+        "endLine": 45,
+        "endChar": 65
+      },
+      "revId": "45644d5bfc60ffb1662581558e6373d4f8e0a2f9",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a76adc5_44a658af",
+        "filename": "conductor/conductor/tests/functional/simulators/aafsim/aafsim.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1361
+      },
+      "writtenOn": "2018-09-18T17:22:10Z",
+      "side": 1,
+      "message": "nit whitespace",
+      "range": {
+        "startLine": 49,
+        "startChar": 0,
+        "endLine": 49,
+        "endChar": 3
+      },
+      "revId": "45644d5bfc60ffb1662581558e6373d4f8e0a2f9",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a76adc5_c4e028cf",
+        "filename": "conductor/conductor/tests/functional/simulators/aafsim/aafsim.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1361
+      },
+      "writtenOn": "2018-09-18T17:22:10Z",
+      "side": 1,
+      "message": "logger?",
+      "range": {
+        "startLine": 62,
+        "startChar": 8,
+        "endLine": 62,
+        "endChar": 14
+      },
+      "revId": "45644d5bfc60ffb1662581558e6373d4f8e0a2f9",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a76adc5_64a11493",
+        "filename": "conductor/conductor/tests/functional/simulators/aafsim/aafsim.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1361
+      },
+      "writtenOn": "2018-09-18T17:22:10Z",
+      "side": 1,
+      "message": "whitespace",
+      "range": {
+        "startLine": 66,
+        "startChar": 0,
+        "endLine": 66,
+        "endChar": 3
+      },
+      "revId": "45644d5bfc60ffb1662581558e6373d4f8e0a2f9",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a76adc5_04ace08a",
+        "filename": "conductor/conductor/tests/functional/simulators/aafsim/aafsim.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1361
+      },
+      "writtenOn": "2018-09-18T17:22:10Z",
+      "side": 1,
+      "message": "whitespace",
+      "range": {
+        "startLine": 83,
+        "startChar": 0,
+        "endLine": 83,
+        "endChar": 3
+      },
+      "revId": "45644d5bfc60ffb1662581558e6373d4f8e0a2f9",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a76adc5_c4b908cd",
+        "filename": "conductor/conductor/tests/functional/simulators/aafsim/aafsim.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 1361
+      },
+      "writtenOn": "2018-09-18T17:22:10Z",
+      "side": 1,
+      "message": "whitespace",
+      "range": {
+        "startLine": 90,
+        "startChar": 26,
+        "endLine": 90,
+        "endChar": 27
+      },
+      "revId": "45644d5bfc60ffb1662581558e6373d4f8e0a2f9",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
