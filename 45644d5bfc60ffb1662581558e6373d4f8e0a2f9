@@ -249,6 +249,76 @@
     },
     {
       "key": {
+        "uuid": "1a76adc5_db748237",
+        "filename": "conductor/conductor/api/controllers/v1/plans.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1361
+      },
+      "writtenOn": "2018-09-18T20:46:55Z",
+      "side": 1,
+      "message": "My suggestion is to remove this and use CONF.aaf_authenticate.is_aaf_enabled instead of CONF.conductor_api.is_aaf_enabled. I see that this config is created under the [aaf_authenticate] group inside aaf_authenitcation.py.",
+      "parentUuid": "1a76adc5_c485885a",
+      "range": {
+        "startLine": 56,
+        "startChar": 17,
+        "endLine": 56,
+        "endChar": 31
+      },
+      "revId": "45644d5bfc60ffb1662581558e6373d4f8e0a2f9",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a76adc5_bbbc26bc",
+        "filename": "conductor/conductor/api/controllers/v1/plans.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 1361
+      },
+      "writtenOn": "2018-09-18T20:46:55Z",
+      "side": 1,
+      "message": "I couldn\u0027t find this config initialized anywhere. Could you please check the previous comment and define this?",
+      "range": {
+        "startLine": 92,
+        "startChar": 80,
+        "endLine": 92,
+        "endChar": 93
+      },
+      "revId": "45644d5bfc60ffb1662581558e6373d4f8e0a2f9",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a76adc5_5baf127d",
+        "filename": "conductor/conductor/api/controllers/v1/plans.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 375,
+      "author": {
+        "id": 1361
+      },
+      "writtenOn": "2018-09-18T20:46:55Z",
+      "side": 1,
+      "message": "nit whitespaces",
+      "range": {
+        "startLine": 374,
+        "startChar": 0,
+        "endLine": 375,
+        "endChar": 8
+      },
+      "revId": "45644d5bfc60ffb1662581558e6373d4f8e0a2f9",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a76adc5_a49bac64",
         "filename": "conductor/conductor/tests/functional/simulators/aafsim/aafsim.py",
         "patchSetId": 1
