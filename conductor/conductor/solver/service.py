@@ -347,10 +347,10 @@ class SolverService(cotyledon.Service):
                         rec["candidate"]["host_id"] = resource.get("host_id")
 
                     if rec["candidate"]["inventory_type"] == "cloud":
-                        if resource.get("flavor_map"):
-                            rec["attributes"]["flavors"] = resource.get(
-                                "flavor_map")
-
+                        if resource.get("all_directives") and resource.get("flavor_map"):
+                            rec["attributes"]["directives"] = \
+                                self.set_flavor_in_flavor_directives(
+                                    resource.get("flavor_map"), resource.get("all_directives"))
                     # TODO(snarayanan): Add total value to recommendations?
                     # msg = "--- total value of decision = {}"
                     # LOG.debug(msg.format(_best_path.total_value))
@@ -387,3 +387,18 @@ class SolverService(cotyledon.Service):
         """Reload"""
         LOG.debug("%s" % self.__class__.__name__)
         self._restart()
+
+    def set_flavor_in_flavor_directives(self, flavor_map, directives):
+        '''
+        Insert the flavor name inside the flavor_map into flavor_directives
+        :param flavor_map: flavor map get
+        :param directives: All the directives get from request
+        '''
+        flavor_label = flavor_map.keys()
+        for ele in directives.get("directives"):
+            for item in ele.get("directives"):
+                if "flavor_directives" in item.get("type"):
+                    for attr in item.get("attributes"):
+                        attr["attribute_value"] = flavor_map.get(attr["attribute_name"]) \
+                            if attr.get("attribute_name") in flavor_label else ""
+        return directives

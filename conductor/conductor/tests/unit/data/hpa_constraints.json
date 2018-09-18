@@ -26,7 +26,8 @@
                         "unit": "GB"
                       }
                     ],
-                    "hpa-version": "v1"
+                    "hpa-version": "v1",
+                    "directives": []
                   },
                   {
                     "architecture": "generic",
@@ -60,7 +61,8 @@
                         "unit": "GB"
                       }
                     ],
-                    "hpa-version": "v1"
+                    "hpa-version": "v1",
+                    "directives": []
                   },
                   {
                     "architecture": "generic",
@@ -77,10 +79,23 @@
                         "operator": "="
                       }
                     ],
-                    "hpa-version": "v1"
+                    "hpa-version": "v1",
+                    "directives": []
                   }
                 ],
-                "flavorLabel": "flavor_label_1"
+                "id": "vg_1",
+                "type": "vnfc",
+                "directives": [
+                  {
+                    "type": "flavor_directives",
+                    "attributes": [
+                      {
+                        "attribute_name": "flavor_label_1",
+                        "attribute_value": ""
+                      }
+                    ]
+                  }
+                ]
               },
               {
                 "flavorProperties": [
@@ -100,7 +115,8 @@
                         "unit": "GB"
                       }
                     ],
-                    "hpa-version": "v1"
+                    "hpa-version": "v1",
+                    "directives": []
                   },
                   {
                     "architecture": "generic",
@@ -134,7 +150,8 @@
                         "unit": "GB"
                       }
                     ],
-                    "hpa-version": "v1"
+                    "hpa-version": "v1",
+                    "directives": []
                   },
                   {
                     "architecture": "generic",
@@ -147,10 +164,23 @@
                         "unit": "GB"
                       }
                     ],
-                    "hpa-version": "v1"
+                    "hpa-version": "v1",
+                    "directives": []
                   }
                 ],
-                "flavorLabel": "flavor_label_2"
+                "id": "vg_2",
+                "type": "vnfc",
+                "directives": [
+                  {
+                    "type": "flavor_directives",
+                    "attributes": [
+                      {
+                        "attribute_name": "flavor_label_2",
+                        "attribute_value": ""
+                      }
+                    ]
+                  }
+                ]
               }
             ]
           }

@@ -54,15 +54,19 @@ class HPA(constraint.Constraint):
             self.constraint_type, demand_name))
         vm_label_list = self.properties.get('evaluate')
         for vm_demand in vm_label_list:
-            label_name = vm_demand['flavorLabel']
+            id = vm_demand['id']
+            type = vm_demand['type']
+            directives = vm_demand['directives']
             flavorProperties = vm_demand['flavorProperties']
-            response = (cei.get_candidates_with_hpa(label_name,
+            response = (cei.get_candidates_with_hpa(id,
+                                                    type,
+                                                    directives,
                                                     _candidate_list,
                                                     flavorProperties))
             _candidate_list = response
             if not response:
                 LOG.error(_LE("No matching candidates for HPA exists").format(
-                    label_name))
+                    id))
                 break
                 # No need to continue.
 

@@ -28,7 +28,6 @@ from oslo_config import cfg
 class TestAAI(unittest.TestCase):
 
     def setUp(self):
-
         CONF = cfg.CONF
         CONF.register_opts(aai.AAI_OPTS, group='aai')
         self.conf = CONF
@@ -38,20 +37,16 @@ class TestAAI(unittest.TestCase):
         mock.patch.stopall()
 
     def test_get_version_from_string(self):
-
         self.assertEqual("2.5", self.aai_ep._get_version_from_string("AAI2.5"))
         self.assertEqual("3.0", self.aai_ep._get_version_from_string("AAI3.0"))
 
     def test_aai_versioned_path(self):
-
         self.assertEqual('/{}/cloud-infrastructure/cloud-regions/?depth=0'.format(self.conf.aai.server_url_version),
                          self.aai_ep._aai_versioned_path("/cloud-infrastructure/cloud-regions/?depth=0"))
         self.assertEqual('/{}/query?format=id'.format(self.conf.aai.server_url_version),
                          self.aai_ep._aai_versioned_path("/query?format=id"))
 
-
     def test_resolve_clli_location(self):
-
         req_json_file = './conductor/tests/unit/data/plugins/inventory_provider/_request_clli_location.json'
         req_json = json.loads(open(req_json_file).read())
 
@@ -62,11 +57,10 @@ class TestAAI(unittest.TestCase):
 
         self.mock_get_request = mock.patch.object(AAI, '_request', return_value=response)
         self.mock_get_request.start()
-        self.assertEqual({'country': u'USA', 'latitude': u'40.39596', 'longitude': u'-74.135342'} ,
-                        self.aai_ep.resolve_clli_location("clli_code"))
+        self.assertEqual({'country': u'USA', 'latitude': u'40.39596', 'longitude': u'-74.135342'},
+                         self.aai_ep.resolve_clli_location("clli_code"))
 
     def test_get_inventory_group_pair(self):
-
         req_json_file = './conductor/tests/unit/data/plugins/inventory_provider/_request_inventory_group_pair.json'
         req_json = json.loads(open(req_json_file).read())
 
@@ -77,11 +71,10 @@ class TestAAI(unittest.TestCase):
 
         self.mock_get_request = mock.patch.object(AAI, '_request', return_value=response)
         self.mock_get_request.start()
-        self.assertEqual([[u'instance-1', u'instance-2']] ,
-                        self.aai_ep.get_inventory_group_pairs("service_description"))
+        self.assertEqual([[u'instance-1', u'instance-2']],
+                         self.aai_ep.get_inventory_group_pairs("service_description"))
 
     def test_resolve_host_location(self):
-
         req_json_file = './conductor/tests/unit/data/plugins/inventory_provider/_request_host_name.json'
         req_json = json.loads(open(req_json_file).read())
 
@@ -99,11 +92,10 @@ class TestAAI(unittest.TestCase):
         self.mock_get_complex = mock.patch.object(AAI, '_get_complex', return_value=complex_json)
         self.mock_get_complex.start()
 
-        self.assertEqual({'country': u'USA', 'latitude': u'28.543251', 'longitude': u'-81.377112'} ,
+        self.assertEqual({'country': u'USA', 'latitude': u'28.543251', 'longitude': u'-81.377112'},
                          self.aai_ep.resolve_host_location("host_name"))
 
     def test_resolve_demands(self):
-
         self.assertEqual({}, self.aai_ep.resolve_demands(dict()))
 
         demands_list_file = './conductor/tests/unit/data/plugins/inventory_provider/demand_list.json'
@@ -126,7 +118,8 @@ class TestAAI(unittest.TestCase):
         req_response.ok = True
         req_response.json.return_value = demand_service_response
 
-        self.mock_first_level_service_call = mock.patch.object(AAI, 'first_level_service_call', return_value=generic_vnf_list)
+        self.mock_first_level_service_call = mock.patch.object(AAI, 'first_level_service_call',
+                                                               return_value=generic_vnf_list)
         self.mock_first_level_service_call.start()
 
         self.mock_get_regions = mock.patch.object(AAI, '_get_regions', return_value=regions_response)
@@ -167,7 +160,6 @@ class TestAAI(unittest.TestCase):
             self.aai_ep.resolve_demands(demands_list))
 
     def test_get_complex(self):
-
         complex_json_file = './conductor/tests/unit/data/plugins/inventory_provider/_request_get_complex.json'
         complex_json = json.loads(open(complex_json_file).read())
 
@@ -179,12 +171,12 @@ class TestAAI(unittest.TestCase):
         self.mock_get_request = mock.patch.object(AAI, '_request', return_value=response)
         self.mock_get_request.start()
 
-        self.assertEqual({u'city': u'Middletown', u'latitude': u'28.543251', u'longitude': u'-81.377112', u'country': u'USA', u'region': u'SE'} ,
-                         self.aai_ep._get_complex("/v10/complex/complex_id", "complex_id"))
-
+        self.assertEqual(
+            {u'city': u'Middletown', u'latitude': u'28.543251', u'longitude': u'-81.377112', u'country': u'USA',
+             u'region': u'SE'},
+            self.aai_ep._get_complex("/v10/complex/complex_id", "complex_id"))
 
     def test_check_network_roles(self):
-
         network_role_json_file = './conductor/tests/unit/data/plugins/inventory_provider/_request_network_role.json'
         network_role_json = json.loads(open(network_role_json_file).read())
 
@@ -195,12 +187,10 @@ class TestAAI(unittest.TestCase):
 
         self.mock_get_request = mock.patch.object(AAI, '_request', return_value=response)
         self.mock_get_request.start()
-        self.assertEqual(set(['test-cloud-value']) ,
-                        self.aai_ep.check_network_roles("network_role_id"))
-
+        self.assertEqual(set(['test-cloud-value']),
+                         self.aai_ep.check_network_roles("network_role_id"))
 
     def test_check_candidate_role(self):
-
         candidate_role_json_file = './conductor/tests/unit/data/plugins/inventory_provider/_request_candidate_role.json'
         candidate_role_json = json.loads(open(candidate_role_json_file).read())
 
@@ -223,7 +213,8 @@ class TestAAI(unittest.TestCase):
         inventory_attributes['attr-1'] = 'attr-1-value1'
 
         self.assertEqual(True,
-                         self.aai_ep.match_inventory_attributes(template_attributes, inventory_attributes, "candidate-id"))
+                         self.aai_ep.match_inventory_attributes(template_attributes, inventory_attributes,
+                                                                "candidate-id"))
 
         template_attributes['attr-1'] = {
             'not': ['attr-1-value2']
@@ -268,7 +259,6 @@ class TestAAI(unittest.TestCase):
                          self.aai_ep._refresh_cache())
 
     def test_get_aai_rel_link(self):
-
         relatonship_response_file = './conductor/tests/unit/data/plugins/inventory_provider/relationship_list.json'
         relatonship_response = json.loads(open(relatonship_response_file).read())
         related_to = "service-instance"
@@ -301,7 +291,7 @@ class TestAAI(unittest.TestCase):
 
     def test_match_hpa(self):
         flavor_json_file = \
-           './conductor/tests/unit/data/plugins/inventory_provider/hpa_flavors.json'
+            './conductor/tests/unit/data/plugins/inventory_provider/hpa_flavors.json'
         flavor_json = json.loads(open(flavor_json_file).read())
         feature_json_file = \
             './conductor/tests/unit/data/plugins/inventory_provider/hpa_req_features.json'
@@ -310,17 +300,34 @@ class TestAAI(unittest.TestCase):
         candidate_json = json.loads(open(candidate_json_file).read())
         candidate_json['candidate_list'][1]['flavors'] = flavor_json
 
-        flavor_map = {"flavor-id": "f5aa2b2e-3206-41b6-80d5-cf041b098c43",
-                      "flavor-name": "flavor-cpu-pinning-ovsdpdk-instruction-set",
-                      "score": 0}
+        flavor_map = {
+            "directives": [],
+            "flavor_map": {"flavor-id": "f5aa2b2e-3206-41b6-80d5-cf041b098c43",
+                           "flavor-name": "flavor-cpu-pinning-ovsdpdk-instruction-set",
+                           "score": 0}}
         self.assertEqual(flavor_map,
                          self.aai_ep.match_hpa(candidate_json['candidate_list'][1],
                                                feature_json[0]))
 
-        flavor_map = {"flavor-id": "f5aa2b2e-3206-41b6-80d5-cf041b098c43",
-                      "flavor-name": "flavor-cpu-ovsdpdk-instruction-set",
-                      "score": 10}
+        flavor_map = {"flavor_map": {"flavor-id": "f5aa2b2e-3206-41b6-80d5-cf041b098c43",
+                                     "flavor-name": "flavor-cpu-ovsdpdk-instruction-set",
+                                     "score": 10},
+                      "directives": []}
         self.assertEqual(flavor_map,
-             self.aai_ep.match_hpa(candidate_json['candidate_list'][1],
-                                   feature_json[1]))
-
+                         self.aai_ep.match_hpa(candidate_json['candidate_list'][1],
+                                               feature_json[1]))
+        flavor_map = {"flavor_map": {"flavor-id": "f5aa2b2e-3206-41b6-80d5-cf6t2b098c43",
+                                     "flavor-name": "flavor-ovsdpdk-cpu-pinning-sriov-NIC-Network-set",
+                                     "score": 13},
+                      "directives": [{
+                          "type": "sriovNICNetwork_directives",
+                          "attributes": [
+                              {
+                                  "attribute_name": "A",
+                                  "attribute_value": "a"
+                              }
+                          ]
+                      }]}
+        self.assertEqual(flavor_map,
+                         self.aai_ep.match_hpa(candidate_json['candidate_list'][1],
+                                               feature_json[2]))
