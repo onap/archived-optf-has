@@ -331,3 +331,32 @@ class TestAAI(unittest.TestCase):
         self.assertEqual(flavor_map,
                          self.aai_ep.match_hpa(candidate_json['candidate_list'][1],
                                                feature_json[2]))
+        self.assertEqual(None, self.aai_ep.match_hpa(candidate_json['candidate_list'][1],
+                                                     feature_json[3]))
+        flavor_map = {"flavor_map": {"flavor-id": "f5aa2b2e-3206-41b6-19d5-cf6t2b098c43",
+                                     "flavor-name": "flavor-ovsdpdk-cpu-pinning-double-sriov-NIC-Network-set",
+                                     "score": 6},
+                      "directives": [
+                          {
+                          "type": "sriovNICNetwork_directives",
+                          "attributes": [
+                              {
+                                  "attribute_name": "A",
+                                  "attribute_value": "a"
+                              }
+                          ]
+                          },
+                          {
+                              "type": "sriovNICNetwork_directives",
+                              "attributes": [
+                                  {
+                                      "attribute_name": "B",
+                                      "attribute_value": "b"
+                                  }
+                              ]
+                          }]
+                      }
+        self.assertEqual(flavor_map, self.aai_ep.match_hpa(candidate_json['candidate_list'][1],
+                                                           feature_json[4]))
+        self.assertEqual(None, self.aai_ep.match_hpa(candidate_json['candidate_list'][1],
+                                                     feature_json[5]))

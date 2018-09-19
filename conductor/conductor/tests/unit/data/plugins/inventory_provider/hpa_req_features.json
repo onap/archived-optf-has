@@ -323,5 +323,399 @@
         }
       ]
     }
+  ],
+  [
+    {
+      "hpa-feature": "basicCapabilities",
+      "hpa-version": "v1",
+      "architecture": "generic",
+      "mandatory": "True",
+      "directives": [],
+      "hpa-feature-attributes": [
+        {
+          "hpa-attribute-key": "numVirtualCpu",
+          "hpa-attribute-value": "8",
+          "operator": "="
+        },
+        {
+          "hpa-attribute-key": "virtualMemSize",
+          "hpa-attribute-value": "16",
+          "operator": "=",
+          "unit": "GB"
+        }
+      ]
+    },
+    {
+      "hpa-feature": "ovsDpdk",
+      "hpa-version": "v1",
+      "architecture": "generic",
+      "mandatory": "False",
+      "score": "5",
+      "directives": [],
+      "hpa-feature-attributes": [
+        {
+          "hpa-attribute-key": "dataProcessingAccelerationLibrary",
+          "hpa-attribute-value": "v18.02",
+          "operator": "="
+        }
+      ]
+    },
+    {
+      "hpa-feature": "cpuPinning",
+      "hpa-version": "v1",
+      "architecture": "generic",
+      "mandatory": "False",
+      "score": "1",
+      "directives": [],
+      "hpa-feature-attributes": [
+        {
+          "hpa-attribute-key": "logicalCpuThreadPinningPolicy",
+          "hpa-attribute-value": "prefer",
+          "operator": "="
+        },
+        {
+          "hpa-attribute-key": "logicalCpuPinningPolicy",
+          "hpa-attribute-value": "dedicated",
+          "operator": "="
+        }
+      ]
+    },
+    {
+      "hpa-feature": "hugePages",
+      "hpa-version": "v1",
+      "architecture": "generic",
+      "mandatory": "True",
+      "directives": [],
+      "hpa-feature-attributes": [
+        {
+          "hpa-attribute-key": "memoryPageSize",
+          "hpa-attribute-value": "2",
+          "operator": "=",
+          "unit": "GB"
+        }
+      ]
+    }
+  ],
+  [
+    {
+      "hpa-feature": "basicCapabilities",
+      "hpa-version": "v1",
+      "architecture": "generic",
+      "mandatory": "True",
+      "directives": [],
+      "hpa-feature-attributes": [
+        {
+          "hpa-attribute-key": "numVirtualCpu",
+          "hpa-attribute-value": "8",
+          "operator": "="
+        },
+        {
+          "hpa-attribute-key": "virtualMemSize",
+          "hpa-attribute-value": "16",
+          "operator": "=",
+          "unit": "GB"
+        }
+      ]
+    },
+    {
+      "hpa-feature": "ovsDpdk",
+      "hpa-version": "v1",
+      "architecture": "generic",
+      "mandatory": "False",
+      "score": "5",
+      "directives": [],
+      "hpa-feature-attributes": [
+        {
+          "hpa-attribute-key": "dataProcessingAccelerationLibrary",
+          "hpa-attribute-value": "v18.02",
+          "operator": "="
+        }
+      ]
+    },
+    {
+      "hpa-feature": "cpuPinning",
+      "hpa-version": "v1",
+      "architecture": "generic",
+      "mandatory": "False",
+      "score": "1",
+      "directives": [],
+      "hpa-feature-attributes": [
+        {
+          "hpa-attribute-key": "logicalCpuThreadPinningPolicy",
+          "hpa-attribute-value": "prefer",
+          "operator": "="
+        },
+        {
+          "hpa-attribute-key": "logicalCpuPinningPolicy",
+          "hpa-attribute-value": "dedicated",
+          "operator": "="
+        }
+      ]
+    },
+    {
+      "hpa-feature": "instructionSetExtensions",
+      "hpa-version": "v1",
+      "architecture": "Intel64",
+      "mandatory": "False",
+      "score": "5",
+      "directives": [],
+      "hpa-feature-attributes": [
+        {
+          "hpa-attribute-key": "instructionSetExtensions",
+          "hpa-attribute-value": [
+            "A11",
+            "B22"
+          ],
+          "operator": "ALL"
+        }
+      ]
+    },
+    {
+      "hpa-feature": "sriovNICNetwork",
+      "hpa-version": "v1",
+      "mandatory": "True",
+      "architecture": "generic",
+      "directives": [
+        {
+          "type": "sriovNICNetwork_directives",
+          "attributes": [
+            {
+              "attribute_name": "A",
+              "attribute_value": "a"
+            }
+          ]
+        }
+      ],
+      "hpa-feature-attributes": [
+        {
+          "hpa-attribute-key": "pciCount",
+          "hpa-attribute-value": "1",
+          "operator": "=",
+          "unit": ""
+        },
+        {
+          "hpa-attribute-key": "pciVendorId",
+          "hpa-attribute-value": "8086",
+          "operator": "=",
+          "unit": ""
+        },
+        {
+          "hpa-attribute-key": "pciDeviceId",
+          "hpa-attribute-value": "1234",
+          "operator": "=",
+          "unit": ""
+        },
+        {
+          "hpa-attribute-key": "physicalNetwork",
+          "hpa-attribute-value": "physnet1",
+          "operator": "=",
+          "unit": ""
+        }
+      ]
+    },
+    {
+      "hpa-feature": "sriovNICNetwork",
+      "hpa-version": "v1",
+      "mandatory": "True",
+      "architecture": "generic",
+      "directives": [
+        {
+          "type": "sriovNICNetwork_directives",
+          "attributes": [
+            {
+              "attribute_name": "B",
+              "attribute_value": "b"
+            }
+          ]
+        }
+      ],
+      "hpa-feature-attributes": [
+        {
+          "hpa-attribute-key": "pciCount",
+          "hpa-attribute-value": "1",
+          "operator": "=",
+          "unit": ""
+        },
+        {
+          "hpa-attribute-key": "pciVendorId",
+          "hpa-attribute-value": "8086",
+          "operator": "=",
+          "unit": ""
+        },
+        {
+          "hpa-attribute-key": "pciDeviceId",
+          "hpa-attribute-value": "4321",
+          "operator": "=",
+          "unit": ""
+        },
+        {
+          "hpa-attribute-key": "physicalNetwork",
+          "hpa-attribute-value": "physnet2",
+          "operator": "=",
+          "unit": ""
+        }
+      ]
+    }
+  ],
+  [
+    {
+      "hpa-feature": "basicCapabilities",
+      "hpa-version": "v1",
+      "architecture": "generic",
+      "mandatory": "True",
+      "directives": [],
+      "hpa-feature-attributes": [
+        {
+          "hpa-attribute-key": "numVirtualCpu",
+          "hpa-attribute-value": "8",
+          "operator": "="
+        },
+        {
+          "hpa-attribute-key": "virtualMemSize",
+          "hpa-attribute-value": "16",
+          "operator": "=",
+          "unit": "GB"
+        }
+      ]
+    },
+    {
+      "hpa-feature": "ovsDpdk",
+      "hpa-version": "v1",
+      "architecture": "generic",
+      "mandatory": "False",
+      "score": "5",
+      "directives": [],
+      "hpa-feature-attributes": [
+        {
+          "hpa-attribute-key": "dataProcessingAccelerationLibrary",
+          "hpa-attribute-value": "v18.02",
+          "operator": "="
+        }
+      ]
+    },
+    {
+      "hpa-feature": "cpuPinning",
+      "hpa-version": "v1",
+      "architecture": "generic",
+      "mandatory": "False",
+      "score": "1",
+      "directives": [],
+      "hpa-feature-attributes": [
+        {
+          "hpa-attribute-key": "logicalCpuThreadPinningPolicy",
+          "hpa-attribute-value": "prefer",
+          "operator": "="
+        },
+        {
+          "hpa-attribute-key": "logicalCpuPinningPolicy",
+          "hpa-attribute-value": "dedicated",
+          "operator": "="
+        }
+      ]
+    },
+    {
+      "hpa-feature": "instructionSetExtensions",
+      "hpa-version": "v1",
+      "architecture": "Intel64",
+      "mandatory": "False",
+      "score": "5",
+      "directives": [],
+      "hpa-feature-attributes": [
+        {
+          "hpa-attribute-key": "instructionSetExtensions",
+          "hpa-attribute-value": [
+            "A11",
+            "B22"
+          ],
+          "operator": "ALL"
+        }
+      ]
+    },
+    {
+      "hpa-feature": "sriovNICNetwork",
+      "hpa-version": "v1",
+      "mandatory": "True",
+      "architecture": "generic",
+      "directives": [
+        {
+          "type": "sriovNICNetwork_directives",
+          "attributes": [
+            {
+              "attribute_name": "C",
+              "attribute_value": "c"
+            }
+          ]
+        }
+      ],
+      "hpa-feature-attributes": [
+        {
+          "hpa-attribute-key": "pciCount",
+          "hpa-attribute-value": "1",
+          "operator": "=",
+          "unit": ""
+        },
+        {
+          "hpa-attribute-key": "pciVendorId",
+          "hpa-attribute-value": "8086",
+          "operator": "=",
+          "unit": ""
+        },
+        {
+          "hpa-attribute-key": "pciDeviceId",
+          "hpa-attribute-value": "1235",
+          "operator": "=",
+          "unit": ""
+        },
+        {
+          "hpa-attribute-key": "physicalNetwork",
+          "hpa-attribute-value": "physnet1",
+          "operator": "=",
+          "unit": ""
+        }
+      ]
+    },
+    {
+      "hpa-feature": "sriovNICNetwork",
+      "hpa-version": "v1",
+      "mandatory": "True",
+      "architecture": "generic",
+      "directives": [
+        {
+          "type": "sriovNICNetwork_directives",
+          "attributes": [
+            {
+              "attribute_name": "B",
+              "attribute_value": "b"
+            }
+          ]
+        }
+      ],
+      "hpa-feature-attributes": [
+        {
+          "hpa-attribute-key": "pciCount",
+          "hpa-attribute-value": "1",
+          "operator": "=",
+          "unit": ""
+        },
+        {
+          "hpa-attribute-key": "pciVendorId",
+          "hpa-attribute-value": "8086",
+          "operator": "=",
+          "unit": ""
+        },
+        {
+          "hpa-attribute-key": "pciDeviceId",
+          "hpa-attribute-value": "4321",
+          "operator": "=",
+          "unit": ""
+        },
+        {
+          "hpa-attribute-key": "physicalNetwork",
+          "hpa-attribute-value": "physnet2",
+          "operator": "=",
+          "unit": ""
+        }
+      ]
+    }
   ]
 ]
