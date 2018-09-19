@@ -2,6 +2,75 @@
   "comments": [
     {
       "key": {
+        "uuid": "1a76adc5_b10a0788",
+        "filename": "conductor/conductor/api/controllers/v1/latency_country_rules_loader.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 2041
+      },
+      "writtenOn": "2018-09-19T02:51:30Z",
+      "side": 1,
+      "message": "2018",
+      "range": {
+        "startLine": 3,
+        "startChar": 18,
+        "endLine": 3,
+        "endChar": 27
+      },
+      "revId": "67e66e6d51ce1075302e148f8cdfa07b42d6abf2",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a76adc5_51fdb36c",
+        "filename": "conductor/conductor/api/controllers/v1/latency_loader.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 2041
+      },
+      "writtenOn": "2018-09-19T02:51:30Z",
+      "side": 1,
+      "message": "2018",
+      "range": {
+        "startLine": 3,
+        "startChar": 18,
+        "endLine": 3,
+        "endChar": 27
+      },
+      "revId": "67e66e6d51ce1075302e148f8cdfa07b42d6abf2",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a76adc5_d1f0e392",
+        "filename": "conductor/conductor/api/controllers/v1/release_orders.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 2041
+      },
+      "writtenOn": "2018-09-19T02:51:30Z",
+      "side": 1,
+      "message": "2018",
+      "range": {
+        "startLine": 3,
+        "startChar": 18,
+        "endLine": 3,
+        "endChar": 27
+      },
+      "revId": "67e66e6d51ce1075302e148f8cdfa07b42d6abf2",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a76adc5_11b2db4b",
         "filename": "conductor/conductor/solver/service.py",
         "patchSetId": 5
@@ -42,6 +111,57 @@
         "endLine": 498,
         "endChar": 28
       },
+      "revId": "67e66e6d51ce1075302e148f8cdfa07b42d6abf2",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a76adc5_11cdfb65",
+        "filename": "conductor/conductor/solver/triage_tool/traige_latency.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 2041
+      },
+      "writtenOn": "2018-09-19T02:51:30Z",
+      "side": 1,
+      "message": "Please add license header.",
+      "revId": "67e66e6d51ce1075302e148f8cdfa07b42d6abf2",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a76adc5_31c83754",
+        "filename": "conductor/conductor/solver/triage_tool/triage_data.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 2041
+      },
+      "writtenOn": "2018-09-19T02:51:30Z",
+      "side": 1,
+      "message": "Please add license header.",
+      "revId": "67e66e6d51ce1075302e148f8cdfa07b42d6abf2",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a76adc5_f1bddfb1",
+        "filename": "conductor/conductor/solver/triage_tool/triage_tool_service.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 2041
+      },
+      "writtenOn": "2018-09-19T02:51:30Z",
+      "side": 1,
+      "message": "Please add license header.",
       "revId": "67e66e6d51ce1075302e148f8cdfa07b42d6abf2",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": false
