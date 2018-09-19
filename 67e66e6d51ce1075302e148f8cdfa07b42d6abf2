@@ -71,6 +71,57 @@
     },
     {
       "key": {
+        "uuid": "1a76adc5_c4bc9e08",
+        "filename": "conductor/conductor/conf/adiod_controller.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 2041
+      },
+      "writtenOn": "2018-09-19T16:32:41Z",
+      "side": 1,
+      "message": "Is this plugin needed ?",
+      "revId": "67e66e6d51ce1075302e148f8cdfa07b42d6abf2",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a76adc5_843a2697",
+        "filename": "conductor/conductor/data/plugins/adiod_controller/extensions.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 2041
+      },
+      "writtenOn": "2018-09-19T16:32:41Z",
+      "side": 1,
+      "message": "Is this plugin needed ?",
+      "revId": "67e66e6d51ce1075302e148f8cdfa07b42d6abf2",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a76adc5_44c96eaa",
+        "filename": "conductor/conductor/data/plugins/adiod_controller/sdnc_adiod.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 2041
+      },
+      "writtenOn": "2018-09-19T16:32:41Z",
+      "side": 1,
+      "message": "Is this a required plugin ?",
+      "revId": "67e66e6d51ce1075302e148f8cdfa07b42d6abf2",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a76adc5_11b2db4b",
         "filename": "conductor/conductor/solver/service.py",
         "patchSetId": 5
