@@ -1082,11 +1082,12 @@ Or, to place two demands in the same region:
    but these terms may cause confusion with affinity/anti-affinity in
    OpenStack.
 
-HPA
-~~~~
+HPA & Cloud Agnostic Intent
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Constrain each demand's inventory candidates based on cloud regions' Hardware
-platform capabilities (HPA)
+platform capabilities (HPA) and also intent support. Note that currently HPA
+the cloud agnostic constraints will use the same schema.
 
 Requirements mapped to the inventory provider specified properties, referenced
 by the demands. For eg, properties could be hardware capabilities provided by
@@ -1099,9 +1100,47 @@ supported by the services, etc.
 +---------------+--------------------------------------------------------+
 | Property      | Value                                                  |
 +===============+========================================================+
-| ``evaluate``  | List of flavorLabel, flavorProperties of each VM of the|
-|               | VNF demand.                                            |
+| ``evaluate``  | List of id, type, directives and flavorProperties of   |
+|               | each VM of the VNF demand.                             |
 +---------------+--------------------------------------------------------+
+
++-------------------------+--------------------------------------------------------+
+| Property for evaluation | Value                                                  |
++=========================+========================================================+
+| ``id``                  | Name of VFC                                            |
++-------------------------+--------------------------------------------------------+
+| ``type``                | Type of VFC. Could be ``vnfc`` or ``tocsa.nodes.nfv.   |
+|                         | Vdu.Compute`` according to different models            |
++-------------------------+--------------------------------------------------------+
+| ``directives``          | Directives for one VFC. Now we only have flavor        |
+|                         | directives inside. Each VFC must have one directive    |
++-------------------------+--------------------------------------------------------+
+| ``flavorProperties``    | Flavor properties for one VFC. Contains detailed       |
+|                         | HPA requirements                                       |
++-------------------------+--------------------------------------------------------+
+
++--------------------------+-------------------------------------------+
+| Property for directives  | Value                                     |
++==========================+===========================================+
+| ``type``                 | Type of directive                         |
++--------------------------+-------------------------------------------+
+| ``attributes``           | Attributes inside directive               |
++--------------------------+-------------------------------------------+
+
++--------------------------+-------------------------------------------+
+| Property for attributes  | Value                                     |
++==========================+===========================================+
+| ``attribute_name``       | Attribute name/label                      |
++--------------------------+-------------------------------------------+
+| ``attributes_value``     | Attributes value                          |
++--------------------------+-------------------------------------------+
+
+*Note: Each VFC must have one directive with type 'flavor_directives' to put the
+flavors inside. The ``attribute_name`` is the place to put flavor label and the
+``attribute_value`` will first left blank. After getting the proper flavor, OOF will
+merge the flavor name into the ``attribute_value`` inside flavor directives. Also,
+all the directives coming from one VFC inside the same request will be merged
+together in ``directives``, as they are using the same structure as 'directives'.
 
 .. code:: yaml
 
@@ -1111,14 +1150,28 @@ supported by the services, etc.
         demands: [my_vnf_demand, my_other_vnf_demand]
         properties:
           evaluate:
-            - [ List of {flavorLabel : {flavor label name},
+            - [ List of {id: {vdu Name},
+                        type: {type of VF },
+                        directives: DIRECTIVES LIST,
                         flavorProperties: HPACapability DICT} ]
+
     HPACapability DICT :
       hpa-feature: basicCapabilities
       hpa-version: v1
       architecture: generic
+      directives:
+        - DIRECTIVES LIST
       hpa-feature-attributes:
         - HPAFEATUREATTRIBUTES LIST
+
+    DIRECTIVES LIST:
+      type: String
+      attributes:
+        - ATTRIBUTES LIST
+
+    ATTRIBUTES LIST:
+      attribute_name: String,
+      attribute_value: String
 
     HPAFEATUREATTRIBUTES LIST:
       hpa-attribute-key: String
@@ -1129,6 +1182,7 @@ supported by the services, etc.
 
 **Example**
 
+Example for HEAT request(SO)
 
 .. code-block:: json
 
@@ -1141,19 +1195,41 @@ supported by the services, etc.
             "properties":{
                "evaluate":[
                   {
-                     "flavorLabel":"flavor_label_1",
+                     "id": "vgw_0",
+                     "type": "vnfc",
+                     "directives": [
+                        {
+                         "type":"flavor_directives",
+                         "attributes":[
+                            {
+                             "attribute_name":" oof_returned_flavor_label_for_vgw_0 ", //Admin needs to ensure that this value is same as flavor parameter in HOT
+                             "attribute_value": "<Blank>"
+                            }
+                         ]
+                        }
+                     ],
                      "flavorProperties":[
                         {
                            "hpa-feature":"basicCapabilities",
                            "hpa-version":"v1",
                            "architecture":"generic",
                            "mandatory": "True",
+                           "directives": [],
                            "hpa-feature-attributes":[
                               {
                                  "hpa-attribute-key":"numVirtualCpu",
                                  "hpa-attribute-value":"32",
                                  "operator":"="
-                              },
+                              }
+                           ]
+                        },
+                        {
+                           "hpa-feature":"basicCapabilities",
+                           "hpa-version":"v1",
+                           "architecture":"generic",
+                           "mandatory": "True",
+                           "directives": [],
+                           "hpa-feature-attributes":[
                               {
                                  "hpa-attribute-key":"virtualMemSize",
                                  "hpa-attribute-value":"64",
@@ -1168,6 +1244,7 @@ supported by the services, etc.
                            "architecture":"generic",
                            "mandatory": "False",
                            "score": "10",
+                           "directives": [],
                            "hpa-feature-attributes":[
                               {
                                  "hpa-attribute-key":"dataProcessingAccelerationLibrary",
@@ -1175,11 +1252,43 @@ supported by the services, etc.
                                  "operator":"="
                               }
                            ]
+                        },
+                        {
+                           "hpa-feature": "qosIntentCapabilities",
+                           "mandatory": "True",
+                           "architecture": "generic",
+                           "hpa-version": "v1",
+                           "directives": [],
+                           "hpa-feature-attributes": [
+                              {
+                                 "hpa-attribute-key":"Infrastructure Resource Isolation for VNF",
+                                 "hpa-attribute-value": "Burstable QoS",
+                                 "operator": "=",
+                                 "unit": ""
+                              },
+                              {  "hpa-attribute-key":"Burstable QoS Oversubscription Percentage",
+                                 "hpa-attribute-value": "25",
+                                 "operator": "=",
+                                 "unit": ""
+                              }
+                           ]
                         }
                      ]
                   },
                   {
-                     "flavorLabel":"flavor_label_2",
+                     "id": "vgw_1",
+                     "type": "vnfc",
+                     "directives": [
+                        {
+                         "type":"flavor_directives",
+                         "attributes":[
+                            {
+                             "attribute_name":" oof_returned_flavor_label_for_vgw_1 ", //Admin needs to ensure that this value is same as flavor parameter in HOT
+                             "attribute_value": "<Blank>"
+                            }
+                         ]
+                        }
+                     ],
                      "flavorProperties":[
                         {
                            "hpa-feature":"basicCapabilities",
@@ -1187,18 +1296,247 @@ supported by the services, etc.
                            "architecture":"generic",
                            "mandatory": "False",
                            "score": "5",
+                           "directives": [],
                            "hpa-feature-attributes":[
                               {
                                  "hpa-attribute-key":"numVirtualCpu",
                                  "hpa-attribute-value":"8",
                                  "operator":">="
-                              },
+                              }
+                           ]
+                        },
+                        {
+                           "hpa-feature":"basicCapabilities",
+                           "hpa-version":"v1",
+                           "architecture":"generic",
+                           "mandatory": "False",
+                           "score": "5",
+                           "directives": [],
+                           "hpa-feature-attributes":[
                               {
                                  "hpa-attribute-key":"virtualMemSize",
                                  "hpa-attribute-value":"16",
                                  "operator":">=",
                                  "unit":"GB"
                               }
+                           ]
+                        },
+                        {
+                           "hpa-feature":"sriovNICNetwork",
+                           "hpa-version":"v1",
+                           "architecture":"generic",
+                           "mandatory": "True",
+                           "directives": [
+                              {
+                                "type": "sriovNICNetwork_directives",
+                                "attributes": [
+                                   { "attribute_name": "oof_returned_vnic_type_for_vgw_1",
+                                     "attribute_value": "direct"
+                                   },
+                                   { "attribute_name": "oof_returned_provider_network_for_vgw_1",
+                                     "attribute_value": "physnet2"
+                                   }
+                                ]
+                              }
+                           ],
+                           "hpa-feature-attributes":[
+                              {
+                                 "hpa-attribute-key":"pciVendorId",
+                                 "hpa-attribute-value":"8086",
+                                 "operator":"=",
+                                 "unit":""
+                              },
+                              {
+                                 "hpa-attribute-key":"pciDeviceId",
+                                 "hpa-attribute-value":"0443",
+                                 "operator":"=",
+                                 "unit":""
+                              },
+                              {
+                                 "hpa-attribute-key":"pciCount",
+                                 "hpa-attribute-value":"1",
+                                 "operator":"=",
+                                 "unit":""
+                              },
+                              {
+                                 "hpa-attribute-key":"physicalNetwork",
+                                 "hpa-attribute-value":"physnet2",
+                                 "operator":"=",
+                                 "unit":""
+                              }
+                           ]
+                        }
+                     ]
+                  }
+               ]
+            }
+         }
+      }
+
+Example for Pure TOSCA request(VF-C)
+
+.. code-block:: json
+
+    {
+        "hpa_constraint":{
+            "type":"hpa",
+            "demands":[
+               "vG"
+            ],
+            "properties":{
+               "evaluate":[
+                  {
+                     "id": "vgw_0",
+                     "type": "tocsa.nodes.nfv.Vdu.Compute",
+                     "directives": [
+                        {
+                         "type":"flavor_directives",
+                         "attributes":[
+                            {
+                             "attribute_name":" flavor_name ",
+                             "attribute_value": "<Blank>"
+                            }
+                         ]
+                        }
+                     ],
+                     "flavorProperties":[
+                        {
+                           "hpa-feature":"basicCapabilities",
+                           "hpa-version":"v1",
+                           "architecture":"generic",
+                           "mandatory": "True",
+                           "directives": [],
+                           "hpa-feature-attributes":[
+                              {
+                                 "hpa-attribute-key":"numVirtualCpu",
+                                 "hpa-attribute-value":"32",
+                                 "operator":"="
+                              }
+                           ]
+                        },
+                        {
+                           "hpa-feature":"basicCapabilities",
+                           "hpa-version":"v1",
+                           "architecture":"generic",
+                           "mandatory": "True",
+                           "directives": [],
+                           "hpa-feature-attributes":[
+                              {
+                                 "hpa-attribute-key":"virtualMemSize",
+                                 "hpa-attribute-value":"64",
+                                 "operator":"=",
+                                 "unit":"GB"
+                              }
+                           ]
+                        },
+                        {
+                           "hpa-feature":"ovsDpdk",
+                           "hpa-version":"v1",
+                           "architecture":"generic",
+                           "mandatory": "False",
+                           "score": "10",
+                           "directives": [],
+                           "hpa-feature-attributes":[
+                              {
+                                 "hpa-attribute-key":"dataProcessingAccelerationLibrary",
+                                 "hpa-attribute-value":"v18.02",
+                                 "operator":"="
+                              }
+                           ]
+                        },
+                        {
+                           "hpa-feature": "qosIntentCapabilities",
+                           "mandatory": "True",
+                           "architecture": "generic",
+                           "hpa-version": "v1",
+                           "directives": [],
+                           "hpa-feature-attributes": [
+                              {
+                                 "hpa-attribute-key":"Infrastructure Resource Isolation for VNF",
+                                 "hpa-attribute-value": "Burstable QoS",
+                                 "operator": "=",
+                                 "unit": ""
+                              },
+                              {  "hpa-attribute-key":"Burstable QoS Oversubscription Percentage",
+                                 "hpa-attribute-value": "25",
+                                 "operator": "=",
+                                 "unit": ""
+                              }
+                           ]
+                        }
+                     ]
+                  },
+                  {
+                     "id": "vgw_1",
+                     "type": "tosca.nodes.nfv.Vdu.Compute",
+                     "directives": [
+                        {
+                         "type":"flavor_directives",
+                         "attributes":[
+                            {
+                             "attribute_name":" flavor_name ",
+                             "attribute_value": "<Blank>"
+                            }
+                         ]
+                        }
+                     ],
+                     "flavorProperties":[
+                        {
+                           "hpa-feature":"basicCapabilities",
+                           "hpa-version":"v1",
+                           "architecture":"generic",
+                           "mandatory": "False",
+                           "score": "5",
+                           "directives": [],
+                           "hpa-feature-attributes":[
+                              {
+                                 "hpa-attribute-key":"numVirtualCpu",
+                                 "hpa-attribute-value":"8",
+                                 "operator":">="
+                              }
+                           ]
+                        },
+                        {
+                           "hpa-feature":"basicCapabilities",
+                           "hpa-version":"v1",
+                           "architecture":"generic",
+                           "mandatory": "False",
+                           "score": "5",
+                           "directives": [],
+                           "hpa-feature-attributes":[
+                              {
+                                 "hpa-attribute-key":"virtualMemSize",
+                                 "hpa-attribute-value":"16",
+                                 "operator":">=",
+                                 "unit":"GB"
+                              }
+                           ]
+                        },
+                        {
+                           "hpa-feature":"sriovNICNetwork",
+                           "hpa-version":"v1",
+                           "architecture":"generic",
+                           "mandatory": "True",
+                           "directives": [],
+                           "hpa-feature-attributes":[
+                              {
+                                 "hpa-attribute-key":"pciVendorId",
+                                 "hpa-attribute-value":"8086",
+                                 "operator":"=",
+                                 "unit":""
+                              },
+                              {
+                                 "hpa-attribute-key":"pciDeviceId",
+                                 "hpa-attribute-value":"0443",
+                                 "operator":"=",
+                                 "unit":""
+                              },
+                              {
+                                 "hpa-attribute-key":"pciCount",
+                                 "hpa-attribute-value":"1",
+                                 "operator":"=",
+                                 "unit":""
+                              },
                            ]
                         }
                      ]
@@ -1253,9 +1591,9 @@ settings.
    object defined through policy, so it is not restricted to this format. In
    ONAP Beijing release MultiCloud supports the check_vim_capacity using the
    following grammar.
-   
+
    .. code-block:: json
-   
+
        {
          "request":{
            "vCPU":10,
