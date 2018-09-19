@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a76adc5_11b2db4b",
+        "filename": "conductor/conductor/solver/service.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 484,
+      "author": {
+        "id": 2977
+      },
+      "writtenOn": "2018-09-19T01:53:32Z",
+      "side": 1,
+      "message": "One question here, any chance that we don\u0027t have a vim-id inside?",
+      "range": {
+        "startLine": 484,
+        "startChar": 24,
+        "endLine": 484,
+        "endChar": 50
+      },
+      "revId": "67e66e6d51ce1075302e148f8cdfa07b42d6abf2",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a76adc5_31ad97e9",
+        "filename": "conductor/conductor/solver/service.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 498,
+      "author": {
+        "id": 2977
+      },
+      "writtenOn": "2018-09-19T01:53:32Z",
+      "side": 1,
+      "message": "Extra line here.",
+      "range": {
+        "startLine": 498,
+        "startChar": 0,
+        "endLine": 498,
+        "endChar": 28
+      },
+      "revId": "67e66e6d51ce1075302e148f8cdfa07b42d6abf2",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
