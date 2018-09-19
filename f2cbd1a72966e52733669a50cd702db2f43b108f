@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a76adc5_55f596ea",
+        "filename": "conductor/conductor/solver/request/objective.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 1361
+      },
+      "writtenOn": "2018-09-19T23:10:10Z",
+      "side": 1,
+      "message": "Merge/rebase is not done correctly",
+      "range": {
+        "startLine": 112,
+        "startChar": 0,
+        "endLine": 113,
+        "endChar": 69
+      },
+      "revId": "f2cbd1a72966e52733669a50cd702db2f43b108f",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
