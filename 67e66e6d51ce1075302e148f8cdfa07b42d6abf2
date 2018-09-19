@@ -165,6 +165,52 @@
       "revId": "67e66e6d51ce1075302e148f8cdfa07b42d6abf2",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a76adc5_2799d9c3",
+        "filename": "conductor/conductor/tests/unit/controller/test_translator.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 126,
+      "author": {
+        "id": 2977
+      },
+      "writtenOn": "2018-09-19T08:31:25Z",
+      "side": 1,
+      "message": "why drop this test case?",
+      "range": {
+        "startLine": 126,
+        "startChar": 4,
+        "endLine": 126,
+        "endChar": 60
+      },
+      "revId": "67e66e6d51ce1075302e148f8cdfa07b42d6abf2",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a76adc5_e78e8178",
+        "filename": "conductor/conductor/tests/unit/controller/test_translator.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 166,
+      "author": {
+        "id": 2977
+      },
+      "writtenOn": "2018-09-19T08:31:25Z",
+      "side": 1,
+      "message": "why drop this test case?",
+      "range": {
+        "startLine": 166,
+        "startChar": 8,
+        "endLine": 166,
+        "endChar": 63
+      },
+      "revId": "67e66e6d51ce1075302e148f8cdfa07b42d6abf2",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
     }
   ]
 }
