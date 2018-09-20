@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "1a76adc5_fe37dae0",
+        "filename": "conductor/README.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1361
+      },
+      "writtenOn": "2018-09-20T21:50:16Z",
+      "side": 1,
+      "message": "Is this file required? If yes should be part of docs?\nAlso there are ECOMP references which needs to be fixed,",
+      "revId": "ff575b90f9562272ec8725529c55ee253675dd87",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a76adc5_bea3a241",
         "filename": "conductor/README.rst",
         "patchSetId": 2
@@ -19,6 +36,413 @@
     },
     {
       "key": {
+        "uuid": "1a76adc5_be5ba220",
+        "filename": "conductor/conductor/api/controllers/v1/plans.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1361
+      },
+      "writtenOn": "2018-09-20T21:50:16Z",
+      "side": 1,
+      "message": "Indentation, alignment",
+      "range": {
+        "startLine": 49,
+        "startChar": 0,
+        "endLine": 49,
+        "endChar": 1
+      },
+      "revId": "ff575b90f9562272ec8725529c55ee253675dd87",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a76adc5_1ea41606",
+        "filename": "conductor/conductor/api/controllers/v1/plans.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 295,
+      "author": {
+        "id": 1361
+      },
+      "writtenOn": "2018-09-20T21:50:16Z",
+      "side": 1,
+      "message": "nit. typo",
+      "range": {
+        "startLine": 295,
+        "startChar": 56,
+        "endLine": 295,
+        "endChar": 58
+      },
+      "revId": "ff575b90f9562272ec8725529c55ee253675dd87",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a76adc5_feacbaee",
+        "filename": "conductor/conductor/api/controllers/v1/plans.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 317,
+      "author": {
+        "id": 1361
+      },
+      "writtenOn": "2018-09-20T21:50:16Z",
+      "side": 1,
+      "message": "nit. extra space",
+      "range": {
+        "startLine": 317,
+        "startChar": 54,
+        "endLine": 317,
+        "endChar": 55
+      },
+      "revId": "ff575b90f9562272ec8725529c55ee253675dd87",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a76adc5_beb2c246",
+        "filename": "conductor/conductor/api/controllers/v1/plans.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 326,
+      "author": {
+        "id": 1361
+      },
+      "writtenOn": "2018-09-20T21:50:16Z",
+      "side": 1,
+      "message": "nit. space",
+      "revId": "ff575b90f9562272ec8725529c55ee253675dd87",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a76adc5_5e85ae57",
+        "filename": "conductor/conductor/api/controllers/v1/plans.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 329,
+      "author": {
+        "id": 1361
+      },
+      "writtenOn": "2018-09-20T21:50:16Z",
+      "side": 1,
+      "message": "nit. typo",
+      "range": {
+        "startLine": 329,
+        "startChar": 88,
+        "endLine": 329,
+        "endChar": 90
+      },
+      "revId": "ff575b90f9562272ec8725529c55ee253675dd87",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a76adc5_3e7eb26a",
+        "filename": "conductor/conductor/api/controllers/v1/plans.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 339,
+      "author": {
+        "id": 1361
+      },
+      "writtenOn": "2018-09-20T21:50:16Z",
+      "side": 1,
+      "message": "parameter is authstr and please add description if needed",
+      "range": {
+        "startLine": 339,
+        "startChar": 11,
+        "endLine": 339,
+        "endChar": 18
+      },
+      "revId": "ff575b90f9562272ec8725529c55ee253675dd87",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a76adc5_5e3a8e99",
+        "filename": "conductor/conductor/common/music/messaging/component.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1361
+      },
+      "writtenOn": "2018-09-20T21:50:16Z",
+      "side": 1,
+      "message": "License header missing",
+      "revId": "ff575b90f9562272ec8725529c55ee253675dd87",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a76adc5_7e3d0a8e",
+        "filename": "conductor/conductor/common/music/messaging/component.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 331,
+      "author": {
+        "id": 1361
+      },
+      "writtenOn": "2018-09-20T21:50:16Z",
+      "side": 1,
+      "message": "alignment",
+      "range": {
+        "startLine": 328,
+        "startChar": 6,
+        "endLine": 331,
+        "endChar": 53
+      },
+      "revId": "ff575b90f9562272ec8725529c55ee253675dd87",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a76adc5_de4d3e3f",
+        "filename": "conductor/conductor/common/music/messaging/component.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 428,
+      "author": {
+        "id": 1361
+      },
+      "writtenOn": "2018-09-20T21:50:16Z",
+      "side": 1,
+      "message": "nit. pep8 80 characters",
+      "range": {
+        "startLine": 425,
+        "startChar": 13,
+        "endLine": 428,
+        "endChar": 105
+      },
+      "revId": "ff575b90f9562272ec8725529c55ee253675dd87",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a76adc5_7e642ab8",
+        "filename": "conductor/conductor/common/utils/conductor_logging_util.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 1361
+      },
+      "writtenOn": "2018-09-20T21:50:16Z",
+      "side": 1,
+      "message": "2018",
+      "range": {
+        "startLine": 3,
+        "startChar": 25,
+        "endLine": 3,
+        "endChar": 27
+      },
+      "revId": "ff575b90f9562272ec8725529c55ee253675dd87",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a76adc5_fe6fda8f",
+        "filename": "conductor/conductor/controller/rpc.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 139,
+      "author": {
+        "id": 1361
+      },
+      "writtenOn": "2018-09-20T21:50:16Z",
+      "side": 1,
+      "message": "nit, line between functions",
+      "revId": "ff575b90f9562272ec8725529c55ee253675dd87",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a76adc5_5e084ed9",
+        "filename": "conductor/conductor/controller/service.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1361
+      },
+      "writtenOn": "2018-09-20T21:50:16Z",
+      "side": 1,
+      "message": "Is this intended to be removed?",
+      "range": {
+        "startLine": 59,
+        "startChar": 77,
+        "endLine": 60,
+        "endChar": 1
+      },
+      "revId": "ff575b90f9562272ec8725529c55ee253675dd87",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a76adc5_befc02b6",
+        "filename": "conductor/conductor/controller/translator.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 871,
+      "author": {
+        "id": 1361
+      },
+      "writtenOn": "2018-09-20T21:50:16Z",
+      "side": 1,
+      "message": "Is this intended removal?",
+      "range": {
+        "startLine": 871,
+        "startChar": 37,
+        "endLine": 871,
+        "endChar": 37
+      },
+      "revId": "ff575b90f9562272ec8725529c55ee253675dd87",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a76adc5_be988275",
+        "filename": "conductor/conductor/data/plugins/inventory_provider/aai.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 938,
+      "author": {
+        "id": 1361
+      },
+      "writtenOn": "2018-09-20T21:50:16Z",
+      "side": 1,
+      "message": "HPA is enabled in ONAP always. So if this is ECOMP specific, does it make sense to maintain in the ECOMP internal repo??",
+      "range": {
+        "startLine": 938,
+        "startChar": 32,
+        "endLine": 938,
+        "endChar": 38
+      },
+      "revId": "ff575b90f9562272ec8725529c55ee253675dd87",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a76adc5_fe927a55",
+        "filename": "conductor/conductor/data/plugins/inventory_provider/aai.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 940,
+      "author": {
+        "id": 1361
+      },
+      "writtenOn": "2018-09-20T21:50:16Z",
+      "side": 1,
+      "message": "Can you elaborate why this check was introduced? If this is regarding the AAI timeout bug, my honest opinion is that we fix the actual issue and submit it as part of the other patch.",
+      "range": {
+        "startLine": 939,
+        "startChar": 0,
+        "endLine": 940,
+        "endChar": 51
+      },
+      "revId": "ff575b90f9562272ec8725529c55ee253675dd87",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a76adc5_dea53ea2",
+        "filename": "conductor/conductor/data/plugins/inventory_provider/aai.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 1466,
+      "author": {
+        "id": 1361
+      },
+      "writtenOn": "2018-09-20T21:50:16Z",
+      "side": 1,
+      "message": "nit whitespace",
+      "range": {
+        "startLine": 1466,
+        "startChar": 0,
+        "endLine": 1466,
+        "endChar": 8
+      },
+      "revId": "ff575b90f9562272ec8725529c55ee253675dd87",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a76adc5_fea03a91",
+        "filename": "conductor/conductor/data/plugins/inventory_provider/aai.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 1468,
+      "author": {
+        "id": 1361
+      },
+      "writtenOn": "2018-09-20T21:50:16Z",
+      "side": 1,
+      "message": "nit whitespace",
+      "range": {
+        "startLine": 1468,
+        "startChar": 0,
+        "endLine": 1468,
+        "endChar": 8
+      },
+      "revId": "ff575b90f9562272ec8725529c55ee253675dd87",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a76adc5_decc5e6c",
+        "filename": "conductor/conductor/data/plugins/triage_translator/__init__.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1361
+      },
+      "writtenOn": "2018-09-20T21:50:16Z",
+      "side": 1,
+      "message": "License?",
+      "revId": "ff575b90f9562272ec8725529c55ee253675dd87",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a76adc5_fec7da42",
+        "filename": "conductor/conductor/data/plugins/triage_translator/triage_translator_data.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1361
+      },
+      "writtenOn": "2018-09-20T21:50:16Z",
+      "side": 1,
+      "message": "License?",
+      "revId": "ff575b90f9562272ec8725529c55ee253675dd87",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a76adc5_3eb8f273",
         "filename": "conductor/conductor/data/plugins/triage_translator/triage_translator_data.py",
         "patchSetId": 2
@@ -30,6 +454,46 @@
       "writtenOn": "2018-09-20T20:15:11Z",
       "side": 1,
       "message": "please add Copyright header",
+      "revId": "ff575b90f9562272ec8725529c55ee253675dd87",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a76adc5_3ee9d2b6",
+        "filename": "conductor/conductor/solver/optimizer/optimizer.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 271,
+      "author": {
+        "id": 1361
+      },
+      "writtenOn": "2018-09-20T21:50:16Z",
+      "side": 1,
+      "message": "can you remove this if not used? This looks like a local test file path",
+      "range": {
+        "startLine": 269,
+        "startChar": 0,
+        "endLine": 271,
+        "endChar": 62
+      },
+      "revId": "ff575b90f9562272ec8725529c55ee253675dd87",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a76adc5_60bd6dd7",
+        "filename": "conductor/conductor/solver/request/objective.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1361
+      },
+      "writtenOn": "2018-09-20T21:50:16Z",
+      "side": 1,
+      "message": "License missing",
       "revId": "ff575b90f9562272ec8725529c55ee253675dd87",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": false
@@ -64,6 +528,144 @@
       "writtenOn": "2018-09-20T20:15:11Z",
       "side": 1,
       "message": "This file may not be needed either.",
+      "revId": "ff575b90f9562272ec8725529c55ee253675dd87",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a76adc5_f96a9418",
+        "filename": "conductor/conductor/tests/unit/controller/test_translator.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 172,
+      "author": {
+        "id": 1361
+      },
+      "writtenOn": "2018-09-20T21:50:16Z",
+      "side": 1,
+      "message": "nit. whitespace",
+      "range": {
+        "startLine": 172,
+        "startChar": 4,
+        "endLine": 172,
+        "endChar": 7
+      },
+      "revId": "ff575b90f9562272ec8725529c55ee253675dd87",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a76adc5_9975a0fb",
+        "filename": "conductor/conductor/tests/unit/controller/test_translator.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 173,
+      "author": {
+        "id": 1361
+      },
+      "writtenOn": "2018-09-20T21:50:16Z",
+      "side": 1,
+      "message": "nit. whitespace",
+      "range": {
+        "startLine": 173,
+        "startChar": 78,
+        "endLine": 173,
+        "endChar": 80
+      },
+      "revId": "ff575b90f9562272ec8725529c55ee253675dd87",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a76adc5_b9709c08",
+        "filename": "conductor/conductor/tests/unit/data/plugins/inventory_provider/test_aai.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 108,
+      "author": {
+        "id": 1361
+      },
+      "writtenOn": "2018-09-20T21:50:16Z",
+      "side": 1,
+      "message": "Same as previous comment. This is not required in ONAP.",
+      "range": {
+        "startLine": 108,
+        "startChar": 8,
+        "endLine": 108,
+        "endChar": 43
+      },
+      "revId": "ff575b90f9562272ec8725529c55ee253675dd87",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a76adc5_d956b85b",
+        "filename": "conductor/conductor/tests/unit/data/plugins/inventory_provider/test_aai.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 336,
+      "author": {
+        "id": 1361
+      },
+      "writtenOn": "2018-09-20T21:50:16Z",
+      "side": 1,
+      "message": "please remove this commented block.",
+      "range": {
+        "startLine": 314,
+        "startChar": 0,
+        "endLine": 336,
+        "endChar": 54
+      },
+      "revId": "ff575b90f9562272ec8725529c55ee253675dd87",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a76adc5_be440247",
+        "filename": "conductor/setup.cfg",
+        "patchSetId": 2
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1361
+      },
+      "writtenOn": "2018-09-20T21:50:16Z",
+      "side": 1,
+      "message": "nit. whitespace",
+      "range": {
+        "startLine": 21,
+        "startChar": 13,
+        "endLine": 21,
+        "endChar": 14
+      },
+      "revId": "ff575b90f9562272ec8725529c55ee253675dd87",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a76adc5_5e77ee9f",
+        "filename": "conductor/setup.cfg",
+        "patchSetId": 2
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1361
+      },
+      "writtenOn": "2018-09-20T21:50:16Z",
+      "side": 1,
+      "message": "nit. whitespace",
+      "range": {
+        "startLine": 40,
+        "startChar": 8,
+        "endLine": 40,
+        "endChar": 9
+      },
       "revId": "ff575b90f9562272ec8725529c55ee253675dd87",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": false
