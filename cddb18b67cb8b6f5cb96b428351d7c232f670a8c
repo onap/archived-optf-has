@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "1a76adc5_5950680a",
+        "filename": "conductor/conductor/api/adapters/__init__.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1739
+      },
+      "writtenOn": "2018-09-20T20:48:36Z",
+      "side": 1,
+      "message": "Empty package definition / markup files we have been keeping empty (no Copyright headers). Can we please do the same here as well?",
+      "revId": "cddb18b67cb8b6f5cb96b428351d7c232f670a8c",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a76adc5_9e4ca6c9",
         "filename": "conductor/conductor/api/adapters/aaf/aaf_authentication.py",
         "patchSetId": 3
@@ -19,6 +36,40 @@
         "endLine": 83,
         "endChar": 26
       },
+      "revId": "cddb18b67cb8b6f5cb96b428351d7c232f670a8c",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a76adc5_f93e14b7",
+        "filename": "conductor/conductor/tests/functional/simulators/aafsim/requirements.txt",
+        "patchSetId": 3
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1739
+      },
+      "writtenOn": "2018-09-20T20:48:36Z",
+      "side": 1,
+      "message": "This file really needed?",
+      "revId": "cddb18b67cb8b6f5cb96b428351d7c232f670a8c",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a76adc5_197bd07b",
+        "filename": "conductor/conductor/tests/functional/simulators/build_aafsim.sh",
+        "patchSetId": 3
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1739
+      },
+      "writtenOn": "2018-09-20T20:48:36Z",
+      "side": 1,
+      "message": "\u0027shebangs\u0027 have to be on the first line - and we have our pretty Copyright message too. Historically though, we did remove this from a few files. Can you please test without this and see if really required? If required, I am totally ok with this. It appears in multiple files.",
       "revId": "cddb18b67cb8b6f5cb96b428351d7c232f670a8c",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": false
