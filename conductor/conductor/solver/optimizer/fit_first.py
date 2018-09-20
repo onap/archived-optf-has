@@ -1,4 +1,3 @@
-#!/bin/python
 #
 # -------------------------------------------------------------------------
 #   Copyright (c) 2015-2017 AT&T Intellectual Property
@@ -18,13 +17,13 @@
 # -------------------------------------------------------------------------
 #
 
-
 from oslo_log import log
 import sys
 import time
 
 from conductor.solver.optimizer import decision_path as dpath
 from conductor.solver.optimizer import search
+from conductor.solver.triage_tool.triage_data import TriageData
 
 LOG = log.getLogger(__name__)
 
@@ -34,9 +33,11 @@ class FitFirst(search.Search):
     def __init__(self, conf):
         search.Search.__init__(self, conf)
 
-    def search(self, _demand_list, _objective, _request, _begin_time):
+    def search(self, _demand_list, _objective, _request):
         decision_path = dpath.DecisionPath()
         decision_path.set_decisions({})
+
+        _begin_time = int(round(time.time()))
 
         # Begin the recursive serarch
         return self._find_current_best(
@@ -45,8 +46,12 @@ class FitFirst(search.Search):
     def _find_current_best(self, _demand_list, _objective,
                            _decision_path, _request, _begin_time):
 
-        _current_time = int(round(time.time()))
-        if (_current_time - _begin_time) > self.conf.solver.solver_timeout:
+        self.triageSolver.getSortedDemand(_demand_list)
+        # Termination condition:
+        # when order takes a long time to solve (more than 'timeout' value)
+        # then jump out of the recursion
+        if (int(round(time.time())) - _begin_time) > \
+                self.conf.solver.solver_timeout:
             return None
 
         # _demand_list is common across all recursions
@@ -62,7 +67,6 @@ class FitFirst(search.Search):
         # call constraints to whittle initial candidates
         # candidate_list meets all constraints for the demand
         candidate_list = self._solve_constraints(_decision_path, _request)
-
         # find the best candidate among the list
 
         # bound_value keeps track of the max value discovered
@@ -89,17 +93,14 @@ class FitFirst(search.Search):
                 if _objective.goal is None:
                     best_resource = candidate
 
-                # @Shankar, the following string value was renamed to 'min_cloud_version' in ONAP version (probably to
-                # ignore the word 'aic' like in other places). Looks like this will break things up in ECOMP.
-                # Renamed to older value 'min_aic'.
                 elif _objective.goal == "min_aic":
                     # convert the unicode to string
                     candidate_version = candidate \
                         .get("cloud_region_version").encode('utf-8')
                     if _decision_path.total_value < bound_value or \
                        (_decision_path.total_value == bound_value and
-                        self._compare_version(candidate_version,
-                                              version_value) > 0):
+                       self._compare_version(candidate_version,
+                                             version_value) > 0):
                         bound_value = _decision_path.total_value
                         version_value = candidate_version
                         best_resource = candidate
@@ -123,6 +124,7 @@ class FitFirst(search.Search):
                 # candidate) back in the list so that it can be picked
                 # up in the next iteration of the recursion
                 _demand_list.insert(0, demand)
+                self.triageSolver.rollBackStatus(_decision_path.current_demand,_decision_path)
                 return None  # return None back to the recursion
             else:
                 # best resource is found, add to the decision path

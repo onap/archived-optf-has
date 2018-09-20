@@ -36,6 +36,7 @@ from oslo_config import cfg
 
 CONF = cfg.CONF
 
+
 LOG = log.getLogger(__name__)
 
 CONDUCTOR_API_OPTS = [
@@ -43,14 +44,14 @@ CONDUCTOR_API_OPTS = [
                default='',
                help='Base URL for plans.'),
     cfg.StrOpt('username',
-               default='',
+               default='admin1',
                help='username for plans.'),
-    cfg.StrOpt('password',
-               default='',
+	cfg.StrOpt('password',
+               default='plan.15',
                help='password for plans.'),
     cfg.BoolOpt('basic_auth_secure',
-                default=True,
-                help='auth toggling.')
+               default=True,
+               help='auth toggling.')
 ]
 
 CONF.register_opts(CONDUCTOR_API_OPTS, group='conductor_api')
@@ -60,6 +61,7 @@ CREATE_SCHEMA = (
     (decorators.optional('id'), types.string),
     (decorators.optional('limit'), types.integer),
     (decorators.optional('name'), types.string),
+    (decorators.optional('num_solution'), types.string),
     ('template', string_or_dict),
     (decorators.optional('template_url'), types.string),
     (decorators.optional('timeout'), types.integer),
@@ -87,8 +89,8 @@ class PlansBaseController(object):
         basic_auth_flag = CONF.conductor_api.basic_auth_secure
 
         if plan_id == 'healthcheck' or \
-                not basic_auth_flag or \
-                (basic_auth_flag and check_basic_auth()):
+        not basic_auth_flag or \
+        (basic_auth_flag and check_basic_auth()):
             return self.plan_getid(plan_id)
 
     def plan_getid(self, plan_id):
@@ -145,7 +147,6 @@ class PlansBaseController(object):
             args.get('name')))
 
         client = pecan.request.controller
-
         transaction_id = pecan.request.headers.get('transaction-id')
         if transaction_id:
             args['template']['transaction-id'] = transaction_id
@@ -291,11 +292,10 @@ class PlansController(PlansBaseController):
 
         basic_auth_flag = CONF.conductor_api.basic_auth_secure
 
-        # Create the plan only when the basic authentication is disabled or pass the authenticaiton check
+        # Create the plan only when the basic authenticaiton is disabled or pass the authenticaiton check
         if not basic_auth_flag or \
-                (basic_auth_flag and check_basic_auth()):
+        (basic_auth_flag and check_basic_auth()):
             plan = self.plan_create(args)
-
         if not plan:
             error('/errors/server_error', _('Unable to create Plan.'))
         else:
@@ -307,15 +307,14 @@ class PlansController(PlansBaseController):
         """Pecan subcontroller routing callback"""
         return PlansItemController(uuid4), remainder
 
-
 def check_basic_auth():
     """
     Returns True/False if the username/password of Basic Auth match/not match
     :return boolean value
-    """
+     """
 
     try:
-        if pecan.request.headers['Authorization'] and verify_user(pecan.request.headers['Authorization']):
+        if pecan.request.headers['Authorization'] and  verify_user(pecan.request.headers['Authorization']):
             LOG.debug("Authorized username and password")
             plan = True
         else:
@@ -324,22 +323,20 @@ def check_basic_auth():
             user_pw = auth_str.split(' ')[1]
             decode_user_pw = base64.b64decode(user_pw)
             list_id_pw = decode_user_pw.split(':')
-            LOG.error("Incorrect username={} / password={}".format(list_id_pw[0], list_id_pw[1]))
+            LOG.error("Incorrect username={} / password={}".format(list_id_pw[0],list_id_pw[1]))
     except:
         error('/errors/basic_auth_error', _('Unauthorized: The request does not '
-                                            'provide any HTTP authentication (basic authentication)'))
-        plan = False
+                                            'provide any HTTP authentication (basic authetnication)'))
 
     if not plan:
         error('/errors/authentication_error', _('Invalid credentials: username or password is incorrect'))
-
     return plan
 
 
 def verify_user(authstr):
     """
     authenticate user as per config file
-    :param authstr:
+    :param headers:
     :return boolean value
     """
     user_dict = dict()
@@ -351,9 +348,6 @@ def verify_user(authstr):
     user_dict['password'] = list_id_pw[1]
     password = CONF.conductor_api.password
     username = CONF.conductor_api.username
-
-    print ("Expected username/password: {}/{}".format(username, password))
-
     if username == user_dict['username'] and password == user_dict['password']:
         return True
     else:

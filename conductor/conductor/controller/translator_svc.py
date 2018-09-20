@@ -17,8 +17,10 @@
 # -------------------------------------------------------------------------
 #
 
-import time
+import json
+import os
 import socket
+import time
 
 import cotyledon
 import futurist
@@ -106,12 +108,11 @@ class TranslatorService(cotyledon.Service):
 
         Use this only when the translator service is not running concurrently.
         """
-        plans = self.Plan.query.all()
+        plans = self.Plan.query.get_plan_by_col("status", self.Plan.TRANSLATING)
         for the_plan in plans:
-            if the_plan.status == self.Plan.TRANSLATING:
-                the_plan.status = self.Plan.TEMPLATE
-                # Use only in active-passive mode, so don't have to be atomic
-                the_plan.update()
+            the_plan.status = self.Plan.TEMPLATE
+            # Use only in active-passive mode, so don't have to be atomic
+            the_plan.update()
 
     def _restart(self):
         """Prepare to restart the service"""
@@ -140,6 +141,7 @@ class TranslatorService(cotyledon.Service):
             trns = translator.Translator(
                 self.conf, plan.name, plan.id, plan.template)
             trns.translate()
+
             if trns.ok:
                 plan.translation = trns.translation
                 plan.status = self.Plan.TRANSLATED
@@ -161,9 +163,11 @@ class TranslatorService(cotyledon.Service):
             plan.message = template.format(type(ex).__name__, ex.args)
             plan.status = self.Plan.ERROR
 
-        _is_success = 'FAILURE | Could not acquire lock'
-        while 'FAILURE | Could not acquire lock' in _is_success:
+        _is_success = 'FAILURE'
+        while 'FAILURE' in _is_success and (self.current_time_seconds() - self.millisec_to_sec(plan.updated)) <= self.conf.messaging_server.timeout:
             _is_success = plan.update(condition=self.translation_owner_condition)
+            LOG.info(_LI("Changing the template status from translating to {}, "
+                         "atomic update response from MUSIC {}").format(plan.status, _is_success))
 
     def __check_for_templates(self):
         """Wait for the polling interval, then do the real template check."""
@@ -171,9 +175,16 @@ class TranslatorService(cotyledon.Service):
         # Wait for at least poll_interval sec
         polling_interval = self.conf.controller.polling_interval
         time.sleep(polling_interval)
-
         # Look for plans with the status set to TEMPLATE
-        plans = self.Plan.query.all()
+
+        # Instead of using the query.all() method, now creating an index for 'status'
+        # field in conductor.plans table, and query plans by status columns
+        template_plans = self.Plan.query.get_plan_by_col("status", self.Plan.TEMPLATE)
+        translating_plans = self.Plan.query.get_plan_by_col("status", self.Plan.TRANSLATING)
+
+        # combine the plans with status = 'template' and 'translating' together
+        plans = template_plans + translating_plans
+
         for plan in plans:
             # If there's a template to be translated, do it!
             if plan.status == self.Plan.TEMPLATE:
@@ -190,12 +201,15 @@ class TranslatorService(cotyledon.Service):
                     plan.status = self.Plan.TRANSLATING
                     plan.translation_counter += 1
                     plan.translation_owner = socket.gethostname()
+                    plan.translation_begin_timestamp = int(round(time.time() * 1000))
                     _is_updated = plan.update(condition=self.template_status_condition)
+                    log_util.setLoggerFilter(LOG, self.conf.keyspace, plan.id)
                     LOG.info(_LE("Plan {} is trying to update the status from 'template' to 'translating',"
-                                 " get {} response from MUSIC") \
-                             .format(plan.id, _is_updated))
-                    if 'SUCCESS' in _is_updated:
-                        log_util.setLoggerFilter(LOG, self.conf.keyspace, plan.id)
+                                 " get {} response from MUSIC").format(plan.id, _is_updated))
+                    if not _is_updated:
+                        break
+
+                    if _is_updated and 'SUCCESS' in _is_updated:
                         self.translate(plan)
                 break
 
@@ -206,21 +220,20 @@ class TranslatorService(cotyledon.Service):
                 plan.update(condition=self.translating_status_condition)
                 break
 
+
+
             elif plan.timedout:
-                # Move plan to error status? Create a new timed-out status?
-                # todo(snarayanan)
+                # TODO(jdandrea): How to tell all involved to stop working?
+                # Not enough to just set status.
                 continue
 
     def run(self):
         """Run"""
         LOG.debug("%s" % self.__class__.__name__)
-
         # Look for templates to translate from within a thread
         executor = futurist.ThreadPoolExecutor()
-        while self.running:
-            # Delay time (Seconds) for MUSIC requests.
-            time.sleep(self.conf.delay_time)
 
+        while self.running:
             fut = executor.submit(self.__check_for_templates)
             fut.result()
         executor.shutdown()

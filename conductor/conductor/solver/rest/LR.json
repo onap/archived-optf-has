@@ -1,0 +1,8 @@
+[
+{"group": "EMEA-CORE1",  "countries" : "FRA|DEU|NLD|GBR1"},
+{"group": "EMEA-CORE2",  "countries" : "FRA|DEU|NLD|GBR2"},
+{"group": "EMEA-CORE3",  "countries" : "FRA|DEU|NLD|GBR3"},
+{"group": "EMEA-CORE4",  "countries" : "FRA|DEU|NLD|GBR4"},
+{"group": "EMEA-CORE5",  "countries" : "FRA|DEU|NLD|GBR5"},
+{"group": "EMEA-CORE6",  "countries" : "FRA|DEU|NLD|GBR6"}
+]

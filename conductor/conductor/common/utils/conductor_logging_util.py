@@ -1,3 +1,22 @@
+#
+# -------------------------------------------------------------------------
+#   Copyright (c) 2015-2017 AT&T Intellectual Property
+#
+#   Licensed under the Apache License, Version 2.0 (the "License");
+#   you may not use this file except in compliance with the License.
+#   You may obtain a copy of the License at
+#
+#       http://www.apache.org/licenses/LICENSE-2.0
+#
+#   Unless required by applicable law or agreed to in writing, software
+#   distributed under the License is distributed on an "AS IS" BASIS,
+#   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+#   See the License for the specific language governing permissions and
+#   limitations under the License.
+#
+# -------------------------------------------------------------------------
+#
+
 import json
 import logging
 from conductor.common.music import api
@@ -12,25 +31,30 @@ class LoggerFilter(logging.Filter):
 
 def getTransactionId(keyspace, plan_id):
     """ get transaction id from a pariticular plan in MUSIC """
+
     rows = api.API().row_read(keyspace, "plans", "id", plan_id)
-    
     if 'result' in rows:
         rows = rows['result']
-    
     for row_id, row_value in rows.items():
-        template = row_value['template']
-        if template:
-            data = json.loads(template)
-            if "transaction-id" in data:
-                return data["transaction-id"]
+            template = row_value['template']
+            if template:
+                data = json.loads(template)
+                if "transaction-id" in data:
+                    return data["transaction-id"]
 
 def setLoggerFilter(logger, keyspace, plan_id):
 
     #formatter = logging.Formatter('%(asctime)s %(transaction_id)s %(levelname)s %(name)s: [-] %(plan_id)s %(message)s')
-    generic_formatter = logging.Formatter('%(asctime)s|%(transaction_id)s|%(thread)d|%(levelname)s|%(module)s|%(name)s: [-] plan id: %(plan_id)s [-] %(message)s')
-    audit_formatter = logging.Formatter('%(asctime)s|%(asctime)s|%(transaction_id)s||%(thread)d||Conductor|N/A|COMPLETE|200|sucessful||%(levelname)s|||0|%(module)s|||||||||%(name)s : [-] plan id: %(plan_id)s [-] %(message)s')
-    metric_formatter = logging.Formatter('%(asctime)s|%(asctime)s|%(transaction_id)s||%(thread)d||Conductor|N/A|N/A|N/A|COMPLETE|200|sucessful||%(levelname)s|||0|%(module)s||||||||||%(name)s : [-] plan id: %(plan_id)s [-] %(message)s')
-    error_formatter = logging.Formatter('%(asctime)s|%(transaction_id)s|%(thread)d|Conductor|N/A|N/A|N/A|ERROR|500|N/A|%(name)s : [-] plan id: %(plan_id)s [-] %(message)s')
+    generic_formatter = logging.Formatter('%(asctime)s|%(transaction_id)s|%(thread)d|%(levelname)s|%(module)s|%(name)s:'
+                                          ' [-] plan id: %(plan_id)s [-] %(message)s')
+    audit_formatter = logging.Formatter('%(asctime)s|%(asctime)s|%(transaction_id)s||%(thread)d||Conductor|N/A|COMPLETE'
+                                        '|200|sucessful||%(levelname)s|||0|%(module)s|||||||||%(name)s : [-] '
+                                        'plan id: %(plan_id)s [-] %(message)s')
+    metric_formatter = logging.Formatter('%(asctime)s|%(asctime)s|%(transaction_id)s||%(thread)d||Conductor|N/A|N/A|N/A|'
+                                         'COMPLETE|200|sucessful||%(levelname)s|||0|%(module)s||||||||||%(name)s : [-] '
+                                         'plan id: %(plan_id)s [-] %(message)s')
+    error_formatter = logging.Formatter('%(asctime)s|%(transaction_id)s|%(thread)d|Conductor|N/A|N/A|N/A|ERROR|500'
+                                        '|N/A|%(name)s : [-] plan id: %(plan_id)s [-] %(message)s')
 
     logger_filter = LoggerFilter()
     logger_filter.transaction_id = getTransactionId(keyspace, plan_id)
