@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a76adc5_bea3a241",
+        "filename": "conductor/README.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1739
+      },
+      "writtenOn": "2018-09-20T20:15:11Z",
+      "side": 1,
+      "message": "please add header",
+      "revId": "ff575b90f9562272ec8725529c55ee253675dd87",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a76adc5_3eb8f273",
+        "filename": "conductor/conductor/data/plugins/triage_translator/triage_translator_data.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1739
+      },
+      "writtenOn": "2018-09-20T20:15:11Z",
+      "side": 1,
+      "message": "please add Copyright header",
+      "revId": "ff575b90f9562272ec8725529c55ee253675dd87",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a76adc5_be8c02d8",
+        "filename": "conductor/conductor/tests/data/data1.json",
+        "patchSetId": 2
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1739
+      },
+      "writtenOn": "2018-09-20T20:15:11Z",
+      "side": 1,
+      "message": "Larry, we may not need this file. Can we get rid of this?",
+      "revId": "ff575b90f9562272ec8725529c55ee253675dd87",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a76adc5_7ec2eae9",
+        "filename": "conductor/conductor/tests/data/template1.json",
+        "patchSetId": 2
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1739
+      },
+      "writtenOn": "2018-09-20T20:15:11Z",
+      "side": 1,
+      "message": "This file may not be needed either.",
+      "revId": "ff575b90f9562272ec8725529c55ee253675dd87",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
