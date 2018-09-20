@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a76adc5_808e892c",
+        "filename": "conductor/conductor/api/adapters/aaf/aaf_authentication.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1361
+      },
+      "writtenOn": "2018-09-20T16:12:19Z",
+      "side": 1,
+      "message": "aaf-service uses port 8100 in OOM helm charts. Can you make this default? \nhttps://github.com/onap/oom/blob/master/kubernetes/aaf/charts/aaf-service/values.yaml",
+      "range": {
+        "startLine": 42,
+        "startChar": 43,
+        "endLine": 42,
+        "endChar": 47
+      },
+      "revId": "5a782a08102976bede4dbfee8cec885a697c8bf7",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a76adc5_c0a6c1aa",
+        "filename": "conductor/conductor/tests/functional/simulators/aafsim/aafsim.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1361
+      },
+      "writtenOn": "2018-09-20T16:12:19Z",
+      "side": 1,
+      "message": "nit. whitespace",
+      "range": {
+        "startLine": 46,
+        "startChar": 32,
+        "endLine": 46,
+        "endChar": 35
+      },
+      "revId": "5a782a08102976bede4dbfee8cec885a697c8bf7",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a76adc5_60b9edca",
+        "filename": "conductor/conductor/tests/functional/simulators/aafsim/aafsim.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1361
+      },
+      "writtenOn": "2018-09-20T16:12:19Z",
+      "side": 1,
+      "message": "nit. whitespace",
+      "range": {
+        "startLine": 78,
+        "startChar": 32,
+        "endLine": 78,
+        "endChar": 35
+      },
+      "revId": "5a782a08102976bede4dbfee8cec885a697c8bf7",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a76adc5_20af757e",
+        "filename": "conductor/conductor/tests/functional/simulators/aafsim/aafsim.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 85,
+      "author": {
+        "id": 1361
+      },
+      "writtenOn": "2018-09-20T16:12:19Z",
+      "side": 1,
+      "message": "nit. whitespace",
+      "range": {
+        "startLine": 85,
+        "startChar": 26,
+        "endLine": 85,
+        "endChar": 27
+      },
+      "revId": "5a782a08102976bede4dbfee8cec885a697c8bf7",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a76adc5_00c83953",
+        "filename": "conductor/conductor/tests/functional/simulators/build_aafsim.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1361
+      },
+      "writtenOn": "2018-09-20T16:12:19Z",
+      "side": 1,
+      "message": "nit. whitespace",
+      "range": {
+        "startLine": 22,
+        "startChar": 24,
+        "endLine": 22,
+        "endChar": 26
+      },
+      "revId": "5a782a08102976bede4dbfee8cec885a697c8bf7",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
