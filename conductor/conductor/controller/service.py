@@ -18,10 +18,9 @@
 #
 
 import cotyledon
-from oslo_config import cfg
-from oslo_log import log
 
 from conductor.common.models import plan
+from conductor.common.models import order_lock
 from conductor.common.music import api
 from conductor.common.music import messaging as music_messaging
 from conductor.common.music.model import base
@@ -29,6 +28,8 @@ from conductor.controller import rpc
 from conductor.controller import translator_svc
 from conductor import messaging
 from conductor import service
+from oslo_config import cfg
+from oslo_log import log
 
 LOG = log.getLogger(__name__)
 
@@ -56,10 +57,6 @@ CONTROLLER_OPTS = [
                      'mode. When set to False, controller will flush any '
                      'abandoned messages at startup. The controller always '
                      'restarts abandoned template translations at startup.'),
-    cfg.IntOpt('weight1',
-               default=1),
-    cfg.IntOpt('weight2',
-               default=1),
 ]
 
 CONF.register_opts(CONTROLLER_OPTS, group='controller')
@@ -71,7 +68,6 @@ CONF.register_opts(OPTS)
 
 class ControllerServiceLauncher(object):
     """Launcher for the controller service."""
-
     def __init__(self, conf):
         self.conf = conf
 
@@ -82,8 +78,12 @@ class ControllerServiceLauncher(object):
         # Dynamically create a plan class for the specified keyspace
         self.Plan = base.create_dynamic_model(
             keyspace=conf.keyspace, baseclass=plan.Plan, classname="Plan")
+        self.OrderLock = base.create_dynamic_model(
+            keyspace=conf.keyspace, baseclass=order_lock.OrderLock, classname="OrderLock")
 
         if not self.Plan:
+            raise
+        if not self.OrderLock:
             raise
 
     def run(self):
@@ -102,7 +102,8 @@ class ControllerServiceLauncher(object):
                        workers=self.conf.controller.workers,
                        args=(self.conf,), kwargs=kwargs)
 
-            kwargs = {'plan_class': self.Plan, }
+            kwargs = {'plan_class': self.Plan,
+                      'order_locks': self.OrderLock}
             svcmgr.add(translator_svc.TranslatorService,
                        workers=self.conf.controller.workers,
                        args=(self.conf,), kwargs=kwargs)

@@ -17,9 +17,16 @@
 # -------------------------------------------------------------------------
 #
 
+import json
 import uuid
+from conductor.solver.orders_lock.orders_lock_service import OrdersLockingService
+from conductor.solver.triage_tool.triage_tool_service import TriageToolService
 from oslo_log import log
+from oslo_config import cfg
+
 LOG = log.getLogger(__name__)
+
+CONF = cfg.CONF
 
 
 class ControllerRPCEndpoint(object):
@@ -28,13 +35,15 @@ class ControllerRPCEndpoint(object):
     def __init__(self, conf, plan_class):
         self.conf = conf
         self.Plan = plan_class
+        self.OrdersLockingService = OrdersLockingService()
+        self.TriageToolService = TriageToolService()
 
     def plan_create(self, ctx, arg):
         """Create a plan"""
         name = arg.get('name', str(uuid.uuid4()))
         LOG.info('Plan name: {}'.format(name))
         timeout = arg.get('timeout', self.conf.controller.timeout)
-        recommend_max = arg.get('limit', self.conf.controller.limit)
+        recommend_max = arg.get('num_solution', self.conf.controller.limit)
         template = arg.get('template', None)
         status = self.Plan.TEMPLATE
         new_plan = self.Plan(name, timeout, recommend_max, template,
@@ -62,7 +71,7 @@ class ControllerRPCEndpoint(object):
         """Delete one or more plans"""
         plan_id = arg.get('plan_id')
         if plan_id:
-            plans = self.Plan.query.get_plan_by_id(plan_id)
+            plans = self.Plan.query.get_plan_by_col('id', plan_id)
         else:
             plans = self.Plan.query.all()
         for the_plan in plans:
@@ -77,7 +86,7 @@ class ControllerRPCEndpoint(object):
         """Get one or more plans"""
         plan_id = arg.get('plan_id')
         if plan_id:
-            plans = self.Plan.query.get_plan_by_id(plan_id)
+            plans = self.Plan.query.get_plan_by_col('id', plan_id)
         else:
             plans = self.Plan.query.all()
 
@@ -99,4 +108,56 @@ class ControllerRPCEndpoint(object):
         rtn = {
             'response': {"plans": plan_list},
             'error': False}
+        return rtn
+
+    def triage_get(self, ctx, arg):
+        id = arg.get('id')
+        if id:
+            triage_data = self.TriageToolService._get_plans_by_id(id)
+        if not  triage_data.triage_solver == None or type(triage_data.triage_solver) == "NoneType":
+            triage_solver = json.loads(triage_data.triage_solver)
+        else:
+            triage_solver = triage_data.triage_solver
+
+        triage_data_list =[]
+        triage_data_json = {
+            "id":triage_data.id,
+            "name":triage_data.name,
+            "solver_triage": triage_solver,
+            "translator_triage":triage_data.triage_translator,
+            "optimization_type": json.loads(triage_data.optimization_type)
+        }
+        if hasattr(triage_data, 'message'):
+            triage_data_json["message"] = triage_data.message
+
+        triage_data_list.append(triage_data_json)
+
+        rtn = {
+            'response': {"triageData": triage_data_list},
+            'error': False}
+        return rtn
+    def release_orders(self, ctx, arg):
+        rehome_decisions = []
+        release_orders = arg.get("release-locks")
+        LOG.info("Following Orders were received in this release call from MSO:{}".format(release_orders))
+
+        for release_order in release_orders:
+            rehome_decisions = self.OrdersLockingService.rehomes_for_service_resource(release_order['status'],
+                                                                                      release_order['service-resource-id'],
+                                                                                      rehome_decisions)
+
+        self.OrdersLockingService.do_rehome(rehome_decisions)
+
+        if not rehome_decisions:
+            response_msg = "Orders have been released, but no plans are effected in Conductor"
+        else:
+            response_msg = rehome_decisions
+
+        LOG.info(response_msg)
+        rtn = {
+            'response': {
+                "status": "success",
+                "message": response_msg
+            }
+        }
         return rtn

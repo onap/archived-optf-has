@@ -113,6 +113,7 @@ class SDNC(base.ServiceControllerBase):
         if response is None:
             LOG.error(_LE("No response from SDN-C ({}: {})").
                       format(context, value))
+            raise Exception('SDN-C query {} timed out'.format(path))
         elif response.status_code != 200:
             LOG.error(_LE("SDN-C request ({}: {}) returned HTTP "
                           "status {} {}, link: {}{}").
@@ -120,6 +121,80 @@ class SDNC(base.ServiceControllerBase):
                              response.status_code, response.reason,
                              self.base, path))
         return response
+
+    def reserve_candidates(self, candidate_list, request):
+
+        path = '/operations/DHVCAPACITY-API:service-capacity-check-operation'
+        action_type = "RESERVE"
+        change_type = "New-Start"
+
+        e2evpnkey = request.get('e2evpnkey')
+        dhv_service_instance = request.get('dhv_service_instance')
+
+        vnf_input_list = []
+
+        for candidate in candidate_list:
+
+            # SDN-GC does not reserve cloud candidates
+            if candidate.get("inventory_type") == "cloud":
+                continue
+
+            vnf_input = {}
+            # VNF input parameters common to all service_type
+            request = candidate.get('request')
+            vnf_input["device-type"] = request.get('service_type')
+            vnf_input['dhv-site-effective-bandwidth'] = request.get('dhv_site_effective_bandwidth')
+
+            if candidate.get('location_id') == "AAIAIC25":
+                vnf_input["cloud-region-id"] = ""
+            else:
+                vnf_input["cloud-region-id"] = candidate.get('location_id')
+
+            if "service_resource_id" in candidate:
+                vnf_input["cust-service-instance-id"] = candidate.get('service_resource_id')
+
+            vnf_input["vnf-host-name"] = candidate.get('host_id')
+            vnf_input["infra-service-instance-id"] = candidate.get('candidate_id')
+
+            vnf_input_list.append(vnf_input)
+
+        data = {
+            "input": {
+                "service-capacity-check-operation": {
+                    "sdnc-request-header": {
+                        "request-id":
+                            "59c36776-249b-4966-b911-9a89a63d1676"
+                    },
+                    "capacity-check-information": {
+                        "service-instance-id": dhv_service_instance,
+                        "service": "DHV SD-WAN",
+                        "action-type": action_type,
+                        "change-type": change_type,
+                        "e2e-vpn-key": e2evpnkey,
+                        "vnf-list": {
+                            "vnf": vnf_input_list
+                        }
+                    }
+                }
+            }
+        }
+
+        try:
+            response = self._request('post', path=path, data=data)
+            if response is None or response.status_code != 200:
+                return
+            body = response.json()
+            response_code = body.get("output"). \
+                get("service-capacity-check-response"). \
+                get("response-code")
+
+            if response_code == "200":
+                return candidate_list
+
+        except Exception as exc:
+            LOG.error("SD-WAN reservation, SDNC unknown error: {}".
+                      format(exc))
+            return
 
     def filter_candidates(self, request, candidate_list,
                           constraint_name, constraint_type, request_type):
@@ -134,15 +209,6 @@ class SDNC(base.ServiceControllerBase):
         else:
             LOG.error(_LE("Constraint {} has an unknown type {}").
                       format(constraint_name, constraint_type))
-
-        change_type = ""
-        if request_type == "speed-changed":
-            change_type = "Change-Speed"
-        elif request_type == "initial" or request_type == "":
-            change_type = "New-Start"
-        else:
-            LOG.error(_LE("Constraint {} has an unknown request type {}").
-                      format(constraint_name, request_type))
 
         # VNF input params common to all services
         service_type = request.get('service_type')
@@ -197,6 +263,25 @@ class SDNC(base.ServiceControllerBase):
                 vnf_input["infra-service-instance-id"] = dhv_service_instance
 
         for candidate in candidate_list:
+
+            # generate the value of change_type based on the request type (inital or speed changed)
+            # and existing placement
+            # For New Start (or initial): New-Start
+            # For Change Speed No Rehome :  Change-Speed
+            # For Change Speed Rehome: Rehome
+            change_type = ""
+            if request_type == "initial" or request_type == "":
+                change_type = "New-Start"
+            elif request_type == "speed changed":
+                existing_placement = str(candidate.get('existing_placement'))
+                if existing_placement == 'false':
+                    change_type = "Rehome"
+                elif existing_placement == 'true':
+                    change_type = "Change-Speed"
+            else:
+                LOG.error(_LE("Constraint {} has an unknown request type {}").
+                          format(constraint_name, request_type))
+
             # VNF input parameters common to all service_type
             vnf_input["device-type"] = service_type
             # If the candidate region id is AAIAIC25 and region_fit constraint

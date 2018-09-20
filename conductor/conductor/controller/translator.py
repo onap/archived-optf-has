@@ -28,8 +28,11 @@ import yaml
 from conductor import __file__ as conductor_root
 from conductor import messaging
 from conductor import service
+
 from conductor.common import threshold
 from conductor.common.music import messaging as music_messaging
+from conductor.data.plugins.triage_translator.triage_translator_data import TraigeTranslatorData
+from conductor.data.plugins.triage_translator.triage_translator import TraigeTranslator
 from oslo_config import cfg
 from oslo_log import log
 
@@ -42,13 +45,14 @@ LOCATION_KEYS = ['latitude', 'longitude', 'host_name', 'clli_code']
 INVENTORY_PROVIDERS = ['aai']
 INVENTORY_TYPES = ['cloud', 'service', 'transport']
 DEFAULT_INVENTORY_PROVIDER = INVENTORY_PROVIDERS[0]
-CANDIDATE_KEYS = ['inventory_type', 'candidate_id', 'location_id',
-                  'location_type', 'cost']
-DEMAND_KEYS = ['inventory_provider', 'inventory_type', 'service_type',
-               'service_id', 'service_resource_id', 'customer_id',
-               'default_cost', 'candidates', 'region', 'complex',
-               'required_candidates', 'excluded_candidates',
-               'existing_placement', 'subdivision', 'flavor', 'attributes']
+CANDIDATE_KEYS = ['candidate_id', 'cost', 'inventory_type', 'location_id',
+                  'location_type']
+DEMAND_KEYS = ['attributes', 'candidates', 'complex', 'conflict_identifier',
+               'customer_id', 'default_cost', 'excluded_candidates',
+               'existing_placement', 'flavor', 'inventory_provider',
+               'inventory_type', 'port_key', 'region', 'required_candidates',
+               'service_id', 'service_resource_id', 'service_subscription',
+               'service_type', 'subdivision', 'unique', 'vlan_key']
 CONSTRAINT_KEYS = ['type', 'demands', 'properties']
 CONSTRAINTS = {
     # constraint_type: {
@@ -133,7 +137,8 @@ class Translator(object):
         self._translation = None
         self._valid = False
         self._ok = False
-
+        self.triageTranslatorData= TraigeTranslatorData()
+        self.triageTranslator = TraigeTranslator()
         # Set up the RPC service(s) we want to talk to.
         self.data_service = self.setup_rpc(self.conf, "data")
 
@@ -493,7 +498,13 @@ class Translator(object):
             args = {
                 "demands": {
                     name: requirements,
-                }
+                },
+                "plan_info":{
+                    "plan_id": self._plan_id,
+                    "plan_name": self._plan_name
+                },
+                "triage_translator_data": self.triageTranslatorData.__dict__
+
             }
 
             # Check if required_candidate and excluded candidate
@@ -512,7 +523,6 @@ class Translator(object):
                         " list are not mutually exclusive for demand"
                         " {}".format(name)
                     )
-
             response = self.data_service.call(
                 ctxt=ctxt,
                 method="resolve_demands",
@@ -520,10 +530,13 @@ class Translator(object):
 
             resolved_demands = \
                 response and response.get('resolved_demands')
+            triage_data_trans = \
+                response and response.get('trans')
 
             required_candidates = resolved_demands \
                 .get('required_candidates')
             if not resolved_demands:
+                self.triageTranslator.thefinalCallTrans(triage_data_trans)
                 raise TranslatorException(
                     "Unable to resolve inventory "
                     "candidates for demand {}"
@@ -534,11 +547,13 @@ class Translator(object):
                 inventory_candidates.append(candidate)
             if len(inventory_candidates) < 1:
                 if not required_candidates:
+                    self.triageTranslator.thefinalCallTrans(triage_data_trans)
                     raise TranslatorException(
                         "Unable to find any candidate for "
                         "demand {}".format(name)
                     )
                 else:
+                    self.triageTranslator.thefinalCallTrans(triage_data_trans)
                     raise TranslatorException(
                         "Unable to find any required "
                         "candidate for demand {}"
@@ -547,7 +562,7 @@ class Translator(object):
             parsed[name] = {
                 "candidates": inventory_candidates,
             }
-
+        self.triageTranslator.thefinalCallTrans(triage_data_trans)
         return parsed
 
     def validate_hpa_constraints(self, req_prop, value):
@@ -560,7 +575,7 @@ class Translator(object):
                     or not para.get('flavorProperties') \
                     or para.get('id') == '' \
                     or para.get('type') == '' \
-                    or not isinstance(para.get('directives'), list)  \
+                    or not isinstance(para.get('directives'), list) \
                     or para.get('flavorProperties') == '':
                 raise TranslatorException(
                     "HPA requirements need at least "
@@ -754,6 +769,28 @@ class Translator(object):
                 "Optimization goal 'minimize', function 'sum' "
                 "must be a list of exactly two operands.")
 
+        def get_latency_between_args(operand):
+            args = operand.get('latency_between')
+            if type(args) is not list and len(args) != 2:
+                raise TranslatorException(
+                    "Optimization 'latency_between' arguments must "
+                    "be a list of length two.")
+
+            got_demand = False
+            got_location = False
+            for arg in args:
+                if not got_demand and arg in self._demands.keys():
+                    got_demand = True
+                if not got_location and arg in self._locations.keys():
+                    got_location = True
+            if not got_demand or not got_location:
+                raise TranslatorException(
+                    "Optimization 'latency_between' arguments {} must "
+                    "include one valid demand name and one valid "
+                    "location name.".format(args))
+
+            return args
+
         def get_distance_between_args(operand):
             args = operand.get('distance_between')
             if type(args) is not list and len(args) != 2:
@@ -791,8 +828,11 @@ class Translator(object):
                 for product_op in operand['product']:
                     if threshold.is_number(product_op):
                         weight = product_op
-                    elif type(product_op) is dict:
-                        if product_op.keys() == ['distance_between']:
+                    elif isinstance(product_op, dict):
+                        if product_op.keys() == ['latency_between']:
+                            function = 'latency_between'
+                            args = get_latency_between_args(product_op)
+                        elif product_op.keys() == ['distance_between']:
                             function = 'distance_between'
                             args = get_distance_between_args(product_op)
                         elif product_op.keys() == ['aic_version']:
@@ -814,8 +854,11 @@ class Translator(object):
                                     for nested_product_op in nested_operand['product']:
                                         if threshold.is_number(nested_product_op):
                                             nested_weight = nested_weight * int(nested_product_op)
-                                        elif type(nested_product_op) is dict:
-                                            if nested_product_op.keys() == ['distance_between']:
+                                        elif isinstance(nested_product_op, dict):
+                                            if nested_product_op.keys() == ['latency_between']:
+                                                function = 'latency_between'
+                                                args = get_latency_between_args(nested_product_op)
+                                            elif nested_product_op.keys() == ['distance_between']:
                                                 function = 'distance_between'
                                                 args = get_distance_between_args(nested_product_op)
                                     parsed['operands'].append(
@@ -826,16 +869,6 @@ class Translator(object):
                                             "function_param": args,
                                         }
                                     )
-
-                    elif type(product_op) is unicode:
-                        if product_op == 'W1':
-                            # get this weight from configuration file
-                            weight = self.conf.controller.weight1
-                        elif product_op == 'W2':
-                            # get this weight from configuration file
-                            weight = self.conf.controller.weight2
-                        elif product_op == 'cost':
-                            function = 'cost'
 
                 if not args:
                     raise TranslatorException(
@@ -869,23 +902,31 @@ class Translator(object):
 
     def parse_reservations(self, reservations):
         demands = self._demands
-        if type(reservations) is not dict:
+        if not isinstance(reservations, dict):
             raise TranslatorException("Reservations must be provided in "
                                       "dictionary form")
-
         parsed = {}
         if reservations:
             parsed['counter'] = 0
-        for name, reservation in reservations.items():
-            if not reservation.get('properties'):
-                reservation['properties'] = {}
-            for demand in reservation.get('demands', []):
-                if demand in demands.keys():
-                    constraint_demand = name + '_' + demand
-                    parsed['demands'] = {}
-                    parsed['demands'][constraint_demand] = copy.deepcopy(reservation)
-                    parsed['demands'][constraint_demand]['name'] = name
-                    parsed['demands'][constraint_demand]['demand'] = demand
+            parsed['demands'] = {}
+
+        for key, value in reservations.items():
+
+            if key == "service_model":
+                parsed['service_model'] = value
+
+            elif key == "service_candidates":
+                for name, reservation_details in value.items():
+                    if not reservation_details.get('properties'):
+                        reservation_details['properties'] = {}
+                    for demand in reservation_details.get('demands', []):
+                        if demand in demands.keys():
+                            reservation_demand = name + '_' + demand
+                            parsed['demands'][reservation_demand] = copy.deepcopy(reservation_details)
+                            parsed['demands'][reservation_demand]['name'] = name
+                            parsed['demands'][reservation_demand]['demands'] = demand
+                        else:
+                            raise TranslatorException("Demand {} must be provided in demands section".format(demand))
 
         return parsed
 
@@ -894,7 +935,9 @@ class Translator(object):
         if not self.valid:
             raise TranslatorException("Can't translate an invalid template.")
 
-        request_type = self._parameters.get("request_type") or ""
+        request_type = self._parameters.get("request_type") \
+                       or self._parameters.get("REQUEST_TYPE") \
+                       or ""
 
         self._translation = {
             "conductor_solver": {
@@ -903,6 +946,7 @@ class Translator(object):
                 "request_type": request_type,
                 "locations": self.parse_locations(self._locations),
                 "demands": self.parse_demands(self._demands),
+                "objective": self.parse_optimization(self._optmization),
                 "constraints": self.parse_constraints(self._constraints),
                 "objective": self.parse_optimization(self._optmization),
                 "reservations": self.parse_reservations(self._reservations),

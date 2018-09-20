@@ -59,7 +59,7 @@ class Query(object):
         """Convert query response rows to objects"""
         results = []
         pk_name = self.model.pk_name()  # pylint: disable=E1101
-        for row_id, row in rows.items():  # pylint: disable=W0612
+        for row_id, row in rows.items():# pylint: disable=W0612
             the_id = row.pop(pk_name)
             result = self.model(_insert=False, **row)
             setattr(result, pk_name, the_id)
@@ -72,30 +72,21 @@ class Query(object):
         kwargs = self.__kwargs()
         rows = api.MUSIC_API.row_read(
             pk_name=pk_name, pk_value=pk_value, **kwargs)
-	 
-        if 'result' in rows:
-            return (self.__rows_to_objects(rows['result']).first())
-        else:
-            return (self.__rows_to_objects(rows).first())
+        return (self.__rows_to_objects(rows).first())
 
     def all(self):
         """Return all objects"""
         kwargs = self.__kwargs()
         rows = api.MUSIC_API.row_read(**kwargs)
-   
-        # Accommodate both Music 2.1 and 2.2 responses 
-        if 'result' in rows:
-            return self.__rows_to_objects(rows['result'])
-        else:
-            return self.__rows_to_objects(rows)
+        return self.__rows_to_objects(rows)
 
-    def get_plan_by_id(self, plan_id):
-        """Return the plan with specific id"""
-        plan = self.one(plan_id)
-
-        items = Results([])
-        items.append(plan)
-        return items
+    def get_plan_by_col(self, pk_name, pk_value):
+        # Before using this method, create an index the column (except the primary key)
+        # you want to filter by.
+        kwargs = self.__kwargs()
+        rows = api.MUSIC_API.row_read(
+            pk_name=pk_name, pk_value=pk_value, **kwargs)
+        return self.__rows_to_objects(rows)
 
     def filter_by(self, **kwargs):
         """Filter objects"""
@@ -103,7 +94,6 @@ class Query(object):
         # We need to get all items and then go looking for what we want.
         all_items = self.all()
         filtered_items = Results([])
-
         # For every candidate ...
         for item in all_items:
             passes = True
