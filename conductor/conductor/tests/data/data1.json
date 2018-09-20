@@ -1,0 +1,53 @@
+{
+  "simulation_data": {
+     "aic_inventory": [
+	    {
+	      "location_id": "sec01",
+	      "name": "Secaucus",
+        "latitude": "40.789545",
+        "longitude": "-74.056530",
+        "country": "usa",
+        "state": "nj"
+      },
+      {	   
+        "location_id": "mor01",
+        "name": "Morristown",
+        "latitude": "40.796767",
+        "longitude": "-74.481544",
+        "country": "usa",
+        "state": "nj"
+      },
+      {	   
+        "location_id": "phi01",
+        "name": "Philadephia",
+        "latitude": "39.952584",
+        "longitude": "-75.16522",
+        "country": "usa",
+        "state": "pa"
+      },
+      {	
+        "location_id": "dal01",
+        "name": "Dallas",
+        "latitude": "32.77664",
+        "longitude": "-96.796988",
+        "country": "usa",
+        "state": "tx"
+      },
+      {
+        "location_id": "lax01",
+        "name": "Los Angeles",
+        "latitude": "34.052234",
+        "longitude": "-118.243685",
+        "country": "usa",
+        "state": "ca"
+      },
+      {
+        "location_id": "lon01",
+        "name:": "London",
+        "latitude": "51.507351",
+        "longitude": "-0.127758",
+        "country": "uk"
+      }
+     ]
+  }   
+}
