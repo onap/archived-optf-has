@@ -1,0 +1,157 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a76adc5_790be4d5",
+        "filename": "conductor/conductor/solver/request/functions/aic_version.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1739
+      },
+      "writtenOn": "2018-09-20T21:00:11Z",
+      "side": 1,
+      "message": "Copyright message - Its from earlier, but we should fix. Also remove the first line.",
+      "revId": "da5157cb49d6b2b2d24136d268632d1c5bb956c8",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a76adc5_d9747869",
+        "filename": "conductor/conductor/solver/request/functions/cost.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1739
+      },
+      "writtenOn": "2018-09-20T21:00:11Z",
+      "side": 1,
+      "message": "Remove this and add Copyright message",
+      "revId": "da5157cb49d6b2b2d24136d268632d1c5bb956c8",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a76adc5_395a4cf2",
+        "filename": "conductor/conductor/solver/request/objective.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1739
+      },
+      "writtenOn": "2018-09-20T21:00:11Z",
+      "side": 1,
+      "message": "Please remove this shebang and add Copyright message.",
+      "revId": "da5157cb49d6b2b2d24136d268632d1c5bb956c8",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a76adc5_39432c14",
+        "filename": "conductor/conductor/tests/unit/controller/test_translator.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 172,
+      "author": {
+        "id": 1739
+      },
+      "writtenOn": "2018-09-20T21:00:11Z",
+      "side": 1,
+      "message": "please remove this whitespace",
+      "revId": "da5157cb49d6b2b2d24136d268632d1c5bb956c8",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a76adc5_f948542e",
+        "filename": "conductor/conductor/tests/unit/controller/test_translator.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 173,
+      "author": {
+        "id": 1739
+      },
+      "writtenOn": "2018-09-20T21:00:11Z",
+      "side": 1,
+      "message": "this too",
+      "revId": "da5157cb49d6b2b2d24136d268632d1c5bb956c8",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a76adc5_793d248e",
+        "filename": "conductor/conductor/tests/unit/data/plugins/inventory_provider/test_aai.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 315,
+      "author": {
+        "id": 1739
+      },
+      "writtenOn": "2018-09-20T21:00:11Z",
+      "side": 1,
+      "message": "Please remove this commented out section",
+      "revId": "da5157cb49d6b2b2d24136d268632d1c5bb956c8",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a76adc5_59d3885f",
+        "filename": "conductor/conductor/tests/unit/solver/test_order_lock_service.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1739
+      },
+      "writtenOn": "2018-09-20T21:00:11Z",
+      "side": 1,
+      "message": "please remove this \u0027shebang\u0027. not really needed.",
+      "revId": "da5157cb49d6b2b2d24136d268632d1c5bb956c8",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a76adc5_39f56cec",
+        "filename": "conductor/setup.cfg",
+        "patchSetId": 3
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1739
+      },
+      "writtenOn": "2018-09-20T21:00:11Z",
+      "side": 1,
+      "message": "please remove this space",
+      "revId": "da5157cb49d6b2b2d24136d268632d1c5bb956c8",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a76adc5_d9df9867",
+        "filename": "conductor/setup.cfg",
+        "patchSetId": 3
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1739
+      },
+      "writtenOn": "2018-09-20T21:00:11Z",
+      "side": 1,
+      "message": "this too",
+      "revId": "da5157cb49d6b2b2d24136d268632d1c5bb956c8",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
