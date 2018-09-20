@@ -17,7 +17,6 @@
 # -------------------------------------------------------------------------
 #
 
-# import socket
 import sys
 
 # from keystoneauth1 import loading as ka_loading
@@ -47,9 +46,12 @@ OPTS = [
                default='conductor',
                help='Music keyspace for content'),
     cfg.IntOpt('delay_time',
-               default=2,
-               help='Delay time (Seconds) for MUSIC requests. Set it to 2 seconds '
-                    'by default.'),
+                default=2,
+                help='Delay time (Seconds) for MUSIC requests. Set it to 2 seconds '
+                     'by default.'),
+    #TODO(larry): move to a new section [feature_supported] in config file
+    cfg.BoolOpt('HPA_enabled',
+                default=True)
 ]
 cfg.CONF.register_opts(OPTS)
 

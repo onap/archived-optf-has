@@ -1,4 +1,3 @@
-#!/bin/python
 #
 # -------------------------------------------------------------------------
 #   Copyright (c) 2015-2017 AT&T Intellectual Property
@@ -17,7 +16,6 @@
 #
 # -------------------------------------------------------------------------
 #
-
 
 import copy
 import operator
@@ -143,7 +141,7 @@ class BestFirst(search.Search):
             best_resource = None
             for candidate in candidate_list:
                 _decision_path.decisions[demand.name] = candidate
-                _objective.compute(_decision_path)
+                _objective.compute(_decision_path) #TODO call the compute of latencyBetween
                 if _objective.goal == "min":
                     if _decision_path.total_value < bound_value:
                         bound_value = _decision_path.total_value

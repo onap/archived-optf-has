@@ -18,6 +18,7 @@
 #
 
 import cotyledon
+import json
 import time
 import socket
 from oslo_config import cfg
@@ -31,7 +32,7 @@ from conductor.i18n import _LE, _LI
 from conductor import messaging
 from conductor import service
 from conductor.common.utils import conductor_logging_util as log_util
-
+from conductor.common.models import order_lock
 
 LOG = log.getLogger(__name__)
 
@@ -44,7 +45,7 @@ reservation_OPTS = [
                help='Number of workers for reservation service. '
                     'Default value is 1.'),
     cfg.IntOpt('reserve_retries',
-               default=3,
+               default=1,
                help='Number of times reservation/release '
                     'should be attempted.'),
     cfg.IntOpt('timeout',
@@ -82,13 +83,17 @@ class ReservationServiceLauncher(object):
         # Dynamically create a plan class for the specified keyspace
         self.Plan = base.create_dynamic_model(
             keyspace=conf.keyspace, baseclass=plan.Plan, classname="Plan")
-
+        self.OrderLock = base.create_dynamic_model(
+            keyspace=conf.keyspace, baseclass=order_lock.OrderLock, classname="OrderLock")
 
         if not self.Plan:
             raise
+        if not self.OrderLock:
+            raise
 
     def run(self):
-        kwargs = {'plan_class': self.Plan}
+        kwargs = {'plan_class': self.Plan,
+                      'order_locks': self.OrderLock}
         svcmgr = cotyledon.ServiceManager()
         svcmgr.add(ReservationService,
                    workers=self.conf.reservation.workers,
@@ -126,6 +131,7 @@ class ReservationService(cotyledon.Service):
         self.kwargs = kwargs
 
         self.Plan = kwargs.get('plan_class')
+        self.OrderLock = kwargs.get('order_locks')
 
         # Set up the RPC service(s) we want to talk to.
         self.data_service = self.setup_rpc(conf, "data")
@@ -156,12 +162,11 @@ class ReservationService(cotyledon.Service):
 
         Use this only when the reservation service is not running concurrently.
         """
-        plans = self.Plan.query.all()
+        plans = self.Plan.query.get_plan_by_col("status", self.Plan.RESERVING)
         for the_plan in plans:
-            if the_plan.status == self.Plan.RESERVING:
-                the_plan.status = self.Plan.SOLVED
-                # Use only in active-passive mode, so don't have to be atomic
-                the_plan.update()
+            the_plan.status = self.Plan.SOLVED
+            # Use only in active-passive mode, so don't have to be atomic
+            the_plan.update()
 
     def _restart(self):
         """Prepare to restart the service"""
@@ -239,6 +244,7 @@ class ReservationService(cotyledon.Service):
         LOG.debug("%s" % self.__class__.__name__)
         # TODO(snarayanan): This is really meant to be a control loop
         # As long as self.running is true, we process another request.
+
         while self.running:
 
             # Delay time (Seconds) for MUSIC requests.
@@ -252,12 +258,22 @@ class ReservationService(cotyledon.Service):
             translation = None
             p = None
             # requests_to_reserve = dict()
-            plans = self.Plan.query.all()
+
+            # Instead of using the query.all() method, now creating an index for 'status'
+            # field in conductor.plans table, and query plans by status columns
+            solved_plans = self.Plan.query.get_plan_by_col("status", self.Plan.SOLVED)
+            reserving_plans = self.Plan.query.get_plan_by_col("status", self.Plan.RESERVING)
+
+            # combine the plans with status = 'solved' and 'reserving' together
+            plans = solved_plans + reserving_plans
+
             found_solved_template = False
 
             for p in plans:
+                # when a plan is in RESERVING status more than timeout value
                 if p.status == self.Plan.RESERVING and \
                 (self.current_time_seconds() - self.millisec_to_sec(p.updated)) > self.conf.reservation.timeout:
+                    # change the plan status to SOLVED for another VM to reserve
                     p.status = self.Plan.SOLVED
                     p.update(condition=self.reservating_status_condition)
                     break
@@ -267,16 +283,17 @@ class ReservationService(cotyledon.Service):
                     found_solved_template = True
                     break
 
+            if not solution:
+                if found_solved_template:
+                    message = _LE("Plan {} status is solved, yet "
+                                  "the solution wasn't found").format(p.id)
+                    LOG.error(message)
+                    p.status = self.Plan.ERROR
+                    p.message = message
+                    p.update(condition=self.solved_status_condition)
+                continue
 
-            if found_solved_template and not solution:
-                message = _LE("Plan {} status is solved, yet "
-                              "the solution wasn't found").format(p.id)
-                LOG.error(message)
-                p.status = self.Plan.ERROR
-                p.message = message
-                p.update(condition=self.solved_status_condition)
-                continue  # continue looping
-            elif found_solved_template and p and p.reservation_counter >= self.conf.reservation.max_reservation_counter:
+            if found_solved_template and p and p.reservation_counter >= self.conf.reservation.max_reservation_counter:
                 message = _LE("Tried {} times. Plan {} is unable to reserve") \
                     .format(self.conf.reservation.max_reservation_counter, p.id)
                 LOG.error(message)
@@ -284,8 +301,6 @@ class ReservationService(cotyledon.Service):
                 p.message = message
                 p.update(condition=self.solved_status_condition)
                 continue
-            elif not solution:
-                continue  # continue looping
 
             log_util.setLoggerFilter(LOG, self.conf.keyspace, p.id)
 
@@ -296,9 +311,14 @@ class ReservationService(cotyledon.Service):
             p.reservation_owner = socket.gethostname()
             _is_updated = p.update(condition=self.solved_status_condition)
 
+            if not _is_updated:
+                continue
+
             if 'FAILURE' in _is_updated:
                 continue
 
+            LOG.info(_LI("Reservation starts, changing the template status from solved to reserving, "
+                         "atomic update response from MUSIC {}").format(_is_updated))
             LOG.info(_LI("Plan {} with request id {} is reserving by machine {}. Tried to reserve it for {} times.").
                      format(p.id, p.name, p.reservation_owner, p.reservation_counter))
 
@@ -306,7 +326,7 @@ class ReservationService(cotyledon.Service):
             # if plan needs reservation proceed with reservation
             # else set status to done.
             reservations = None
-            _is_success = 'FAILURE | Could not acquire lock'
+            _is_success = "FAILURE"
 
             if translation:
                 conductor_solver = translation.get("conductor_solver")
@@ -320,85 +340,139 @@ class ReservationService(cotyledon.Service):
 
                 recommendations = solution.get("recommendations")
                 reservation_list = list()
+                # TODO(larry) combine the two reservation logic as one, make the code service independent
+                sdwan_candidate_list = list()
+                service_model = reservations.get("service_model")
 
-                for reservation, resource in reservations.get("demands",
-                                                              {}).items():
+                for reservation, resource in reservations.get("demands", {}).items():
                     candidates = list()
-                    reservation_demand = resource.get("demand")
+                    reservation_demand = resource.get("demands")
                     reservation_name = resource.get("name")
                     reservation_type = resource.get("type")
 
                     reservation_properties = resource.get("properties")
                     if reservation_properties:
-                        controller = reservation_properties.get(
-                            "controller")
+                        controller = reservation_properties.get("controller")
                         request = reservation_properties.get("request")
 
                     for recommendation in recommendations:
                         for demand, r_resource in recommendation.items():
                             if demand == reservation_demand:
                                 # get selected candidate from translation
-                                selected_candidate_id = \
-                                    r_resource.get("candidate")\
-                                    .get("candidate_id")
-                                demands = \
-                                    translation.get("conductor_solver")\
-                                    .get("demands")
-                                for demand_name, d_resource in \
-                                        demands.items():
+                                selected_candidate_id = r_resource.get("candidate").get("candidate_id")
+                                demands = translation.get("conductor_solver").get("demands")
+                                for demand_name, d_resource in demands.items():
                                     if demand_name == demand:
-                                        for candidate in d_resource\
-                                                .get("candidates"):
-                                            if candidate\
-                                                .get("candidate_id") ==\
-                                                    selected_candidate_id:
-                                                candidates\
-                                                    .append(candidate)
 
-                    is_success = self.try_reservation_call(
-                        method="reserve",
-                        candidate_list=candidates,
-                        reservation_name=reservation_name,
-                        reservation_type=reservation_type,
-                        controller=controller,
-                        request=request)
+                                        for candidate in d_resource.get("candidates"):
+                                            if candidate.get("candidate_id") == selected_candidate_id:
+                                                candidate['request'] = request
+                                                candidates.append(candidate)
+                                                sdwan_candidate_list.append(candidate)
 
-                    # if reservation succeeds continue with next candidate
-                    if is_success:
-                        curr_reservation = dict()
-                        curr_reservation['candidate_list'] = candidates
-                        curr_reservation['reservation_name'] = \
-                            reservation_name
-                        curr_reservation['reservation_type'] = \
-                            reservation_type
-                        curr_reservation['controller'] = controller
-                        curr_reservation['request'] = request
-                        reservation_list.append(curr_reservation)
-                    else:
-                        # begin roll back of all reserved resources on
-                        # the first failed reservation
-                        rollback_status = \
-                            self.rollback_reservation(reservation_list)
-                        # statuses
-                        if rollback_status:
-                            # released all reservations,
-                            # move plan to translated
-                            p.status = self.Plan.TRANSLATED
-                            # TODO(larry): Should be replaced by the new api from MUSIC
-                            while 'FAILURE | Could not acquire lock' in _is_success:
-                                _is_success = p.update(condition=self.reservation_owner_condition)
-                            del reservation_list[:]
+                    #TODO(larry) combine the two reservation logic as one, make the code service independent
+                    if service_model == "ADIOD":
+                        is_success = self.try_reservation_call(
+                            method="reserve",
+                            candidate_list=candidates,
+                            reservation_type=service_model,
+                            controller=controller,
+                            request=request,
+                            reservation_name=None
+                        )
+
+                        # if reservation succeed continue with next candidate
+                        if is_success:
+                            curr_reservation = dict()
+                            curr_reservation['candidate_list'] = candidates
+                            curr_reservation['reservation_name'] = reservation_name
+                            curr_reservation['reservation_type'] = reservation_type
+                            curr_reservation['controller'] = controller
+                            curr_reservation['request'] = request
+                            reservation_list.append(curr_reservation)
+
                         else:
-                            LOG.error("Reservation rollback failed")
-                            p.status = self.Plan.ERROR
-                            p.message = "Reservation release failed"
-                            # TODO(larry): Should be replaced by the new api from MUSIC
-                            while 'FAILURE | Could not acquire lock' in _is_success:
-                                _is_success = p.update(condition=self.reservation_owner_condition)
-                        break  # reservation failed
+                            # begin roll back of all reserved resources on
+                            # the first failed reservation
+                            rollback_status = \
+                                self.rollback_reservation(reservation_list)
+
+                            # order_lock spin-up rollback
+                            for decision in solution.get('recommendations'):
+
+                                candidate = decision.values()[0].get('candidate')
+                                if candidate.get('inventory_type') == 'cloud':
+                                    # TODO(larry) change the code to get('conflict_id') instead of 'location_id'
+                                    conflict_id = candidate.get('conflict_id')
+                                    order_record = self.OrderLock.query.get_plan_by_col("id", conflict_id)[0]
+                                    if order_record:
+                                        order_record.delete()
+                            # statuses
+                            if rollback_status:
+                                # released all reservations,
+                                # move plan to translated
+                                if p.reservation_counter >= self.conf.reservation.max_reservation_counter:
+                                    p.status = self.Plan.ERROR
+                                    p.message = _LE("Tried {} times. Plan {} is unable to reserve").format(self.conf.reservation.max_reservation_counter, p.id)
+                                    LOG.error(p.message)
+                                else:
+                                    p.status = self.Plan.TRANSLATED
+                                # TODO(larry): Should be replaced by the new api from MUSIC
+                                while 'FAILURE' in _is_success:
+                                    _is_success = p.update(condition=self.reservation_owner_condition)
+                                    LOG.info(_LI("Rolling back the template from reserving to {} status, "
+                                                 "atomic update response from MUSIC {}").format(p.status, _is_success))
+                                del reservation_list[:]
+                            else:
+                                LOG.error("Reservation rollback failed")
+                                p.status = self.Plan.ERROR
+                                p.message = "Reservation release failed"
+                                # TODO(larry): Should be replaced by the new api from MUSIC
+                                while 'FAILURE' in _is_success:
+                                    _is_success = p.update(condition=self.reservation_owner_condition)
+                                    LOG.info(_LI("Rollback Failed, Changing the template status from reserving to error, "
+                                                 "atomic update response from MUSIC {}").format(_is_success))
+                            break  # reservation failed
 
                     continue
-                        # continue with reserving the next candidate
+                    # continue with reserving the next candidate
+
+                # TODO(larry) combine the two reservation logic as one, make the code service independent
+                if service_model == "DHV":
+                    is_success = self.try_reservation_call(
+                        method="reserve",
+                        candidate_list=sdwan_candidate_list,
+                        reservation_type=service_model,
+                        controller=controller,
+                        request=request,
+                        reservation_name=None
+                        )
+
+                    if not is_success:
+                        # order_lock spin-up rollback
+                        for decision in solution.get('recommendations'):
+
+                            candidate = decision.values()[0].get('candidate')
+                            if candidate.get('inventory_type') == 'cloud':
+                                conflict_id = candidate.get('conflict_id')
+                                order_record = self.OrderLock.query.get_plan_by_col("id", conflict_id)[0]
+                                if order_record:
+                                    order_record.delete()
+
+                        if p.reservation_counter >= self.conf.reservation.max_reservation_counter:
+                            p.status = self.Plan.ERROR
+                            p.message = _LE("Tried {} times. Plan {} is unable to reserve").format(
+                                self.conf.reservation.max_reservation_counter, p.id)
+                            LOG.error(p.message)
+                        else:
+                            p.status = self.Plan.TRANSLATED
+
+                        # TODO(larry): Should be replaced by the new api from MUSIC
+                        while 'FAILURE' in _is_success:
+                            _is_success = p.update(condition=self.reservation_owner_condition)
+                            LOG.info(_LI("Rolling back the template from reserving to {} status, "
+                                         "atomic update response from MUSIC {}").format(p.status, _is_success))
+                        del reservation_list[:]
 
             # verify if all candidates have been reserved
             if p.status == self.Plan.RESERVING:
@@ -408,9 +482,10 @@ class ReservationService(cotyledon.Service):
                 LOG.debug("Plan {} Reservation complete".format(p.id))
                 p.status = self.Plan.DONE
 
-                while 'FAILURE | Could not acquire lock' in _is_success:
+                while 'FAILURE' in _is_success and (self.current_time_seconds() - self.millisec_to_sec(p.updated)) <= self.conf.reservation.timeout:
                     _is_success = p.update(condition=self.reservation_owner_condition)
-
+                    LOG.info(_LI("Reservation is complete, changing the template status from reserving to done, "
+                                 "atomic update response from MUSIC {}").format(_is_success))
             continue
             # done reserving continue to loop
 
@@ -425,4 +500,3 @@ class ReservationService(cotyledon.Service):
         """Reload"""
         LOG.debug("%s" % self.__class__.__name__)
         self._restart()
-

@@ -52,13 +52,13 @@ DATA_OPTS = [
                      'mode. When set to False, data will flush any abandoned '
                      'messages at startup.'),
     cfg.FloatOpt('existing_placement_cost',
-                 default=-8000.0,
-                 help='Default value is -8000, which is the diameter of the earth. '
-                      'The distance cannot larger than this value'),
+               default=-8000.0,
+               help='Default value is -8000, which is the diameter of the earth. '
+                    'The distance cannot larger than this value'),
     cfg.FloatOpt('cloud_candidate_cost',
-                 default=2.0),
+               default=2.0),
     cfg.FloatOpt('service_candidate_cost',
-                 default=1.0),
+               default=1.0),
 ]
 
 CONF.register_opts(DATA_OPTS, group='data')
@@ -72,6 +72,7 @@ class DataServiceLauncher(object):
 
         self.conf = conf
         self.init_extension_managers(conf)
+
 
     def init_extension_managers(self, conf):
         """Initialize extension managers."""
@@ -112,6 +113,11 @@ class DataEndpoint(object):
         self.vc_ext_manager = vc_ext_manager
         self.sc_ext_manager = sc_ext_manager
         self.plugin_cache = {}
+        self.triage_data_trans = {
+            'plan_id': None,
+            'plan_name': None,
+            'translator_triage': []
+        }
 
     def get_candidate_location(self, ctx, arg):
         # candidates should have lat long info already
@@ -223,7 +229,7 @@ class DataEndpoint(object):
                     discard_set.add(candidate.get("candidate_id"))
         return discard_set
 
-    # (TODO:Larry) merge this function with the "get_candidate_discard_set"
+    #(TODO:Larry) merge this function with the "get_candidate_discard_set"
     def get_candidate_discard_set_by_cloud_region(self, value, candidate_list, value_attrib):
         discard_set = set()
 
@@ -239,7 +245,9 @@ class DataEndpoint(object):
                     (candidate.get(value_attrib) not in service_requests):
                 discard_set.add(candidate.get("candidate_id"))
 
+
         return discard_set
+
 
     def get_inventory_group_candidates(self, ctx, arg):
         candidate_list = arg["candidate_list"]
@@ -590,18 +598,36 @@ class DataEndpoint(object):
 
         error = False
         demands = arg.get('demands')
+        plan_info = arg.get('plan_info')
+        triage_translator_data = arg.get('triage_translator_data')
         resolved_demands = None
         results = self.ip_ext_manager.map_method(
             'resolve_demands',
-            demands
+            demands, plan_info, triage_translator_data
         )
         if results and len(results) > 0:
             resolved_demands = results[0]
+            if self.triage_data_trans['plan_id']== None :
+                self.triage_data_trans['plan_name'] = triage_translator_data['plan_name']
+                self.triage_data_trans['plan_id'] = triage_translator_data['plan_id']
+                self.triage_data_trans['translator_triage'].append(triage_translator_data['dropped_candidates'])
+            elif (not self.triage_data_trans['plan_id'] == triage_translator_data['plan_id']) :
+                self.triage_data_trans = {
+                    'plan_id': None,
+                    'plan_name': None,
+                    'translator_triage': []
+                }
+                self.triage_data_trans['plan_name']  = triage_translator_data['plan_name']
+                self.triage_data_trans['plan_id'] = triage_translator_data['plan_id']
+                self.triage_data_trans['translator_triage'].append(triage_translator_data['dropped_candidates'])
+            else:
+                self.triage_data_trans['translator_triage'].append(triage_translator_data['dropped_candidates'])
         else:
             error = True
 
-        return {'response': {'resolved_demands': resolved_demands},
-                'error': error}
+        return {'response': {'resolved_demands': resolved_demands,
+                             'trans': self.triage_data_trans},
+                'error': error  }
 
     def resolve_location(self, ctx, arg):
 

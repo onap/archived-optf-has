@@ -18,12 +18,17 @@
 #
 
 from oslo_log import log
-import pecan
 from pecan import secure
 
 from conductor.api.controllers import error
 from conductor.api.controllers.v1 import plans
+from conductor.api.controllers.v1 import release_orders
+from conductor.api.controllers.v1 import latency_reduction_loader
+from conductor.api.controllers.v1 import latency_country_rules_loader
+from conductor.api.controllers.v1 import triage
 from conductor.i18n import _
+import pecan
+
 
 LOG = log.getLogger(__name__)
 
@@ -32,6 +37,9 @@ class V1Controller(secure.SecureController):
     """Version 1 API controller root."""
 
     plans = plans.PlansController()
+    triage_tool = triage.TriageController()
+    load_latency_rules = latency_reduction_loader.LatencyLoaderController()
+    load_latency_country_rules = latency_country_rules_loader.LatencyCountryRulesLoaderController()
 
     @classmethod
     def check_permissions(cls):
@@ -45,3 +53,6 @@ class V1Controller(secure.SecureController):
         message = _('The %s method is not allowed.') % pecan.request.method
         kwargs = {}
         error('/errors/not_allowed', message, **kwargs)
+
+#TODO(larry): understand pecan and change the following code
+pecan.route(V1Controller, 'release-orders', release_orders.LocksController())

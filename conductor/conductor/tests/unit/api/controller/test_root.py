@@ -19,7 +19,7 @@
 """Test case for RootController /"""
 
 import json
-
+from conductor import version
 from conductor.tests.unit.api import base_api
 
 
@@ -29,7 +29,11 @@ class TestRoot(base_api.BaseApiTest):
         actual_response = self.app.get('/')
         req_json_file = './conductor/tests/unit/api/controller/versions.json'
         expected_response = json.loads(open(req_json_file).read())
-        # print('GOT:%s' % actual_response)
+
+        versions = expected_response.get('versions')
+        for version_obj in versions:
+            version_obj['version'] = "of-has:{}".format(version.version_info.version_string())
+
         self.assertEqual(200, actual_response.status_int)
         self.assertJsonEqual(expected_response,
                              json.loads(actual_response.body))

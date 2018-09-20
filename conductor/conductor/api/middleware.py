@@ -22,7 +22,6 @@ response with one formatted so the client can parse it.
 
 Based on pecan.middleware.errordocument
 """
-
 import json
 
 from lxml import etree
@@ -33,7 +32,25 @@ import webob
 from conductor import i18n
 from conductor.i18n import _
 
+from conductor import version
+from oslo_config import cfg
+
+CONF = cfg.CONF
+
+
 LOG = log.getLogger(__name__)
+
+VERSION_AUTH_OPTS = [
+    cfg.BoolOpt('version_auth_flag',
+               default=False,
+               help='version auth toggling.'),
+    cfg.StrOpt('version_auth_token',
+               default='',
+               help='version auth token')
+]
+
+CONF.register_opts(VERSION_AUTH_OPTS, group='version_auth')
+
 
 
 class ParsableErrorMiddleware(object):
@@ -58,7 +75,29 @@ class ParsableErrorMiddleware(object):
         # Request for this state, modified by replace_start_response()
         # and used when an error is being reported.
         state = {}
-
+        latest_version = version.version_info.version_string()
+        latest_version_semantic = latest_version.split('.')
+        minor_version = latest_version_semantic[1]
+        patch_version = latest_version_semantic[2]
+        req_minor_version = environ.get('HTTP_X_MINORVERSION')
+        req_patch_version = environ.get('HTTP_X_PATCHVERSION')
+        version_auth_flag = CONF.version_auth.version_auth_flag
+        conf_version_auth_token = CONF.version_auth.version_auth_token
+        version_auth_token = environ.get('HTTP_VERSION_AUTH_TOKEN')
+        if req_minor_version is not None:
+            if int(req_minor_version) <= int(minor_version):
+                minor_version = req_minor_version
+            else:
+                raise Exception((
+                    'Expecting minor version less than or equal to %s' % minor_version
+                ))
+        if req_patch_version is not None:
+            if int(req_patch_version) <= int(patch_version):
+                patch_version = req_patch_version
+            else:
+                raise Exception((
+                    'Not expecting a patch version but the entered patch version is not acceptable if it is not less than or equal to %s' % patch_version
+                ))
         def replacement_start_response(status, headers, exc_info=None):
             """Overrides the default response to make errors parsable."""
             try:
@@ -80,6 +119,12 @@ class ParsableErrorMiddleware(object):
                                ]
                 # Save the headers in case we need to modify them.
                 state['headers'] = headers
+
+                if not version_auth_flag or \
+                        (version_auth_flag and version_auth_token == conf_version_auth_token):
+                    state['headers'].append(('X-MinorVersion', minor_version))
+                    state['headers'].append(('X-PatchVersion', patch_version))
+                    state['headers'].append(('X-LatestVersion', latest_version))
                 return start_response(status, headers, exc_info)
 
         app_iter = self.app(environ, replacement_start_response)
@@ -124,8 +169,14 @@ class ParsableErrorMiddleware(object):
                 if six.PY3:
                     body = body.encode('utf-8')
 
+
             state['headers'].append(('Content-Length', str(len(body))))
             state['headers'].append(('Content-Type', content_type))
+            if not version_auth_flag or \
+                    (version_auth_flag and version_auth_token == conf_version_auth_token):
+                state['headers'].append(('X-minorVersion', minor_version))
+                state['headers'].append(('X-patchVersion', patch_version))
+                state['headers'].append(('X-latestVersion', latest_version))
             body = [body]
         else:
             body = app_iter

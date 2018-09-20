@@ -21,6 +21,7 @@
 
 import json
 import time
+import os
 
 from conductor.common.models import validate_uuid4
 from conductor.common.music.model import base
@@ -55,6 +56,7 @@ class Plan(base.Base):
     message = None
     translation_owner = None
     translation_counter = None
+    translation_begin_timestamp = None
     solver_owner = None
     solver_counter = None
     reservation_owner = None
@@ -65,7 +67,7 @@ class Plan(base.Base):
 
     # Status
     TEMPLATE = "template"  # Template ready for translation
-    TRANSLATING = "translating"  # Translating the template
+    TRANSLATING = "translating" # Translating the template
     TRANSLATED = "translated"  # Translation ready for solving
     SOLVING = "solving"  # Search for solutions in progress
     # Search complete, solution with n>0 recommendations found
@@ -77,10 +79,14 @@ class Plan(base.Base):
     RESERVING = "reserving"
     # Final state, Solved and Reserved resources (if required)
     DONE = "done"
+    # if any cloud candidate in the solution under spin-up in MSO,
+    # the plan goes to 'waiting spinup' state
+    WAITING_SPINUP = "waiting spinup"
+
     STATUS = [TEMPLATE, TRANSLATING, TRANSLATED, SOLVING, SOLVED, NOT_FOUND,
-              ERROR, RESERVING, DONE, ]
-    WORKING = [TEMPLATE, TRANSLATING, TRANSLATED, SOLVING, RESERVING, ]
-    FINISHED = [TRANSLATED, SOLVED, NOT_FOUND, ERROR, DONE, ]
+              ERROR, WAITING_SPINUP, RESERVING, DONE, ]
+    WORKING = [TEMPLATE, TRANSLATING, SOLVING, RESERVING, ]
+    FINISHED = [TRANSLATED, SOLVED, NOT_FOUND, ERROR, DONE, WAITING_SPINUP]
 
     @classmethod
     def schema(cls):
@@ -92,7 +98,7 @@ class Plan(base.Base):
             'updated': 'bigint',  # Last update time in msec from epoch
             'name': 'text',  # Plan name/alias
             'timeout': 'int',  # Timeout in seconds
-            'recommend_max': 'int',  # Max recommendations
+            'recommend_max': 'text',  # Max recommendations
             'message': 'text',  # Message (e.g., error or other info)
             'template': 'text',  # Plan template
             'translation': 'text',  # Translated template for the solver
@@ -103,6 +109,7 @@ class Plan(base.Base):
             'translation_counter': 'int',
             'solver_counter': 'int',
             'reservation_counter': 'int',
+            'translation_begin_timestamp': 'bigint',
             'PRIMARY KEY': '(id)',
         }
         return schema
@@ -147,6 +154,17 @@ class Plan(base.Base):
     def working(self):
         return self.status in self.WORKING
 
+    def rehome_plan(self):
+        """reset the field values when rehoming a plan"""
+        self.status = self.TEMPLATE
+        self.updated = current_time_millis()
+        self.message = ""
+        self.translation_counter = 0
+        self.solver_counter = 0
+        self.reservation_counter = 0
+        self.translation = {}
+        self.solution = {}
+
     def update(self, condition=None):
         """Update plan
 
@@ -170,6 +188,7 @@ class Plan(base.Base):
             'solution': json.dumps(self.solution),
             'translation_owner': self.translation_owner,
             'translation_counter': self.translation_counter,
+            'translation_begin_timestamp': self.translation_begin_timestamp,
             'solver_owner': self.solver_owner,
             'solver_counter': self.solver_counter,
             'reservation_owner': self.reservation_owner,
@@ -183,9 +202,9 @@ class Plan(base.Base):
                  id=None, created=None, updated=None, status=None,
                  message=None, translation=None, solution=None,
                  translation_owner=None, solver_owner=None,
-                 reservation_owner=None, translation_counter = None,
-                 solver_counter = None, reservation_counter = None,
-                 _insert=True):
+                 reservation_owner=None, translation_counter=None,
+                 solver_counter=None, reservation_counter=None,
+                 translation_begin_timestamp=None, _insert=True):
         """Initializer"""
         super(Plan, self).__init__()
         self.status = status or self.TEMPLATE
@@ -203,6 +222,7 @@ class Plan(base.Base):
         self.translation_counter = translation_counter or 0
         self.solver_counter = solver_counter or 0
         self.reservation_counter = reservation_counter or 0
+        self.translation_begin_timestamp = translation_begin_timestamp
 
         if _insert:
             if validate_uuid4(id):
@@ -234,12 +254,6 @@ class Plan(base.Base):
         json_['template'] = self.template
         json_['translation'] = self.translation
         json_['solution'] = self.solution
-        json_['translation_owner'] = self.translation_owner
-        json_['translation_counter'] = self.translation_counter
-        json_['solver_owner'] = self.solver_owner
-        json_['solver_counter'] = self.solver_counter
-        json_['reservation_owner'] = self.reservation_owner
-        json_['reservation_counter'] = self.reservation_counter
         json_['translation_owner'] = self.translation_owner
         json_['translation_counter'] = self.translation_counter
         json_['solver_owner'] = self.solver_owner

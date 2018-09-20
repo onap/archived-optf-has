@@ -18,6 +18,7 @@
 #
 
 import inspect
+import json
 import sys
 import time
 import socket
@@ -46,16 +47,15 @@ MESSAGING_SERVER_OPTS = [
                help='Wait interval while checking for a message response. '
                     'Default value is 1 second.'),
     cfg.IntOpt('response_timeout',
-               default=20,
+               default=120,
                min=1,
                help='Overall message response timeout. '
-                    'Default value is 20 seconds.'),
+                    'Default value is 120 seconds.'),
     cfg.IntOpt('timeout',
-               default=600,
+               default=300,
                min=1,
                help='Timeout for detecting a VM is down, and other VMs can pick the plan up. '
-                    'This value should be larger than solver_timeout'
-                    'Default value is 10 minutes. (integer value)'),
+                    'Default value is 5 minutes. (integer value)'),
     cfg.IntOpt('workers',
                default=1,
                min=1,
@@ -105,8 +105,8 @@ class Target(object):
             baseclass=message.Message, classname=self.topic)
 
         if not self._topic_class:
-            raise RuntimeError("Error setting the topic class "
-                               "for the messaging layer.")
+            RuntimeError("Error setting the topic class "
+                         "for the messaging layer.")
 
     @property
     def topic(self):
@@ -208,8 +208,7 @@ class RPCClient(object):
         # Check message status within a thread
         executor = futurist.ThreadPoolExecutor()
         started_at = time.time()
-        while (time.time() - started_at) <= \
-                self.conf.messaging_server.timeout:
+        while (time.time() - started_at) <= self.conf.messaging_server.response_timeout:
             fut = executor.submit(self.__check_rpc_status, rpc_id, method)
             rpc = fut.result()
             if rpc and rpc.finished:
@@ -276,6 +275,7 @@ class RPCService(cotyledon.Service):
         self.kwargs = kwargs
         self.RPC = self.target.topic_class
         self.name = "{}, topic({})".format(RPCSVRNAME, self.target.topic)
+
         self.messaging_owner_condition = {
             "owner": socket.gethostname()
         }
@@ -345,14 +345,13 @@ class RPCService(cotyledon.Service):
             # Find the first msg marked as enqueued.
 
             if msg.working and \
-                (self.current_time_seconds() - self.millisec_to_sec(msg.updated)) > \
-                            self.conf.messaging_server.timeout:
+                    (self.current_time_seconds() - self.millisec_to_sec(msg.updated))\
+                    > self.conf.messaging_server.response_timeout:
                 msg.status = message.Message.ENQUEUED
                 msg.update(condition=self.working_status_condition)
 
             if not msg.enqueued:
                 continue
-
             if 'plan_name' in msg.ctxt.keys():
                 LOG.info('Plan name: {}'.format(msg.ctxt['plan_name']))
             elif 'plan_name' in msg.args.keys():
@@ -364,7 +363,7 @@ class RPCService(cotyledon.Service):
             # All update should have a condition (status == enqueued)
             _is_updated = msg.update(condition=self.enqueued_status_condition)
 
-            if 'FAILURE' in _is_updated:
+            if not _is_updated or 'FAILURE' in _is_updated:
                 continue
 
             # RPC methods must not start/end with an underscore.
@@ -410,6 +409,7 @@ class RPCService(cotyledon.Service):
 
             failure = None
             try:
+
                 # Add the template to conductor.plan table
                 # Methods return an opaque dictionary
                 result = method(msg.ctxt, msg.args)
@@ -440,9 +440,11 @@ class RPCService(cotyledon.Service):
                     LOG.debug("Message {} method {}, response: {}".format(
                         msg.id, msg.method, msg.response))
 
-                _is_success = 'FAILURE | Could not acquire lock'
-                while 'FAILURE | Could not acquire lock' in _is_success:
-                    _is_success = msg.update(condition=self.messaging_owner_condition)
+                _is_success = 'FAILURE'
+                while 'FAILURE' in _is_success and (self.current_time_seconds() - self.millisec_to_sec(msg.updated)) <= self.conf.messaging_server.response_timeout:
+                    _is_success = msg.update()
+                    LOG.info(_LI("updating the message status from working to {}, "
+                                 "atomic update response from MUSIC {}").format(msg.status, _is_success))
 
             except Exception:
                 LOG.exception(_LE("Can not send reply for message {} "
@@ -472,9 +474,6 @@ class RPCService(cotyledon.Service):
         # Listen for messages within a thread
         executor = futurist.ThreadPoolExecutor()
         while self.running:
-            # Delay time (Seconds) for MUSIC requests.
-            time.sleep(self.conf.delay_time)
-
             fut = executor.submit(self.__check_for_messages)
             fut.result()
         executor.shutdown()

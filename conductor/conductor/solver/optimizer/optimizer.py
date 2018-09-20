@@ -1,4 +1,3 @@
-#!/bin/python
 #
 # -------------------------------------------------------------------------
 #   Copyright (c) 2015-2017 AT&T Intellectual Property
@@ -18,10 +17,11 @@
 # -------------------------------------------------------------------------
 #
 
-
 from oslo_config import cfg
 from oslo_log import log
+import copy
 import time
+
 
 from conductor import service
 # from conductor.solver.optimizer import decision_path as dpath
@@ -30,6 +30,7 @@ from conductor import service
 from conductor.solver.optimizer import fit_first
 from conductor.solver.optimizer import random_pick
 from conductor.solver.request import demand
+from conductor.solver.triage_tool.triage_data import TriageData
 
 LOG = log.getLogger(__name__)
 
@@ -65,49 +66,84 @@ class Optimizer(object):
         # that cleanup. Also, Shankar has confirmed solver/simulators folder needs
         # to go away. Commenting out for now - may be should be removed permanently.
         # Shankar (TODO).
-
         # else:
-            # ''' for simulation '''
-            # req_sim = request_simulator.RequestSimulator(self.conf)
-            # req_sim.generate_requests()
-            # self.requests = req_sim.requests
+        #     ''' for simulation '''
+        #     req_sim = request_simulator.RequestSimulator(self.conf)
+        #     req_sim.generate_requests()
+        #     self.requests = req_sim.requests
 
-    def get_solution(self):
+    def get_solution(self, num_solutions):
+
         LOG.debug("search start")
-
         for rk in self.requests:
             request = self.requests[rk]
             LOG.debug("--- request = {}".format(rk))
 
+            decision_list = list()
+
             LOG.debug("1. sort demands")
             demand_list = self._sort_demands(request)
-
             for d in demand_list:
                 LOG.debug("    demand = {}".format(d.name))
 
             LOG.debug("2. search")
-            st = time.time()
 
-            if not request.objective.goal:
-                LOG.debug("No objective function is provided. "
-                          "Random pick algorithm is used")
-                self.search = random_pick.RandomPick(self.conf)
-                best_path = self.search.search(demand_list, request)
-            else:
-                LOG.debug("Fit first algorithm is used")
-                self.search = fit_first.FitFirst(self.conf)
-                best_path = self.search.search(demand_list,
-                                               request.objective, request,
-                                               self._begin_time)
+            while (num_solutions == 'all' or num_solutions > 0):
 
-            if best_path is not None:
-                self.search.print_decisions(best_path)
-            else:
-                LOG.debug("no solution found")
-            LOG.debug("search delay = {} sec".format(time.time() - st))
-            return best_path
+                LOG.debug("searching for the solution {}".format(len(decision_list) + 1))
+
+                st = time.time()
+                _copy_demand_list = copy.deepcopy(demand_list)
+
+                if not request.objective.goal:
+                    LOG.debug("No objective function is provided. "
+                              "Random pick algorithm is used")
+                    self.search = random_pick.RandomPick(self.conf)
+                    best_path = self.search.search(demand_list, request)
+                else:
+                    LOG.debug("Fit first algorithm is used")
+                    self.search = fit_first.FitFirst(self.conf)
+                    best_path = self.search.search(demand_list,
+                                                   request.objective, request)
+
+                if best_path is not None:
+                    self.search.print_decisions(best_path)
+                else:
+                    LOG.debug("no solution found")
+                    break
+
+                LOG.debug("search delay = {} sec".format(time.time() - st))
+
+                # add the current solution to decision_list
+                decision_list.append(best_path.decisions)
+
+                #remove the candidate with "uniqueness = true"
+                demand_list = copy.deepcopy(_copy_demand_list)
+                self._remove_unique_candidate(request, best_path, demand_list)
+
+                if num_solutions != 'all':
+                    num_solutions -= 1
+            self.search.triageSolver.getSolution(decision_list)
+            return decision_list
+
+    def _remove_unique_candidate(self, _request, current_decision, demand_list):
+
+        # This method is to remove previous solved/used candidate from consideration
+        # when Conductor needs to provide multiple solutions to the user/client
+
+        for demand_name, candidate_attr in current_decision.decisions.items():
+            candidate_uniqueness = candidate_attr.get('uniqueness')
+            if candidate_uniqueness and candidate_uniqueness == 'true':
+                # if the candidate uniqueness is 'false', then remove
+                # that solved candidate from the translated candidates list
+                _request.demands[demand_name].resources.pop(candidate_attr.get('candidate_id'))
+                # update the demand_list
+                for demand in demand_list:
+                    if(getattr(demand, 'name') == demand_name):
+                        demand.resources = _request.demands[demand_name].resources
 
     def _sort_demands(self, _request):
+        LOG.debug(" _sort_demands")
         demand_list = []
 
         # first, find loc-demand dependencies
@@ -115,13 +151,22 @@ class Optimizer(object):
         open_demand_list = []
         for key in _request.constraints:
             c = _request.constraints[key]
-            if c.constraint_type == "distance_to_location":
+            if c.constraint_type == "access_distance":
                 for dk in c.demand_list:
                     if _request.demands[dk].sort_base != 1:
                         _request.demands[dk].sort_base = 1
                         open_demand_list.append(_request.demands[dk])
         for op in _request.objective.operand_list:
-            if op.function.func_type == "distance_between":
+            if op.function.func_type == "latency_between": #TODO   do i need to include the region_group here?
+                if isinstance(op.function.loc_a, demand.Location):
+                    if _request.demands[op.function.loc_z.name].sort_base != 1:
+                        _request.demands[op.function.loc_z.name].sort_base = 1
+                        open_demand_list.append(op.function.loc_z)
+                elif isinstance(op.function.loc_z, demand.Location):
+                    if _request.demands[op.function.loc_a.name].sort_base != 1:
+                        _request.demands[op.function.loc_a.name].sort_base = 1
+                        open_demand_list.append(op.function.loc_a)
+            elif op.function.func_type == "distance_between":
                 if isinstance(op.function.loc_a, demand.Location):
                     if _request.demands[op.function.loc_z.name].sort_base != 1:
                         _request.demands[op.function.loc_z.name].sort_base = 1
@@ -162,7 +207,8 @@ class Optimizer(object):
 
             for key in _request.constraints:
                 c = _request.constraints[key]
-                if c.constraint_type == "distance_between_demands":
+                # FIXME(snarayanan): "aic" only to be known by conductor-data
+                if c.constraint_type == "aic_distance":
                     if d.name in c.demand_list:
                         for dk in c.demand_list:
                             if dk != d.name and \
@@ -172,7 +218,25 @@ class Optimizer(object):
                                     _request.demands[dk])
 
             for op in _request.objective.operand_list:
-                if op.function.func_type == "distance_between":
+                if op.function.func_type == "latency_between":  #TODO
+                    if op.function.loc_a.name == d.name:
+                        if op.function.loc_z.name in \
+                                _request.demands.keys():
+                            if _request.demands[
+                                    op.function.loc_z.name].sort_base != 1:
+                                _request.demands[
+                                    op.function.loc_z.name].sort_base = 1
+                                _open_demand_list.append(op.function.loc_z)
+                    elif op.function.loc_z.name == d.name:
+                        if op.function.loc_a.name in \
+                                _request.demands.keys():
+                            if _request.demands[
+                                    op.function.loc_a.name].sort_base != 1:
+                                _request.demands[
+                                    op.function.loc_a.name].sort_base = 1
+                                _open_demand_list.append(op.function.loc_a)
+
+                elif op.function.func_type == "distance_between":
                     if op.function.loc_a.name == d.name:
                         if op.function.loc_z.name in \
                                 _request.demands.keys():
@@ -201,14 +265,3 @@ class Optimizer(object):
                 break
         return not_sorted_demand
 
-
-# Used for testing. This file is in .gitignore and will NOT be checked in.
-CONFIG_FILE = ''
-
-''' for unit test '''
-if __name__ == "__main__":
-    # Prepare service-wide components (e.g., config)
-    conf = service.prepare_service([], config_files=[CONFIG_FILE])
-
-    opt = Optimizer(conf)
-    opt.get_solution()

@@ -19,6 +19,7 @@
 
 import pecan
 
+from conductor import version as conductor_version
 from conductor.api.controllers import errors
 from conductor.api.controllers.v1 import root as v1
 
@@ -36,7 +37,7 @@ class RootController(object):
     def index(self):
         """Catchall for all methods"""
         base_url = pecan.request.application_url
-        available = [{'tag': 'v1', 'date': '2016-11-01T00:00:00Z', }]
+        available = [{'tag': 'v1', 'date': '2016-11-01T00:00:00Z', },{'tag': 'v1', 'date': '2018-02-01T00:00:00Z', }]
         collected = [version_descriptor(base_url, v['tag'], v['date'])
                      for v in available]
         versions = {'versions': collected}
@@ -46,12 +47,14 @@ class RootController(object):
 def version_descriptor(base_url, version, released_on):
     """Version Descriptor"""
     url = version_url(base_url, version)
+    version_current = conductor_version.version_info.version_string()
     return {
+
         'id': version,
+        'version': "of-has:{}".format( str(version_current)),
         'links': [
             {'href': url, 'rel': 'self', },
-            {'href': 'https://wiki.onap.org/pages'
-                     '/viewpage.action?pageId=16005528',
+            {'href': 'https://wiki.onap.org/pages/viewpage.action?pageId=16005528',
              'rel': 'describedby', 'type': 'text/html', }],
         'media-types': [
             {'base': 'application/json', 'type': MEDIA_TYPE_JSON % version, }],
