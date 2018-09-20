@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a76adc5_9e4ca6c9",
+        "filename": "conductor/conductor/api/adapters/aaf/aaf_authentication.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1739
+      },
+      "writtenOn": "2018-09-20T20:18:57Z",
+      "side": 1,
+      "message": "Suppose there are two users accessing has - user1 and user2. We want user1 to have access to our \u0027get_plan\u0027 endpoint but user2 can access the \u0027release\u0027 endpoint.\n\nLooks like its expected that \u0027get_plan\u0027 endpoint will be entered as a \u0027permission\u0027 under one his/her roles in AAF? Similary, user2 will be checked against a permission that contains \u0027release\u0027?",
+      "range": {
+        "startLine": 83,
+        "startChar": 24,
+        "endLine": 83,
+        "endChar": 26
+      },
+      "revId": "cddb18b67cb8b6f5cb96b428351d7c232f670a8c",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
