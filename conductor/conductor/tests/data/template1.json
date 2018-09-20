@@ -1,0 +1,63 @@
+{
+  "conductor_solver": {
+    "version": "2016-09-29",
+    "plan_id": "257cf581-1cb7-4f54-9de3-08674298dc2f",
+    "tracing_id": "b6daf967-f083-4cf9-9696-042b132f5756",
+    "demands": {
+      "vvig1": {
+        "candidates": [
+          {
+            "inventory_type": "service",
+            "candidate_id": "vvig100",
+            "location_id": "sec01",
+            "location_type": "aic",
+            "cost": "1"
+          },
+          {
+            "inventory_type": "service",
+            "candidate_id": "vvig101",
+            "location_id": "mor01",
+            "location_type": "aic",
+            "cost": "10"
+          },
+          {
+            "inventory_type": "service",
+            "candidate_id": "vvig103",
+            "location_id": "phi01",
+            "location_type": "aic",
+            "cost": "100"
+          }
+        ]
+      }
+    },
+    "locations": {
+      "bedminster": {
+        "latitude": "40.669264",
+        "longitude": "-74.680400"
+      }
+    },
+    "constraints": {
+      "vvig1_distance_to_bedminster": {
+        "type": "access_distance",
+        "demands": "vvig1",
+        "properties": {
+          "location_id": "bedminster",
+          "operator": "<",
+          "distance": "500"
+        }
+      }
+    },
+    "objective" : {
+      "goal": "min",
+      "operation" : "sum",
+      "operands" : [
+        {
+          "operation": "product",
+          "weight": "1.0",
+          "function": "distance_between",
+          "function_param": ["vvig1", "bedminster"]
+        }
+      ]  
+    }
+  }
+}

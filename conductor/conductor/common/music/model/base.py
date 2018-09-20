@@ -101,6 +101,7 @@ class Base(object):
         kwargs['values'] = self.values()
         kwargs['atomic'] = self.atomic()
         pk_name = kwargs['pk_name']
+
         if pk_name not in kwargs['values']:
             # TODO(jdandrea): Make uuid4() generation a default method in Base.
             the_id = str(uuid.uuid4())
@@ -109,7 +110,8 @@ class Base(object):
             setattr(self, pk_name, the_id)
         else:
             kwargs['pk_value'] = kwargs['values'][pk_name]
-        api.MUSIC_API.row_create(**kwargs)
+        response = api.MUSIC_API.row_create(**kwargs)
+        return response
 
     def update(self, condition=None):
         """Update row"""
@@ -123,8 +125,9 @@ class Base(object):
         kwargs['condition'] = condition
         # FIXME(jdandrea): Do we need this test/pop clause?
         pk_name = kwargs['pk_name']
-        if pk_name in kwargs['values']:
-            kwargs['values'].pop(pk_name)
+        if kwargs['table'] != ('order_locks'):
+            if pk_name in kwargs['values']:
+                kwargs['values'].pop(pk_name)
         return api.MUSIC_API.row_update(**kwargs)
 
     def delete(self):

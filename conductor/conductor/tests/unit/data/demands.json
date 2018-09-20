@@ -26,5 +26,12 @@
         "inventory_type": "cloud"
       }
     ]
-  }
+  },
+  "triage_translator_data": {
+        "plan_id": "plan_abc",
+        "plan_name": "plan_name",
+        "translator_triage": [],
+        "dropped_candidates": []
+    }
+
 }

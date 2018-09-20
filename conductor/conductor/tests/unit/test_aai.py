@@ -15,8 +15,10 @@ class TestConstaintAccessDistance(unittest.TestCase, AccessDistance):
         self.parserExpected = {
                                "demands": {},
                                "locations": {},
+                               "obj_func_param": {},
                                "cei": "null",
                                "region_gen": "null",
+                               "region_group": {},
                                "request_id": "null",
                                "request_type": "null",
                                "objective": "null",

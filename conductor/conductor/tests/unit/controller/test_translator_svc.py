@@ -96,7 +96,7 @@ class TestTranslatorServiceNoException(unittest.TestCase):
                           int(round(time.time())))
 
     @patch('conductor.common.music.model.base.Base.insert')
-    @patch('conductor.common.music.model.search.Query.all')
+    @patch('conductor.common.music.model.search.Query.get_plan_by_col')
     @patch('conductor.common.music.model.base.Base.update')
     def test_reset_template_status(self, mock_call, mock_update, mock_insert):
         mock_plan = self.Plan(str(uuid.uuid4()),

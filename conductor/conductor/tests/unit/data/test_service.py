@@ -42,6 +42,7 @@ class TestDataEndpoint(unittest.TestCase):
             vc_ext.Manager(cfg.CONF, 'conductor.vim_controller.plugin'))
         sc_ext_manager = (
             sc_ext.Manager(cfg.CONF, 'conductor.service_controller.plugin'))
+
         self.data_ep = DataEndpoint(ip_ext_manager,
                                     vc_ext_manager,
                                     sc_ext_manager)
@@ -204,6 +205,7 @@ class TestDataEndpoint(unittest.TestCase):
     def test_reslove_demands(self, ext_mock, logutil_mock, info_mock,
                              debug_mock,
                              error_mock):
+        self.maxDiff = None
         req_json_file = './conductor/tests/unit/data/demands.json'
         req_json = yaml.safe_load(open(req_json_file).read())
         ctxt = {
@@ -212,14 +214,21 @@ class TestDataEndpoint(unittest.TestCase):
         }
         logutil_mock.return_value = uuid.uuid4()
         ext_mock.return_value = []
-        expected_response = {'response': {'resolved_demands': None},
+        expected_response = {'response': {'resolved_demands': None, 'trans': {'plan_id': None,
+                                                                                      'plan_name': None,
+                                                                                      'translator_triage': []}},
                              'error': True}
         self.assertEqual(expected_response,
                          self.data_ep.resolve_demands(ctxt, req_json))
         return_value = req_json['demands']['vG']
         ext_mock.return_value = [return_value]
-        expected_response = {'response': {'resolved_demands': return_value},
-                             'error': False}
+        expected_response = { 'error': False, 'response':
+            { 'resolved_demands':
+                  [{ 'attributes':
+                         { 'customer-id': 'some_company', 'provisioning-status': 'provisioned' },
+                     'inventory_provider': 'aai', 'inventory_type': 'service', 'service_type': 'vG' },
+                   { 'inventory_provider': 'aai', 'inventory_type': 'cloud' } ],
+              'trans': { 'plan_id': 'plan_abc', 'plan_name': 'plan_name', 'translator_triage': [ [] ] } } }
         self.assertEqual(expected_response,
                          self.data_ep.resolve_demands(ctxt, req_json))
 

@@ -18,6 +18,7 @@
 #
 """Test classes for translator"""
 
+import mock
 import os
 import unittest
 import uuid
@@ -26,6 +27,7 @@ import yaml
 from conductor import __file__ as conductor_root
 from conductor.controller.translator import Translator
 from conductor.controller.translator import TranslatorException
+from conductor.data.plugins.triage_translator.triage_translator import TraigeTranslator
 from mock import patch
 from oslo_config import cfg
 
@@ -124,6 +126,9 @@ class TestNoExceptionTranslator(unittest.TestCase):
 
     @patch('conductor.common.music.messaging.component.RPCClient.call')
     def test_parse_demands_with_candidate(self, mock_call):
+
+        TraigeTranslator.thefinalCallTrans = mock.MagicMock(return_value=None)
+
         demands = {
             "vGMuxInfra": [{
                 "inventory_provider": "aai",
@@ -164,6 +169,8 @@ class TestNoExceptionTranslator(unittest.TestCase):
 
     @patch('conductor.common.music.messaging.component.RPCClient.call')
     def test_parse_demands_without_candidate(self, mock_call):
+        
+        TraigeTranslator.thefinalCallTrans = mock.MagicMock(return_value=None)  
         demands = {
             "vGMuxInfra": [{
                 "inventory_provider": "aai",
@@ -688,14 +695,27 @@ class TestNoExceptionTranslator(unittest.TestCase):
 
     @patch('conductor.controller.translator.Translator.create_components')
     def test_parse_reservation(self, mock_create):
-        expected_resv = {'counter': 0, 'demands': {
-            'instance_vG': {'demands': {'vG': 'null'},
-                            'properties': {},
-                            'name': 'instance',
-                            'demand': 'vG'}}}
+        expected_resv = {
+            'counter': 0,
+            'demands': {
+                'instance_vG': {
+                    'demands': 'vG',
+                    'name': 'instance',
+                    'properties': {}
+                }
+            },
+            'service_model': 'null'
+        }
         self.Translator._demands = {'vG': 'null'}
         resv = {
-            'instance': {'demands': {'vG': 'null'}}
+            'service_model': 'null',
+            'service_candidates': {
+                'instance': {
+                    'demands': {
+                        'vG': 'null'
+                    }
+                }
+            }
         }
         self.assertEquals(
             self.Translator.parse_reservations(resv), expected_resv)

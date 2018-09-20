@@ -18,15 +18,18 @@
 #
 
 """Music Data Store API"""
-import base64
+
 import copy
 import logging
+import json
 import time
 
-from conductor.common import rest
-from conductor.i18n import _LE, _LI  # pylint: disable=W0212
 from oslo_config import cfg
 from oslo_log import log
+
+from conductor.common import rest
+from conductor.common.utils import basic_auth_util
+from conductor.i18n import _LE, _LI  # pylint: disable=W0212
 
 LOG = log.getLogger(__name__)
 
@@ -67,6 +70,7 @@ MUSIC_API_OPTS = [
                 help='Use mock API'),
     cfg.StrOpt('music_topology',
                default='SimpleStrategy'),
+    #TODO(larry); make the config inputs more generic
     cfg.StrOpt('first_datacenter_name',
                help='Name of the first data center'),
     cfg.IntOpt('first_datacenter_replicas',
@@ -79,16 +83,11 @@ MUSIC_API_OPTS = [
                help='Name of the third data center'),
     cfg.IntOpt('third_datacenter_replicas',
                help='Number of replicas in third data center'),
-    cfg.BoolOpt('music_new_version', 
-               help='new or old version'),
-    cfg.StrOpt('music_version', 
-               help='for version'),
-    cfg.StrOpt('aafuser', 
-               help='for header value'),
-    cfg.StrOpt('aafpass', 
-               help='for header value'),
-    cfg.StrOpt('aafns', 
-               help='for header value'),
+    cfg.BoolOpt('music_new_version', help='new or old version'),
+    cfg.StrOpt('music_version', help='for version'),
+    cfg.StrOpt('aafuser', help='username value that used for creating basic authorization header'),
+    cfg.StrOpt('aafpass', help='password value that used for creating basic authorization header'),
+    cfg.StrOpt('aafns', help='AAF namespace field used in MUSIC request header'),
 ]
 
 CONF.register_opts(MUSIC_API_OPTS, group='music_api')
@@ -107,6 +106,9 @@ class MusicAPI(object):
         """Initializer."""
         global MUSIC_API
 
+        # set the urllib log level to ERROR
+        logging.getLogger('urllib3').setLevel(logging.ERROR)
+
         LOG.info(_LI("Initializing Music API"))
         server_url = CONF.music_api.server_url.rstrip('/')
         if not server_url:
@@ -117,6 +119,7 @@ class MusicAPI(object):
             host = next(iter(CONF.music_api.hostnames or []), 'controller')
             port = CONF.music_api.port or 8080
             path = CONF.music_api.path or '/MUSIC/rest'
+            version = CONF.version
             server_url = 'http://{}:{}/{}'.format(
                 host, port, version, path.rstrip('/').lstrip('/'))
 
@@ -132,15 +135,13 @@ class MusicAPI(object):
             MUSIC_version = CONF.music_api.music_version.split(".")
 
             self.rest.session.headers['content-type'] = 'application/json'
+            self.rest.session.headers['X-minorVersion'] = MUSIC_version[1]
             self.rest.session.headers['X-patchVersion'] = MUSIC_version[2]
             self.rest.session.headers['ns'] = CONF.music_api.aafns
-            # auth_str = 'Basic {}'.format(base64.encodestring(
-            #     '{}:{}'.format(CONF.music_api.aafuser,
-            #                    CONF.music_api.aafpass)).strip())
-            # self.rest.session.headers['Authorization'] = auth_str
-
             self.rest.session.headers['userId'] = CONF.music_api.aafuser
             self.rest.session.headers['password'] = CONF.music_api.aafpass
+            self.rest.session.headers['Authorization'] = basic_auth_util.encode(CONF.music_api.aafuser,
+                                                                                CONF.music_api.aafpass)
 
         self.lock_ids = {}
 
@@ -149,6 +150,7 @@ class MusicAPI(object):
         self.replication_factor = CONF.music_api.replication_factor
         self.music_topology = CONF.music_api.music_topology
 
+        # TODO(larry) make the code more generic
         self.first_datacenter_name = CONF.music_api.first_datacenter_name
         self.first_datacenter_replicas = CONF.music_api.first_datacenter_replicas
         self.second_datacenter_name = CONF.music_api.second_datacenter_name
@@ -191,6 +193,7 @@ class MusicAPI(object):
 
     def _lock_id_create(self, lock_name):
         """Returns the lock id. Use for acquiring and releasing."""
+
         path = '/locks/create/%s' % lock_name
         response = self.rest.request(method='post',
                                      content_type='text/plain', path=path)
@@ -200,6 +203,7 @@ class MusicAPI(object):
         return lock_id
 
     def _lock_id_acquire(self, lock_id):
+
         """Acquire a lock by id. Returns True if successful."""
         path = '/locks/acquire/%s' % lock_id
         response = self.rest.request(method='get',
@@ -220,7 +224,7 @@ class MusicAPI(object):
                      pk_value=None, atomic=False, condition=None):
         """Initialize payload for Music requests.
 
-        Supports atomic operations.
+        Supports atomic operations,
         Returns a payload of data and lock_name (if any).
         """
         #if atomic:
@@ -228,17 +232,18 @@ class MusicAPI(object):
         #else:
         #    lock_name = None
 
-        # lock_id = self.lock_ids.get(lock_name)
+        #lock_id = self.lock_ids.get(lock_name)
         data = {
             'consistencyInfo': {
                 'type': 'atomic' if condition else 'eventual',
             }
         }
 
+
         if condition:
             data['conditions'] = condition
 
-        # , 'lock_name': lock_name
+        #, 'lock_name': lock_name
         return {'data': data}
 
     def payload_delete(self, payload):
@@ -252,10 +257,12 @@ class MusicAPI(object):
             self.lock_delete(lock_name)
 
     def keyspace_create(self, keyspace):
+
         """Creates a keyspace."""
         payload = self.payload_init()
         data = payload.get('data')
         data['durabilityOfWrites'] = True
+
         replication_info = {
             'class': self.music_topology,
         }
@@ -276,6 +283,11 @@ class MusicAPI(object):
         if CONF.music_api.debug:
             LOG.debug("Creating keyspace {}".format(keyspace))
         response = self.rest.request(method='post', path=path, data=data)
+
+        if response and CONF.music_api.music_new_version:
+            result = response.json().get('result')
+            return result
+
         return response and response.ok
 
     def keyspace_delete(self, keyspace):
@@ -329,7 +341,7 @@ class MusicAPI(object):
         return response and response.ok
 
     def row_create(self, keyspace, table,  # pylint: disable=R0913
-                   pk_name, pk_value, values, atomic=False):
+                   pk_name, pk_value, values, atomic=False, conditional=False):
         """Create a row."""
         payload = self.payload_init(keyspace, table, pk_value, atomic)
         data = payload.get('data')
@@ -358,7 +370,12 @@ class MusicAPI(object):
             LOG.debug("Updating row with pk_value {} in table "
                       "{}, keyspace {}".format(pk_value, table, keyspace))
         response = self.rest.request(method='put', path=path, data=data)
-        # self.payload_delete(payload)
+        #self.payload_delete(payload)
+        if response is not None and CONF.music_api.music_new_version:
+            response_json = json.loads(response.content)
+            response_status = response_json.get("status")
+            return response_status
+
         return response and response.ok and response.content
 
     def row_read(self, keyspace, table, pk_name=None, pk_value=None):
@@ -368,6 +385,11 @@ class MusicAPI(object):
             LOG.debug("Reading row with pk_value {} from table "
                       "{}, keyspace {}".format(pk_value, table, keyspace))
         response = self.rest.request(path=path)
+
+        if response is not None and CONF.music_api.music_new_version:
+            result = response.json().get('result') or {}
+            return result
+
         return response and response.json()
 
     def row_delete(self, keyspace, table, pk_name, pk_value, atomic=False):
@@ -382,6 +404,109 @@ class MusicAPI(object):
         response = self.rest.request(method='delete', path=path, data=data)
         self.payload_delete(payload)
         return response and response.ok
+
+    def row_insert_by_condition(self, keyspace, table, pk_name, pk_value, values, exists_status):
+
+        """Insert a row with certain condition."""
+        # Get the plan id from plans field
+        plan_id = next(iter(values.get('plans')))
+
+        # If id does not exist in order_locks table, insert the 'values_when_id_non_exist'
+        values_when_id_non_exist = values.get('plans')[plan_id]
+
+        # If id exists in order_locks table, insert the 'values_when_id_exist'
+        values_when_id_exist = copy.deepcopy(values_when_id_non_exist)
+        values_when_id_exist['status'] = exists_status
+
+        # Common values for new MUSIC api
+        common_values = copy.deepcopy(values_when_id_non_exist)
+        common_values.pop('status', None)
+
+        if (CONF.music_api.music_new_version):
+            #  Conditional Insert request body sends to new version of MUSIC (2.5.5 and lator)
+            data = {
+               "primaryKey": pk_name,
+               "primaryKeyValue": pk_value,
+
+               "casscadeColumnName": "plans",
+               "tableValues": {
+                   "id": pk_value,
+                   "is_spinup_completed": values.get('is_spinup_completed')
+               },
+               "casscadeColumnData": {
+                   "key": plan_id,
+                   "value": common_values
+               },
+               "conditions": {
+                   "exists": {
+                       "status": values_when_id_exist.get('status')
+                   },
+                   "nonexists": {
+                       "status": values_when_id_non_exist.get('status')
+                   }
+               }
+            }
+
+        else:
+            data = {
+                "primaryKey": pk_name,
+                "primaryKeyValue": pk_value,
+                "cascadeColumnKey": plan_id,
+                "cascadeColumnName": "plans",
+                "values":{
+                    "id": pk_value,
+                    "is_spinup_completed": values.get('is_spinup_completed')
+                },
+                "nonExistsCondition": {
+                    "value": values_when_id_non_exist
+                },
+                "existsCondition": {
+                    "value": values_when_id_exist
+                }
+            }
+
+        #conditional/update/keyspaces/conductor_order_locks/tables/order_locks
+        path = '/conditional/insert/keyspaces/%(keyspace)s/tables/%(table)s' % {
+            'keyspace': keyspace,
+            'table': table,
+        }
+        response = self.rest.request(method='post', path=path, data=data)
+        return response
+
+
+    def row_complex_field_update(self, keyspace, table, pk_name, pk_value, plan_id, updated_fields, values):
+
+        if (CONF.music_api.music_new_version):
+            # new version of MUSIC
+            data = {
+                "primaryKey": pk_name,
+                "primaryKeyValue": pk_value,
+                "casscadeColumnName": "plans",
+                "tableValues": values,
+                "casscadeColumnData": {
+                    "key": plan_id,
+                    "value": updated_fields
+                }
+            }
+        else:
+            data = {
+                "primaryKey": pk_name,
+                "primaryKeyValue": pk_value,
+                "cascadeColumnName": "plans",
+                "planId": plan_id,
+                "updateStatus": updated_fields,
+                "values": values
+            }
+
+        path = '/conditional/update/keyspaces/%(keyspace)s/tables/%(table)s' % {
+            'keyspace': keyspace,
+            'table': table,
+        }
+        response = self.rest.request(method='put', path=path, data=data)
+        LOG.debug("Updated the order {} status to {} for conflict_id {} in "
+                  "order_locks table, response from MUSIC {}".format(plan_id, updated_fields, pk_value, response))
+        return response and response.ok
+
 
     @staticmethod
     def _table_path_generate(keyspace, table):
@@ -437,9 +562,6 @@ class MockAPI(object):
         LOG.info(_LI("Initializing Music Mock API"))
 
         global MUSIC_API
-
-        # set the urllib log level to ERROR
-        logging.getLogger('urllib3').setLevel(logging.ERROR)
 
         self.music['keyspaces'] = {}
 

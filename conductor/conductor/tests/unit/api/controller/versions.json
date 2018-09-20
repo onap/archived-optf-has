@@ -1,26 +1,35 @@
 {
-  "versions": [
-    {
-      "id": "v1",
-      "media-types": [
-        {
-          "type": "application/vnd.onap.has-v1+json",
-          "base": "application/json"
-        }
-      ],
-      "updated": "2016-11-01T00:00:00Z",
-      "links": [
-        {
-          "rel": "self",
-          "href": "http://localhost/v1"
-        },
-        {
-          "type": "text/html",
-          "rel": "describedby",
-          "href": "https://wiki.onap.org/pages/viewpage.action?pageId=16005528"
-        }
-      ],
-      "status": "EXPERIMENTAL"
-    }
-  ]
+	"versions": [{
+		"id": "v1",
+		"links": [{
+			"href": "http://localhost/v1",
+			"rel": "self"
+		}, {
+			"href": "https://wiki.onap.org/pages/viewpage.action?pageId=16005528",
+			"rel": "describedby",
+			"type": "text/html"
+		}],
+		"media-types": [{
+			"base": "application/json",
+			"type": "application/vnd.onap.has-v1+json"
+		}],
+		"status": "EXPERIMENTAL",
+		"updated": "2016-11-01T00:00:00Z"
+	}, {
+		"id": "v1",
+		"links": [{
+			"href": "http://localhost/v1",
+			"rel": "self"
+		}, {
+			"href": "https://wiki.onap.org/pages/viewpage.action?pageId=16005528",
+			"rel": "describedby",
+			"type": "text/html"
+		}],
+		"media-types": [{
+			"base": "application/json",
+			"type": "application/vnd.onap.has-v1+json"
+		}],
+		"status": "EXPERIMENTAL",
+		"updated": "2018-02-01T00:00:00Z"
+	}]
 }

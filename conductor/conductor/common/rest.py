@@ -137,7 +137,9 @@ class REST(object):
         response = None
         for attempt in range(self.retries):
             if attempt > 0:
-                LOG.warn(_LW("Retry #{}/{}").format(
+                # No need to show 400 bad requests from Music - Ignorable when lock cannot be received at one particular point in time
+                if "MUSIC" not in full_url:
+                    LOG.warn(_LW("Retry #{}/{}").format(
                     attempt + 1, self.retries))
 
             try:
@@ -149,8 +151,10 @@ class REST(object):
                 response.close()
 
                 if not response.ok:
-                    LOG.warn("Response Status: {} {}".format(
-                        response.status_code, response.reason))
+                    # No need to show 400 bad requests from Music - Ignorable when lock cannot be received at one particular point in time
+                    if "MUSIC" not in full_url:
+                        LOG.warn("Response Status: {} {}".format(
+                            response.status_code, response.reason))
                 if self.log_debug and response.text:
                     try:
                         response_dict = json.loads(response.text)
@@ -167,6 +171,8 @@ class REST(object):
         # That means we must check the object type vs treating it as a bool.
         # More info: https://github.com/kennethreitz/requests/issues/2002
         if isinstance(response, requests.models.Response) and not response.ok:
-            LOG.error(_LE("Status {} {} after {} retries for URL: {}").format(
-                response.status_code, response.reason, self.retries, full_url))
+            # No need to show 400 bad requests from Music - Ignorable when lock cannot be received at one particular point in time
+            if "MUSIC" not in full_url:
+                LOG.error(_LE("Status {} {} after {} retries for URL: {}").format(
+                    response.status_code, response.reason, self.retries, full_url))
         return response
