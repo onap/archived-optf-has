@@ -20,6 +20,7 @@
 import mock
 import unittest
 
+from conductor.common.music import api
 from conductor.solver.request import demand
 from conductor.solver.request.parser import Parser as SolverRequestParser
 from conductor.solver.optimizer.constraints import access_distance as access_dist
@@ -31,6 +32,8 @@ class TestSolverParser(unittest.TestCase):
 
 
     def setUp(self):
+        # Initialize music API
+        music = api.API()
         self.sp = SolverRequestParser()
 
         c1 = access_dist.AccessDistance(_name = 'c1', _type = 't1', _demand_list = ['d1', 'd2'])
