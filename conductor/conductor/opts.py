@@ -22,6 +22,7 @@ import itertools
 import conductor.api.app
 import conductor.common.music.api
 import conductor.common.music.messaging.component
+import conductor.common.prometheus_metrics
 import conductor.common.sms
 import conductor.conf.inventory_provider
 import conductor.conf.service_controller
@@ -70,4 +71,5 @@ def list_opts():
         ('solver', conductor.solver.service.SOLVER_OPTS),
         ('reservation', conductor.reservation.service.reservation_OPTS),
         ('aaf_sms', conductor.common.sms.AAF_SMS_OPTS),
+        ('prometheus', conductor.common.prometheus_metrics.METRICS_OPTS),
     ]

@@ -21,12 +21,12 @@
 '''Utility functions for
    Hardware Platform Awareness (HPA) constraint plugin'''
 
-# python imports
-import yaml
 import operator
 
-from conductor.i18n import _LE, _LI
-
+import conductor.common.prometheus_metrics as PC
+# python imports
+import yaml
+from conductor.i18n import _LI
 # Third-party library imports
 from oslo_log import log
 
@@ -55,6 +55,7 @@ class HpaMatchProvider(object):
     def __init__(self, candidate, req_cap_list):
         self.flavors_list = candidate['flavors']['flavor']
         self.req_cap_list = req_cap_list
+        self.m_vim_id = candidate.get('vim-id')
 
     # Find the flavor which has all the required capabilities
     def match_flavor(self):
@@ -76,6 +77,11 @@ class HpaMatchProvider(object):
                 flavor_cap_list = flavor['hpa-capabilities']
             except KeyError:
                 LOG.info(_LI("hpa-capabilities not found in flavor "))
+                # Metrics to Prometheus
+                m_flavor_name = flavor['flavor-name']
+                PC.HPA_FLAVOR_MATCH_UNSUCCESSFUL.labels('ONAP', 'N/A', 'N/A',
+                                                      'N/A', self.m_vim_id,
+                                                      m_flavor_name).inc()
                 continue
             for capability in CapabilityDataParser.get_item(flavor_cap_list,
                                                             'hpa-capability'):
@@ -88,6 +94,11 @@ class HpaMatchProvider(object):
                 if match_found:
                     LOG.info(_LI("Matching Flavor found '{}' for request - {}").
                              format(flavor['flavor-name'], self.req_cap_list))
+                    # Metrics to Prometheus
+                    m_flavor_name = flavor['flavor-name']
+                    PC.HPA_FLAVOR_MATCH_SUCCESSFUL.labels('ONAP', 'N/A', 'N/A',
+                                                          'N/A', self.m_vim_id,
+                                                          m_flavor_name).inc()
                     if score > max_score:
                         max_score = score
                         flavor_map = {"flavor-id": flavor['flavor-id'],
@@ -95,6 +106,20 @@ class HpaMatchProvider(object):
                                       "score": max_score}
                         directives = {"flavor_map": flavor_map,
                                       "directives": req_directives}
+                else:
+                    # Metrics to Prometheus
+                    m_flavor_name = flavor['flavor-name']
+                    PC.HPA_FLAVOR_MATCH_UNSUCCESSFUL.labels('ONAP', 'N/A',
+                                                            'N/A', 'N/A',
+                                                            self.m_vim_id,
+                                                            m_flavor_name).inc()
+            else:
+                # Metrics to Prometheus
+                m_flavor_name = flavor['flavor-name']
+                PC.HPA_FLAVOR_MATCH_UNSUCCESSFUL.labels('ONAP', 'N/A',
+                                                        'N/A', 'N/A',
+                                                        self.m_vim_id,
+                                                        m_flavor_name).inc()
         return directives
 
 
