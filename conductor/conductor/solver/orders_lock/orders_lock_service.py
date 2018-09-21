@@ -19,6 +19,8 @@
 
 import json
 import time
+
+from conductor.common.music import api
 from oslo_log import log
 from oslo_config import cfg
 from conductor.common.models.plan import Plan
@@ -31,6 +33,10 @@ LOG = log.getLogger(__name__)
 class OrdersLockingService(object):
 
     def __init__(self):
+
+        # Set up Music access.
+        self.music = api.API()
+        self.music.keyspace_create(keyspace=CONF.keyspace)
         self.Plan = base.create_dynamic_model(keyspace=CONF.keyspace, baseclass=Plan, classname="Plan")
         self.OrderLock = base.create_dynamic_model(
             keyspace=CONF.keyspace, baseclass=OrderLock, classname="OrderLock")

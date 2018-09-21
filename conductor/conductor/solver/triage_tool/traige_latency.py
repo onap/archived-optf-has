@@ -22,6 +22,7 @@ import json
 import unicodedata
 
 from conductor.common.models.triage_tool import TriageTool
+from conductor.common.music import api
 from conductor.common.music.model import base
 from oslo_config import cfg
 from StringIO import StringIO
@@ -33,6 +34,9 @@ io = StringIO()
 class TriageLatency(object):
 
     def __init__(self):
+        # Set up Music access.
+        self.music = api.API()
+        self.music.keyspace_create(keyspace=CONF.keyspace)
         self.TriageTool = base.create_dynamic_model(
             keyspace=CONF.keyspace, baseclass=TriageTool, classname="TriageTool")
         self.optimzation={}
