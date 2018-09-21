@@ -20,6 +20,7 @@
 # import json
 # import os
 
+import conductor.common.prometheus_metrics as PC
 import cotyledon
 from conductor import messaging
 # from conductor import __file__ as conductor_root
@@ -71,6 +72,10 @@ class DataServiceLauncher(object):
         """Initializer."""
 
         self.conf = conf
+
+        # Initialize Prometheus metrics Endpoint
+        # Data service uses index 0
+        PC._init_metrics(0)
         self.init_extension_managers(conf)
 
 
@@ -489,11 +494,18 @@ class DataEndpoint(object):
                         "inventory provider: {} for candidate: {}").format(
                         self.ip_ext_manager.names()[0],
                         candidate_list[i].get("candidate_id")))
+
+            # Metrics to Prometheus
+            m_vim_id = candidate_list[i].get("vim-id")
             if not flavor_info:
                 discard_set.add(candidate_list[i].get("candidate_id"))
+                PC.HPA_CLOUD_REGION_UNSUCCESSFUL.labels('ONAP', 'N/A',
+                                                        m_vim_id).inc()
             else:
                 if not flavor_info.get("flavor-name"):
                     discard_set.add(candidate_list[i].get("candidate_id"))
+                    PC.HPA_CLOUD_REGION_UNSUCCESSFUL.labels('ONAP', 'N/A',
+                                                            m_vim_id).inc()
                 else:
                     if not candidate_list[i].get("flavor_map"):
                         candidate_list[i]["flavor_map"] = {}
@@ -509,6 +521,10 @@ class DataEndpoint(object):
                     if not candidate_list[i].get("hpa_score"):
                         candidate_list[i]["hpa_score"] = 0
                     candidate_list[i]["hpa_score"] += flavor_info.get("score")
+
+                    # Metrics to Prometheus
+                    PC.HPA_CLOUD_REGION_SUCCESSFUL.labels('ONAP', 'N/A',
+                                                          m_vim_id).inc()
 
         # return candidates not in discard set
         candidate_list[:] = [c for c in candidate_list

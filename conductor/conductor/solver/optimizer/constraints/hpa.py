@@ -23,6 +23,7 @@
 
 # python imports
 
+import conductor.common.prometheus_metrics as PC
 from conductor.i18n import _LE, _LI
 # Conductor imports
 from conductor.solver.optimizer.constraints import constraint
@@ -67,6 +68,10 @@ class HPA(constraint.Constraint):
             if not response:
                 LOG.error(_LE("No matching candidates for HPA exists").format(
                     id))
+
+                # Metrics to Prometheus
+                PC.HPA_CLOUD_REGION_UNSUCCESSFUL.labels('ONAP', 'N/A',
+                                                        'ALL').inc()
                 break
                 # No need to continue.
 
