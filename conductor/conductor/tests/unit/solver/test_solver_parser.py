@@ -20,17 +20,23 @@
 import mock
 import unittest
 
+from conductor.common.music import api
 from conductor.solver.request import demand
 from conductor.solver.request.parser import Parser as SolverRequestParser
 from conductor.solver.optimizer.constraints import access_distance as access_dist
 from conductor.solver.triage_tool.traige_latency import TriageLatency
 from collections import OrderedDict
+from oslo_config import cfg
 
 
 class TestSolverParser(unittest.TestCase):
 
 
     def setUp(self):
+        # Initialize music API
+        music = api.API()
+        cfg.CONF.set_override('keyspace', 'conductor')
+        music.keyspace_create(keyspace=cfg.CONF.keyspace)
         self.sp = SolverRequestParser()
 
         c1 = access_dist.AccessDistance(_name = 'c1', _type = 't1', _demand_list = ['d1', 'd2'])
