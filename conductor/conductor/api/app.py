@@ -33,7 +33,7 @@ LOG = log.getLogger(__name__)
 
 CONF = cfg.CONF
 
-OPTS = [
+WSGI_OPTS = [
     cfg.StrOpt('api_paste_config',
                default="api_paste.ini",
                help="Configuration file for WSGI definition of API."
@@ -51,7 +51,7 @@ API_OPTS = [
                ),
 ]
 
-CONF.register_opts(OPTS)
+CONF.register_opts(WSGI_OPTS)
 CONF.register_opts(API_OPTS, group='api')
 
 # Pull in service opts. We use them here.
