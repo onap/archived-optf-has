@@ -46,10 +46,10 @@ SDNC_OPTS = [
     cfg.StrOpt('password',
                help='Basic Authentication Password'),
     cfg.StrOpt('sdnc_rest_timeout',
-               default=30,
+               default='30',
                help='Timeout for SDNC Rest Call'),
     cfg.StrOpt('sdnc_retries',
-               default=3,
+               default='3',
                help='Retry Numbers for SDNC Rest Call'),
 ]
 
