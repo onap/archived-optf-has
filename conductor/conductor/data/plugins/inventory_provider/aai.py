@@ -55,10 +55,10 @@ AAI_OPTS = [
                help='Base URL for A&AI, up to and not including '
                     'the version, and without a trailing slash.'),
     cfg.StrOpt('aai_rest_timeout',
-               default=30,
+               default='30',
                help='Timeout for A&AI Rest Call'),
     cfg.StrOpt('aai_retries',
-               default=3,
+               default='3',
                help='Number of retry for A&AI Rest Call'),
     cfg.StrOpt('server_url_version',
                default='v10',
