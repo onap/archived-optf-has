@@ -113,7 +113,7 @@ def get_aaf_permissions(uid, passwd):
 
     if perms and datetime.now() < perms.get(EXPIRE_TIME):
         LOG.debug("Returning cached value")
-        return perms
+        return perms['roles']
     LOG.debug("Invoking AAF authentication API")
     response = remote_api(passwd, uid)
     perms = {EXPIRE_TIME: datetime.now() + time_delta, 'roles': response}

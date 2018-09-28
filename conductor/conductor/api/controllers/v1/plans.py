@@ -350,8 +350,8 @@ def verify_user(authstr):
     user_pw = auth_str.split(' ')[1]
     decode_user_pw = base64.b64decode(user_pw)
     list_id_pw = decode_user_pw.split(':')
-    user_dict['username'] = list_id_pw[0]
-    user_dict['password'] = list_id_pw[1]
+    user_dict['username'] = str(list_id_pw[0])
+    user_dict['password'] = str(list_id_pw[1])
     password = CONF.conductor_api.password
     username = CONF.conductor_api.username
 

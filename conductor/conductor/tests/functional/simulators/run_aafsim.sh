@@ -17,6 +17,6 @@
 #
 # -------------------------------------------------------------------------
 #
-#   Note mapping to external port 8082. avoids conflict with aaisim
-docker run -d --name aafsim -p 8082:8081  aafsim
+#   Note mapping to external port 8100. avoids conflict with aaisim
+docker run -d --name aafsim -p 8100:8100  aafsim
 

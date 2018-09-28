@@ -27,13 +27,14 @@ ADD ./  /opt/aafsim
 
 # Install any needed packages specified in requirements.txt
 RUN pip install web.py
+RUN pip install oslo.log
 
 # Make port 80 available to the world outside this container
-EXPOSE 8081
+EXPOSE 8100
 
 # Define environment variable
 ENV NAME aafsim
 
 # Run aafsim.py when the container launches
-CMD ["/bin/sh", "-c", "python -u aafsim.py 8081 > /tmp/aafsim.log 2>&1"]
+CMD ["/bin/sh", "-c", "python -u aafsim.py 8100 > /tmp/aafsim.log 2>&1"]
 
