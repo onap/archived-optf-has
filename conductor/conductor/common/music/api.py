@@ -473,6 +473,17 @@ class MusicAPI(object):
         response = self.rest.request(method='post', path=path, data=data)
         return response
 
+    def index_create(self, keyspace, table, index):
+
+        """Create indexes for a particular table"""
+
+        path = '/keyspaces/%(keyspace)s/tables/%(table)s/index/%(field)s' % {
+            'keyspace': keyspace,
+            'table': table,
+            'field': index
+        }
+        response = self.rest.request(method='post', path=path)
+        return response
 
     def row_complex_field_update(self, keyspace, table, pk_name, pk_value, plan_id, updated_fields, values):
 
@@ -580,6 +591,9 @@ class MockAPI(object):
     def _set_table(self, keyspace, table):
         self._keyspaces[keyspace][table] = {}
 
+    def _set_index(self, keyspace, table):
+        self._keyspaces[keyspace][table] = {}
+
     def _unset_table(self, keyspace, table):
         self._keyspaces[keyspace].pop(table)
 
@@ -651,6 +665,13 @@ class MockAPI(object):
         if CONF.music_api.debug:
             LOG.debug("Creating table {}, keyspace {}".format(table, keyspace))
         self._set_table(keyspace, table)
+        return True
+
+    def index_create(self, keyspace, table, index=None):
+        """Creates a index."""
+        if CONF.music_api.debug:
+            LOG.debug("Creating index {}, keyspace {}".format(table, keyspace))
+        self._set_index(keyspace, table)
         return True
 
     def table_delete(self, keyspace, table):

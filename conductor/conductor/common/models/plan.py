@@ -115,6 +115,14 @@ class Plan(base.Base):
         return schema
 
     @classmethod
+    def indexes(cls):
+        """Return indexes """
+        indexes = [
+            'status'
+        ]
+        return indexes
+
+    @classmethod
     def atomic(cls):
         """Use atomic operations"""
         return False
