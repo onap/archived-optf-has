@@ -473,6 +473,59 @@ class MusicAPI(object):
         response = self.rest.request(method='post', path=path, data=data)
         return response
 
+    def index_create(self, keyspace, table, index):
+
+        """Create indexes for a particular table"""
+
+        path = '/keyspaces/%(keyspace)s/tables/%(table)s/index/%(field)s' % {
+            'keyspace': keyspace,
+            'table': table,
+            'field': index
+        }
+        response = self.rest.request(method='post', path=path)
+        return response
+
+        # target_field, target_value, endpoint
+        def trigger_create(self, keyspace, table, protocol,
+                           domain_name, port, target_field=None,
+                           target_value=None):
+            """Create trigger for a particular microservice"""
+            path = '/admin/onboardCallback'
+
+            notify_field = '%(keyspace)s.%(table)s' % {
+                'keyspace': keyspace,
+                'table': table
+            }
+            # Update trigger based on column (with specific value)
+            if target_field and target_value:
+                notify_field += ':%(target_field)s:%(target_value)s' % {
+                    'target_field': target_field,
+                    'target_value': target_value
+                }
+            # Notification endpoint URL
+            endpoint = '%(protocol)s://%(domain_name)s:%(port)s/v1/notification' % {
+                'protocol': protocol,
+                'domain_name': domain_name,
+                'port': port
+            }
+            username = CONF.conductor_basic_auth.username
+            # TODO(larry): after merge the encrypted password branch, change the following
+            password = CONF.conductor_basic_auth.password
+            response_body = {
+                "id": "text"
+            }
+
+            data = {
+                "notify_field": notify_field,
+                "endpoint": endpoint,
+                "username": username,
+                "password": password,
+                "response_body": response_body
+            }
+
+            response = self.rest.request(method='post', path=path, data=data)
+            return response
+
 
     def row_complex_field_update(self, keyspace, table, pk_name, pk_value, plan_id, updated_fields, values):
 

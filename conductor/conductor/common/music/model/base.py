@@ -69,6 +69,13 @@ class Base(object):
         kwargs['schema'] = cls.schema()
         api.MUSIC_API.table_create(**kwargs)
 
+        # Create indexes for the table
+        del kwargs['schema']
+        if cls.indexes():
+            for index in cls.indexes():
+                kwargs['index'] = index
+                api.MUSIC_API.index_create(**kwargs)
+
     @abstractclassmethod
     def atomic(cls):
         """Use atomic operations"""
@@ -78,6 +85,12 @@ class Base(object):
     def schema(cls):
         """Return schema"""
         return cls()
+
+    @abstractclassmethod
+    def indexes(cls):
+        """Return Indexes"""
+        pass
+        # return cls()
 
     @abstractclassmethod
     def pk_name(cls):
