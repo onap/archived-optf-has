@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bada0100_d7e3cb31",
+        "filename": "conductor/conductor/common/music/model/base.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 2845
+      },
+      "writtenOn": "2018-10-02T17:54:13Z",
+      "side": 1,
+      "message": "Change it to @classmethod",
+      "range": {
+        "startLine": 89,
+        "startChar": 5,
+        "endLine": 89,
+        "endChar": 24
+      },
+      "revId": "b82048db5367355b85647ce24586b19cc64fbf17",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
