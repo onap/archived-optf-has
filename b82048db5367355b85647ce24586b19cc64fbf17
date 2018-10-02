@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "bada0100_f7c36f88",
+        "filename": "conductor/conductor/common/music/api.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 527,
+      "author": {
+        "id": 2845
+      },
+      "writtenOn": "2018-10-02T17:57:42Z",
+      "side": 1,
+      "message": "That is the API of creating notification trigger, you do not need it.",
+      "range": {
+        "startLine": 488,
+        "startChar": 8,
+        "endLine": 527,
+        "endChar": 27
+      },
+      "revId": "b82048db5367355b85647ce24586b19cc64fbf17",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "bada0100_d7e3cb31",
         "filename": "conductor/conductor/common/music/model/base.py",
         "patchSetId": 1
