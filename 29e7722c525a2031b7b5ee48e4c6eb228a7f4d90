@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bada0100_2b48b22c",
+        "filename": "conductor.conf",
+        "patchSetId": 1
+      },
+      "lineNbr": 520,
+      "author": {
+        "id": 2041
+      },
+      "writtenOn": "2018-10-03T15:02:48Z",
+      "side": 1,
+      "message": "These shouldn\u0027t be the default values - would be good to clean up.",
+      "range": {
+        "startLine": 520,
+        "startChar": 0,
+        "endLine": 520,
+        "endChar": 73
+      },
+      "revId": "29e7722c525a2031b7b5ee48e4c6eb228a7f4d90",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bada0100_cb5486cc",
+        "filename": "conductor.conf",
+        "patchSetId": 1
+      },
+      "lineNbr": 528,
+      "author": {
+        "id": 2041
+      },
+      "writtenOn": "2018-10-03T15:02:48Z",
+      "side": 1,
+      "message": "same as above",
+      "range": {
+        "startLine": 528,
+        "startChar": 0,
+        "endLine": 528,
+        "endChar": 18
+      },
+      "revId": "29e7722c525a2031b7b5ee48e4c6eb228a7f4d90",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
