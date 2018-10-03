@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bada0100_6614aff5",
+        "filename": "conductor/conductor/common/prometheus_metrics.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1739
+      },
+      "writtenOn": "2018-10-03T21:21:41Z",
+      "side": 1,
+      "message": "Is common a good place for this file? What other components will use this functionality?",
+      "revId": "635533772814f59248f90f4461dda240bfb5951d",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
