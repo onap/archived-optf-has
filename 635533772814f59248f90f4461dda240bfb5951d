@@ -16,6 +16,24 @@
       "revId": "635533772814f59248f90f4461dda240bfb5951d",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bada0100_c6c79b63",
+        "filename": "conductor/conductor/common/prometheus_metrics.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1361
+      },
+      "writtenOn": "2018-10-03T21:59:18Z",
+      "side": 1,
+      "message": "For Casablanca, solver and data modules use it. This is not specific to HPA. An example would be, to get stats on number of homing requests, time taken for various operations, etc. In my opinion Common is the best place as it is used and initialized by various modules. Metrics is like logging so it can be used in code wherever an event occurs.",
+      "parentUuid": "bada0100_6614aff5",
+      "revId": "635533772814f59248f90f4461dda240bfb5951d",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
     }
   ]
 }
