@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bada0100_d7166bf1",
+        "filename": "conductor.conf",
+        "patchSetId": 1
+      },
+      "lineNbr": 409,
+      "author": {
+        "id": 2041
+      },
+      "writtenOn": "2018-10-03T15:04:35Z",
+      "side": 1,
+      "message": "are these ports compatible with the available ports in OOM ?",
+      "range": {
+        "startLine": 409,
+        "startChar": 16,
+        "endLine": 409,
+        "endChar": 40
+      },
+      "revId": "418e801199b71a457e6cbac7a6c866416f92a389",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
