@@ -19,6 +19,7 @@
 
 import collections
 
+import conductor.common.prometheus_metrics as PC
 import cotyledon
 import json
 import time
@@ -150,6 +151,10 @@ class SolverServiceLauncher(object):
         #    keyspace=conf.keyspace, baseclass=groups.Groups, classname="Groups")
         #self.GroupRules = base.create_dynamic_model(
         #    keyspace=conf.keyspace, baseclass=group_rules.GroupRules, classname="GroupRules")
+
+        # Initialize Prometheus metrics Endpoint
+        # Solver service uses index 1
+        PC._init_metrics(1)
 
         if not self.Plan:
             raise
@@ -447,6 +452,11 @@ class SolverService(cotyledon.Service):
                 # Update the plan status
                 p.status = self.Plan.NOT_FOUND
                 p.message = message
+
+                # Metrics to Prometheus
+                m_svc_name = p.template['parameters'].get('service_name', 'N/A')
+                PC.VNF_FAILURE.labels('ONAP', m_svc_name).inc()
+
                 while 'FAILURE' in _is_success:
                     _is_success = p.update(condition=self.solver_owner_condition)
                     LOG.info(_LI("Plan serach failed, changing the template status from solving to not found, "
@@ -504,6 +514,24 @@ class SolverService(cotyledon.Service):
                                 rec["attributes"]["directives"] = \
                                     self.set_flavor_in_flavor_directives(
                                         resource.get("flavor_map"), resource.get("all_directives"))
+
+                                # Metrics to Prometheus
+                                m_vim_id = resource.get("vim-id")
+                                m_hpa_score = resource.get("hpa_score", 0)
+                                m_svc_name = p.template['parameters'].get(
+                                    'service_name', 'N/A')
+                                for vnfc, flavor in resource.get("flavor_map"):
+                                    PC.VNF_COMPUTE_PROFILES.labels('ONAP',
+                                                                   m_svc_name,
+                                                                   demand_name,
+                                                                   vnfc,
+                                                                   flavor,
+                                                                   m_vim_id).inc()
+
+                                PC.VNF_SCORE.labels('ONAP', m_svc_name,
+                                                    demand_name,
+                                                    m_hpa_score).inc()
+
                             if resource.get('conflict_id'):
                                 rec["candidate"]["conflict_id"] = resource.get("conflict_id")
 
