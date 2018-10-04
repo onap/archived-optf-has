@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bada0100_25269a17",
+        "filename": "conductor.conf",
+        "patchSetId": 3
+      },
+      "lineNbr": 315,
+      "author": {
+        "id": 2845
+      },
+      "writtenOn": "2018-10-04T18:51:53Z",
+      "side": 1,
+      "message": "Since Conductor will run in active-active mode, need to add the following line:\nconcurrent \u003d true",
+      "range": {
+        "startLine": 315,
+        "startChar": 0,
+        "endLine": 315,
+        "endChar": 19
+      },
+      "revId": "b13fb1bf524f99198c3128a83bc609a41ffec3d7",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
