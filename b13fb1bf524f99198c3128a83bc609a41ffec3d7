@@ -22,6 +22,30 @@
       "revId": "b13fb1bf524f99198c3128a83bc609a41ffec3d7",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bada0100_282511c2",
+        "filename": "conductor.conf",
+        "patchSetId": 3
+      },
+      "lineNbr": 315,
+      "author": {
+        "id": 2041
+      },
+      "writtenOn": "2018-10-05T02:00:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bada0100_25269a17",
+      "range": {
+        "startLine": 315,
+        "startChar": 0,
+        "endLine": 315,
+        "endChar": 19
+      },
+      "revId": "b13fb1bf524f99198c3128a83bc609a41ffec3d7",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
     }
   ]
 }
