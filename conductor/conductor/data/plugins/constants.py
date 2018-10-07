@@ -21,4 +21,4 @@
 
 CLOUD_REGIONS_URI = '/cloud-infrastructure/cloud-regions/cloud-region'
 
-FLAVORS_URI = CLOUD_REGIONS_URI + '/%s/%s/flavors/?depth=all'
+FLAVORS_URI = CLOUD_REGIONS_URI + '/%s/%s/flavors/?depth=all&nodes-only=true'
