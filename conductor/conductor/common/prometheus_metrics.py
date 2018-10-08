@@ -59,7 +59,7 @@ VNF_SUB_OPTIMUM = Counter(
 VNF_SCORE = Counter(
     'vnf_scores',
     'HPA Scores of vnf',
-    ['customer_name', 'service_name', 'vnf_name', 'vnfc_name', 'hpa_score']
+    ['customer_name', 'service_name', 'vnf_name', 'hpa_score']
 )
 
 # HPA Matching stats

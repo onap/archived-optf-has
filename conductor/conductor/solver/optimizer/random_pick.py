@@ -39,6 +39,7 @@ class RandomPick(search.Search):
 
     def _find_current_best(self, _demand_list, _decision_path, _request):
 
+        self.triageSolver.getSortedDemand(_demand_list)
         for demand in _demand_list:
             # apply the constraints on all candidates first
             _decision_path.current_demand = demand
