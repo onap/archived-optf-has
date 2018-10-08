@@ -35,10 +35,7 @@ class TestSMS(unittest.TestCase):
 
     @requests_mock.mock()
     def test_sms(self, mock_sms):
-        ''' NOTE: preload_secret generate the uuid for the domain
-                  Create Domain API is called during the deployment using a
-                  preload script. So the application oly knows the domain_uuid.
-                  All sub-sequent SMS API calls needs the uuid.
+        ''' NOTE: preload_secret during the deployment using a preload script.
                   For test purposes we need to do preload ourselves'''
         sms_url = self.config.aaf_sms_url
 
@@ -53,7 +50,8 @@ class TestSMS(unittest.TestCase):
         # Mock requests for preload_secret
         cd_url = self.base_domain_url.format(sms_url)
         domain_uuid1 = str(uuid4())
-        s_url = self.secret_url.format(sms_url, domain_uuid1)
+        domain_name = self.config.secret_domain
+        s_url = self.secret_url.format(sms_url, domain_name)
         mock_sms.post(cd_url, status_code=200, json={'uuid': domain_uuid1})
         mock_sms.post(s_url, status_code=200)
         # Initialize Secrets from SMS
@@ -61,13 +59,9 @@ class TestSMS(unittest.TestCase):
 
         # Part 2: Retrieve Secret Test
         # Mock requests for retrieve_secrets
-        # IMPORTANT: Read the config again as the preload_secrets has
-        # updated the config with uuid
-        domain_uuid2 = self.config.secret_domain
-        self.assertEqual(domain_uuid1, domain_uuid2)
 
-        d_url = self.domain_url.format(sms_url, domain_uuid2)
-        s_url = self.secret_url.format(sms_url, domain_uuid2)
+        d_url = self.domain_url.format(sms_url, domain_name)
+        s_url = self.secret_url.format(sms_url, domain_name)
 
         # Retrieve Secrets from SMS and load to secret cache
         # Use the secret_cache instead of config files
