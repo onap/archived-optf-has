@@ -22,6 +22,30 @@
       "revId": "35542db90b214695f96331154f11fb9e2ac1420a",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bada0100_09760c3f",
+        "filename": "conductor/conductor/solver/optimizer/random_pick.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1361
+      },
+      "writtenOn": "2018-10-08T06:09:09Z",
+      "side": 1,
+      "message": "Ikram/Larry to comment on the functionality. Without setting this the ArrayListIndexOutofBound exception is happening.",
+      "parentUuid": "bada0100_49ce5485",
+      "range": {
+        "startLine": 42,
+        "startChar": 8,
+        "endLine": 42,
+        "endChar": 12
+      },
+      "revId": "35542db90b214695f96331154f11fb9e2ac1420a",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
     }
   ]
 }
