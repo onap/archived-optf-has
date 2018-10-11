@@ -23,6 +23,12 @@ from onapsmsclient import Client
 
 from oslo_config import cfg
 from oslo_log import log
+import conductor.data.plugins.inventory_provider.aai
+import conductor.api.controllers.v1.plans
+import conductor.common.music.api
+import conductor.data.plugins.service_controller.sdnc
+
+
 
 LOG = log.getLogger(__name__)
 
@@ -43,16 +49,13 @@ AAF_SMS_OPTS = [
                     'is not verified by the client.'),
     cfg.StrOpt('secret_domain',
                default='has',
-               help='Domain UUID - A unique UUID generated when the domain'
-                    'for HAS is created by administrator during deployment')
+               help='Domain Name for HAS')
 ]
 
 CONF.register_opts(AAF_SMS_OPTS, group='aaf_sms')
 config_spec = {
     "preload_secrets": "../preload_secrets.yaml"
 }
-
-secret_cache = {}
 
 
 def preload_secrets():
@@ -67,8 +70,8 @@ def preload_secrets():
     timeout = config.aaf_sms_timeout
     cacert = config.aaf_ca_certs
     sms_client = Client(url=sms_url, timeout=timeout, cacert=cacert)
-    domain = sms_client.createDomain(domain)
-    config.secret_domain = domain  # uuid
+    domain_uuid = sms_client.createDomain(domain)
+    LOG.debug("Created domain {} with uuid {}".format(domain, domain_uuid))
     secrets = preload_config.get("secrets")
     for secret in secrets:
         sms_client.storeSecret(domain, secret.get('name'),
@@ -91,6 +94,20 @@ def retrieve_secrets():
         secret_dict[secret] = values
     LOG.debug("Secret Dictionary Retrieval Success")
     return secret_dict
+
+
+def load_secrets():
+    config = CONF
+    secret_dict = retrieve_secrets()
+    config.aai.username = secret_dict['aai']['username']
+    config.aai.password = secret_dict['aai']['password']
+    config.conductor_api.username = secret_dict['conductor_api']['username']
+    config.conductor_api.password = secret_dict['conductor_api']['password']
+    config.music_api.aafuser = secret_dict['music_api']['aafuser']
+    config.music_api.aafpass = secret_dict['music_api']['aafpass']
+    config.music_api.aafns = secret_dict['music_api']['aafns']
+    config.sdnc.username = secret_dict['sdnc']['username']
+    config.sdnc.password = secret_dict['sdnc']['password']
 
 
 def delete_secrets():
