@@ -35,6 +35,9 @@ LOG = log.getLogger(__name__)
 CONF = cfg.CONF
 
 AAF_SMS_OPTS = [
+    cfg.BoolOpt('is_enabled',
+               default=True,
+               help='Is Secret Management service enabled'),
     cfg.StrOpt('aaf_sms_url',
                default='https://aaf-sms.onap:10443',
                help='Base URL for SMS, up to and not including '
@@ -99,15 +102,15 @@ def retrieve_secrets():
 def load_secrets():
     config = CONF
     secret_dict = retrieve_secrets()
-    config.aai.username = secret_dict['aai']['username']
-    config.aai.password = secret_dict['aai']['password']
-    config.conductor_api.username = secret_dict['conductor_api']['username']
-    config.conductor_api.password = secret_dict['conductor_api']['password']
-    config.music_api.aafuser = secret_dict['music_api']['aafuser']
-    config.music_api.aafpass = secret_dict['music_api']['aafpass']
-    config.music_api.aafns = secret_dict['music_api']['aafns']
-    config.sdnc.username = secret_dict['sdnc']['username']
-    config.sdnc.password = secret_dict['sdnc']['password']
+    config.set_override('username', secret_dict['aai']['username'], 'aai')
+    config.set_override('password', secret_dict['aai']['password'], 'aai')
+    config.set_override('username', secret_dict['conductor_api']['username'], 'conductor_api')
+    config.set_override('password', secret_dict['conductor_api']['password'], 'conductor_api')
+    config.set_override('aafuser', secret_dict['music_api']['aafuser'], 'music_api')
+    config.set_override('aafpass', secret_dict['music_api']['aafpass'], 'music_api')
+    config.set_override('aafns', secret_dict['music_api']['aafns'], 'music_api')
+    config.set_override('username', secret_dict['sdnc']['username'], 'sdnc')
+    config.set_override('password', secret_dict['sdnc']['password'], 'sdnc')
 
 
 def delete_secrets():
