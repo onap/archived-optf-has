@@ -108,6 +108,6 @@ def prepare_service(argv=None, config_files=None):
     if argv:
         gmr.TextGuruMeditation.setup_autorun(version)
     messaging.setup()
-    # TODO(Dileep): Uncomment once Helm charts to preload secrets available
-    # sms.load_secrets()
+    # Load secrets from SMS
+    sms.load_secrets()
     return conf
