@@ -20,9 +20,11 @@
 import base64
 from datetime import datetime, timedelta
 import json
+import os
 
 from conductor.common import rest
 from conductor.i18n import _LE, _LI
+from conductor import __file__ as conductor_root
 
 from oslo_log import log
 LOG = log.getLogger(__name__)
@@ -30,32 +32,46 @@ LOG = log.getLogger(__name__)
 from oslo_config import cfg
 CONF = cfg.CONF
 
-# TBD - read values from conductor.conf
 AAF_OPTS = [
     cfg.BoolOpt('is_aaf_enabled',
-                default=True,
+                default=False,
                 help='is_aaf_enabled.'),
     cfg.IntOpt('aaf_cache_expiry_hrs',
-               default='3',
+               default='24',
                help='aaf_cache_expiry_hrs.'),
     cfg.StrOpt('aaf_url',
-               default='http://aaf-service:8100/authz/perms/user/',
+               default='https://aaf-service:8100/authz/perms/user/',
                help='aaf_url.'),
+    cfg.StrOpt('username',
+               default=None,
+               help='username.'),
+    cfg.StrOpt('password',
+               default=None,
+               help='pasword.'),
+    cfg.StrOpt('aaf_cert_file',
+               default=None,
+               help='aaf_cert_file.'),
+    cfg.StrOpt('aaf_cert_key_file',
+               default=None,
+               help='aaf_cert_key_file.'),
+    cfg.StrOpt('aaf_ca_bundle_file',
+               default="",
+               help='aaf_ca_bundle_file.'),
     cfg.IntOpt('aaf_retries',
                default='3',
                help='aaf_retries.'),
     cfg.IntOpt('aaf_timeout',
                default='100',
                help='aaf_timeout.'),
-    cfg.ListOpt('aaf_user_roles',
-               default=['{"type": "org.onap.oof","instance": "plans","action": "GET"}',
-                      '{"type": "org.onap.oof","instance": "plans","action": "POST"}'],
+    cfg.StrOpt('aaf_conductor_user',
+               default=None,
+               help='aaf_conductor_user.'),
+    cfg.ListOpt('aaf_permissions',
+               default=['{"type": "org.onap.oof.access","instance": "*","action": "*"}'],
                help='aaf_user_roles.')
 ]
 
-CONF.register_opts(AAF_OPTS, group='aaf_authentication')
-
-AUTHZ_PERMS_USER = '{}/authz/perms/user/{}'
+CONF.register_opts(AAF_OPTS, group='aaf_api')
 
 EXPIRE_TIME = 'expire_time'
 
@@ -64,11 +80,22 @@ perm_cache = {}
 def clear_cache():
     perm_cache.clear()
 
-
 def authenticate(uid, passwd):
+    # FS - trace
+    LOG.info("Authenticating username:password {} : {}: ".format(uid, passwd))
+
+    aafUser = None
+    username = CONF.conductor_api.username
+    password = CONF.conductor_api.password
+    if username == uid and password == passwd:
+        aafUser = CONF.aaf_api.aaf_conductor_user
+    else:
+        LOG.debug("Error Authenticating the user {} : {}: ".format(uid, passwd))
+        return False
+
     try:
-        perms = get_aaf_permissions(uid, passwd)
-        return has_valid_role(perms)
+        perms = get_aaf_permissions(aafUser)
+        return has_valid_permissions(perms)
     except Exception as exp:
         LOG.error("Error Authenticating the user {} : {}: ".format(uid, exp))
         pass
@@ -80,22 +107,27 @@ return True if the user has valid permissions
 else return false
 """
 
-def has_valid_role(perms):
-    aaf_user_roles = CONF.aaf_authentication.aaf_user_roles
+def has_valid_permissions(userPerms):
+    permissions = CONF.aaf_api.aaf_permissions
 
-    permObj = json.loads(perms)
-    permList = permObj["perm"]
-    for user_role in aaf_user_roles:
-        role = json.loads(user_role)
-        userType = role["type"]
-        userInstance = role["instance"]
-        userAction = role["action"]
-        for perm in permList:
-            permType = perm["type"]
-            permInstance = perm["instance"]
-            permAction = perm["action"]
+    LOG.info("Validate permisions: acquired permissions {} ".format(userPerms))
+    LOG.info("Validate permisions: allowed permissions {} ".format(permissions))
+
+    userPermObj = json.loads(userPerms)
+    userPermList = userPermObj["perm"]
+    for perm in permissions:
+        permObj = json.loads(perm)
+        permType = permObj["type"]
+        permInstance = permObj["instance"]
+        permAction = permObj["action"]
+        for userPerm in userPermList:
+            userType = userPerm["type"]
+            userInstance = userPerm["instance"]
+            userAction = userPerm["action"]
             if userType == permType and userInstance == permInstance and \
                 (userAction == permAction or userAction == "*"):
+                # FS - trace
+                LOG.info("User has valid permissions ")
                 return True
     return False
 
@@ -104,35 +136,43 @@ Make the remote aaf api call if user is not in the cache.
 
 Return the perms
 """
-def get_aaf_permissions(uid, passwd):
-    key = base64.b64encode("{}_{}".format(uid, passwd), "ascii")
-    time_delta = timedelta(hours = CONF.aaf_authentication.aaf_cache_expiry_hrs)
+def get_aaf_permissions(aafUser):
+    key = base64.b64encode("{}".format(aafUser), "ascii")
+    time_delta = timedelta(hours = CONF.aaf_api.aaf_cache_expiry_hrs)
 
-# TBD - test cache logic
     perms = perm_cache.get(key)
 
     if perms and datetime.now() < perms.get(EXPIRE_TIME):
         LOG.debug("Returning cached value")
         return perms['roles']
     LOG.debug("Invoking AAF authentication API")
-    response = remote_api(passwd, uid)
+    response = remote_api(aafUser)
     perms = {EXPIRE_TIME: datetime.now() + time_delta, 'roles': response}
     perm_cache[key] = perms
     return response
 
-def remote_api(passwd, uid):
-    server_url = CONF.aaf_authentication.aaf_url.rstrip('/')
+
+"""
+The remote api is the AAF service
+
+"""
+def remote_api(aafUser):
+    server_url = CONF.aaf_api.aaf_url+aafUser
+
     kwargs = {
         "server_url": server_url,
-        "retries": CONF.aaf_authentication.aaf_retries,
-        "username": uid,
-        "password": passwd,
+        "retries": CONF.aaf_api.aaf_retries,
+        "username": CONF.aaf_api.username,
+        "password": CONF.aaf_api.password,
         "log_debug": LOG.debug,
-        "read_timeout": CONF.aaf_authentication.aaf_timeout,
+        "read_timeout": CONF.aaf_api.aaf_timeout,
+        "cert_file": CONF.aaf_api.aaf_cert_file,
+        "cert_key_file": CONF.aaf_api.aaf_cert_key_file,
+        "ca_bundle_file": CONF.aaf_api.aaf_ca_bundle_file,
     }
     restReq = rest.REST(**kwargs)
 
-    headers = {"Accept": "application/json"}
+    headers = {"Accept": "application/Perms+json;q=1.0;charset=utf-8;version=2.1,application/json;q=1.0;version=2.1,*/*;q=1.0"}
     rkwargs = {
         "method": 'GET',
         "path": '',
