@@ -111,6 +111,9 @@ def load_secrets():
     config.set_override('aafns', secret_dict['music_api']['aafns'], 'music_api')
     config.set_override('username', secret_dict['sdnc']['username'], 'sdnc')
     config.set_override('password', secret_dict['sdnc']['password'], 'sdnc')
+    config.set_override('username', secret_dict['aaf_api']['username'], 'aaf_api')
+    config.set_override('password', secret_dict['aaf_api']['password'], 'aaf_api')
+    config.set_override('aaf_conductor_user', secret_dict['aaf_api']['aaf_conductor_user'], 'aaf_api')
 
 
 def delete_secrets():

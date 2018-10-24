@@ -85,7 +85,7 @@ class PlansBaseController(object):
 
     def plans_get(self, plan_id=None):
 
-        auth_flag = CONF.conductor_api.basic_auth_secure or CONF.aaf_authentication.is_aaf_enabled
+        auth_flag = CONF.conductor_api.basic_auth_secure or CONF.aaf_api.is_aaf_enabled
 
         # TBD - is healthcheck properly supported?
         if plan_id == 'healthcheck' or \
@@ -291,7 +291,7 @@ class PlansController(PlansBaseController):
         if args and args['name']:
             LOG.info('Plan name: {}'.format(args['name']))
 
-        auth_flag = CONF.conductor_api.basic_auth_secure or CONF.aaf_authentication.is_aaf_enabled
+        auth_flag = CONF.conductor_api.basic_auth_secure or CONF.aaf_api.is_aaf_enabled
 
         # Create the plan only when the basic authentication is disabled or pass the authenticaiton check
         if not auth_flag or \
@@ -360,7 +360,7 @@ def verify_user(authstr):
 
     retVal = False
 
-    if CONF.aaf_authentication.is_aaf_enabled:
+    if CONF.aaf_api.is_aaf_enabled:
         retVal = aaf_auth.authenticate(user_dict['username'], user_dict['password'])
     else:
         if username == user_dict['username'] and password == user_dict['password']:

@@ -75,7 +75,7 @@ def list_opts():
         ('solver', conductor.solver.service.SOLVER_OPTS),
         ('reservation', conductor.reservation.service.reservation_OPTS),
         ('aaf_sms', conductor.common.sms.AAF_SMS_OPTS),
-        ('aaf_authentication',
+        ('aaf_api',
          conductor.api.adapters.aaf.aaf_authentication.AAF_OPTS),
         ('prometheus', conductor.common.prometheus_metrics.METRICS_OPTS),
     ]
