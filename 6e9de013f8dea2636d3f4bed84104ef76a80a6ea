@@ -1,0 +1,234 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bada0100_aacf677e",
+        "filename": "conductor.conf",
+        "patchSetId": 2
+      },
+      "lineNbr": 147,
+      "author": {
+        "id": 1361
+      },
+      "writtenOn": "2018-10-30T00:06:16Z",
+      "side": 1,
+      "message": "All the conf needs to be synced to CSIT and OOM.",
+      "range": {
+        "startLine": 147,
+        "startChar": 0,
+        "endLine": 147,
+        "endChar": 64
+      },
+      "revId": "6e9de013f8dea2636d3f4bed84104ef76a80a6ea",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bada0100_cacaeb6d",
+        "filename": "conductor.conf",
+        "patchSetId": 2
+      },
+      "lineNbr": 160,
+      "author": {
+        "id": 1361
+      },
+      "writtenOn": "2018-10-30T00:06:16Z",
+      "side": 1,
+      "message": "Needs to be added to has.json in OOM project, (preload_secrets.yaml - optional for local testing)",
+      "range": {
+        "startLine": 156,
+        "startChar": 0,
+        "endLine": 160,
+        "endChar": 26
+      },
+      "revId": "6e9de013f8dea2636d3f4bed84104ef76a80a6ea",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bada0100_6ac97f77",
+        "filename": "conductor/conductor/api/adapters/aaf/aaf_authentication.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1361
+      },
+      "writtenOn": "2018-10-30T00:06:16Z",
+      "side": 1,
+      "message": "Default value is True?",
+      "range": {
+        "startLine": 37,
+        "startChar": 24,
+        "endLine": 37,
+        "endChar": 29
+      },
+      "revId": "6e9de013f8dea2636d3f4bed84104ef76a80a6ea",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bada0100_8ac4e35f",
+        "filename": "conductor/conductor/api/adapters/aaf/aaf_authentication.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1361
+      },
+      "writtenOn": "2018-10-30T00:06:16Z",
+      "side": 1,
+      "message": "test url should not be default. https://aaf-service can be default",
+      "range": {
+        "startLine": 43,
+        "startChar": 32,
+        "endLine": 43,
+        "endChar": 61
+      },
+      "revId": "6e9de013f8dea2636d3f4bed84104ef76a80a6ea",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bada0100_2aa377b3",
+        "filename": "conductor/conductor/api/adapters/aaf/aaf_authentication.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1361
+      },
+      "writtenOn": "2018-10-30T00:06:16Z",
+      "side": 1,
+      "message": "please remove",
+      "range": {
+        "startLine": 45,
+        "startChar": 3,
+        "endLine": 50,
+        "endChar": 36
+      },
+      "revId": "6e9de013f8dea2636d3f4bed84104ef76a80a6ea",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bada0100_4aa6fbc2",
+        "filename": "conductor/conductor/api/adapters/aaf/aaf_authentication.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1361
+      },
+      "writtenOn": "2018-10-30T00:06:16Z",
+      "side": 1,
+      "message": "please remove if not used",
+      "range": {
+        "startLine": 66,
+        "startChar": 0,
+        "endLine": 67,
+        "endChar": 81
+      },
+      "revId": "6e9de013f8dea2636d3f4bed84104ef76a80a6ea",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bada0100_eaac8fa2",
+        "filename": "conductor/conductor/api/adapters/aaf/aaf_authentication.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 1361
+      },
+      "writtenOn": "2018-10-30T00:06:16Z",
+      "side": 1,
+      "message": "avoid credentials in logs",
+      "range": {
+        "startLine": 107,
+        "startChar": 58,
+        "endLine": 107,
+        "endChar": 78
+      },
+      "revId": "6e9de013f8dea2636d3f4bed84104ef76a80a6ea",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bada0100_0ab0f3f2",
+        "filename": "conductor/conductor/api/adapters/aaf/aaf_authentication.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 1361
+      },
+      "writtenOn": "2018-10-30T00:06:16Z",
+      "side": 1,
+      "message": "minor nit whitespace",
+      "range": {
+        "startLine": 116,
+        "startChar": 0,
+        "endLine": 116,
+        "endChar": 4
+      },
+      "revId": "6e9de013f8dea2636d3f4bed84104ef76a80a6ea",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bada0100_aa96874a",
+        "filename": "conductor/conductor/api/adapters/aaf/aaf_authentication.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 194,
+      "author": {
+        "id": 1361
+      },
+      "writtenOn": "2018-10-30T00:06:16Z",
+      "side": 1,
+      "message": "In the deployment this will be replaced with the absolute path of the RootCA file.",
+      "range": {
+        "startLine": 194,
+        "startChar": 55,
+        "endLine": 194,
+        "endChar": 97
+      },
+      "revId": "6e9de013f8dea2636d3f4bed84104ef76a80a6ea",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bada0100_ca918b53",
+        "filename": "conductor/conductor/api/adapters/aaf/aaf_authentication.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 194,
+      "author": {
+        "id": 1361
+      },
+      "writtenOn": "2018-10-30T00:06:16Z",
+      "side": 1,
+      "message": "This is not required. We can specify the absolute file path in the conf like other places in the project.",
+      "range": {
+        "startLine": 194,
+        "startChar": 20,
+        "endLine": 194,
+        "endChar": 52
+      },
+      "revId": "6e9de013f8dea2636d3f4bed84104ef76a80a6ea",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
