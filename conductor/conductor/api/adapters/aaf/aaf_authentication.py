@@ -81,16 +81,13 @@ def clear_cache():
     perm_cache.clear()
 
 def authenticate(uid, passwd):
-    # FS - trace
-    LOG.info("Authenticating username:password {} : {}: ".format(uid, passwd))
-
     aafUser = None
     username = CONF.conductor_api.username
     password = CONF.conductor_api.password
     if username == uid and password == passwd:
         aafUser = CONF.aaf_api.aaf_conductor_user
     else:
-        LOG.debug("Error Authenticating the user {} : {}: ".format(uid, passwd))
+        LOG.debug("Error Authenticating the user {} ".format(uid))
         return False
 
     try:
