@@ -229,6 +229,23 @@
       "revId": "6e9de013f8dea2636d3f4bed84104ef76a80a6ea",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bada0100_f3dec63e",
+        "filename": "conductor/etc/conductor/AAF_RootCA.cer",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1361
+      },
+      "writtenOn": "2018-11-01T22:34:08Z",
+      "side": 1,
+      "message": "AAF_RootCA.cer is already available. This is duplicate",
+      "revId": "6e9de013f8dea2636d3f4bed84104ef76a80a6ea",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
     }
   ]
 }
