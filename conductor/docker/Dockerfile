@@ -15,7 +15,7 @@
 #
 # -------------------------------------------------------------------------
 
-FROM python:2.7
+FROM python:2.7-alpine
 
 ARG MVN_ARTIFACT_VERSION
 ARG REPO
@@ -29,15 +29,28 @@ ENV CON_PORT "8091"
 
 EXPOSE ${CON_PORT}
 
-RUN apt-get update && apt-get --assume-yes install python-setuptools && \
-apt-get install -y unzip curl wget git vim
+# Add required libraries
+RUN apk add --no-cache          curl \
+                                gcc \
+                                libffi-dev \
+                                linux-headers \
+                                musl-dev \
+                                git \
+                                libxml2-dev \
+                                libxslt-dev \
+                                openssl-dev \
+                                py-setuptools \
+                                unzip \
+                                wget \
+                                xvfb 
 
-# HAS
 WORKDIR /opt/has
 RUN wget -O /opt/has.zip "https://nexus.onap.org/service/local/artifact/maven/redirect?r=${REPO}&g=org.onap.optf.has&a=optf-has-conductor&e=zip&v=${MVN_ARTIFACT_VERSION}" && \
     unzip -q -o -B /opt/has.zip -d /opt/has && \
     rm -f /opt/has.zip
 RUN mkdir -p /var/log/onap/optf/has/
 
-RUN cd /opt/has/conductor/ && git init && pip install -e .
+RUN cd /opt/has/conductor && \ 
+     git init && \ 
+     pip install -e .
 COPY api_paste.ini /usr/local/bin/api_paste.ini
