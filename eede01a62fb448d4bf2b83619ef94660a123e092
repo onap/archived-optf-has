@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9adffdf1_7aff2068",
+        "filename": "conductor/docker/Dockerfile",
+        "patchSetId": 1
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1201
+      },
+      "writtenOn": "2018-11-22T14:30:22Z",
+      "side": 1,
+      "message": "Could you please add default values? Else it has to be added as docker build args.",
+      "revId": "eede01a62fb448d4bf2b83619ef94660a123e092",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9adffdf1_9a02046e",
+        "filename": "conductor/docker/Dockerfile",
+        "patchSetId": 1
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1201
+      },
+      "writtenOn": "2018-11-22T14:30:22Z",
+      "side": 1,
+      "message": "useless and user specific (no proxies in gates)\n\nExtracted from docker-run manual\n\nFor example, if you want to pass a value for http_proxy, use\n          --build-arg\u003dhttp_proxy\u003d\"http://some.proxy.url\"",
+      "revId": "eede01a62fb448d4bf2b83619ef94660a123e092",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9adffdf1_ba1348b7",
+        "filename": "conductor/docker/Dockerfile",
+        "patchSetId": 1
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1201
+      },
+      "writtenOn": "2018-11-22T14:30:22Z",
+      "side": 1,
+      "message": "I would split them into 2 lists: run-time and devel dependencies and then remove all dev dep at the end.\n\nIt would decrease the image size.\n\nRUN apk add --no-cache curl xvfb \u0026\u0026 \\\n    apk add --virtual .build-deps --no-cache gcc libffi-dev linux-headers \\\n        musl-dev git libxml2-dev libxslt-dev openssl-dev py-setuptools unzip \\\n        wget \u0026\u0026 \\\n[...]\n    apk del .build-deps",
+      "revId": "eede01a62fb448d4bf2b83619ef94660a123e092",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9adffdf1_faf23099",
+        "filename": "conductor/docker/Dockerfile",
+        "patchSetId": 1
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1201
+      },
+      "writtenOn": "2018-11-22T14:30:22Z",
+      "side": 1,
+      "message": "Could you please remove all blank chars?",
+      "revId": "eede01a62fb448d4bf2b83619ef94660a123e092",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9adffdf1_1a45b4b2",
+        "filename": "conductor/docker/Dockerfile",
+        "patchSetId": 1
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1201
+      },
+      "writtenOn": "2018-11-22T14:30:22Z",
+      "side": 1,
+      "message": "pip install https://gerrit.onap.org/r/optf/has#egg\u003dof-has\u0026subdirectory\u003dconductor instead of l46-55",
+      "revId": "eede01a62fb448d4bf2b83619ef94660a123e092",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
