@@ -272,9 +272,9 @@ class HpaMatchProvider(object):
                                                req_attr_key, flavor_cfa)
                         if not flavor_feature_attr:
                             flavor_flag = False
-                        if not self._compare_attribute(flavor_feature_attr[0],
+                        elif not self._compare_attribute(flavor_feature_attr[0],
                                                        req_feature_attr):
-                           flavor_flag = False
+                            flavor_flag = False
                     if not flavor_flag:
                         continue
                     else:

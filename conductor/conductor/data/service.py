@@ -511,7 +511,9 @@ class DataEndpoint(object):
                         candidate_list[i]["flavor_map"] = {}
                     # Create flavor mapping for label_name to flavor
                     flavor_name = flavor_info.get("flavor-name")
+                    flavor_id = flavor_info.get("flavor-id")
                     candidate_list[i]["flavor_map"][label_name] = flavor_name
+                    candidate_list[i]["flavor_map"]["flavorId"] = flavor_id
                     # Create directives if not exist already
                     if not candidate_list[i].get("all_directives"):
                         candidate_list[i]["all_directives"] = {}
@@ -549,9 +551,11 @@ class DataEndpoint(object):
         directive= {"id": id,
                     "type": type,
                     "directives": ""}
+        flavor_id_attributes = {"attribute_name": "flavorId", "attribute_value": ""}
         for ele in directives:
             if "flavor_directives" in ele.get("type"):
                 flag = True
+                ele.get("attributes").append(flavor_id_attributes)
                 break
             else:
                 flag = False
