@@ -739,11 +739,11 @@ class SolverService(cotyledon.Service):
         :param flavor_map: flavor map get
         :param directives: All the directives get from request
         '''
-        flavor_label = flavor_map.keys()
+        keys = flavor_map.keys()
         for ele in directives.get("directives"):
             for item in ele.get("directives"):
                 if "flavor_directives" in item.get("type"):
                     for attr in item.get("attributes"):
                         attr["attribute_value"] = flavor_map.get(attr["attribute_name"]) \
-                            if attr.get("attribute_name") in flavor_label else ""
+                            if attr.get("attribute_name") in keys else ""
         return directives
