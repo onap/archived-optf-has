@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "9adffdf1_717ad9f2",
+        "filename": "conductor/docker/Dockerfile",
+        "patchSetId": 1
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 2083
+      },
+      "writtenOn": "2018-11-29T21:48:12Z",
+      "side": 1,
+      "message": "Thanks for your comments. The CIA team\u0027s only goal during this phase is to migrate to smaller base image in a minimally invasive fashion. We have no plans to change a container image\u0027s functionality/structure. I\u0027d encourage you to submit a contribution to address the issue you\u0027ve identified.",
+      "parentUuid": "9adffdf1_7aff2068",
+      "revId": "eede01a62fb448d4bf2b83619ef94660a123e092",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9adffdf1_9a02046e",
         "filename": "conductor/docker/Dockerfile",
         "patchSetId": 1
@@ -36,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "9adffdf1_917dfde9",
+        "filename": "conductor/docker/Dockerfile",
+        "patchSetId": 1
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 2083
+      },
+      "writtenOn": "2018-11-29T21:48:12Z",
+      "side": 1,
+      "message": "Thanks for your comments. The CIA team\u0027s only goal during this phase is to migrate to smaller base image in a minimally invasive fashion. We have no plans to change a container image\u0027s functionality/structure. I\u0027d encourage you to submit a contribution to address the issue you\u0027ve identified.",
+      "parentUuid": "9adffdf1_9a02046e",
+      "revId": "eede01a62fb448d4bf2b83619ef94660a123e092",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9adffdf1_ba1348b7",
         "filename": "conductor/docker/Dockerfile",
         "patchSetId": 1
@@ -47,6 +83,24 @@
       "writtenOn": "2018-11-22T14:30:22Z",
       "side": 1,
       "message": "I would split them into 2 lists: run-time and devel dependencies and then remove all dev dep at the end.\n\nIt would decrease the image size.\n\nRUN apk add --no-cache curl xvfb \u0026\u0026 \\\n    apk add --virtual .build-deps --no-cache gcc libffi-dev linux-headers \\\n        musl-dev git libxml2-dev libxslt-dev openssl-dev py-setuptools unzip \\\n        wget \u0026\u0026 \\\n[...]\n    apk del .build-deps",
+      "revId": "eede01a62fb448d4bf2b83619ef94660a123e092",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9adffdf1_27365353",
+        "filename": "conductor/docker/Dockerfile",
+        "patchSetId": 1
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 2083
+      },
+      "writtenOn": "2018-11-29T21:48:12Z",
+      "side": 1,
+      "message": "Thanks. I implemented the suggested changes. The resulting image size was exactly the same with and without splitting the packages into two lists. apk cleans up packages automatically.",
+      "parentUuid": "9adffdf1_ba1348b7",
       "revId": "eede01a62fb448d4bf2b83619ef94660a123e092",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": false
@@ -81,6 +135,24 @@
       "writtenOn": "2018-11-22T14:30:22Z",
       "side": 1,
       "message": "pip install https://gerrit.onap.org/r/optf/has#egg\u003dof-has\u0026subdirectory\u003dconductor instead of l46-55",
+      "revId": "eede01a62fb448d4bf2b83619ef94660a123e092",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9adffdf1_318451d3",
+        "filename": "conductor/docker/Dockerfile",
+        "patchSetId": 1
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 2083
+      },
+      "writtenOn": "2018-11-29T21:48:12Z",
+      "side": 1,
+      "message": "Thanks for your comments. The CIA team\u0027s only goal during this phase is to migrate to smaller base image in a minimally invasive fashion. We have no plans to change a container image\u0027s functionality/structure. I\u0027d encourage you to submit a contribution to address the issue you\u0027ve identified.",
+      "parentUuid": "9adffdf1_1a45b4b2",
       "revId": "eede01a62fb448d4bf2b83619ef94660a123e092",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": false
