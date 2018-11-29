@@ -1135,7 +1135,7 @@ supported by the services, etc.
 | ``attributes_value``     | Attributes value                          |
 +--------------------------+-------------------------------------------+
 
-*Note: Each VFC must have one directive with type 'flavor_directives' to put the
+*Note*: Each VFC must have one directive with type 'flavor_directives' to put the
 flavors inside. The ``attribute_name`` is the place to put flavor label and the
 ``attribute_value`` will first left blank. After getting the proper flavor, OOF will
 merge the flavor name into the ``attribute_value`` inside flavor directives. Also,
@@ -1184,6 +1184,9 @@ together in ``directives``, as they are using the same structure as 'directives'
 
 Example for HEAT request(SO)
 
+*Note*: Where "attributes":[{"attribute_name":" oof_returned_flavor_label_for_vgw_1 ",
+    Admin needs to ensure that this value is same as flavor parameter in HOT
+
 .. code-block:: json
 
     {
@@ -1202,7 +1205,7 @@ Example for HEAT request(SO)
                          "type":"flavor_directives",
                          "attributes":[
                             {
-                             "attribute_name":" oof_returned_flavor_label_for_vgw_0 ", //Admin needs to ensure that this value is same as flavor parameter in HOT
+                             "attribute_name":" oof_returned_flavor_label_for_vgw_0 ", 
                              "attribute_value": "<Blank>"
                             }
                          ]
@@ -1283,7 +1286,7 @@ Example for HEAT request(SO)
                          "type":"flavor_directives",
                          "attributes":[
                             {
-                             "attribute_name":" oof_returned_flavor_label_for_vgw_1 ", //Admin needs to ensure that this value is same as flavor parameter in HOT
+                             "attribute_name":" oof_returned_flavor_label_for_vgw_1 ", 
                              "attribute_value": "<Blank>"
                             }
                          ]
@@ -1372,7 +1375,7 @@ Example for HEAT request(SO)
             }
          }
       }
-
+      
 Example for Pure TOSCA request(VF-C)
 
 .. code-block:: json

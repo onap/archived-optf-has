@@ -39,15 +39,10 @@ is an orchestration service, or Nova is a compute service.
 
    ./sections/architecture.rst
    ./sections/offeredapis.rst
-   ./sections/homingspecification.rst
    ./sections/consumedapis.rst
-   Distribution <./sections/distribution.rst>
-   ./sections/logging.rst
    ./sections/installation.rst
-   ./sections/configuration.rst
-   ./sections/administration.rst
-   ./sections/humaninterfaces.rst
-   ./sections/glossary.rst
+   ./sections/logging.rst
+   ./sections/homingspecification.rst
    Example Homing Templates <./sections/example.rst>
    ./sections/release-notes.rst
 
