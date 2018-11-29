@@ -46,7 +46,7 @@ Use cases
 ----------------------
 Residential vCPE: https://wiki.onap.org/display/DW/vCPE+Homing+Use+Case
 
-5G RAN: https://wiki.onap.org/display/DW/5G+RAN+use+case
+5G RAN: https://wiki.onap.org/display/DW/Homing+5G+RAN+VNFs
 
 
 A sample heuristic greedy algorithm of HAS (using a vCPE as example)
