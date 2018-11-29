@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9adffdf1_8fd2acfe",
+        "filename": "docs/sections/release-notes.rst",
+        "patchSetId": 3
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1361
+      },
+      "writtenOn": "2018-11-29T22:25:49Z",
+      "side": 1,
+      "message": "Hardware Platform Awareness Enhancements\n1) Added support for SRIOV-NIC and directives to assist the orchestrator\n2) Select the best candidate across all cloud region based on HPA score.\n3) HPA metrics using prometheus",
+      "revId": "bb1afae81dd5a65659a4bb33fa1e2b894ce56654",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9adffdf1_cfb194e2",
+        "filename": "docs/sections/release-notes.rst",
+        "patchSetId": 3
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1361
+      },
+      "writtenOn": "2018-11-29T22:25:49Z",
+      "side": 1,
+      "message": "Can you add OPTFRA-267 for OOF HPA Enhancements?",
+      "revId": "bb1afae81dd5a65659a4bb33fa1e2b894ce56654",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
