@@ -62,6 +62,7 @@ Example 1
             - distance_between:
               - customer_loc
               - vG
+
 Example 1
 ---------
 
