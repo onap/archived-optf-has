@@ -1,0 +1,8 @@
+Verified+1: ONAP Jobbuilder <onap-jobbuilder@jenkins.onap.org>
+Code-Review+1: Vikas Varma <vv8305@att.com>
+Code-Review+2: Dileep Ranganathan <dileep.ranganathan@intel.com>
+Submitted-by: Dileep Ranganathan <dileep.ranganathan@intel.com>
+Submitted-at: Fri, 30 Nov 2018 16:28:16 +0000
+Reviewed-on: https://gerrit.onap.org/r/73967
+Project: optf/has
+Branch: refs/heads/master
