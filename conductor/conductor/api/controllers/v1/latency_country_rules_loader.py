@@ -39,7 +39,6 @@ class LatencyCountryRulesBaseController(object):
 
     def load(self, args):
 
-        ctx = {}
         #method = 'release_orders'
         method = 'load'
         client = pecan.request.controller
