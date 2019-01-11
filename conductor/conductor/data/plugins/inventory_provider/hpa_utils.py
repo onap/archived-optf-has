@@ -53,9 +53,19 @@ def  match_all_operator(big_list, small_list):
 class HpaMatchProvider(object):
 
     def __init__(self, candidate, req_cap_list):
-        self.flavors_list = candidate['flavors']['flavor']
+        self.flavors_list = None
+        if isinstance(candidate.get('flavors'), dict) \
+                and candidate.get('flavors').get('flavor'):
+            self.flavors_list = candidate.get('flavors').get('flavor')
         self.req_cap_list = req_cap_list
         self.m_vim_id = candidate.get('vim-id')
+
+    # Find out whether there is flavor info inside the candidate
+    def init_verify(self):
+        if self.flavors_list is not None:
+            return True
+        else:
+            return False
 
     # Find the flavor which has all the required capabilities
     def match_flavor(self):

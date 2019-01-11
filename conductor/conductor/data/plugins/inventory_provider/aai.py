@@ -1607,7 +1607,10 @@ class AAI(base.InventoryProviderBase):
     def match_hpa(self, candidate, features):
         """Match HPA features requirement with the candidate flavors """
         hpa_provider = hpa_utils.HpaMatchProvider(candidate, features)
-        directives = hpa_provider.match_flavor()
+        if hpa_provider.init_verify():
+            directives = hpa_provider.match_flavor()
+        else:
+            directives = None
         return directives
 
 
