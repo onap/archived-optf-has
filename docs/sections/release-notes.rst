@@ -7,7 +7,25 @@ Release Notes
 =============
 
 
-Version: 1.2.4
+Version: 3.0.1
+--------------
+
+:Release Date: 2019-01-31 (Casablanca Maintenance Release)
+
+The following items were deployed with the Casablanca Maintenance Release:
+
+
+**New Features**
+
+None.
+
+**Bug Fixes**
+
+* [OPTFRA-401] - 	Need flavor id while launching vm.
+
+
+
+Version: 3.0.0
 --------------
 
 :Release Date: 2018-11-30 (R3 Casablanca Release)
@@ -129,7 +147,7 @@ No features deprecated in this release
 **Other**
 None
 
-Version: 1.1.1
+Version: 2.0.0
 --------------
 
 :Release Date: 2018-06-07 (Beijing Release)
