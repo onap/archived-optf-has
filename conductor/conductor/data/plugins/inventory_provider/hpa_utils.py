@@ -74,7 +74,7 @@ class HpaMatchProvider(object):
         req_filter_list = []
         for capability in CapabilityDataParser.get_item(self.req_cap_list,
                                                         None):
-            if capability.item['mandatory'] == 'True':
+            if capability.item['mandatory'].lower() == 'true':
                 hpa_list = {k: capability.item[k] \
                             for k in hpa_keys if k in capability.item}
                 if hpa_list not in req_filter_list:
@@ -290,9 +290,9 @@ class HpaMatchProvider(object):
                     else:
                         req_flag = True
                         break
-            if not req_flag and capability.item['mandatory'] == 'True':
+            if not req_flag and capability.item['mandatory'].lower() == 'true':
                 return False, 0, None
-            if req_flag and capability.item['mandatory'] == 'False':
+            if req_flag and capability.item['mandatory'].lower() == 'false':
                 score = score + int(capability.item['score'])
         return True, score, directives
 

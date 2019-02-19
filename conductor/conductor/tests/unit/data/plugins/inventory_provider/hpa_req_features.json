@@ -4,7 +4,7 @@
       "hpa-feature": "basicCapabilities",
       "hpa-version": "v1",
       "architecture": "generic",
-      "mandatory": "True",
+      "mandatory": "true",
       "directives": [],
       "hpa-feature-attributes": [
         {
