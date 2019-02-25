@@ -41,9 +41,6 @@ class LatencyLoadController(object):
 
     @index.when(method='POST', template='json')
     def index_POST(self, **kwargs):
-        json_data = kwargs['data']
-        test = latency_dataloader.LatencyDataLoader().load_into_rph(json_data)
-
         return kwargs['data']
 
 

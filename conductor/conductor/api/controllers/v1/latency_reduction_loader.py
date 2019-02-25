@@ -38,11 +38,6 @@ LOG = log.getLogger(__name__)
 class LatencyLoaderBaseController(object):
 
     def load(self, args):
-
-        ctx = {}
-        #method = 'release_orders'
-        method = 'load_latency_rules'
-        client = pecan.request.controller
         latency_dataloader.LatencyDataLoader().load_into_rph(args)
 
         response = "OK"

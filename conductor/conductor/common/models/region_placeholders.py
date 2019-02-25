@@ -91,9 +91,6 @@ class RegionPlaceholders(base.Base):
         self.region_name = region_name
         self.countries = countries
 
-        if _insert:
-            return self.insert()
-
     def __repr__(self):
         """Object representation"""
         return '<RegionPlaceholders {}>'.format(self.id)

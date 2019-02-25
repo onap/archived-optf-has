@@ -32,29 +32,6 @@ CONF = cfg.CONF
 
 LOG = log.getLogger(__name__)
 
-# Triage_API_OPTS = [
-#     cfg.StrOpt('server_url',
-#                default='',
-#                help='Base URL for tData.'),
-#     cfg.StrOpt('username',
-#                default='admin1',
-#                help='username for tData.'),
-# 	cfg.StrOpt('password',
-#                default='plan.15',
-#                help='password for tData.'),
-#     cfg.BoolOpt('basic_auth_secure',
-#                default=True,
-#                help='auth toggling.')
-# ]
-#
-# CONF.register_opts(Triage_API_OPTS, group='triage_api')
-#
-# CREATE_SCHEMA = (
-#     (decorators.optional('id'), types.string),
-#     (decorators.optional('name'), types.string),
-#     ('children', string_or_dict),
-# )
-
 
 class TriageBaseController(object):
     """Triage Base Controller - Common Methods"""
@@ -84,7 +61,6 @@ class TriageBaseController(object):
         triage = result
 
         for tData in triage['triageData']:
-            thetData_id = tData.get('id')
             triage_data_list.append(tData)
 
         if id:

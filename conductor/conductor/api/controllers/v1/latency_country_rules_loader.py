@@ -38,11 +38,6 @@ LOG = log.getLogger(__name__)
 class LatencyCountryRulesBaseController(object):
 
     def load(self, args):
-
-        ctx = {}
-        #method = 'release_orders'
-        method = 'load'
-        client = pecan.request.controller
         latency_dataloader.LatencyDataLoader().load_into_country_letancy(args)
 
         response = "OK"

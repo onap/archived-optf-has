@@ -95,7 +95,6 @@ def authenticate(uid, passwd):
         return has_valid_permissions(perms)
     except Exception as exp:
         LOG.error("Error Authenticating the user {} : {}: ".format(uid, exp))
-        pass
     return False
 
 """
