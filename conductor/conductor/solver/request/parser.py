@@ -78,11 +78,6 @@ class Parser(object):
         if json_template is None:
             LOG.error("No template specified")
             return "Error"
-        # fd = open(self.region_gen.data_path + \
-        #     "/../dhv/dhv_test_template.json", "r")
-        # fd = open(template, "r")
-        # parse_template = json.load(fd)
-        # fd.close()
 
         # get request type
         self.request_type = json_template['conductor_solver']['request_type']
@@ -548,23 +543,6 @@ class Parser(object):
             _location=loc)
         constraint_list.append(access_distance)
 
-        '''
-        access_distance = access_dist.AccessDistance(
-            "uCPE-all", "access_distance", [demand1.name, demand2.name],
-            _comparison_operator=operator.le, _threshold=5000, _location=loc)
-        constraint_list.append(access_distance)
-
-        aic_distance = aic_dist.AICDistance(
-            "vVIG-vGW", "aic_distance", [demand1.name, demand2.name],
-            _comparison_operator=operator.le, _threshold=50)
-        constraint_list.append(aic_distance)
-
-        same_zone = zone.Zone(
-            "same-zone", "zone", [demand1.name, demand2.name],
-            _qualifier="same", _category="zone1")
-        constraint_list.append(same_zone)
-        '''
-
     def reorder_constraint(self):
         # added manual ranking to the constraint type for optimizing purpose the last 2 are costly interaction
         for constraint_name, constraint in self.constraints.items():
@@ -598,9 +576,6 @@ class Parser(object):
             cl_list.sort(key=self.attr_sort(attrs=['rank']))
 
     def assgin_constraints_to_demands(self):
-        # self.parse_dhv_template() # get data from DHV template
-        # self.get_data_from_aai_simulator() # get data from aai simulation
-        # renaming simulate to assgin_constraints_to_demands
         # spread the constraints over the demands
         self.reorder_constraint()
         for constraint_name, constraint in self.constraints.items():
