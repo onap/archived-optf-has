@@ -411,12 +411,10 @@ class AAI(base.InventoryProviderBase):
                 latitude = complex_info.get('latitude')
                 longitude = complex_info.get('longitude')
                 city = complex_info.get('city')
-                # removed the state check for MoW orders - Countries in Europe do not always enter states
-                # state = complex_info.get('state')
-                # region = complex_info.get('region')
                 country = complex_info.get('country')
 
-                # removed the state check for MoW orders - Countries in Europe do not always enter states
+                # removed the state check for countries in Europe
+                # that do not always enter states
                 if not (latitude and longitude and city and country):
                     keys = ('latitude', 'longitude', 'city', 'country')
                     missing_keys = \
@@ -535,7 +533,7 @@ class AAI(base.InventoryProviderBase):
         path = self._aai_versioned_path(network_role_uri)
 
         # This UUID is reserved by A&AI for a Conductor-specific named query.
-        named_query_uid = "96e54642-c0e1-4aa2-af53-e37c623b8d01"
+        named_query_uid = "role-UUID"
 
         data = {
             "query-parameters": {
@@ -707,7 +705,7 @@ class AAI(base.InventoryProviderBase):
                           "number {}").format(demand_name, candidate_name,
                                               aic_version)
                       )
-            if aic_version == "3.6":
+            if aic_version == "X.Y":
                 return True
         return False
 
@@ -831,14 +829,13 @@ class AAI(base.InventoryProviderBase):
             resolved_demands[name] = []
             for requirement in requirements:
                 inventory_type = requirement.get('inventory_type').lower()
-                # used for VLAN tagging feature
                 service_subscription = requirement.get('service_subscription')
                 candidate_uniqueness = requirement.get('unique', 'true')
                 attributes = requirement.get('attributes')
                 #TODO: may need to support multiple service_type and customer_id in the futrue
 
                 #TODO: make it consistent for dash and underscore
-                # For 1802 templates and later
+
                 if attributes:
                     # catch equipment-role and service-type from template
                     equipment_role = attributes.get('equipment-role')
@@ -854,7 +851,7 @@ class AAI(base.InventoryProviderBase):
                     model_invariant_id = attributes.get('model-invariant-id')
                     model_version_id = attributes.get('model-version-id')
                     service_role = attributes.get('service-role')
-                # For 1712 template and earlier
+                # For earlier
                 else:
                     service_type = equipment_role = requirement.get('service_type')
                     customer_id = global_customer_id = requirement.get('customer_id')
@@ -865,7 +862,7 @@ class AAI(base.InventoryProviderBase):
                 # Used for order locking feature
                 # by defaut, conflict id is the combination of candidate id, service type and vnf-e2e-key
                 conflict_identifier = requirement.get('conflict_identifier')
-                # VLAN tagging fields
+                # VLAN fields
                 vlan_key = requirement.get('vlan_key')
                 port_key = requirement.get('port_key')
 
@@ -886,11 +883,6 @@ class AAI(base.InventoryProviderBase):
                 # transparent to Conductor
                 service_resource_id = requirement.get('service_resource_id') \
                     if requirement.get('service_resource_id') else ''
-                # 21014aa2-526b-11e6-beb8-9e71128cae77 is a special
-                # customer_id that is supposed to fetch all VVIG instances.
-                # This should be a config parameter.
-                # if service_type in ['VVIG', 'HNGATEWAY', 'HNPORTAL']:
-                #     customer_id = '21014aa2-526b-11e6-beb8-9e71128cae77'
 
                 # add all the candidates of cloud type
                 if inventory_type == 'cloud':
@@ -1118,7 +1110,7 @@ class AAI(base.InventoryProviderBase):
                             candidate['vim-id'] = \
                                 candidate['cloud_owner'] + '_' + cloud_region_id
 
-                        # get AIC version for service candidate
+                        # get version for service candidate
                         if cloud_region_id:
                             cloud_region_uri = '/cloud-infrastructure/cloud-regions' \
                                                '/?cloud-region-id=' \
@@ -1249,7 +1241,7 @@ class AAI(base.InventoryProviderBase):
                                           format(name, rl_data))
                                 # if HPA_feature is disabled
                                 if not self.conf.HPA_enabled:
-                                    # (ecomp2onap-feature2) Triage Tool Feature Changes
+                                    # Triage Tool Feature Changes
                                     self.triage_translator.collectDroppedCandiate(candidate['candidate_id'],
                                                                                   candidate['location_id'], name,
                                                                                   triage_translator_data,
@@ -1260,7 +1252,7 @@ class AAI(base.InventoryProviderBase):
                                         LOG.error("{} cloud-owner or cloud-region not "
                                                   "available from A&AI".
                                                   format(name))
-                                        # (ecomp2onap-feature2) Triage Tool Feature Changes
+                                        # Triage Tool Feature Changes
                                         self.triage_translator.collectDroppedCandiate(candidate['candidate_id'],
                                                                                       candidate['location_id'], name,
                                                                                       triage_translator_data,
@@ -1276,7 +1268,7 @@ class AAI(base.InventoryProviderBase):
                                                              path=path,
                                                              data=None)
                                     if response is None or response.status_code != 200:
-                                        # (ecomp2onap-feature2) Triage Tool Feature Changes
+                                        # Triage Tool Feature Changes
                                         self.triage_translator.collectDroppedCandiate(candidate['candidate_id'],
                                                                                       candidate['location_id'], name,
                                                                                       triage_translator_data,
@@ -1289,7 +1281,7 @@ class AAI(base.InventoryProviderBase):
                                     LOG.error(_LE("{} pserver path information "
                                                   "not found in A&AI: {}").
                                               format(name, ps_link))
-                                    # (ecomp2onap-feature2) Triage Tool Feature Changes
+                                    # Triage Tool Feature Changes
                                     self.triage_translator.collectDroppedCandiate(candidate['candidate_id'],
                                                                                   candidate['location_id'], name,
                                                                                   triage_translator_data,
@@ -1299,7 +1291,7 @@ class AAI(base.InventoryProviderBase):
                                 response = self._request(
                                     path=path, context="PSERVER", value=ps_path)
                                 if response is None or response.status_code != 200:
-                                    # (ecomp2onap-feature2) Triage Tool Feature Changes
+                                    # Triage Tool Feature Changes
                                     self.triage_translator.collectDroppedCandiate(candidate['candidate_id'],
                                                                                   candidate['location_id'], name,
                                                                                   triage_translator_data,
@@ -1459,24 +1451,6 @@ class AAI(base.InventoryProviderBase):
                 elif inventory_type == 'transport' \
                      and customer_id and service_type and \
                      service_subscription and service_role:
-
-                    '''
-                        GET /aai/v11/business/customers/customer/31739f3e-526b-11e6-beb8-9e71128cae77/service-subscriptions/
-                        service-subscription/MISVPN%20Transport/service-instances?service-type=TRANSPORT&service-role=MISVPN
-                        Sample demand section for transport services:
-                        "TRANSPORT_DEMAND_1": [
-                              {
-                                 "attributes": {
-                                   "global-customer-id": "31739f3e-526b-11e6-beb8-9e71128cae77",
-                                   "service-type": "TRANSPORT",
-                                   "service-role": "MISVPN"
-                                 },
-                                 "inventory_provider": "aai",
-                                 "inventory_type": "transport",
-                                 "service_subscription": "MISVPN%20Transport"
-                               }
-                       ]
-                    '''
                     path = self._aai_versioned_path('business/customers/customer/{}/service-subscriptions/'
                                                     'service-subscription/{}/service-instances'
                                                     '?service-type={}&service-role={}'.format(customer_id,
