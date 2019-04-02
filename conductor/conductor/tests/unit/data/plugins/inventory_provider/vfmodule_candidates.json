@@ -1,0 +1,73 @@
+{"vPGN": [{
+            "existing_placement": "false",
+            "service_resource_id": "vPGN-XX",
+            "vf-module-name": "vnf-pkg-r1-t2-mc",
+            "inventory_provider": "aai",
+            "cost": 1.0,
+            "vf-module-id": "d187d743-5932-4fb9-a42d-db0a5be5ba7e",
+            "nf-id": "fcbff633-47cc-4f38-a98d-4ba8285bd8b6",
+            "ipv4-oam-address": "oam_network_zb4J",
+            "location_id": "RegionOne",
+            "complex_name": "clli1",
+            "vservers": [{
+                "vserver-id": "00bddefc-126e-4e4f-a18d-99b94d8d9a30",
+                "l-interfaces": [{
+                        "macaddr": "fa:16:3e:c4:07:7f",
+                        "interface-name": "vnf-pkg-r1-t2-mc-vpg_private_2_port-mf7lu55usq7i",
+                        "ipv4-addresses": [
+                            "10.100.100.2"
+                        ],
+                        "ipv6-addresses": [],
+                        "interface-id": "4b333af1-90d6-42ae-8389-d440e6ff0e93",
+                        "network-name": "",
+                        "network-id": "59763a33-3296-4dc8-9ee6-2bdcd63322fc"
+                    },
+                    {
+                        "macaddr": "fa:16:3e:b5:86:38",
+                        "interface-name": "vnf-pkg-r1-t2-mc-vpg_private_1_port-734xxixicw6r",
+                        "ipv4-addresses": [
+                            "10.0.110.2"
+                        ],
+                        "ipv6-addresses": [],
+                        "interface-id": "85dd57e9-6e3a-48d0-a784-4598d627e798",
+                        "network-name": "",
+                        "network-id": "cdb4bc25-2412-4b77-bbd5-791a02f8776d"
+                    },
+                    {
+                        "macaddr": "fa:16:3e:ff:d8:6f",
+                        "interface-name": "vnf-pkg-r1-t2-mc-vpg_private_0_port-e5qdm3p5ijhe",
+                        "ipv4-addresses": [
+                            "192.168.10.200"
+                        ],
+                        "ipv6-addresses": [],
+                        "interface-id": "edaff25a-878e-4706-ad52-4e3d51cf6a82",
+                        "network-name": "",
+                        "network-id": "932ac514-639a-45b2-b1a3-4c5bb708b5c1"
+                    }
+                ],
+                "vserver-name": "zdfw1fwl01pgn01"
+            }],
+            "city": "example-city-val-27150",
+            "cloud_owner": "CloudOwner",
+            "vnf-type": "5G_EVE_Demo/5G_EVE_PKG 0",
+            "nf-name": "vFW-PKG-MC",
+            "inventory_type": "vfmodule",
+            "sriov_automation": "false",
+            "uniqueness": "false",
+            "candidate_id": "d187d743-5932-4fb9-a42d-db0a5be5ba7e",
+            "latitude": "example-latitude-val-89101",
+            "physical_location_id": "clli1",
+            "nf-type": "vnf",
+            "port_key": "vlan_port",
+            "vlan_key": "vlan_key",
+            "cloud_region_version": "1",
+            "host_id": "vFW-PKG-MC",
+            "ipv6-oam-address": "",
+            "location_type": "att_aic",
+            "country": "example-country-val-94173",
+            "region": "example-region-val-13893",
+            "service_instance_id": "3e8d118c-10ca-4b4b-b3db-089b5e9e6a1c",
+            "state": "example-state-val-59487",
+            "longitude": "32.89948",
+            "vim-id": "CloudOwner_RegionOne"}
+]}

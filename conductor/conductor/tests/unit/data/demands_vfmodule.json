@@ -1,0 +1,35 @@
+{
+    "demands": {
+        "vFW-SINK": [{
+            "service_resource_id": "vFW-SINK-XX",
+            "inventory_provider": "aai",
+            "inventory_type": "vfmodule",
+            "vlan_key": "vlan_key",
+            "port_key": "vlan_port",
+            "excluded_candidates": [{
+                "candidate_id": ["e765d576-8755-4145-8536-0bb6d9b1dc9a"],
+                "inventory_type": "vfmodule"
+            }],
+            "attributes": {
+                "prov-status": "ACTIVE",
+                "global-customer-id": "Demonstration",
+                "model-version-id": "763731df-84fd-494b-b824-01fc59a5ff2d",
+                "model-invariant-id": "e7227847-dea6-4374-abca-4561b070fe7d",
+                "orchestration-status": ["active"],
+                "cloud-region-id": {
+                    "get_param": "chosen_region"
+                },
+                "service_instance_id": {
+                    "get_param": "service_id"
+                }
+            },
+            "service_type": "vFW-SINK-XX"
+        }]
+    },
+    "triage_translator_data": {
+        "plan_id": "plan_abc",
+        "plan_name": "plan_name",
+        "translator_triage": [],
+        "dropped_candidates": []
+    }
+}

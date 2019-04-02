@@ -1,0 +1,85 @@
+{
+    "physical-location-id": "clli1",
+    "data-center-code": "example-data-center-code-val-5556",
+    "complex-name": "clli1",
+    "identity-url": "example-identity-url-val-56898",
+    "resource-version": "1554189552609",
+    "physical-location-type": "example-physical-location-type-val-7608",
+    "street1": "example-street1-val-34205",
+    "street2": "example-street2-val-99210",
+    "city": "example-city-val-27150",
+    "state": "example-state-val-59487",
+    "postal-code": "68871",
+    "country": "example-country-val-94173",
+    "region": "example-region-val-13893",
+    "latitude": "example-latitude-val-89101",
+    "longitude": "32.89948",
+    "elevation": "97.045443",
+    "lata": "example-lata-val-46073",
+    "relationship-list": {
+        "relationship": [
+            {
+                "related-to": "cloud-region",
+                "relationship-label": "org.onap.relationships.inventory.LocatedIn",
+                "related-link": "/aai/v14/cloud-infrastructure/cloud-regions/cloud-region/CloudOwner/RegionOne",
+                "relationship-data": [
+                    {
+                        "relationship-key": "cloud-region.cloud-owner",
+                        "relationship-value": "CloudOwner"
+                    },
+                    {
+                        "relationship-key": "cloud-region.cloud-region-id",
+                        "relationship-value": "RegionOne"
+                    }
+                ],
+                "related-to-property": [
+                    {
+                        "property-key": "cloud-region.owner-defined-type",
+                        "property-value": "OwnerType"
+                    }
+                ]
+            },
+            {
+                "related-to": "cloud-region",
+                "relationship-label": "org.onap.relationships.inventory.LocatedIn",
+                "related-link": "/aai/v14/cloud-infrastructure/cloud-regions/cloud-region/ja/asd",
+                "relationship-data": [
+                    {
+                        "relationship-key": "cloud-region.cloud-owner",
+                        "relationship-value": "ja"
+                    },
+                    {
+                        "relationship-key": "cloud-region.cloud-region-id",
+                        "relationship-value": "asd"
+                    }
+                ],
+                "related-to-property": [
+                    {
+                        "property-key": "cloud-region.owner-defined-type",
+                        "property-value": "asd"
+                    }
+                ]
+            },
+            {
+                "related-to": "cloud-region",
+                "relationship-label": "org.onap.relationships.inventory.LocatedIn",
+                "related-link": "/aai/v14/cloud-infrastructure/cloud-regions/cloud-region/CloudOwner/RegionTwo",
+                "relationship-data": [
+                    {
+                        "relationship-key": "cloud-region.cloud-owner",
+                        "relationship-value": "CloudOwner"
+                    },
+                    {
+                        "relationship-key": "cloud-region.cloud-region-id",
+                        "relationship-value": "RegionTwo"
+                    }
+                ],
+                "related-to-property": [
+                    {
+                        "property-key": "cloud-region.owner-defined-type"
+                    }
+                ]
+            }
+        ]
+    }
+}

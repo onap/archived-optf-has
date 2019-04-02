@@ -166,6 +166,97 @@ class TestNoExceptionTranslator(unittest.TestCase):
         self.assertEquals(self.Translator.parse_demands(demands), rtn)
 
     @patch('conductor.common.music.messaging.component.RPCClient.call')
+    def test_parse_demands_inventory_type_vfmodule(self, mock_call):
+        TraigeTranslator.thefinalCallTrans = mock.MagicMock(return_value=None)
+        demands = {
+            "vFW-SINK": [{
+                "service_resource_id": "vFW-SINK-XX",
+                "inventory_provider": "aai",
+                "inventory_type": "vfmodule",
+                "vlan_key": "vlan_key",
+                "port_key": "vlan_port",
+                "excluded_candidates": [{
+                    "candidate_id": ["e765d576-8755-4145-8536-0bb6d9b1dc9a"],
+                    "inventory_type": "vfmodule"
+                }],
+                "attributes": {
+                    "prov-status": "ACTIVE",
+                    "global-customer-id": "Demonstration",
+                    "model-version-id": "763731df-84fd-494b-b824-01fc59a5ff2d",
+                    "model-invariant-id": "e7227847-dea6-4374-abca-4561b070fe7d",
+                    "orchestration-status": ["active"],
+                    "cloud-region-id": {
+                        "get_param": "chosen_region"
+                    },
+                    "service_instance_id": {
+                        "get_param": "service_id"
+                    }
+                },
+                "service_type": "vFW-SINK-XX"
+            }]
+        }
+        self.Translator._plan_id = ""
+        self.Translator._plan_name = ""
+        mock_call.return_value = {'resolved_demands': {
+            "vFW-SINK": [{
+                "service_resource_id": "vFW-SINK-XX",
+                "inventory_provider": "aai",
+                "inventory_type": "vfmodule",
+                "vlan_key": "vlan_key",
+                "port_key": "vlan_port",
+                "excluded_candidates": [{
+                    "candidate_id": ["e765d576-8755-4145-8536-0bb6d9b1dc9a"],
+                    "inventory_type": "vfmodule"
+                }],
+                "attributes": {
+                    "prov-status": "ACTIVE",
+                    "global-customer-id": "Demonstration",
+                    "model-version-id": "763731df-84fd-494b-b824-01fc59a5ff2d",
+                    "model-invariant-id": "e7227847-dea6-4374-abca-4561b070fe7d",
+                    "orchestration-status": ["active"],
+                    "cloud-region-id": {
+                        "get_param": "chosen_region"
+                    },
+                    "service_instance_id": {
+                        "get_param": "service_id"
+                    }
+                },
+                "service_type": "vFW-SINK-XX"
+            }]
+        }}
+        rtn = {
+            "vFW-SINK": {
+                "candidates": [{
+                    "excluded_candidates": [{
+                        "candidate_id": ["e765d576-8755-4145-8536-0bb6d9b1dc9a"],
+                        "inventory_type": "vfmodule"
+                    }],
+                    "port_key": "vlan_port",
+                    "service_resource_id": "vFW-SINK-XX",
+                    "vlan_key": "vlan_key",
+                    "service_type": "vFW-SINK-XX",
+                    "attributes": {
+                        "cloud-region-id": {
+                            "get_param": "chosen_region"
+                        },
+                        "model-version-id": "763731df-84fd-494b-b824-01fc59a5ff2d",
+                        "service_instance_id": {
+                            "get_param": "service_id"
+                        },
+                        "orchestration-status": ["active"],
+                        "global-customer-id": "Demonstration",
+                        "prov-status": "ACTIVE",
+                        "model-invariant-id": "e7227847-dea6-4374-abca-4561b070fe7d"
+                    },
+                    "inventory_provider": "aai",
+                    "inventory_type": "vfmodule"
+                }]
+            }
+        }
+
+        self.assertEquals(self.Translator.parse_demands(demands), rtn)
+
+    @patch('conductor.common.music.messaging.component.RPCClient.call')
     def test_parse_demands_without_candidate(self, mock_call):
         TraigeTranslator.thefinalCallTrans = mock.MagicMock(return_value=None)  
         demands = {

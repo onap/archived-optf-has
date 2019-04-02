@@ -45,9 +45,12 @@ class RandomPick(search.Search):
             _decision_path.current_demand = demand
             candidate_list = self._solve_constraints(_decision_path, _request)
 
-            # random pick one candidate
-            r_index = randint(0, len(candidate_list) - 1)
-            best_resource = candidate_list[r_index]
-            _decision_path.decisions[demand.name] = best_resource
+            if len(candidate_list) > 0:
+                # random pick one candidate
+                r_index = randint(0, len(candidate_list) - 1)
+                best_resource = candidate_list[r_index]
+                _decision_path.decisions[demand.name] = best_resource
+            else:
+                return None
 
         return _decision_path
