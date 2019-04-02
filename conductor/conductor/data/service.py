@@ -240,6 +240,7 @@ class DataEndpoint(object):
 
         cloud_requests = value.get("cloud-requests")
         service_requests = value.get("service-requests")
+        vfmodule_requests = value.get("vfmodule-requests")
 
         for candidate in candidate_list:
             if candidate.get("inventory_type") == "cloud" and \
@@ -250,6 +251,9 @@ class DataEndpoint(object):
                     (candidate.get(value_attrib) not in service_requests):
                 discard_set.add(candidate.get("candidate_id"))
 
+            elif candidate.get("inventory_type") == "vfmodule" and \
+                    (candidate.get(value_attrib) not in vfmodule_requests):
+                discard_set.add(candidate.get("candidate_id"))
 
         return discard_set
 
@@ -671,6 +675,7 @@ class DataEndpoint(object):
                 clli_code
             )
         else:
+            results = None
             # unknown location response
             LOG.error(_LE("Unknown location type from the input template."
                           "Expected location types are host_name"

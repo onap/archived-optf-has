@@ -22,7 +22,6 @@ from oslo_log import log
 import copy
 import time
 
-
 from conductor import service
 # from conductor.solver.optimizer import decision_path as dpath
 # from conductor.solver.optimizer import best_first
@@ -74,7 +73,7 @@ class Optimizer(object):
 
     def get_solution(self, num_solutions):
 
-        LOG.debug("search start")
+        LOG.debug("search start for max {} solutions".format(num_solutions))
         for rk in self.requests:
             request = self.requests[rk]
             LOG.debug("--- request = {}".format(rk))
@@ -88,6 +87,7 @@ class Optimizer(object):
 
             LOG.debug("2. search")
 
+            rand_counter = 10
             while (num_solutions == 'all' or num_solutions > 0):
 
                 LOG.debug("searching for the solution {}".format(len(decision_list) + 1))
@@ -106,25 +106,40 @@ class Optimizer(object):
                     best_path = self.search.search(demand_list,
                                                    request.objective, request)
 
+                LOG.debug("search delay = {} sec".format(time.time() - st))
+
+                demand_list = copy.deepcopy(_copy_demand_list)
+
                 if best_path is not None:
                     self.search.print_decisions(best_path)
+                    rand_counter = 10
+                elif not request.objective.goal and rand_counter > 0 and self._has_candidates(request):
+                    rand_counter -= 1 #let's wait a bit for random solution
+                    LOG.debug("Incomplete random solution - repeat {}".format(rand_counter))
+                    continue
                 else:
                     LOG.debug("no solution found")
                     break
-
-                LOG.debug("search delay = {} sec".format(time.time() - st))
 
                 # add the current solution to decision_list
                 decision_list.append(best_path.decisions)
 
                 #remove the candidate with "uniqueness = true"
-                demand_list = copy.deepcopy(_copy_demand_list)
                 self._remove_unique_candidate(request, best_path, demand_list)
 
                 if num_solutions != 'all':
                     num_solutions -= 1
             self.search.triageSolver.getSolution(decision_list)
             return decision_list
+
+    def _has_candidates(self, request):
+        for demand_name, demand in request.demands.items():
+            LOG.debug("Req Available resources: {} {}".format(demand_name, len(request.demands[demand_name].resources)))
+            if len(demand.resources) == 0:
+                LOG.debug("No more candidates for demand {}".format(demand_name))
+                return False
+
+        return True
 
     def _remove_unique_candidate(self, _request, current_decision, demand_list):
 

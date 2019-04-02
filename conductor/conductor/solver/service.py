@@ -24,9 +24,7 @@ import cotyledon
 import json
 import time
 import traceback
-import json
 import socket
-import json
 from oslo_config import cfg
 from oslo_log import log
 
@@ -508,6 +506,25 @@ class SolverService(cotyledon.Service):
                                 rec["attributes"]['vlan_key'] = resource.get('vlan_key')
                             if resource.get('port_key'):
                                 rec["attributes"]['port_key'] = resource.get('port_key')
+
+                        if rec["candidate"]["inventory_type"] == "vfmodule":
+                            rec["attributes"]["host_id"] = resource.get("host_id")
+                            rec["attributes"]["service_instance_id"] = resource.get("service_instance_id")
+                            rec["candidate"]["host_id"] = resource.get("host_id")
+
+                            if resource.get('vlan_key'):
+                                rec["attributes"]['vlan_key'] = resource.get('vlan_key')
+                            if resource.get('port_key'):
+                                rec["attributes"]['port_key'] = resource.get('port_key')
+
+                            vf_module_data = rec["attributes"]
+                            vf_module_data['nf-name'] = resource.get("nf-name")
+                            vf_module_data['nf-id'] = resource.get("nf-id")
+                            vf_module_data['nf-type'] = resource.get("nf-type")
+                            vf_module_data['vnf-type'] = resource.get("vnf-type")
+                            vf_module_data['ipv4-oam-address'] = resource.get("ipv4-oam-address")
+                            vf_module_data['ipv6-oam-address'] = resource.get("ipv6-oam-address")
+                            vf_module_data['vservers'] = resource.get("vservers")
 
                         elif rec["candidate"]["inventory_type"] == "cloud":
                             if resource.get("all_directives") and resource.get("flavor_map"):
