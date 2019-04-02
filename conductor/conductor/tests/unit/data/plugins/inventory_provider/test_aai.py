@@ -18,6 +18,9 @@
 #
 import json
 import unittest
+import logging
+import sys
+import copy
 
 import conductor.data.plugins.inventory_provider.aai as aai
 import mock
@@ -34,6 +37,7 @@ class TestAAI(unittest.TestCase):
         CONF.register_opts(aai.AAI_OPTS, group='aai')
         self.conf = CONF
         self.aai_ep = AAI()
+        logging.basicConfig(stream=sys.stderr, level=logging.DEBUG)
 
     def tearDown(self):
         mock.patch.stopall()
@@ -103,7 +107,7 @@ class TestAAI(unittest.TestCase):
         self.assertEqual({'country': u'USA', 'latitude': u'28.543251', 'longitude': u'-81.377112'} ,
                          self.aai_ep.resolve_host_location("host_name"))
 
-    def test_resolve_demands(self):
+    def test_resolve_demands_inventory_type_cloud(self):
 
         self.aai_ep.conf.HPA_enabled = True
         TraigeTranslator.getPlanIdNAme = mock.MagicMock(return_value=None)
@@ -141,8 +145,22 @@ class TestAAI(unittest.TestCase):
         self.mock_get_regions = mock.patch.object(AAI, '_get_regions', return_value=regions_response)
         self.mock_get_regions.start()
 
-        self.mock_get_regions = mock.patch.object(AAI, '_request', return_value=req_response)
-        self.mock_get_regions.start()
+        regions_list = list()
+        regions_list.append(regions_response.get('region-name'))
+        self.mock_resolve_cloud_regions_by_cloud_region_id = mock.patch.object(AAI,
+                                                                               'resolve_cloud_regions_by_cloud_region_id',
+                                                                               return_value=regions_list)
+        self.mock_resolve_cloud_regions_by_cloud_region_id.start()
+
+        self.mock_resolove_v_server_for_candidate = mock.patch.object(AAI, 'resolove_v_server_for_candidate',
+                                                                      return_value=demand_service_response)
+        self.mock_resolove_v_server_for_candidate.start()
+
+        complex_link = {"link": "/aai/v10/complex-id", "d_value": 'test-id'}
+        self.mock_resolve_complex_info_link_for_v_server = mock.patch.object(AAI,
+                                                                             'resolve_complex_info_link_for_v_server',
+                                                                             return_value=complex_link)
+        self.mock_resolve_complex_info_link_for_v_server.start()
 
         self.mock_get_complex = mock.patch.object(AAI, '_get_complex', return_value=complex_json)
         self.mock_get_complex.start()
@@ -178,6 +196,160 @@ class TestAAI(unittest.TestCase):
              'flavors': flavor_info}]},
             self.aai_ep.resolve_demands(demands_list, plan_info=plan_info,
                                         triage_translator_data=triage_translator_data))
+
+    def test_resolve_demands_inventory_type_service(self):
+        self.aai_ep.conf.HPA_enabled = True
+        TraigeTranslator.getPlanIdNAme = mock.MagicMock(return_value=None)
+        TraigeTranslator.addDemandsTriageTranslator = mock.MagicMock(return_value=None)
+
+        plan_info = {
+            'plan_name': 'name',
+            'plan_id': 'id'
+        }
+        triage_translator_data = None
+
+        demands_list_file = './conductor/tests/unit/data/plugins/inventory_provider/service_demand_list.json'
+        demands_list = json.loads(open(demands_list_file).read())
+
+        generic_vnf_list_file = './conductor/tests/unit/data/plugins/inventory_provider/vfmodule_service_generic_vnf_list.json'
+        generic_vnf_list = json.loads(open(generic_vnf_list_file).read())
+
+        v_server_file = './conductor/tests/unit/data/plugins/inventory_provider/vfmodule_vserver.json'
+        v_server = json.loads(open(v_server_file).read())
+
+        demand_service_response_file = './conductor/tests/unit/data/plugins/inventory_provider/resolve_demand_service_response.json'
+        demand_service_response = json.loads(open(demand_service_response_file).read())
+
+        complex_file = './conductor/tests/unit/data/plugins/inventory_provider/vfmodule_complex.json'
+        complex_response = json.loads(open(complex_file).read())
+
+        region_response_file = './conductor/tests/unit/data/plugins/inventory_provider/vfmodule_region.json'
+        region_response = json.loads(open(region_response_file).read())
+
+        results_file = './conductor/tests/unit/data/plugins/inventory_provider/service_candidates.json'
+        results_json = json.loads(open(results_file).read())
+
+        req_response = mock.MagicMock()
+        req_response.status_code = 200
+        req_response.ok = True
+        req_response.json.return_value = demand_service_response
+
+        log = logging.getLogger("TestLog")
+
+        def mock_first_level_service_call_response(path, name, service_type):
+            log.debug("{} {} {}".format(path, name, service_type))
+            if "equipment-role" in path:
+                return list()
+            else:
+                return generic_vnf_list
+
+        self.mock_first_level_service_call = mock.patch.object(AAI, 'first_level_service_call',
+                                                               side_effect=mock_first_level_service_call_response)
+        self.mock_first_level_service_call.start()
+
+        regions = list()
+        regions.append(region_response)
+        self.mock_resolve_cloud_regions_by_cloud_region_id = mock.patch.object(AAI,
+                                                                               'resolve_cloud_regions_by_cloud_region_id',
+                                                                               return_value=regions)
+        self.mock_resolve_cloud_regions_by_cloud_region_id.start()
+
+        self.mock_resolove_v_server_for_candidate = mock.patch.object(AAI, 'resolove_v_server_for_candidate',
+                                                                      return_value=v_server)
+        self.mock_resolove_v_server_for_candidate.start()
+
+        complex_link = {"link": "/aai/v14/cloud-infrastructure/complexes/complex/clli1", "d_value": 'clli1'}
+        self.mock_resolve_complex_info_link_for_v_server = mock.patch.object(AAI,
+                                                                             'resolve_complex_info_link_for_v_server',
+                                                                             return_value=complex_link)
+        self.mock_resolve_complex_info_link_for_v_server.start()
+
+        self.mock_get_complex = mock.patch.object(AAI, '_get_complex', return_value=complex_response)
+        self.mock_get_complex.start()
+
+        self.maxDiff = None
+        self.assertEqual(results_json, self.aai_ep.resolve_demands(demands_list, plan_info=plan_info,
+                                         triage_translator_data=triage_translator_data))
+
+    def test_resolve_demands_inventory_type_vfmodule(self):
+        self.aai_ep.conf.HPA_enabled = True
+        TraigeTranslator.getPlanIdNAme = mock.MagicMock(return_value=None)
+        TraigeTranslator.addDemandsTriageTranslator = mock.MagicMock(return_value=None)
+
+        plan_info = {
+            'plan_name': 'name',
+            'plan_id': 'id'
+        }
+        triage_translator_data = None
+
+        demands_list_file = './conductor/tests/unit/data/plugins/inventory_provider/vfmodule_demand_list.json'
+        demands_list = json.loads(open(demands_list_file).read())
+
+        generic_vnf_list_file = './conductor/tests/unit/data/plugins/inventory_provider/vfmodule_service_generic_vnf_list.json'
+        generic_vnf_list = json.loads(open(generic_vnf_list_file).read())
+
+        vfmodules_list_file = './conductor/tests/unit/data/plugins/inventory_provider/vfmodule_list.json'
+        vfmodules_list = json.loads(open(vfmodules_list_file).read())
+
+        v_server_file = './conductor/tests/unit/data/plugins/inventory_provider/vfmodule_vserver.json'
+        v_server = json.loads(open(v_server_file).read())
+
+        demand_service_response_file = './conductor/tests/unit/data/plugins/inventory_provider/resolve_demand_service_response.json'
+        demand_service_response = json.loads(open(demand_service_response_file).read())
+
+        complex_file = './conductor/tests/unit/data/plugins/inventory_provider/vfmodule_complex.json'
+        complex_response = json.loads(open(complex_file).read())
+
+        region_response_file = './conductor/tests/unit/data/plugins/inventory_provider/vfmodule_region.json'
+        region_response = json.loads(open(region_response_file).read())
+
+        results_file = './conductor/tests/unit/data/plugins/inventory_provider/vfmodule_candidates.json'
+        results_json = json.loads(open(results_file).read())
+
+        req_response = mock.MagicMock()
+        req_response.status_code = 200
+        req_response.ok = True
+        req_response.json.return_value = demand_service_response
+
+        log = logging.getLogger("TestLog")
+
+        def mock_first_level_service_call_response(path, name, service_type):
+            log.debug("{} {} {}".format(path, name, service_type))
+            if "equipment-role" in path:
+                return list()
+            else:
+                return generic_vnf_list
+
+        self.mock_first_level_service_call = mock.patch.object(AAI, 'first_level_service_call',
+                                                               side_effect=mock_first_level_service_call_response)
+        self.mock_first_level_service_call.start()
+
+        self.mock_resolve_vf_modules_for_generic_vnf = mock.patch.object(AAI, 'resolve_vf_modules_for_generic_vnf',
+                                                                         return_value=vfmodules_list)
+        self.mock_resolve_vf_modules_for_generic_vnf.start()
+
+        regions = list()
+        regions.append(region_response)
+        self.mock_resolve_cloud_regions_by_cloud_region_id = mock.patch.object(AAI,
+                                                                               'resolve_cloud_regions_by_cloud_region_id',
+                                                                               return_value=regions)
+        self.mock_resolve_cloud_regions_by_cloud_region_id.start()
+
+        self.mock_resolove_v_server_for_candidate = mock.patch.object(AAI, 'resolove_v_server_for_candidate',
+                                                                       return_value=v_server)
+        self.mock_resolove_v_server_for_candidate.start()
+
+        complex_link = {"link": "/aai/v14/cloud-infrastructure/complexes/complex/clli1", "d_value": 'clli1'}
+        self.mock_resolve_complex_info_link_for_v_server = mock.patch.object(AAI, 'resolve_complex_info_link_for_v_server',
+                                                                             return_value=complex_link)
+        self.mock_resolve_complex_info_link_for_v_server.start()
+
+        self.mock_get_complex = mock.patch.object(AAI, '_get_complex', return_value=complex_response)
+        self.mock_get_complex.start()
+
+        self.maxDiff = None
+        self.assertEqual(results_json, self.aai_ep.resolve_demands(demands_list, plan_info=plan_info,
+                                         triage_translator_data=triage_translator_data))
 
     def test_get_complex(self):
 
@@ -311,6 +483,167 @@ class TestAAI(unittest.TestCase):
         flavors_info = self.aai_ep._get_flavors("mock-cloud-owner",
                                                 "mock-cloud-region-id")
         self.assertEqual(2, len(flavors_info['flavor']))
+
+    def test_resolve_complex_info_link_for_v_server(self):
+        TraigeTranslator.collectDroppedCandiate = mock.MagicMock(return_value=None)
+        triage_translator_data = None
+        demand_name = 'vPGN'
+        service_type = 'vFW'
+        cloud_owner = 'CloudOwner'
+        cloud_region_id = 'RegionOne'
+        v_server_file = './conductor/tests/unit/data/plugins/inventory_provider/vfmodule_vserver.json'
+        v_server = json.loads(open(v_server_file).read())
+        region_response_file = './conductor/tests/unit/data/plugins/inventory_provider/vfmodule_region.json'
+        region_response = json.loads(open(region_response_file).read())
+
+        candidate = dict()
+        candidate['candidate_id'] = 'some_id'
+        candidate['location_id'] = 'some_location_id'
+        candidate['inventory_type'] = 'service'
+
+        response = mock.MagicMock()
+        response.status_code = 200
+        response.ok = True
+        response.json.return_value = region_response
+
+        self.mock_get_request = mock.patch.object(AAI, '_request', return_value=response)
+        self.mock_get_request.start()
+
+        link_rl_data = self.aai_ep.resolve_complex_info_link_for_v_server(candidate, v_server, None,
+                                                                          cloud_region_id, service_type,
+                                                                          demand_name, triage_translator_data)
+        self.assertEqual(None, link_rl_data)
+
+        complex_link = {"link": "/aai/v14/cloud-infrastructure/complexes/complex/clli1", "d_value": 'clli1'}
+        link_rl_data = self.aai_ep.resolve_complex_info_link_for_v_server(candidate, v_server, cloud_owner,
+                                                                          cloud_region_id, service_type,
+                                                                          demand_name, triage_translator_data)
+        self.assertEqual(complex_link, link_rl_data)
+
+    def test_build_complex_info_for_candidate(self):
+        TraigeTranslator.collectDroppedCandiate = mock.MagicMock(return_value=None)
+        triage_translator_data = None
+        demand_name = 'vPGN'
+        service_type = 'vFW'
+        complex_file = './conductor/tests/unit/data/plugins/inventory_provider/vfmodule_complex.json'
+        complex_response = json.loads(open(complex_file).read())
+
+        candidate = dict()
+        candidate['candidate_id'] = 'some_id'
+        candidate['location_id'] = 'some_location_id'
+        candidate['inventory_type'] = 'service'
+        initial_candidate = copy.deepcopy(candidate)
+        complex_list_empty = dict()
+        complex_list = list()
+        complex_list.append({"link": "/aai/v14/cloud-infrastructure/complexes/complex/clli1", "d_value": 'clli1'})
+        complex_list.append({"link": "/aai/v14/cloud-infrastructure/complexes/complex/clli2", "d_value": 'clli2'})
+
+        self.mock_get_complex = mock.patch.object(AAI, '_get_complex', return_value=complex_response)
+        self.mock_get_complex.start()
+
+        self.aai_ep.build_complex_info_for_candidate(candidate, None, complex_list_empty, service_type, demand_name,
+                                                     triage_translator_data)
+        self.assertEqual(initial_candidate, candidate)
+        self.assertEqual(1, TraigeTranslator.collectDroppedCandiate.call_count)
+
+        self.aai_ep.build_complex_info_for_candidate(candidate, None, complex_list, service_type, demand_name,
+                                                     triage_translator_data)
+        self.assertEqual(initial_candidate, candidate)
+        self.assertEqual(2, TraigeTranslator.collectDroppedCandiate.call_count)
+
+        complex_list.pop()
+        self.aai_ep.build_complex_info_for_candidate(candidate, None, complex_list, service_type, demand_name,
+                                                     triage_translator_data)
+
+        self.assertEqual(candidate, {'city': u'example-city-val-27150', 'country': u'example-country-val-94173',
+                                     'region': u'example-region-val-13893', 'inventory_type': 'service',
+                                     'longitude': u'32.89948', 'state': u'example-state-val-59487',
+                                     'physical_location_id': 'clli1', 'latitude': u'example-latitude-val-89101',
+                                     'complex_name': u'clli1', 'location_id': 'some_location_id',
+                                     'candidate_id': 'some_id'})
+        self.assertEqual(2, TraigeTranslator.collectDroppedCandiate.call_count)
+
+    def test_resolve_vnf_parameters(self):
+        TraigeTranslator.collectDroppedCandiate = mock.MagicMock(return_value=None)
+        triage_translator_data = None
+        demand_name = 'vPGN'
+        service_type = 'vFW'
+        candidate = dict()
+        candidate['candidate_id'] = 'some_id'
+        candidate['location_id'] = 'some_location_id'
+        candidate['inventory_type'] = 'service'
+
+        generic_vnf_list_file = './conductor/tests/unit/data/plugins/inventory_provider/vfmodule_service_generic_vnf_list.json'
+        good_vnf = json.loads(open(generic_vnf_list_file).read())[0]
+        bad_generic_vnf_list_file = './conductor/tests/unit/data/plugins/inventory_provider/bad_generic_vnf_list.json'
+        bad_vnf = json.loads(open(bad_generic_vnf_list_file).read())[0]
+        region_response_file = './conductor/tests/unit/data/plugins/inventory_provider/vfmodule_region.json'
+        region_response = json.loads(open(region_response_file).read())
+
+        self.assertEqual("CloudOwner",
+                         self.aai_ep.resolve_cloud_owner_for_vnf(candidate, good_vnf, service_type,
+                                                                 demand_name, triage_translator_data).get('d_value'))
+        self.assertIsNone(self.aai_ep.resolve_cloud_owner_for_vnf(candidate, bad_vnf, service_type,
+                                                                  demand_name, triage_translator_data))
+
+        regions = list()
+        regions.append(region_response)
+        self.mock_get_regions = mock.patch.object(AAI, 'resolve_cloud_regions_by_cloud_region_id',
+                                                  return_value=regions)
+        self.mock_get_regions.start()
+
+        cloud_region_rl_data, cloud_region_ver_rl_data = self.aai_ep.resolve_cloud_region_id_and_version_for_vnf(
+            candidate, good_vnf, service_type, demand_name, triage_translator_data)
+        self.assertEqual("RegionOne", cloud_region_rl_data.get('d_value'))
+        self.assertEqual("1", cloud_region_ver_rl_data.get('d_value'))
+
+        self.assertEqual((None, None),
+                         self.aai_ep.resolve_cloud_region_id_and_version_for_vnf(candidate, bad_vnf, service_type,
+                                                                                 demand_name, triage_translator_data))
+        v_server_links = list()
+        v_server_links.append("/aai/v14/cloud-infrastructure/cloud-regions/cloud-region/CloudOwner/RegionOne/tenants/\
+tenant/3c6c471ada7747fe8ff7f28e100b61e8/vservers/vserver/00bddefc-126e-4e4f-a18d-99b94d8d9a30")
+        v_server_links.append("/aai/v14/cloud-infrastructure/cloud-regions/cloud-region/CloudOwner2/RegionOne2/tenants/\
+tenant/3c6c471ada7747fe8ff7f28e100b61e8/vservers/vserver/00bddefc-126e-4e4f-a18d-99b94d8d9a31")
+        self.assertEqual(v_server_links, self.aai_ep.resolve_v_server_links_for_vnf(bad_vnf))
+
+        customer_id = 'Demonstration'
+        self.assertEqual(customer_id,
+                         self.aai_ep.resolve_global_customer_id_for_vnf(candidate, good_vnf, customer_id, service_type,
+                                                                        demand_name,
+                                                                        triage_translator_data).get('d_value'))
+        self.assertEqual("3e8d118c-10ca-4b4b-b3db-089b5e9e6a1c",
+                         self.aai_ep.resolve_service_instance_id_for_vnf(candidate, good_vnf, customer_id, service_type,
+                                                                         demand_name,
+                                                                         triage_translator_data).get('d_value'))
+        self.assertIsNone(self.aai_ep.resolve_service_instance_id_for_vnf(candidate, bad_vnf, customer_id, service_type,
+                                                                          demand_name, triage_translator_data))
+
+    def test_match_candidate_by_list(self):
+        TraigeTranslator.collectDroppedCandiate = mock.MagicMock(return_value=None)
+        triage_translator_data = None
+
+        candidate = dict()
+        candidate['candidate_id'] = 'some_id'
+        candidate['location_id'] = 'some_location_id'
+        candidate['inventory_type'] = 'service'
+
+        candidate_list_empty = list()
+        candidate_list = list()
+        candidate_list.append(candidate)
+
+        self.assertFalse(self.aai_ep.match_candidate_by_list(candidate, candidate_list_empty, True, 'demand',
+                                                             triage_translator_data)),
+        self.assertEqual(0, TraigeTranslator.collectDroppedCandiate.call_count)
+        self.assertTrue(self.aai_ep.match_candidate_by_list(candidate, candidate_list, True, 'demand',
+                                                            triage_translator_data))
+        self.assertEqual(1, TraigeTranslator.collectDroppedCandiate.call_count)
+        self.assertTrue(self.aai_ep.match_candidate_by_list(candidate, candidate_list, False, 'demand',
+                                                            triage_translator_data))
+        self.assertEqual(1, TraigeTranslator.collectDroppedCandiate.call_count)
+        self.assertFalse(self.aai_ep.match_candidate_by_list(candidate, candidate_list_empty, False, 'demand',
+                                                             triage_translator_data))
+        self.assertEqual(2, TraigeTranslator.collectDroppedCandiate.call_count)
 
     def test_match_hpa(self):
         flavor_json_file = \

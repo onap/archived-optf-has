@@ -43,7 +43,7 @@ CONF = cfg.CONF
 VERSIONS = ["2016-11-01", "2017-10-10", "2018-02-01"]
 LOCATION_KEYS = ['latitude', 'longitude', 'host_name', 'clli_code']
 INVENTORY_PROVIDERS = ['aai']
-INVENTORY_TYPES = ['cloud', 'service', 'transport']
+INVENTORY_TYPES = ['cloud', 'service', 'transport', 'vfmodule']
 DEFAULT_INVENTORY_PROVIDER = INVENTORY_PROVIDERS[0]
 CANDIDATE_KEYS = ['candidate_id', 'cost', 'inventory_type', 'location_id',
                   'location_type']
@@ -445,9 +445,9 @@ class Translator(object):
                             "demand {}".format(inventory_type, name)
                         )
 
-                    # For service inventories, customer_id and
+                    # For service and vfmodule inventories, customer_id and
                     # service_type MUST be specified
-                    if inventory_type == 'service':
+                    if inventory_type == 'service' or inventory_type == 'vfmodule':
                         attributes = requirement.get('attributes')
 
                         if attributes:
