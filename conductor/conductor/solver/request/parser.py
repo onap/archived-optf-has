@@ -504,45 +504,6 @@ class Parser(object):
 
         return countries_list
 
-    def get_data_from_aai_simulator(self):
-        loc = demand.Location("uCPE")
-        loc.loc_type = "coordinates"
-        latitude = random.uniform(self.region_gen.least_latitude,
-                                  self.region_gen.most_latitude)
-        longitude = random.uniform(self.region_gen.least_longitude,
-                                   self.region_gen.most_longitude)
-        loc.value = (latitude, longitude)
-        self.locations[loc.name] = loc
-
-        demand1 = demand.Demand("vVIG")
-        demand1.resources = self.region_gen.regions
-        demand1.sort_base = 0  # this is only for testing
-        self.demands[demand1.name] = demand1
-
-        demand2 = demand.Demand("vGW")
-        demand2.resources = self.region_gen.regions
-        demand2.sort_base = 2  # this is only for testing
-        self.demands[demand2.name] = demand2
-
-        demand3 = demand.Demand("vVIG2")
-        demand3.resources = self.region_gen.regions
-        demand3.sort_base = 1  # this is only for testing
-        self.demands[demand3.name] = demand3
-
-        demand4 = demand.Demand("vGW2")
-        demand4.resources = self.region_gen.regions
-        demand4.sort_base = 3  # this is only for testing
-        self.demands[demand4.name] = demand4
-
-        constraint_list = []
-
-        access_distance = access_dist.AccessDistance(
-            "uCPE-all", "access_distance",
-            [demand1.name, demand2.name, demand3.name, demand4.name],
-            _comparison_operator=operator.le, _threshold=50000,
-            _location=loc)
-        constraint_list.append(access_distance)
-
     def reorder_constraint(self):
         # added manual ranking to the constraint type for optimizing purpose the last 2 are costly interaction
         for constraint_name, constraint in self.constraints.items():
