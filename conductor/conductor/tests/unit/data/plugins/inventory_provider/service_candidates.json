@@ -1,0 +1,28 @@
+{
+    "vPGN": [{
+        "existing_placement": "false",
+        "service_resource_id": "vPGN-XX",
+        "inventory_provider": "aai",
+        "cost": 1.0,
+        "cloud_owner": "CloudOwner",
+        "city": "example-city-val-27150",
+        "uniqueness": "true",
+        "location_id": "RegionOne",
+        "inventory_type": "service",
+        "sriov_automation": "false",
+        "state": "example-state-val-59487",
+        "candidate_id": "3e8d118c-10ca-4b4b-b3db-089b5e9e6a1c",
+        "latitude": "example-latitude-val-89101",
+        "physical_location_id": "clli1",
+        "port_key": "vlan_port",
+        "vlan_key": "vlan_key",
+        "cloud_region_version": "1",
+        "host_id": "vFW-PKG-MC",
+        "complex_name": "clli1",
+        "location_type": "att_aic",
+        "country": "example-country-val-94173",
+        "region": "example-region-val-13893",
+        "longitude": "32.89948",
+        "vim-id": "CloudOwner_RegionOne"
+    }]
+}

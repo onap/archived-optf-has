@@ -202,7 +202,7 @@ class TestDataEndpoint(unittest.TestCase):
     @mock.patch.object(service.LOG, 'info')
     @mock.patch.object(log_util, 'getTransactionId')
     @mock.patch.object(stevedore.ExtensionManager, 'map_method')
-    def test_reslove_demands(self, ext_mock, logutil_mock, info_mock,
+    def test_resolve_demands(self, ext_mock, logutil_mock, info_mock,
                              debug_mock,
                              error_mock):
         self.maxDiff = None
@@ -229,6 +229,48 @@ class TestDataEndpoint(unittest.TestCase):
                      'inventory_provider': 'aai', 'inventory_type': 'service', 'service_type': 'vG' },
                    { 'inventory_provider': 'aai', 'inventory_type': 'cloud' } ],
               'trans': { 'plan_id': 'plan_abc', 'plan_name': 'plan_name', 'translator_triage': [ [] ] } } }
+        self.assertEqual(expected_response,
+                         self.data_ep.resolve_demands(ctxt, req_json))
+
+    @mock.patch.object(service.LOG, 'error')
+    @mock.patch.object(service.LOG, 'debug')
+    @mock.patch.object(service.LOG, 'info')
+    @mock.patch.object(log_util, 'getTransactionId')
+    @mock.patch.object(stevedore.ExtensionManager, 'map_method')
+    def test_resolve_vfmodule_demands(self, ext_mock, logutil_mock, info_mock,
+                             debug_mock,
+                             error_mock):
+        self.maxDiff = None
+        req_json_file = './conductor/tests/unit/data/demands_vfmodule.json'
+        req_json = yaml.safe_load(open(req_json_file).read())
+        ctxt = {
+            'plan_id': uuid.uuid4(),
+            'keyspace': cfg.CONF.keyspace
+        }
+        logutil_mock.return_value = uuid.uuid4()
+        return_value = req_json['demands']['vFW-SINK']
+        ext_mock.return_value = [return_value]
+        expected_response = \
+            {'response': {'trans': {'translator_triage': [ [] ], 'plan_name': 'plan_name', 'plan_id': 'plan_abc'},
+                          'resolved_demands': [{'service_resource_id': 'vFW-SINK-XX', 'vlan_key': 'vlan_key',
+                                                'inventory_provider': 'aai', 'inventory_type': 'vfmodule',
+                                                'excluded_candidates': [
+                                                    {'candidate_id': 'e765d576-8755-4145-8536-0bb6d9b1dc9a',
+                                                     'inventory_type': 'vfmodule'
+                                                     }], 'port_key': 'vlan_port', 'service_type': 'vFW-SINK-XX',
+                                                'attributes': {'global-customer-id': 'Demonstration',
+                                                               'cloud-region-id': {'get_param': 'chosen_region'},
+                                                               'model-version-id':
+                                                                   '763731df-84fd-494b-b824-01fc59a5ff2d',
+                                                               'prov-status': 'ACTIVE',
+                                                               'service_instance_id': {'get_param': 'service_id'},
+                                                               'model-invariant-id':
+                                                                   'e7227847-dea6-4374-abca-4561b070fe7d',
+                                                               'orchestration-status': ['active']
+                                                               }
+                                                }]
+                          }, 'error': False}
+
         self.assertEqual(expected_response,
                          self.data_ep.resolve_demands(ctxt, req_json))
 

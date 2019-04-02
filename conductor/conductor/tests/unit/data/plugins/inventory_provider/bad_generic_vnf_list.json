@@ -1,0 +1,127 @@
+[{
+    "vnf-id": "fcbff633-47cc-4f38-a98d-4ba8285bd8b6",
+    "vnf-name": "vFW-PKG-MC",
+    "vnf-type": "5G_EVE_Demo/5G_EVE_PKG 0",
+    "service-id": "f5728144-f4a2-4bf8-9f0e-4ee924235c42",
+    "prov-status": "ACTIVE",
+    "orchestration-status": "Active",
+    "ipv4-oam-address": "oam_network_zb4J",
+    "in-maint": false,
+    "is-closed-loop-disabled": false,
+    "resource-version": "1554713856131",
+    "model-invariant-id": "762472ef-5284-4daa-ab32-3e7bee2ec355",
+    "model-version-id": "e02a7e5c-9d27-4360-ab7c-73bb83b07e3b",
+    "model-customization-id": "83f1f72e-26ea-4e32-8dae-a7b3a833c7f6",
+    "nf-type": "",
+    "nf-function": "",
+    "nf-role": "",
+    "nf-naming-code": "",
+    "relationship-list": {
+        "relationship": [{
+                "related-to": "service-instance",
+                "relationship-label": "org.onap.relationships.inventory.ComposedOf",
+                "related-link": "/aai/v14/business/customers/customer/Demonstration/service-subscriptions/service-subscription/vFW/service-instances/service-instance/3e8d118c-10ca-4b4b-b3db-089b5e9e6a1c",
+                "relationship-data": [{
+                        "relationship-key": "customer.global-customer-id",
+                        "relationship-value": "Demonstration"
+                    },
+                    {
+                        "relationship-key": "service-subscription.service-type",
+                        "relationship-value": "vFW"
+                    },
+                    {
+                        "relationship-key": "service-instance.service-instance-id",
+                        "relationship-value": "3e8d118c-10ca-4b4b-b3db-089b5e9e6a1c"
+                    }
+                ],
+                "related-to-property": [{
+                    "property-key": "service-instance.service-instance-name",
+                    "property-value": "vFW-R1-Tenant1-LR"
+                }]
+            },
+            {
+                "related-to": "service-instance",
+                "relationship-label": "org.onap.relationships.inventory.ComposedOf",
+                "related-link": "/aai/v14/business/customers/customer/Demonstration/service-subscriptions/service-subscription/vFW/service-instances/service-instance/3e8d118c-10ca-4b4b-b3db-089b5e9e6a1b",
+                "relationship-data": [{
+                        "relationship-key": "customer.global-customer-id",
+                        "relationship-value": "Demonstration"
+                    },
+                    {
+                        "relationship-key": "service-subscription.service-type",
+                        "relationship-value": "vFW"
+                    },
+                    {
+                        "relationship-key": "service-instance.service-instance-id",
+                        "relationship-value": "3e8d118c-10ca-4b4b-b3db-089b5e9e6a1b"
+                    }
+                ],
+                "related-to-property": [{
+                    "property-key": "service-instance.service-instance-name",
+                    "property-value": "vFW-R1-Tenant1-LK"
+                }]
+            },
+            {
+                "related-to": "platform",
+                "relationship-label": "org.onap.relationships.inventory.Uses",
+                "related-link": "/aai/v14/business/platforms/platform/Platform-Demonstration",
+                "relationship-data": [{
+                    "relationship-key": "platform.platform-name",
+                    "relationship-value": "Platform-Demonstration"
+                }]
+            },
+            {
+                "related-to": "vserver",
+                "relationship-label": "tosca.relationships.HostedOn",
+                "related-link": "/aai/v14/cloud-infrastructure/cloud-regions/cloud-region/CloudOwner/RegionOne/tenants/tenant/3c6c471ada7747fe8ff7f28e100b61e8/vservers/vserver/00bddefc-126e-4e4f-a18d-99b94d8d9a30",
+                "relationship-data": [{
+                        "relationship-key": "cloud-region.cloud-owner",
+                        "relationship-value": "CloudOwner"
+                    },
+                    {
+                        "relationship-key": "cloud-region.cloud-region-id",
+                        "relationship-value": "RegionOne"
+                    },
+                    {
+                        "relationship-key": "tenant.tenant-id",
+                        "relationship-value": "3c6c471ada7747fe8ff7f28e100b61e8"
+                    },
+                    {
+                        "relationship-key": "vserver.vserver-id",
+                        "relationship-value": "00bddefc-126e-4e4f-a18d-99b94d8d9a30"
+                    }
+                ],
+                "related-to-property": [{
+                    "property-key": "vserver.vserver-name",
+                    "property-value": "zdfw1fwl01pgn01"
+                }]
+            },
+            {
+                "related-to": "vserver",
+                "relationship-label": "tosca.relationships.HostedOn",
+                "related-link": "/aai/v14/cloud-infrastructure/cloud-regions/cloud-region/CloudOwner2/RegionOne2/tenants/tenant/3c6c471ada7747fe8ff7f28e100b61e8/vservers/vserver/00bddefc-126e-4e4f-a18d-99b94d8d9a31",
+                "relationship-data": [{
+                        "relationship-key": "cloud-region.cloud-owner",
+                        "relationship-value": "CloudOwner2"
+                    },
+                    {
+                        "relationship-key": "cloud-region.cloud-region-id",
+                        "relationship-value": "RegionOne2"
+                    },
+                    {
+                        "relationship-key": "tenant.tenant-id",
+                        "relationship-value": "3c6c471ada7747fe8ff7f28e100b61e8"
+                    },
+                    {
+                        "relationship-key": "vserver.vserver-id",
+                        "relationship-value": "00bddefc-126e-4e4f-a18d-99b94d8d9a31"
+                    }
+                ],
+                "related-to-property": [{
+                    "property-key": "vserver.vserver-name",
+                    "property-value": "zdfw1fwl01pgn02"
+                }]
+            }
+        ]
+    }
+}]

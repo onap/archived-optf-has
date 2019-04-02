@@ -1,0 +1,24 @@
+{
+    "cloud-owner": "CloudOwner",
+    "cloud-region-id": "RegionOne",
+    "cloud-type": "SharedNode",
+    "owner-defined-type": "OwnerType",
+    "cloud-region-version": "v1",
+    "cloud-zone": "CloudZone",
+    "resource-version": "1554189551045",
+    "relationship-list": {
+        "relationship": [
+            {
+                "related-to": "complex",
+                "relationship-label": "org.onap.relationships.inventory.LocatedIn",
+                "related-link": "/aai/v14/cloud-infrastructure/complexes/complex/clli1",
+                "relationship-data": [
+                    {
+                        "relationship-key": "complex.physical-location-id",
+                        "relationship-value": "clli1"
+                    }
+                ]
+            }
+        ]
+    }
+}
