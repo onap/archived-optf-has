@@ -22,13 +22,15 @@
 import unittest
 from conductor.common.music import api
 from conductor.solver.optimizer.random_pick import RandomPick
-from conductor.solver.request import demand
 from oslo_config import cfg
-
+from mock import patch
 
 class TestRandomPick(unittest.TestCase):
 
-    def setUp(self):
+    @patch('conductor.solver.optimizer')
+    @patch('conductor.common.music.model.base.Base.table_create')
+    @patch('conductor.common.music.model.base.Base.insert')
+    def setUp(self, conf, _requests=None, _begin_time=None):
         self.music = api.API()
         self.conf = cfg.CONF
         self.randomPick = RandomPick(self.conf)
