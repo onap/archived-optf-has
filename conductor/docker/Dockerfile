@@ -15,42 +15,33 @@
 #
 # -------------------------------------------------------------------------
 
-FROM python:2.7-alpine
-
-ARG MVN_ARTIFACT_VERSION
-ARG REPO
-ARG HTTP_PROXY=${HTTP_PROXY}
-ARG HTTPS_PROXY=${HTTPS_PROXY}
-
-ENV http_proxy $HTTP_PROXY
-ENV https_proxy $HTTPS_PROXY
-ENV CON_ADDR "127.0.0.1"
+FROM python:2.7
 ENV CON_PORT "8091"
 
-EXPOSE ${CON_PORT}
+EXPOSE 8091
+RUN apt-get update && apt-get --assume-yes install python-setuptools && \
+apt-get install -y unzip && \
+apt-get install -y curl && \
+apt-get install -y wget && \
+apt-get install -y nginx && \
+apt-get install -y fcgiwrap
 
-# Add required libraries
-RUN apk add --no-cache  curl \
-                        gcc \
-                        libffi-dev \
-                        linux-headers \
-                        musl-dev \
-                        git \
-                        libxml2-dev \
-                        libxslt-dev \
-                        openssl-dev \
-                        py-setuptools \
-                        unzip \
-                        wget \
-                        xvfb 
+RUN mkdir -p /etc/nginx/ssl && \
+mkdir -p /var/log/conductor && \
+mkdir -p /run/conductor
 
-WORKDIR /opt/has
-RUN wget -O /opt/has.zip "https://nexus.onap.org/service/local/artifact/maven/redirect?r=${REPO}&g=org.onap.optf.has&a=optf-has-conductor&e=zip&v=${MVN_ARTIFACT_VERSION}" && \
-    unzip -q -o -B /opt/has.zip -d /opt/has && \
-    rm -f /opt/has.zip
-RUN mkdir -p /var/log/onap/optf/has/
+RUN apt-get install -y python-pip libpq-dev python-dev
+RUN pip install --upgrade pip
+RUN pip install uwsgi
 
-RUN cd /opt/has/conductor && \ 
-     git init && \ 
-     pip install -e .
+RUN wget -O /tmp/has.zip "https://nexus.onap.org/service/local/artifact/maven/redirect?r=${REPO}&g=org.onap.optf.has&a=optf-has-conductor&e=zip&v=${MVN_ARTIFACT_VERSION}" && \
+    unzip -q -o -B /tmp/has.zip -d /tmp/has && \
+    rm -f /tmp/has.zip
+
+RUN cp /tmp/has/conductor/of_has.egg-info/PKG-INFO /tmp/has/conductor
+RUN pip install -e /tmp/has/conductor
+COPY app.wsgi /etc/nginx/conductor.wsgi
 COPY api_paste.ini /usr/local/bin/api_paste.ini
+COPY api_paste.ini /usr/local/etc/conductor/api_paste.ini
+COPY conductor /etc/nginx/sites-enabled
+COPY conductor /etc/nginx/sites-available
