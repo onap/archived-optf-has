@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ab3ba2dd_ad174f37",
+        "filename": "conductor/docker/Dockerfile",
+        "patchSetId": 1
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 2041
+      },
+      "writtenOn": "2019-04-11T21:22:06Z",
+      "side": 1,
+      "message": "Would this work on python 2.7 alpine ?",
+      "range": {
+        "startLine": 18,
+        "startChar": 0,
+        "endLine": 18,
+        "endChar": 15
+      },
+      "revId": "11ef784d927e6d793b44ba1189974edd2b1116be",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
