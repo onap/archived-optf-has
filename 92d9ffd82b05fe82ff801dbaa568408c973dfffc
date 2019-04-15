@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "830df07c_5515105d",
+        "filename": "conductor/conductor/data/plugins/inventory_provider/aai.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 1325,
+      "author": {
+        "id": 1739
+      },
+      "writtenOn": "2019-04-15T17:20:33Z",
+      "side": 1,
+      "message": "I really like these new functions added to aai.py for repeated code. Its powerful to have a single function do what it needs to do and have it called from multiple places when needed. Single source of truth (and bugs too of course :)) - Easy to maintain code. We should do this across the project. I will add Inam too to review though.",
+      "revId": "92d9ffd82b05fe82ff801dbaa568408c973dfffc",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "449e33f3_9d059f2a",
         "filename": "conductor/conductor/solver/optimizer/optimizer.py",
         "patchSetId": 3
@@ -43,6 +60,40 @@
         "endLine": 115,
         "endChar": 37
       },
+      "revId": "92d9ffd82b05fe82ff801dbaa568408c973dfffc",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "d80b6890_eaa5cf30",
+        "filename": "conductor/conductor/solver/optimizer/random_pick.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1739
+      },
+      "writtenOn": "2019-04-15T17:20:33Z",
+      "side": 1,
+      "message": "Can you please add some comments on line 47 here for the need for this check? How will this check not fail any existing scenarios / test cases?",
+      "revId": "92d9ffd82b05fe82ff801dbaa568408c973dfffc",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3678b79c_b5940901",
+        "filename": "conductor/conductor/tests/unit/controller/test_translator.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 261,
+      "author": {
+        "id": 1739
+      },
+      "writtenOn": "2019-04-15T17:20:33Z",
+      "side": 1,
+      "message": "I know this line is not part of your code, but can you remove these extra spaces?",
       "revId": "92d9ffd82b05fe82ff801dbaa568408c973dfffc",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": false
