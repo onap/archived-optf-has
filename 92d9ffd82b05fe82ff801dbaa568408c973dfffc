@@ -22,6 +22,30 @@
       "revId": "92d9ffd82b05fe82ff801dbaa568408c973dfffc",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9356bcd9_2eff6bf2",
+        "filename": "conductor/conductor/solver/optimizer/optimizer.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 115,
+      "author": {
+        "id": 2701
+      },
+      "writtenOn": "2019-04-15T13:44:16Z",
+      "side": 1,
+      "message": "here counter is being reset. There must be a way to find matching candidates for random pick algorithm. That\u0027s why such counter.",
+      "parentUuid": "449e33f3_9d059f2a",
+      "range": {
+        "startLine": 115,
+        "startChar": 20,
+        "endLine": 115,
+        "endChar": 37
+      },
+      "revId": "92d9ffd82b05fe82ff801dbaa568408c973dfffc",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
     }
   ]
 }
