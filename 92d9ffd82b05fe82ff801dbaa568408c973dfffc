@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "449e33f3_9d059f2a",
+        "filename": "conductor/conductor/solver/optimizer/optimizer.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 115,
+      "author": {
+        "id": 2977
+      },
+      "writtenOn": "2019-04-15T13:37:54Z",
+      "side": 1,
+      "message": "Unnecessary one? Since there\u0027s already a definition upward.",
+      "range": {
+        "startLine": 115,
+        "startChar": 20,
+        "endLine": 115,
+        "endChar": 37
+      },
+      "revId": "92d9ffd82b05fe82ff801dbaa568408c973dfffc",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
