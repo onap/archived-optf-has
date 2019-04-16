@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "676f0133_fd762e86",
+        "filename": "conductor/conductor/data/plugins/inventory_provider/aai.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 1325,
+      "author": {
+        "id": 2701
+      },
+      "writtenOn": "2019-04-16T07:46:02Z",
+      "side": 1,
+      "message": "It is good to hear that",
+      "parentUuid": "830df07c_5515105d",
+      "revId": "92d9ffd82b05fe82ff801dbaa568408c973dfffc",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "449e33f3_9d059f2a",
         "filename": "conductor/conductor/solver/optimizer/optimizer.py",
         "patchSetId": 3
@@ -83,6 +101,24 @@
     },
     {
       "key": {
+        "uuid": "0c087c77_60a4a4c7",
+        "filename": "conductor/conductor/solver/optimizer/random_pick.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 2701
+      },
+      "writtenOn": "2019-04-16T07:46:02Z",
+      "side": 1,
+      "message": "This is bug in fact and this fix is necessary. When you have two demands and for one there are no candidates left code tries to randomly choose index randint(0, -1) what raises an exception. In the optimizer.py I did change to deal with None type returned for RandomPick best_path result. All together is transparent to previous scenarios and test cases",
+      "parentUuid": "d80b6890_eaa5cf30",
+      "revId": "92d9ffd82b05fe82ff801dbaa568408c973dfffc",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3678b79c_b5940901",
         "filename": "conductor/conductor/tests/unit/controller/test_translator.py",
         "patchSetId": 3
@@ -94,6 +130,24 @@
       "writtenOn": "2019-04-15T17:20:33Z",
       "side": 1,
       "message": "I know this line is not part of your code, but can you remove these extra spaces?",
+      "revId": "92d9ffd82b05fe82ff801dbaa568408c973dfffc",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1f114e90_e3ec8ed9",
+        "filename": "conductor/conductor/tests/unit/controller/test_translator.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 261,
+      "author": {
+        "id": 2701
+      },
+      "writtenOn": "2019-04-16T07:46:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3678b79c_b5940901",
       "revId": "92d9ffd82b05fe82ff801dbaa568408c973dfffc",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": false
