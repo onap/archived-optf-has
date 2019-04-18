@@ -56,6 +56,11 @@ class Service(constraint.Constraint):
                     candidates_to_check.append(candidate)
                 else:
                     select_list.append(candidate)
+            elif self.inventory_type == "vfmodule":
+                if candidate["inventory_type"] == "vfmodule":
+                    candidates_to_check.append(candidate)
+                else:
+                    select_list.append(candidate)
         # call conductor data with request parameters
         if len(candidates_to_check) > 0:
             cei = _request.cei

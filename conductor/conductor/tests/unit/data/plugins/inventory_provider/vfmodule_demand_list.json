@@ -1,0 +1,20 @@
+{
+    "vPGN": [{
+        "service_resource_id": "vPGN-XX",
+        "inventory_provider": "aai",
+        "inventory_type": "vfmodule",
+        "port_key": "vlan_port",
+        "vlan_key": "vlan_key",
+        "unique": "false",
+        "attributes": {
+            "prov-status": "ACTIVE",
+            "global-customer-id": "Demonstration",
+            "model-version-id": "e02a7e5c-9d27-4360-ab7c-73bb83b07e3b",
+            "model-invariant-id": "762472ef-5284-4daa-ab32-3e7bee2ec355",
+            "orchestration-status": ["active"],
+            "cloud-region-id": "RegionOne",
+            "service_instance_id": "3e8d118c-10ca-4b4b-b3db-089b5e9e6a1c"
+        },
+        "service_type": "vPGN-XX"
+    }]
+}
