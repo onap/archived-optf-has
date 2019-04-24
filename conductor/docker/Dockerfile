@@ -15,42 +15,38 @@
 #
 # -------------------------------------------------------------------------
 
-FROM python:2.7-alpine
-
-ARG MVN_ARTIFACT_VERSION
-ARG REPO
-ARG HTTP_PROXY=${HTTP_PROXY}
-ARG HTTPS_PROXY=${HTTPS_PROXY}
-
-ENV http_proxy $HTTP_PROXY
-ENV https_proxy $HTTPS_PROXY
-ENV CON_ADDR "127.0.0.1"
+FROM python:2.7.15-alpine
 ENV CON_PORT "8091"
 
-EXPOSE ${CON_PORT}
+EXPOSE 8091
 
-# Add required libraries
-RUN apk add --no-cache  curl \
-                        gcc \
-                        libffi-dev \
-                        linux-headers \
-                        musl-dev \
-                        git \
-                        libxml2-dev \
-                        libxslt-dev \
-                        openssl-dev \
-                        py-setuptools \
-                        unzip \
-                        wget \
-                        xvfb 
+RUN mkdir -p /etc/nginx/ssl && \
+mkdir -p /var/log/conductor && \
+mkdir -p /run/conductor && \
+mkdir -p /run/nginx
 
-WORKDIR /opt/has
-RUN wget -O /opt/has.zip "https://nexus.onap.org/service/local/artifact/maven/redirect?r=${REPO}&g=org.onap.optf.has&a=optf-has-conductor&e=zip&v=${MVN_ARTIFACT_VERSION}" && \
-    unzip -q -o -B /opt/has.zip -d /opt/has && \
-    rm -f /opt/has.zip
-RUN mkdir -p /var/log/onap/optf/has/
+RUN apk --update add py-setuptools && \
+apk add unzip && \
+apk add curl && \
+apk add wget && \
+apk add fcgiwrap && \
+apk add bash vim && \
+apk add nginx
 
-RUN cd /opt/has/conductor && \ 
-     git init && \ 
-     pip install -e .
-COPY api_paste.ini /usr/local/bin/api_paste.ini
+RUN apk add py2-pip libpq python-dev
+RUN pip install --upgrade pip
+RUN apk add --virtual build-dependencies build-base linux-headers pcre-dev libffi-dev libxslt-dev libressl-dev
+RUN pip install uwsgi
+
+#Please leave teh following commmented out line in for test on local clusters
+#RUN wget -O /tmp/has.zip "https://nexus.onap.org/service/local/repositories/autorelease-121393/content/org/onap/optf/has/optf-has-conductor/1.2.5/optf-has-conductor-1.2.5.zip" && \
+RUN wget -O /tmp/has.zip "https://nexus.onap.org/service/local/artifact/maven/redirect?r=${REPO}&g=org.onap.optf.has&a=optf-has-conductor&e=zip&v=${MVN_ARTIFACT_VERSION}" && \
+    unzip -q -o -B /tmp/has.zip -d /tmp/has && \
+    rm -f /tmp/has.zip
+
+#PKG-INFO file must also exists in the conductor folder (i.e. besides and inside the of_has.egg-info folder). The zip file for distro above is missing it
+RUN cp /tmp/has/conductor/of_has.egg-info/PKG-INFO /tmp/has/conductor
+RUN pip install -e /tmp/has/conductor
+
+COPY app.wsgi /etc/nginx/conductor.wsgi
+COPY api_paste.ini /usr/local/etc/conductor/api_paste.ini
