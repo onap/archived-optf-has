@@ -61,6 +61,7 @@ CREATE_SCHEMA = (
     (decorators.optional('id'), types.string),
     (decorators.optional('limit'), types.integer),
     (decorators.optional('name'), types.string),
+    (decorators.optional('num_solution'), types.string),
     ('template', string_or_dict),
     (decorators.optional('template_url'), types.string),
     (decorators.optional('timeout'), types.integer),

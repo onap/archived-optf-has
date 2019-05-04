@@ -2,5 +2,6 @@
   "name": "demo3",
   "template": {"key": "value"},
   "timeout": 5,
+  "num_solution": "2",
   "limit": 3
 }
