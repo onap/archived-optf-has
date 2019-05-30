@@ -559,7 +559,8 @@ class DataEndpoint(object):
         for ele in directives:
             if "flavor_directives" in ele.get("type"):
                 flag = True
-                ele.get("attributes").append(flavor_id_attributes)
+                if len(ele.get("attributes")) <= 1:
+                    ele.get("attributes").append(flavor_id_attributes)
                 break
             else:
                 flag = False
