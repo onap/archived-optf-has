@@ -6,6 +6,69 @@
 Release Notes
 =============
 
+Version: 4.0.0
+--------------
+
+:Release Date: 2019-06-06 (Dublin Release)
+
+**New Features**
+
+A summary of features includes:
+
+* Extend OOF to support traffic distribution optimization
+* Implement encryption for HAS internal and external communication
+
+* Platform Maturity Level 1
+    * ~56.2%+ unit test coverage
+
+The Dublin release for OOF delivered the following Epics.
+
+    * [OPTFRA-424]	Extend OOF to support traffic distribution optimization
+    * [OPTFRA-422]	Move OOF projects' CSIT to run on OOM
+    * [OPTFRA-270]	This epic captures stories related to maintaining current S3P levels of the project as new functional requirements are supported
+
+**Bug Fixes**
+    * OPTFRA-515	Pod oof-has-controller is in CrashLoopBackOff after ONAP deployment
+    * OPTFRA-513	OOF-HAS pods fail to come up in ONAP deployment
+    * OPTFRA-492	HAS API pod failure
+    * OPTFRA-487	OOF HAS CSIT failing with HTTPS changes
+    * OPTFRA-475	Remove Casablanca jobs in preparation for Dublin branch
+    * OPTFRA-467	Remove aai simulator code from HAS solver
+    * OPTFRA-465	Fix data code smells
+    * OPTFRA-461	Enable HTTPS and TLS for HAS API
+    * OPTFRA-452	Remove misleading reservation logic
+    * OPTFRA-449	Create OOM based CSIT for HAS
+    * OPTFRA-448	Multiple Sonar Issues
+    * OPTFRA-445	Modify HAS Data component to support new A&AI requests required by Distribute Traffic functionality
+    * OPTFRA-444	Implement Distribute Traffic API exposure in HAS
+    * OPTFRA-412	Got 'NoneType' error when there's no flavor info inside vim
+    * OPTFRA-411	latency_country_rules_loader.py - Remove the unused local variable "ctx".
+    * OPTFRA-302	Enhance coverage of existing HAS code to 55%
+
+
+**Known Issues**
+
+These are all issues with fix version: Dublin Release and status: open, in-progress, reopened
+
+    * OPTFRA-494	HAS request 'limit' argument is ignored.
+
+**Security Issues**
+
+OPTFRA code has been formally scanned during build time using NexusIQ and no Critical vulnerability was found. `project <https://wiki.onap.org/pages/viewpage.action?pageId=64005463>`_.
+
+**Quick Links**:
+    - `OPTFRA project page <https://wiki.onap.org/display/DW/Optimization+Framework+Project>`_
+    - `Passing Badge information for OPTFRA <https://bestpractices.coreinfrastructure.org/en/projects/1720>`_
+    - `Project Vulnerability Review Table for OPTF <https://wiki.onap.org/pages/viewpage.action?pageId=64005463>`_
+**Upgrade Notes**
+To upgrade, run docker container or install from source, See Distribution page
+
+**Deprecation Notes**
+No features deprecated in this release
+
+**Other**
+None
+
 
 Version: 3.0.1
 --------------
