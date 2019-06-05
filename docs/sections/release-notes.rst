@@ -54,6 +54,12 @@ These are all issues with fix version: Dublin Release and status: open, in-progr
 
 **Security Issues**
 
+*Fixed Security Issues*
+
+*Known Security Issues*
+
+*Known Vulnerabilities in Used Modules*
+
 OPTFRA code has been formally scanned during build time using NexusIQ and no Critical vulnerability was found. `project <https://wiki.onap.org/pages/viewpage.action?pageId=64005463>`_.
 
 **Quick Links**:
@@ -95,9 +101,9 @@ Version: 3.0.0
 
 **New Features**
 
-A summary of features includes: 
+A summary of features includes:
 
-* Security enhancements, including integration with AAF to implement access controls on 
+* Security enhancements, including integration with AAF to implement access controls on
     OSDF and HAS northbound interfaces
 * Integration with SMS
 * Platform Maturity Level 1
@@ -106,8 +112,8 @@ A summary of features includes:
     1) Added support for SRIOV-NIC and directives to assist the orchestrator
     2) Select the best candidate across all cloud region based on HPA score.
     3) HPA metrics using prometheus
-    
-The Casablanca release for OOF delivered the following Epics. 
+
+The Casablanca release for OOF delivered the following Epics.
 
     * OPTFRA-106 - OOF Functional Testing Related User Stories and Tasks
     * OPTFRA-266 - Integrate OOF with Certificate and Secret Management Service (CSM)
@@ -126,14 +132,14 @@ The Casablanca release for OOF delivered the following Epics.
 
     * OPTFRA-205 - Generated conductor.conf missing configurations
     * OPTFRA-210 - Onboarding to Music error
-    * OPTFRA-211 - Error solution for HPA 
+    * OPTFRA-211 - Error solution for HPA
     * OPTFRA-249 - OOF does not return serviceResourceId in homing solution
     * OPTFRA-259 - Fix intermittent failure of HAS CSIT job
     * OPTFRA-264 - oof-has-zookeeper image pull error
     * OPTFRA-305 - Analyze OOM health check failure
     * OPTFRA-306 - OOF-Homing fails health check in HEAT deployment
     * OPTFRA-321 - Fix osdf functional tests script to fix builder failures
-    * OPTFRA-323 - Cannot resolve multiple policies with the same 'hpa-feature' name 
+    * OPTFRA-323 - Cannot resolve multiple policies with the same 'hpa-feature' name
     * OPTFRA-325 - spelling mistake
     * OPTFRA-326 - hyperlink links are missing
     * OPTFRA-335 - Making flavors an optional field in HAS candidate object
@@ -198,14 +204,14 @@ OPTFRA code has been formally scanned during build time using NexusIQ and no Cri
 
 **Quick Links**:
  	- `OPTFRA project page <https://wiki.onap.org/display/DW/Optimization+Framework+Project>`_
- 	
+
  	- `Passing Badge information for OPTFRA <https://bestpractices.coreinfrastructure.org/en/projects/1720>`_
 
 **Upgrade Notes**
-To upgrade, run docker container or install from source, See Distribution page  
+To upgrade, run docker container or install from source, See Distribution page
 
 **Deprecation Notes**
-No features deprecated in this release  
+No features deprecated in this release
 
 **Other**
 None
@@ -217,7 +223,7 @@ Version: 2.0.0
 
 **New Features**
 
-The ONAP Optimization Framework (OOF) is new in Beijing. A summary of features incldues: 
+The ONAP Optimization Framework (OOF) is new in Beijing. A summary of features incldues:
 
 * Baseline HAS functionality
     * support for VCPE use case
@@ -225,8 +231,8 @@ The ONAP Optimization Framework (OOF) is new in Beijing. A summary of features i
 * Integration with OOF OSDF, SO, Policy, AAI, and Multi-Cloud
 * Platform Maturity Level 1
     * ~50%+ unit test coverage
-    
-The Beijing release for OOF delivered the following Epics. 
+
+The Beijing release for OOF delivered the following Epics.
 
     * [OPTFRA-2] - On-boarding and Stabilization of the OOF seed code
 
@@ -251,7 +257,7 @@ The Beijing release for OOF delivered the following Epics.
 
 **Bug Fixes**
 
-None. Initial release R2 Beijing. No previous versions  
+None. Initial release R2 Beijing. No previous versions
 
 **Known Issues**
 
@@ -270,14 +276,14 @@ OPTFRA code has been formally scanned during build time using NexusIQ and no Cri
 
 Quick Links:
  	- `OPTFRA project page <https://wiki.onap.org/display/DW/Optimization+Framework+Project>`_
- 	
+
  	- `Passing Badge information for OPTFRA <https://bestpractices.coreinfrastructure.org/en/projects/1720>`_
 
 **Upgrade Notes**
-None. Initial release R2 Beijing. No previous versions  
+None. Initial release R2 Beijing. No previous versions
 
 **Deprecation Notes**
-None. Initial release R2 Beijing. No previous versions  
+None. Initial release R2 Beijing. No previous versions
 
 **Other**
 None
