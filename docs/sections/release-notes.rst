@@ -58,6 +58,8 @@ These are all issues with fix version: Dublin Release and status: open, in-progr
 
 *Known Security Issues*
 
+    * [`OJSI-137 <https://jira.onap.org/browse/OJSI-137>`_] In default deployment OPTFRA (oof-has-api) exposes HTTP port 30275 outside of cluster.
+
 *Known Vulnerabilities in Used Modules*
 
 OPTFRA code has been formally scanned during build time using NexusIQ and no Critical vulnerability was found. `project <https://wiki.onap.org/pages/viewpage.action?pageId=64005463>`_.
