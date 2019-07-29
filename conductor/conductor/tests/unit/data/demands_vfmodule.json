@@ -7,7 +7,7 @@
             "vlan_key": "vlan_key",
             "port_key": "vlan_port",
             "excluded_candidates": [{
-                "candidate_id": "e765d576-8755-4145-8536-0bb6d9b1dc9a",
+                "candidate_id": ["e765d576-8755-4145-8536-0bb6d9b1dc9a"],
                 "inventory_type": "vfmodule"
             }],
             "attributes": {

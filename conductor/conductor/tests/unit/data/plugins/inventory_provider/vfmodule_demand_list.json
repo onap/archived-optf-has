@@ -15,6 +15,10 @@
             "cloud-region-id": "RegionOne",
             "service_instance_id": "3e8d118c-10ca-4b4b-b3db-089b5e9e6a1c"
         },
-        "service_type": "vPGN-XX"
+        "service_type": "vPGN-XX",
+        "excluded_candidates": [{
+            "inventory_type": "vfmodule",
+            "candidate_id": ["e765d576-8755-4145-8536-0bb6d9b1dc9a"]
+        }]
     }]
 }

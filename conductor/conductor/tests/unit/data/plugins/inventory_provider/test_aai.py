@@ -621,7 +621,10 @@ tenant/3c6c471ada7747fe8ff7f28e100b61e8/vservers/vserver/00bddefc-126e-4e4f-a18d
 
         candidate_list_empty = list()
         candidate_list = list()
-        candidate_list.append(candidate)
+        candidate_info = copy.deepcopy(candidate)
+        candidate_info['candidate_id'] = list()
+        candidate_info['candidate_id'].append(candidate['candidate_id'])
+        candidate_list.append(candidate_info)
 
         self.assertFalse(self.aai_ep.match_candidate_by_list(candidate, candidate_list_empty, True, 'demand',
                                                              triage_translator_data)),

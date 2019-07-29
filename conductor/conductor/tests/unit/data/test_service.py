@@ -255,7 +255,7 @@ class TestDataEndpoint(unittest.TestCase):
                           'resolved_demands': [{'service_resource_id': 'vFW-SINK-XX', 'vlan_key': 'vlan_key',
                                                 'inventory_provider': 'aai', 'inventory_type': 'vfmodule',
                                                 'excluded_candidates': [
-                                                    {'candidate_id': 'e765d576-8755-4145-8536-0bb6d9b1dc9a',
+                                                    {'candidate_id': ['e765d576-8755-4145-8536-0bb6d9b1dc9a'],
                                                      'inventory_type': 'vfmodule'
                                                      }], 'port_key': 'vlan_port', 'service_type': 'vFW-SINK-XX',
                                                 'attributes': {'global-customer-id': 'Demonstration',

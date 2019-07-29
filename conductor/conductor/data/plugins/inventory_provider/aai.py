@@ -1904,11 +1904,16 @@ class AAI(base.InventoryProviderBase):
             for list_candidate in candidates_list:
                 if list_candidate \
                         and list_candidate.get('inventory_type') \
-                        == candidate.get('inventory_type') \
-                        and list_candidate.get('candidate_id') \
-                        == candidate.get('candidate_id'):
-                    has_candidate = True
-                    break
+                        == candidate.get('inventory_type'):
+                    if isinstance(list_candidate.get('candidate_id'), list):
+                        for candidate_id in list_candidate.get('candidate_id'):
+                            if candidate_id == candidate.get('candidate_id'):
+                                has_candidate = True
+                                break
+                    else:
+                        raise Exception("Invalid candidate id list format")
+                    if has_candidate:
+                        break
 
         if not exclude:
             if not has_candidate:
