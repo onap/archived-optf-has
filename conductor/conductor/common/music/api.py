@@ -88,6 +88,11 @@ MUSIC_API_OPTS = [
     cfg.StrOpt('aafuser', help='username value that used for creating basic authorization header'),
     cfg.StrOpt('aafpass', help='password value that used for creating basic authorization header'),
     cfg.StrOpt('aafns', help='AAF namespace field used in MUSIC request header'),
+    cfg.StrOpt('certificate_authority_bundle_file',
+               default='certificate_authority_bundle.pem',
+               help='Certificate Authority Bundle file in pem format. '
+                    'Must contain the appropriate trust chain for the '
+                    'Certificate file.'),
 ]
 
 CONF.register_opts(MUSIC_API_OPTS, group='music_api')
@@ -120,7 +125,7 @@ class MusicAPI(object):
             port = CONF.music_api.port or 8080
             path = CONF.music_api.path or '/MUSIC/rest'
             version = CONF.version
-            server_url = 'http://{}:{}/{}'.format(
+            server_url = 'https://{}:{}/{}'.format(
                 host, port, version, path.rstrip('/').lstrip('/'))
 
         kwargs = {
@@ -128,6 +133,7 @@ class MusicAPI(object):
             'log_debug': CONF.music_api.debug,
             'connect_timeout': CONF.music_api.connect_timeout,
             'read_timeout': CONF.music_api.read_timeout,
+            'ca_bundle_file': CONF.music_api.certificate_authority_bundle_file
         }
         self.rest = rest.REST(**kwargs)
 
