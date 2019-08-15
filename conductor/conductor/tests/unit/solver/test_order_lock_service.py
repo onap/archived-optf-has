@@ -31,6 +31,7 @@ from oslo_config import cfg
 class TestOrdersLockingService(unittest.TestCase):
     def setUp(self):
         # Initialize music API
+        cfg.CONF.set_override('certificate_authority_bundle_file', '../AAF_RootCA.cer', 'music_api')
         music = api.API()
         cfg.CONF.set_override('keyspace', 'conductor')
         music.keyspace_create(keyspace=cfg.CONF.keyspace)
