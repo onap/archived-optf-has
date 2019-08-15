@@ -52,6 +52,7 @@ class TestTranslatorServiceNoException(unittest.TestCase):
         cfg.CONF.set_override('concurrent', True, 'controller')
         cfg.CONF.set_override('keyspace',
                               'conductor_rpc', 'messaging_server')
+        cfg.CONF.set_override('certificate_authority_bundle_file', '../AAF_RootCA.cer', 'music_api')
         self.conf = cfg.CONF
         self.Plan = plan_prepare(self.conf)
         kwargs = self.Plan

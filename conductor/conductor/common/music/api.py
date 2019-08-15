@@ -84,10 +84,16 @@ MUSIC_API_OPTS = [
     cfg.IntOpt('third_datacenter_replicas',
                help='Number of replicas in third data center'),
     cfg.BoolOpt('music_new_version', help='new or old version'),
+    cfg.BoolOpt('enable_https_mode', help='enable HTTPs mode for music connection'),
     cfg.StrOpt('music_version', help='for version'),
     cfg.StrOpt('aafuser', help='username value that used for creating basic authorization header'),
     cfg.StrOpt('aafpass', help='password value that used for creating basic authorization header'),
     cfg.StrOpt('aafns', help='AAF namespace field used in MUSIC request header'),
+    cfg.StrOpt('certificate_authority_bundle_file',
+               default='certificate_authority_bundle.pem',
+               help='Certificate Authority Bundle file in pem format. '
+                    'Must contain the appropriate trust chain for the '
+                    'Certificate file.'),
 ]
 
 CONF.register_opts(MUSIC_API_OPTS, group='music_api')
@@ -130,6 +136,13 @@ class MusicAPI(object):
             'read_timeout': CONF.music_api.read_timeout,
         }
         self.rest = rest.REST(**kwargs)
+
+        # Set one parameter for connection mode
+        # Currently depend on music version
+        if (CONF.music_api.enable_https_mode):
+            self.rest.server_url = 'https://{}:{}/{}'.format(
+                host, port, version, path.rstrip('/').lstrip('/'))
+            self.rest.session.verify = CONF.music_api.certificate_authority_bundle_file
 
         if(CONF.music_api.music_new_version):
             MUSIC_version = CONF.music_api.music_version.split(".")

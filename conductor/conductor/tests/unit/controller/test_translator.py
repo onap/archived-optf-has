@@ -48,6 +48,7 @@ class TestNoExceptionTranslator(unittest.TestCase):
         cfg.CONF.set_override('keyspace', 'conductor')
         cfg.CONF.set_override('keyspace', 'conductor_rpc', 'messaging_server')
         cfg.CONF.set_override('concurrent', True, 'controller')
+        cfg.CONF.set_override('certificate_authority_bundle_file', '../AAF_RootCA.cer', 'music_api')
         conf = cfg.CONF
         self.Translator = Translator(
             conf, 'some_template', str(uuid.uuid4()), get_template())
