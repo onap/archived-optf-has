@@ -1,0 +1,4 @@
+distribution_type: 'maven'
+version: '1.3.3'
+project: 'optf-has'
+log_dir: 'optf-has-maven-stage-master/140/'
