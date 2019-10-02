@@ -6,6 +6,58 @@
 Release Notes
 =============
 
+Version: 5.0.1
+--------------
+
+:Release Date: 2019-09-30 (El Alto Release)
+
+The El Alto release is the fourth release for ONAP Optimization Framework (OOF).
+
+Artifacts released:
+
+optf-has:1.3.3
+
+**New Features**
+
+No new features were added in the release. However, the HAS-Music interface was enhanced from HAS to enable HTTPS based communication.
+Since MUSIC wasnt ready to expose HTTPS in El Alto, using HTTPS was made into an optional flag through config.
+
+    * [OPTFRA-330] security: HTTPS support for HAS-MUSIC interface
+
+* Platform Maturity Level 1
+    * ~56.2%+ unit test coverage
+
+
+**Bug Fixes**
+
+The El Alto release for OOF fixed the following Bugs.
+
+    * [OPTFRA-579] Json error in homing solution
+    * [OPTFRA-521] oof-has-api exposes plain text HTTP endpoint using port 30275
+    * [OPTFRA-409] Template example : purpose to be explained
+
+
+**Known Issues**
+
+**Security Notes**
+
+*Fixed Security Issues*
+
+    * [OPTFRA-521] oof-has-api exposes plain text HTTP endpoint using port 30275
+
+*Known Security Issues*
+
+*Known Vulnerabilities in Used Modules*
+
+**Upgrade Notes**
+
+
+**Deprecation Notes**
+
+
+**Other**
+
+
 Version: 4.0.0
 --------------
 
