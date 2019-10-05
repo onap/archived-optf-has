@@ -43,7 +43,8 @@ The El Alto release for OOF fixed the following Bugs.
 
 *Fixed Security Issues*
 
-    * [OPTFRA-521] oof-has-api exposes plain text HTTP endpoint using port 30275
+    * [`OJSI-137 <https://jira.onap.org/browse/OJSI-137>`_] In default deployment OPTFRA (oof-has-api) exposes HTTP port 30275 outside of cluster.
+      This issue has been also described in "[OPTFRA-521] oof-has-api exposes plain text HTTP endpoint using port 30275"
 
 *Known Security Issues*
 
