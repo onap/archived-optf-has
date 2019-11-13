@@ -610,6 +610,26 @@ tenant/3c6c471ada7747fe8ff7f28e100b61e8/vservers/vserver/00bddefc-126e-4e4f-a18d
         self.assertIsNone(self.aai_ep.resolve_service_instance_id_for_vnf(candidate, bad_vnf, customer_id, service_type,
                                                                           demand_name, triage_translator_data))
 
+    def test_add_passthrough_parameters(self):
+        triage_translator_data = None
+
+        candidate = dict()
+        candidate['candidate_id'] = 'some_id'
+        candidate['location_id'] = 'some_location_id'
+        candidate['inventory_type'] = 'service'
+
+        parameters = dict()
+        parameters['param_one'] = "value"
+        parameters['param_two'] = "value"
+
+        candidate_info = copy.deepcopy(candidate)
+        candidate_info['passthrough_attributes'] = dict()
+        candidate_info['passthrough_attributes']['param_one'] = "value"
+        candidate_info['passthrough_attributes']['param_two'] = "value"
+
+        self.aai_ep.add_passthrough_attributes(candidate, parameters, 'demand', None)
+        self.assertDictEqual(candidate, candidate_info)
+
     def test_match_candidate_by_list(self):
         TraigeTranslator.collectDroppedCandiate = mock.MagicMock(return_value=None)
         triage_translator_data = None
