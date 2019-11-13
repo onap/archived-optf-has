@@ -5,7 +5,7 @@
         "inventory_type": "service",
         "port_key": "vlan_port",
         "vlan_key": "vlan_key",
-        "attributes": {
+        "filtering_attributes": {
             "global-customer-id": "Demonstration",
             "model-version-id": "e02a7e5c-9d27-4360-ab7c-73bb83b07e3b",
             "model-invariant-id": "762472ef-5284-4daa-ab32-3e7bee2ec355"

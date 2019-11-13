@@ -68,6 +68,7 @@
             "region": "example-region-val-13893",
             "service_instance_id": "3e8d118c-10ca-4b4b-b3db-089b5e9e6a1c",
             "state": "example-state-val-59487",
+            "td-role": "anchor",
             "longitude": "32.89948",
             "vim-id": "CloudOwner_RegionOne"}
 ]}

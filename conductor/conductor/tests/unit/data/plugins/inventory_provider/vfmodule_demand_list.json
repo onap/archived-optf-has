@@ -6,7 +6,7 @@
         "port_key": "vlan_port",
         "vlan_key": "vlan_key",
         "unique": "false",
-        "attributes": {
+        "filtering_attributes": {
             "prov-status": "ACTIVE",
             "global-customer-id": "Demonstration",
             "model-version-id": "e02a7e5c-9d27-4360-ab7c-73bb83b07e3b",
@@ -14,6 +14,10 @@
             "orchestration-status": ["active"],
             "cloud-region-id": "RegionOne",
             "service_instance_id": "3e8d118c-10ca-4b4b-b3db-089b5e9e6a1c"
+        },
+       "passthrough_attributes": {
+            "state": "invalid example",
+            "td-role": "anchor"
         },
         "service_type": "vPGN-XX",
         "excluded_candidates": [{

@@ -47,7 +47,7 @@ INVENTORY_TYPES = ['cloud', 'service', 'transport', 'vfmodule']
 DEFAULT_INVENTORY_PROVIDER = INVENTORY_PROVIDERS[0]
 CANDIDATE_KEYS = ['candidate_id', 'cost', 'inventory_type', 'location_id',
                   'location_type']
-DEMAND_KEYS = ['attributes', 'candidates', 'complex', 'conflict_identifier',
+DEMAND_KEYS = ['filtering_attributes', 'passthrough_attributes', 'candidates', 'complex', 'conflict_identifier',
                'customer_id', 'default_cost', 'excluded_candidates',
                'existing_placement', 'flavor', 'inventory_provider',
                'inventory_type', 'port_key', 'region', 'required_candidates',
@@ -448,7 +448,7 @@ class Translator(object):
                     # For service and vfmodule inventories, customer_id and
                     # service_type MUST be specified
                     if inventory_type == 'service' or inventory_type == 'vfmodule':
-                        attributes = requirement.get('attributes')
+                        attributes = requirement.get('filtering_attributes')
 
                         if attributes:
                             customer_id = attributes.get('customer-id')

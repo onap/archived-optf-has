@@ -1187,7 +1187,8 @@ class AAI(base.InventoryProviderBase):
                 inventory_type = requirement.get('inventory_type').lower()
                 service_subscription = requirement.get('service_subscription')
                 candidate_uniqueness = requirement.get('unique', 'true')
-                attributes = requirement.get('attributes')
+                attributes = requirement.get('filtering_attributes')
+                passthrough_attributes = requirement.get('passthrough_attributes')
                 #TODO: may need to support multiple service_type and customer_id in the futrue
 
                 #TODO: make it consistent for dash and underscore
@@ -1330,6 +1331,7 @@ class AAI(base.InventoryProviderBase):
                         if required_candidates and not self.match_candidate_by_list(candidate, required_candidates, False, name, triage_translator_data):
                             continue
 
+                        self.add_passthrough_attributes(candidate, passthrough_attributes, name, triage_translator_data)
                         # add candidate to demand candidates
                         resolved_demands[name].append(candidate)
                         LOG.debug(">>>>>>> Candidate <<<<<<<")
@@ -1502,6 +1504,7 @@ class AAI(base.InventoryProviderBase):
                                                  triage_translator_data):
                             continue
                         else:
+                            self.add_passthrough_attributes(candidate, passthrough_attributes, name, triage_translator_data)
                             resolved_demands[name].append(candidate)
                             LOG.debug(">>>>>>> Candidate <<<<<<<")
                             LOG.debug(json.dumps(candidate, indent=4))
@@ -1744,6 +1747,7 @@ class AAI(base.InventoryProviderBase):
                                                      triage_translator_data):
                                 continue
                             else:
+                                self.add_passthrough_attributes(candidate, passthrough_attributes, name, triage_translator_data)
                                 resolved_demands[name].append(candidate)
                                 LOG.debug(">>>>>>> Candidate <<<<<<<")
                                 LOG.debug(json.dumps(candidate, indent=4))
@@ -1870,6 +1874,7 @@ class AAI(base.InventoryProviderBase):
                             candidate['region'] = \
                                 complex_info.get('region')
 
+                            self.add_passthrough_attributes(candidate, passthrough_attributes, name, triage_translator_data)
                             # add candidate to demand candidates
                             resolved_demands[name].append(candidate)
 
@@ -1877,6 +1882,16 @@ class AAI(base.InventoryProviderBase):
                     LOG.error("Unknown inventory_type "
                               " {}".format(inventory_type))
         return resolved_demands
+
+    def add_passthrough_attributes(self, candidate, passthrough_attributes, demand_name, triage_translator_data):
+        if passthrough_attributes is None:
+            return
+        for key, value in passthrough_attributes.items():
+            if key in candidate:
+                LOG.error('Passthrough attribute {} in demand {} already exist for candidate {}'.
+                          format(key, demand_name, candidate['candidate_id']))
+            else:
+                candidate[key] = value
 
     def match_region(self, candidate, restricted_region_id, restricted_complex_id, demand_name, triage_translator_data):
         if self.match_candidate_attribute(
