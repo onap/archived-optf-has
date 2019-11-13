@@ -556,7 +556,13 @@ class SolverService(cotyledon.Service):
                             if resource.get('conflict_id'):
                                 rec["candidate"]["conflict_id"] = resource.get("conflict_id")
 
-
+                        if resource.get('passthrough_attributes'):
+                            for key, value in resource.get('passthrough_attributes').items():
+                                if key in rec["attributes"]:
+                                    LOG.error('Passthrough attribute {} in demand {} already exist for candidate {}'.
+                                              format(key, demand_name, rec['candidate_id']))
+                                else:
+                                    rec["attributes"][key] = value
                         # TODO(snarayanan): Add total value to recommendations?
                         # msg = "--- total value of decision = {}"
                         # LOG.debug(msg.format(_best_path.total_value))
