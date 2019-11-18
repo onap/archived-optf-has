@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8c8ea62f_9461c2fc",
+        "filename": "conductor/conductor/controller/translator.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 451,
+      "author": {
+        "id": 2041
+      },
+      "writtenOn": "2019-11-18T20:07:21Z",
+      "side": 1,
+      "message": "should we consider renaming this variable to filtering_attributes to avoid confusion? I\u0027m assuming we don\u0027t have an \"attributes\" block in the homing specification.",
+      "range": {
+        "startLine": 451,
+        "startChar": 24,
+        "endLine": 451,
+        "endChar": 34
+      },
+      "revId": "26342f97378e352dc06163150f90882678460fc0",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "463c712c_a8db4285",
+        "filename": "conductor/conductor/data/plugins/inventory_provider/aai.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 1190,
+      "author": {
+        "id": 2041
+      },
+      "writtenOn": "2019-11-18T20:07:21Z",
+      "side": 1,
+      "message": "call this filtering_attributes ?",
+      "range": {
+        "startLine": 1190,
+        "startChar": 16,
+        "endLine": 1190,
+        "endChar": 26
+      },
+      "revId": "26342f97378e352dc06163150f90882678460fc0",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
