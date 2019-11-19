@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "636ecafc_368c6392",
+        "filename": "conductor/conductor/controller/translator.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 451,
+      "author": {
+        "id": 2701
+      },
+      "writtenOn": "2019-11-19T09:26:16Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "8c8ea62f_9461c2fc",
+      "range": {
+        "startLine": 451,
+        "startChar": 24,
+        "endLine": 451,
+        "endChar": 34
+      },
+      "revId": "26342f97378e352dc06163150f90882678460fc0",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "463c712c_a8db4285",
         "filename": "conductor/conductor/data/plugins/inventory_provider/aai.py",
         "patchSetId": 2
@@ -45,6 +69,30 @@
       "revId": "26342f97378e352dc06163150f90882678460fc0",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ff09f4ea_5fae143a",
+        "filename": "conductor/conductor/data/plugins/inventory_provider/aai.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 1190,
+      "author": {
+        "id": 2701
+      },
+      "writtenOn": "2019-11-19T09:26:16Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "463c712c_a8db4285",
+      "range": {
+        "startLine": 1190,
+        "startChar": 16,
+        "endLine": 1190,
+        "endChar": 26
+      },
+      "revId": "26342f97378e352dc06163150f90882678460fc0",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
     }
   ]
 }
