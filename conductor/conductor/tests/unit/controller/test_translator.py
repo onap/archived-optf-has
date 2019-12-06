@@ -180,7 +180,7 @@ class TestNoExceptionTranslator(unittest.TestCase):
                     "candidate_id": ["e765d576-8755-4145-8536-0bb6d9b1dc9a"],
                     "inventory_type": "vfmodule"
                 }],
-                "attributes": {
+                "filtering_attributes": {
                     "prov-status": "ACTIVE",
                     "global-customer-id": "Demonstration",
                     "model-version-id": "763731df-84fd-494b-b824-01fc59a5ff2d",
@@ -209,7 +209,7 @@ class TestNoExceptionTranslator(unittest.TestCase):
                     "candidate_id": ["e765d576-8755-4145-8536-0bb6d9b1dc9a"],
                     "inventory_type": "vfmodule"
                 }],
-                "attributes": {
+                "filtering_attributes": {
                     "prov-status": "ACTIVE",
                     "global-customer-id": "Demonstration",
                     "model-version-id": "763731df-84fd-494b-b824-01fc59a5ff2d",
@@ -236,7 +236,7 @@ class TestNoExceptionTranslator(unittest.TestCase):
                     "service_resource_id": "vFW-SINK-XX",
                     "vlan_key": "vlan_key",
                     "service_type": "vFW-SINK-XX",
-                    "attributes": {
+                    "filtering_attributes": {
                         "cloud-region-id": {
                             "get_param": "chosen_region"
                         },

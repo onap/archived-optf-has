@@ -1187,26 +1187,27 @@ class AAI(base.InventoryProviderBase):
                 inventory_type = requirement.get('inventory_type').lower()
                 service_subscription = requirement.get('service_subscription')
                 candidate_uniqueness = requirement.get('unique', 'true')
-                attributes = requirement.get('attributes')
+                filtering_attributes = requirement.get('filtering_attributes')
+                passthrough_attributes = requirement.get('passthrough_attributes')
                 #TODO: may need to support multiple service_type and customer_id in the futrue
 
                 #TODO: make it consistent for dash and underscore
 
-                if attributes:
+                if filtering_attributes:
                     # catch equipment-role and service-type from template
-                    equipment_role = attributes.get('equipment-role')
-                    service_type = attributes.get('service-type')
+                    equipment_role = filtering_attributes.get('equipment-role')
+                    service_type = filtering_attributes.get('service-type')
                     if equipment_role:
                         service_type = equipment_role
                     # catch global-customer-id and customer-id from template
-                    global_customer_id = attributes.get('global-customer-id')
-                    customer_id = attributes.get('customer-id')
+                    global_customer_id = filtering_attributes.get('global-customer-id')
+                    customer_id = filtering_attributes.get('customer-id')
                     if global_customer_id:
                         customer_id = global_customer_id
 
-                    model_invariant_id = attributes.get('model-invariant-id')
-                    model_version_id = attributes.get('model-version-id')
-                    service_role = attributes.get('service-role')
+                    model_invariant_id = filtering_attributes.get('model-invariant-id')
+                    model_version_id = filtering_attributes.get('model-version-id')
+                    service_role = filtering_attributes.get('service-role')
                 # For earlier
                 else:
                     service_type = equipment_role = requirement.get('service_type')
@@ -1306,7 +1307,7 @@ class AAI(base.InventoryProviderBase):
                         cloud_region_attr['complex-name'] = region['complex_name']
                         cloud_region_attr['physical-location-id'] = region['physical_location_id']
 
-                        if attributes and (not self.match_inventory_attributes(attributes, cloud_region_attr, candidate['candidate_id'])):
+                        if filtering_attributes and (not self.match_inventory_attributes(filtering_attributes, cloud_region_attr, candidate['candidate_id'])):
                             self.triage_translator.collectDroppedCandiate(candidate['candidate_id'], candidate['location_id'], name, triage_translator_data,
                                                                          reason='attributes and match invetory attributes')
                             continue
@@ -1330,6 +1331,7 @@ class AAI(base.InventoryProviderBase):
                         if required_candidates and not self.match_candidate_by_list(candidate, required_candidates, False, name, triage_translator_data):
                             continue
 
+                        self.add_passthrough_attributes(candidate, passthrough_attributes, name, triage_translator_data)
                         # add candidate to demand candidates
                         resolved_demands[name].append(candidate)
                         LOG.debug(">>>>>>> Candidate <<<<<<<")
@@ -1340,7 +1342,7 @@ class AAI(base.InventoryProviderBase):
 
                     # First level query to get the list of generic vnfs
                     vnf_by_model_invariant = list()
-                    if attributes and model_invariant_id:
+                    if filtering_attributes and model_invariant_id:
 
                         raw_path = '/network/generic-vnfs/' \
                                    '?model-invariant-id={}&depth=0'.format(model_invariant_id)
@@ -1477,7 +1479,7 @@ class AAI(base.InventoryProviderBase):
                         vnf['cloud-region-id'] = cloud_region_id
                         vnf['physical-location-id'] = candidate.get('physical_location_id')
 
-                        if attributes and not self.match_inventory_attributes(attributes, vnf, candidate['candidate_id']):
+                        if filtering_attributes and not self.match_inventory_attributes(filtering_attributes, vnf, candidate['candidate_id']):
                             self.triage_translator.collectDroppedCandiate(candidate['candidate_id'], candidate['location_id'], name, triage_translator_data,
                                                                          reason="attibute check error")
                             continue
@@ -1502,6 +1504,7 @@ class AAI(base.InventoryProviderBase):
                                                  triage_translator_data):
                             continue
                         else:
+                            self.add_passthrough_attributes(candidate, passthrough_attributes, name, triage_translator_data)
                             resolved_demands[name].append(candidate)
                             LOG.debug(">>>>>>> Candidate <<<<<<<")
                             LOG.debug(json.dumps(candidate, indent=4))
@@ -1511,7 +1514,7 @@ class AAI(base.InventoryProviderBase):
 
                     # First level query to get the list of generic vnfs
                     vnf_by_model_invariant = list()
-                    if attributes and model_invariant_id:
+                    if filtering_attributes and model_invariant_id:
 
                         raw_path = '/network/generic-vnfs/' \
                                    '?model-invariant-id={}&depth=0'.format(model_invariant_id)
@@ -1715,7 +1718,7 @@ class AAI(base.InventoryProviderBase):
                             vnf_vf_module_inventory['physical-location-id'] = candidate.get('physical_location_id')
                             vnf_vf_module_inventory['service_instance_id'] = vs_service_instance_id
 
-                            if attributes and not self.match_inventory_attributes(attributes, vnf_vf_module_inventory,
+                            if filtering_attributes and not self.match_inventory_attributes(filtering_attributes, vnf_vf_module_inventory,
                                                                                   candidate['candidate_id']):
                                 self.triage_translator.collectDroppedCandiate(candidate['candidate_id'],
                                                                               candidate['location_id'], name,
@@ -1744,6 +1747,7 @@ class AAI(base.InventoryProviderBase):
                                                      triage_translator_data):
                                 continue
                             else:
+                                self.add_passthrough_attributes(candidate, passthrough_attributes, name, triage_translator_data)
                                 resolved_demands[name].append(candidate)
                                 LOG.debug(">>>>>>> Candidate <<<<<<<")
                                 LOG.debug(json.dumps(candidate, indent=4))
@@ -1870,6 +1874,7 @@ class AAI(base.InventoryProviderBase):
                             candidate['region'] = \
                                 complex_info.get('region')
 
+                            self.add_passthrough_attributes(candidate, passthrough_attributes, name, triage_translator_data)
                             # add candidate to demand candidates
                             resolved_demands[name].append(candidate)
 
@@ -1877,6 +1882,14 @@ class AAI(base.InventoryProviderBase):
                     LOG.error("Unknown inventory_type "
                               " {}".format(inventory_type))
         return resolved_demands
+
+    def add_passthrough_attributes(self, candidate, passthrough_attributes, demand_name, triage_translator_data):
+        if passthrough_attributes is None:
+            return
+        if len(passthrough_attributes.items()) > 0:
+            candidate['passthrough_attributes'] = dict()
+        for key, value in passthrough_attributes.items():
+            candidate['passthrough_attributes'][key] = value
 
     def match_region(self, candidate, restricted_region_id, restricted_complex_id, demand_name, triage_translator_data):
         if self.match_candidate_attribute(
