@@ -35,6 +35,7 @@ class TestMultiCloud(unittest.TestCase):
         ]
         cfg.CONF.register_cli_opts(cli_opts)
         self.mc_ep = mc.MULTICLOUD()
+        self.mc_ep.conf.set_override('certificate_authority_bundle_file', '../AAF_RootCA.cer', 'multicloud')
         self.mc_ep.conf.set_override('debug', False)
 
     def tearDown(self):

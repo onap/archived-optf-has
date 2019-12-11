@@ -104,3 +104,8 @@ _ReSharper*/
 # FIXME: Put all paths to temporarily hide under here.
 # This must be considered temporary and is to be cleaned out!
 conductor/api/extra/
+
+#eclipse
+.project
+.settings/
+.pydevproject
