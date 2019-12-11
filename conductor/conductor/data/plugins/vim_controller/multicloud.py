@@ -45,6 +45,12 @@ MULTICLOUD_OPTS = [
     cfg.StrOpt('server_url_version',
                default='v0',
                help='The version of Multicloud API.'),
+   
+    cfg.StrOpt('certificate_authority_bundle_file',
+               default='certificate_authority_bundle.pem',
+               help='Certificate Authority Bundle file in pem format. '
+                    'Must contain the appropriate trust chain for the '
+                    'Certificate file.'),
 ]
 
 CONF.register_opts(MULTICLOUD_OPTS, group='multicloud')
@@ -109,6 +115,9 @@ class MULTICLOUD(base.VimControllerBase):
             "read_timeout": self.timeout,
         }
         self.rest = rest.REST(**kwargs)
+
+	if (self.conf.multicloud.server_url.rstrip('/')[:5] == 'https'):     
+            self.rest.session.verify =self.conf.multicloud.certificate_authority_bundle_file
 
     def check_vim_capacity(self, vim_request):
         LOG.debug("Invoking check_vim_capacity api")
