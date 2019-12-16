@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "380ac01c_d75b970a",
+        "filename": "conductor/conductor/data/plugins/vim_controller/multicloud.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1739
+      },
+      "writtenOn": "2019-12-16T15:02:25Z",
+      "side": 1,
+      "message": "Please remove this whitespace.",
+      "range": {
+        "startLine": 48,
+        "startChar": 0,
+        "endLine": 48,
+        "endChar": 3
+      },
+      "revId": "e3219fc7ebe7676b3727ae9e9a7b465e2fb40a20",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "124f8a1c_708d8fb8",
+        "filename": "conductor/conductor/data/plugins/vim_controller/multicloud.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 1739
+      },
+      "writtenOn": "2019-12-16T15:02:25Z",
+      "side": 1,
+      "message": "Please remove this whitespace.",
+      "revId": "e3219fc7ebe7676b3727ae9e9a7b465e2fb40a20",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
