@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b33d41db_8c0825df",
+        "filename": "conductor/conductor/data/plugins/vim_controller/multicloud.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1739
+      },
+      "writtenOn": "2020-01-09T17:05:24Z",
+      "side": 1,
+      "message": "please remove this extra space.",
+      "range": {
+        "startLine": 47,
+        "startChar": 54,
+        "endLine": 47,
+        "endChar": 56
+      },
+      "revId": "82e6e78508166df6bd2ef9edf075b0c9e0e535f5",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "83c28797_bd5a88ac",
+        "filename": "conductor/conductor/data/plugins/vim_controller/multicloud.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1739
+      },
+      "writtenOn": "2020-01-09T17:05:24Z",
+      "side": 1,
+      "message": "this too.",
+      "range": {
+        "startLine": 52,
+        "startChar": 41,
+        "endLine": 52,
+        "endChar": 44
+      },
+      "revId": "82e6e78508166df6bd2ef9edf075b0c9e0e535f5",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "da52f9b0_658f1741",
+        "filename": "conductor/conductor/data/plugins/vim_controller/multicloud.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 121,
+      "author": {
+        "id": 1739
+      },
+      "writtenOn": "2020-01-09T17:05:24Z",
+      "side": 1,
+      "message": "Please remove this extra space.",
+      "range": {
+        "startLine": 121,
+        "startChar": 0,
+        "endLine": 121,
+        "endChar": 8
+      },
+      "revId": "82e6e78508166df6bd2ef9edf075b0c9e0e535f5",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
