@@ -28,7 +28,7 @@ LOG = log.getLogger(__name__)
 def encode(user_id, password):
     """ Provide the basic authencation encoded value in an 'Authorization' Header """
 
-    user_pass = user_id + ':' + password
+    user_pass = str(user_id) + ":" + str(password)
     base64_val = base64.b64encode(user_pass)
     authorization_val = _LE("Basic {}".format(base64_val))
 

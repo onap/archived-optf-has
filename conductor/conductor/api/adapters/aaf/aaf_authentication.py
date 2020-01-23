@@ -24,7 +24,7 @@ import os
 
 from conductor.common import rest
 from conductor.i18n import _LE, _LI
-from conductor import __file__ as conductor_root
+from conductor.common.utils import cipherUtils
 
 from oslo_log import log
 LOG = log.getLogger(__name__)
@@ -83,7 +83,7 @@ def clear_cache():
 def authenticate(uid, passwd):
     aafUser = None
     username = CONF.conductor_api.username
-    password = CONF.conductor_api.password
+    password = cipherUtils.AESCipher.get_instance().decrypt(CONF.conductor_api.password)
     if username == uid and password == passwd:
         aafUser = CONF.aaf_api.aaf_conductor_user
     else:
@@ -159,7 +159,7 @@ def remote_api(aafUser):
         "server_url": server_url,
         "retries": CONF.aaf_api.aaf_retries,
         "username": CONF.aaf_api.username,
-        "password": CONF.aaf_api.password,
+        "password": cipherUtils.AESCipher.get_instance().decrypt(CONF.aaf_api.password),
         "log_debug": LOG.debug,
         "read_timeout": CONF.aaf_api.aaf_timeout,
         "cert_file": CONF.aaf_api.aaf_cert_file,
