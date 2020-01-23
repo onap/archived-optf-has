@@ -23,6 +23,7 @@ from oslo_config import cfg
 from oslo_log import log
 
 from conductor.common import rest
+from conductor.common.utils import cipherUtils
 from conductor.data.plugins.service_controller import base
 from conductor.i18n import _LE
 
@@ -66,7 +67,7 @@ class SDNC(base.ServiceControllerBase):
         self.conf = CONF
 
         self.base = self.conf.sdnc.server_url.rstrip('/')
-        self.password = self.conf.sdnc.password
+        self.password = cipherUtils.AESCipher.get_instance().decrypt(self.conf.sdnc.password)
         self.timeout = self.conf.sdnc.sdnc_rest_timeout
         self.verify = False
         self.retries = self.conf.sdnc.sdnc_retries
