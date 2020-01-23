@@ -23,11 +23,10 @@ import uuid
 import copy
 
 import json
-from oslo_config import cfg
-from oslo_log import log
 
 from conductor.common import rest
 from conductor.data.plugins import constants
+from conductor.common.utils import cipherUtils
 from conductor.data.plugins.inventory_provider import base
 from conductor.data.plugins.inventory_provider import hpa_utils
 from conductor.data.plugins.triage_translator.triage_translator import TraigeTranslator
@@ -111,7 +110,7 @@ class AAI(base.InventoryProviderBase):
         self.timeout = self.conf.aai.aai_rest_timeout
         self.retries = self.conf.aai.aai_retries
         self.username = self.conf.aai.username
-        self.password = self.conf.aai.password
+        self.password = cipherUtils.AESCipher.get_instance().decrypt(self.conf.aai.password)
         self.triage_translator=TraigeTranslator()
 
         # Cache is initially empty
