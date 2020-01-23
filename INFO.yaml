@@ -54,6 +54,11 @@ committers:
       company: 'ATT'
       id: 'vrvarma'
       timezone: 'America/New_York'
+    - name: 'Arthur Martella'
+      email: 'arthur.martella.1@att.com'
+      company: 'ATT'
+      id: 'amartell'
+      timezone: 'America/New_York'
 tsc:
     approval: 'https://lists.onap.org/pipermail/onap-tsc'
     changes:
@@ -78,3 +83,6 @@ tsc:
         - type: 'Addition'
           name: 'Shankaranarayanan Puzhavakath Narayanan'
           link: 'https://civs.cs.cornell.edu/cgi-bin/results.pl?id=E_2696d1c15c2fdd16'
+        - type: 'Addition'
+          name: 'Arthur Martella'
+          link: 'https://wiki.onap.org/display/DW/Committer+Promotion+Request+for+%5BOOF%5D+-+Arthur+Martella'
