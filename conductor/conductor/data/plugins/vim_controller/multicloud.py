@@ -115,7 +115,7 @@ class MULTICLOUD(base.VimControllerBase):
             "read_timeout": self.timeout,
         }
         self.rest = rest.REST(**kwargs)
-        if(self.conf.multicloud.enable_https_mode):
+        if self.conf.multicloud.enable_https_mode:
             self.rest.server_url = self.base[:4]+'s'+self.base[4:]
             self.rest.session.verify =self.conf.multicloud.certificate_authority_bundle_file    
 

@@ -30,6 +30,7 @@ from oslo_log import log
 from conductor.common import rest
 from conductor.common.utils import basic_auth_util
 from conductor.i18n import _LE, _LI  # pylint: disable=W0212
+from conductor.common.utils import cipherUtils
 
 LOG = log.getLogger(__name__)
 
@@ -137,22 +138,23 @@ class MusicAPI(object):
         }
         self.rest = rest.REST(**kwargs)
 
+        music_pwd = cipherUtils.AESCipher.get_instance().decrypt(CONF.music_api.aafpass)
         # Set one parameter for connection mode
         # Currently depend on music version
-        if (CONF.music_api.enable_https_mode):
+        if CONF.music_api.enable_https_mode:
             self.rest.server_url = 'https://{}:{}/{}'.format(
                 host, port, version, path.rstrip('/').lstrip('/'))
             self.rest.session.verify = CONF.music_api.certificate_authority_bundle_file
 
-        if(CONF.music_api.music_new_version):
-            MUSIC_version = CONF.music_api.music_version.split(".")
+        if CONF.music_api.music_new_version:
+            music_version = CONF.music_api.music_version.split(".")
 
             self.rest.session.headers['content-type'] = 'application/json'
-            self.rest.session.headers['X-minorVersion'] = MUSIC_version[1]
-            self.rest.session.headers['X-patchVersion'] = MUSIC_version[2]
+            self.rest.session.headers['X-minorVersion'] = music_version[1]
+            self.rest.session.headers['X-patchVersion'] = music_version[2]
             self.rest.session.headers['ns'] = CONF.music_api.aafns
             self.rest.session.headers['userId'] = CONF.music_api.aafuser
-            self.rest.session.headers['password'] = CONF.music_api.aafpass
+            self.rest.session.headers['password'] = music_pwd
             self.rest.session.headers['Authorization'] = basic_auth_util.encode(CONF.music_api.aafuser,
                                                                                 CONF.music_api.aafpass)
 

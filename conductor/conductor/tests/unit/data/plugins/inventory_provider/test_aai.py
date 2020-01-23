@@ -30,7 +30,7 @@ from oslo_config import cfg
 class TestAAI(unittest.TestCase):
 
     def setUp(self):
-
+        cfg.CONF.set_override('password', '4HyU6sI+Tw0YMXgSHr5sJ5C0UTkeBaxXoxQqWuSVFugls7sQnaAXp4zMfJ8FKFrH', 'aai')
         CONF = cfg.CONF
         CONF.register_opts(aai.AAI_OPTS, group='aai')
         self.conf = CONF

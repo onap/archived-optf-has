@@ -23,12 +23,12 @@ from conductor.common import rest
 from conductor.common.music.api import MusicAPI
 from oslo_config import cfg
 
-
 class TestMusicApi(unittest.TestCase):
 
     def setUp(self):
         cfg.CONF.set_override('debug', True, 'music_api')
         cfg.CONF.set_override('certificate_authority_bundle_file', '../AAF_RootCA.cer', 'music_api')
+        cfg.CONF.set_override('aafpass', 'U5AudaTTC/DYQ29Q7qiXx/iwsgwV+dV7v7/Q5TDBh1URPwqAGECnbVmUkOynLjTY', 'music_api')
         self.mock_lock_id = mock.patch.object(MusicAPI, '_lock_id_create',
                                               return_value='12345678')
         self.mock_lock_acquire = mock.patch.object(MusicAPI,
