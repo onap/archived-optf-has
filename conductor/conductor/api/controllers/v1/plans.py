@@ -349,8 +349,9 @@ def verify_user(authstr):
     user_dict = dict()
     auth_str = authstr
     user_pw = auth_str.split(' ')[1]
+    user_pw = user_pw.encode()   # below function needs user_pw in bytes object in python 3 so converting that
     decode_user_pw = base64.b64decode(user_pw)
-    list_id_pw = decode_user_pw.split(':')
+    list_id_pw = decode_user_pw.decode().split(':')
     user_dict['username'] = str(list_id_pw[0])
     user_dict['password'] = str(list_id_pw[1])
     password = CONF.conductor_api.password

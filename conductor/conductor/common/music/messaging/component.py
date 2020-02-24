@@ -300,9 +300,9 @@ class RPCService(cotyledon.Service):
         msgs = self.RPC.query.all()
         for msg in msgs:
             if msg.enqueued:
-                if 'plan_name' in msg.ctxt.keys():
+                if 'plan_name' in list(msg.ctxt.keys()):
                     LOG.info('Plan name: {}'.format(msg.ctxt['plan_name']))
-                elif 'plan_name' in msg.args.keys():
+                elif 'plan_name' in list(msg.args.keys()):
                     LOG.info('Plan name: {}'.format(msg.args['plan_name']))
                 msg.delete()
 
@@ -352,9 +352,9 @@ class RPCService(cotyledon.Service):
 
             if not msg.enqueued:
                 continue
-            if 'plan_name' in msg.ctxt.keys():
+            if 'plan_name' in list(msg.ctxt.keys()):
                 LOG.info('Plan name: {}'.format(msg.ctxt['plan_name']))
-            elif 'plan_name' in msg.args.keys():
+            elif 'plan_name' in list(msg.args.keys()):
                 LOG.info('Plan name: {}'.format(msg.args['plan_name']))
 
             # Change the status to WORKING (operation with a lock)
@@ -394,7 +394,7 @@ class RPCService(cotyledon.Service):
                 return
 
             # All methods must take a ctxt and args param.
-            if inspect.getargspec(method).args != ['self', 'ctx', 'arg']:
+            if inspect.getfullargspec(method).args != ['self', 'ctx', 'arg']:
                 error_msg = _LE("Method {} must take three args: "
                                 "self, ctx, arg").format(msg.method)
                 self._log_error_and_update_msg(msg, error_msg)

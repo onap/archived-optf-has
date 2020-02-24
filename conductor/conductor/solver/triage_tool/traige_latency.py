@@ -24,7 +24,10 @@ import unicodedata
 from conductor.common.models.triage_tool import TriageTool
 from conductor.common.music.model import base
 from oslo_config import cfg
-from StringIO import StringIO
+try:
+    from StringIO import StringIO ## for Python 2
+except ImportError:
+    from io import StringIO ## for Python 3
 
 CONF = cfg.CONF
 io = StringIO()

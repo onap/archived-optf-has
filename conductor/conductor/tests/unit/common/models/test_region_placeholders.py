@@ -33,7 +33,7 @@ class TestRegionPlaceholders(unittest.TestCase):
         self.assertEqual("id", self.regionPlaceHolder.pk_name())
         self.assertEqual(None, self.regionPlaceHolder.pk_value())
         self.value = {'region_name': None, 'countries': None}
-        self.assertEqual(self.value, self.regionPlaceHolder.values())
+        self.assertEqual(self.value, list(self.regionPlaceHolder.values()))
         self.assertEqual("text", self.regionPlaceHolder.schema().get("region_name"))
         self.assertEqual(None, self.regionPlaceHolder.__json__().get("region_name"))
 

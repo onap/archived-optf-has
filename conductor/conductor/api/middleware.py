@@ -159,7 +159,7 @@ class ParsableErrorMiddleware(object):
                 if six.PY3:
                     app_data = app_data.decode('utf-8')
                 try:
-                    fault = json.loads(app_data)
+                    fault = list(json.loads(app_data))
                     if error is not None and 'faultstring' in fault:
                         fault['faultstring'] = i18n.translate(error,
                                                               user_locale)

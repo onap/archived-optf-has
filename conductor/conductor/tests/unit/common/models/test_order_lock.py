@@ -33,7 +33,7 @@ class TestOrder_Lock(unittest.TestCase):
         self.assertEqual(None, self.orderLock.pk_value())
 
         self.values = {'is_spinup_completed': False, 'id': None, 'spinup_completed_timestamp': None, 'plans': None}
-        self.assertEqual(self.values, self.orderLock.values())
+        self.assertEqual(self.values, list(self.orderLock.values()))
 
         self.reprVal = '<OrderLock None>'
         self.assertEqual(self.reprVal, self.orderLock.__repr__())

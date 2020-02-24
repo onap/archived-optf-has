@@ -67,7 +67,7 @@ class Threshold(object):
         if base_unit not in self.UNITS:
             raise ThresholdException(
                 "Base unit {} unsupported, must be one of: {}".format(
-                    base_unit, ', '.join(self.UNITS.keys())))
+                    base_unit, ', '.join(list(self.UNITS.keys()))))
 
         self._expression = expression
         self._base_unit = base_unit
@@ -80,7 +80,7 @@ class Threshold(object):
 
     def _all_units(self):
         """Returns a single list of all supported units"""
-        unit_lists = [self.UNITS[k].keys() for k in self.UNITS.keys()]
+        unit_lists = [list(self.UNITS[k].keys()) for k in list(self.UNITS.keys())]
         return list(itertools.chain.from_iterable(unit_lists))
 
     def _default_for_base_unit(self, base_unit):

@@ -400,7 +400,7 @@ class ReservationService(cotyledon.Service):
                             # order_lock spin-up rollback
                             for decision in solution.get('recommendations'):
 
-                                candidate = decision.values()[0].get('candidate')
+                                candidate = list(decision.values())[0].get('candidate')
                                 if candidate.get('inventory_type') == 'cloud':
                                     # TODO(larry) change the code to get('conflict_id') instead of 'location_id'
                                     conflict_id = candidate.get('conflict_id')
@@ -452,7 +452,7 @@ class ReservationService(cotyledon.Service):
                         # order_lock spin-up rollback
                         for decision in solution.get('recommendations'):
 
-                            candidate = decision.values()[0].get('candidate')
+                            candidate = list(decision.values())[0].get('candidate')
                             if candidate.get('inventory_type') == 'cloud':
                                 conflict_id = candidate.get('conflict_id')
                                 order_record = self.OrderLock.query.get_plan_by_col("id", conflict_id)[0]
