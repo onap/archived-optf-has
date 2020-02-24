@@ -33,7 +33,7 @@ class TestCountryLatency(unittest.TestCase):
         self.assertEqual("id", self.countryLatency.pk_name())
         self.assertEqual(None, self.countryLatency.pk_value())
         self.value = {'country_name': None, 'groups': None}
-        self.assertEqual(self.value, self.countryLatency.values())
+        self.assertEqual(self.value, list(self.countryLatency.values()))
         self.assertEqual("text", self.countryLatency.schema().get("country_name"))
         self.assertEqual(None, self.countryLatency.__json__().get("groups"))
 

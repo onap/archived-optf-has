@@ -88,7 +88,7 @@ class BestFirst(search.Search):
 
                     # check closeness for this decision
                     np.set_decision_id(p, candidate.name)
-                    if np.decision_id in close_paths.keys():
+                    if np.decision_id in list(close_paths.keys()):
                         valid_candidate = False
 
                     ''' for base comparison heuristic '''
@@ -112,7 +112,7 @@ class BestFirst(search.Search):
 
     def _get_new_demand(self, _p, _demand_list):
         for demand in _demand_list:
-            if demand.name not in _p.decisions.keys():
+            if demand.name not in list(_p.decisions.keys()):
                 return demand
 
         return None

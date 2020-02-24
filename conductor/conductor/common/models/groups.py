@@ -81,7 +81,7 @@ class Groups(base.Base):
         return \
             api.MUSIC_API.row_insert_by_condition(
                 self.__keyspace__, self.__tablename__, self.pk_name(),
-                self.pk_value(), self.values(), self.PARKED)
+                self.pk_value(), list(self.values()), self.PARKED)
 
     def __init__(self, id=None, group=None, countries=None, _insert=False):
         """Initializer"""

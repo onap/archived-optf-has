@@ -23,7 +23,11 @@ import json
 from conductor.common.models.triage_tool import TriageTool
 from conductor.common.music.model import base
 from oslo_config import cfg
-from StringIO import StringIO
+try:
+    from StringIO import StringIO ## for Python 2
+except ImportError:
+    from io import StringIO ## for Python 3
+
 
 CONF = cfg.CONF
 io = StringIO()
@@ -36,7 +40,7 @@ class TraigeTranslator(object):
         triage_translator_data['plan_name'] = plan_name
         triage_translator_data['plan_id'] = plan_id
     def addDemandsTriageTranslator(self, name, triage_translator_data):
-        if not 'dropped_candidates' in triage_translator_data.keys():
+        if not 'dropped_candidates' in list(triage_translator_data.keys()):
             triage_translator_data['dropped_candidates'] = []
             dropped_candidate_details = {}
             dropped_candidate_details['name'] = name
@@ -45,7 +49,7 @@ class TraigeTranslator(object):
             triage_translator_data['dropped_candidates'].append(dropped_candidate_details)
         else:
             for dc in triage_translator_data['dropped_candidates']:
-                print name
+                print(name)   # Python 3 conversion as print statement changed from python 2
                 if not dc['name'] == name:
                     dropped_candidate_details = {}
                     dropped_candidate_details['name'] = name

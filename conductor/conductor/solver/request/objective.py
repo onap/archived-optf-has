@@ -55,7 +55,7 @@ class Operand(object):
         if self.function.func_type == "latency_between":
             if isinstance(self.function.loc_a, demand.Location):
                 if self.function.loc_z.name in \
-                        _decision_path.decisions.keys():
+                        list(_decision_path.decisions.keys()):
                     resource = \
                         _decision_path.decisions[self.function.loc_z.name]
                     candidate_cost = resource.get('cost')
@@ -70,7 +70,7 @@ class Operand(object):
                         + candidate_cost
             elif isinstance(self.function.loc_z, demand.Location):
                 if self.function.loc_a.name in \
-                        _decision_path.decisions.keys():
+                        list(_decision_path.decisions.keys()):
                     resource = \
                         _decision_path.decisions[self.function.loc_a.name]
                     candidate_cost = resource.get('cost')
@@ -85,9 +85,9 @@ class Operand(object):
                         + candidate_cost
             else:
                 if self.function.loc_a.name in \
-                        _decision_path.decisions.keys() and \
+                        list(_decision_path.decisions.keys()) and \
                    self.function.loc_z.name in \
-                        _decision_path.decisions.keys():
+                        list(_decision_path.decisions.keys()):
                     resource_a = \
                         _decision_path.decisions[self.function.loc_a.name]
                     loc_a = None
@@ -122,7 +122,7 @@ class Operand(object):
         elif self.function.func_type == "distance_between":
             if isinstance(self.function.loc_a, demand.Location):
                 if self.function.loc_z.name in \
-                        _decision_path.decisions.keys():
+                        list(_decision_path.decisions.keys()):
                     resource = \
                         _decision_path.decisions[self.function.loc_z.name]
                     candidate_cost = resource.get('cost')
@@ -137,7 +137,7 @@ class Operand(object):
                         + candidate_cost
             elif isinstance(self.function.loc_z, demand.Location):
                 if self.function.loc_a.name in \
-                        _decision_path.decisions.keys():
+                        list(_decision_path.decisions.keys()):
                     resource = \
                         _decision_path.decisions[self.function.loc_a.name]
                     candidate_cost = resource.get('cost')
@@ -152,9 +152,9 @@ class Operand(object):
                         + candidate_cost
             else:
                 if self.function.loc_a.name in \
-                        _decision_path.decisions.keys() and \
+                        list(_decision_path.decisions.keys()) and \
                    self.function.loc_z.name in \
-                        _decision_path.decisions.keys():
+                        list(_decision_path.decisions.keys()):
                     resource_a = \
                         _decision_path.decisions[self.function.loc_a.name]
                     loc_a = None

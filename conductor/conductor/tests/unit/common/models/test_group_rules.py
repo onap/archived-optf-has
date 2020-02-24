@@ -32,7 +32,7 @@ class TestGroupRules(unittest.TestCase):
         self.assertEqual(True, self.groupRules.atomic())
         self.assertEqual("id", self.groupRules.pk_name())
         self.assertEqual(None, self.groupRules.pk_value())
-        self.assertEqual(self.values, self.groupRules.values())
+        self.assertEqual(self.values, list(self.groupRules.values()))
         self.assertEqual(None, self.groupRules.__json__().get('rule'))
         self.assertEqual("text", self.groupRules.schema().get('id'))
 

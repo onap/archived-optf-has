@@ -32,7 +32,7 @@ class TestTriageTool(unittest.TestCase):
         self.assertEqual(True, self.triageTool.atomic())
         self.assertEqual("id", self.triageTool.pk_name())
         self.assertEqual(None, self.triageTool.pk_value())
-        self.assertEqual(self.values, self.triageTool.values())
+        self.assertEqual(self.values, list(self.triageTool.values()))
         self.assertEqual(None, self.triageTool.__json__().get('name'))
         self.assertEqual("text", self.triageTool.schema().get('optimization_type'))
 

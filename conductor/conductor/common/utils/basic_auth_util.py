@@ -28,7 +28,11 @@ LOG = log.getLogger(__name__)
 def encode(user_id, password):
     """ Provide the basic authencation encoded value in an 'Authorization' Header """
 
-    user_pass = str(user_id) + ":" + str(password)
+    user_pass = user_id + ":" + password
+                # Here user_pass is str type but in python 3.x version, base64.b64encode is expecting byte
+                # like object so we need to convert the str into bytes
+
+    user_pass = user_pass.encode()     # converting str into bytes form
     base64_val = base64.b64encode(user_pass)
     authorization_val = _LE("Basic {}".format(base64_val))
 

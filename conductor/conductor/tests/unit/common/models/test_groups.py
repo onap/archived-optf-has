@@ -33,7 +33,7 @@ class TestGroups(unittest.TestCase):
         self.assertEqual(None, self.groups.pk_value())
 
         self.values = {'group': None, 'id': None}
-        self.assertEqual(self.values, self.groups.values())
+        self.assertEqual(self.values, list(self.groups.values()))
         self.assertEqual(None, self.groups.__json__().get("group"))
         self.assertEqual('<Groups None>', self.groups.__repr__())
         self.assertEqual('text', self.groups.schema().get("id"))

@@ -33,7 +33,7 @@ class TestOrderLockHistory(unittest.TestCase):
         self.assertEqual("id", self.orderLockHistory.pk_name())
         self.assertEqual(None, self.orderLockHistory.pk_value())
         self.value = {'is_spinup_completed': False, 'conflict_id': None, 'spinup_completed_timestamp': None, 'plans': None}
-        self.assertEqual(self.value, self.orderLockHistory.values())
+        self.assertEqual(self.value, list(self.orderLockHistory.values()))
         self.assertEqual("text", self.orderLockHistory.schema().get("conflict_id"))
         self.assertEqual(None, self.orderLockHistory.__json__().get("plans"))
 
