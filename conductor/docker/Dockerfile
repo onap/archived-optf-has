@@ -15,7 +15,7 @@
 #
 # -------------------------------------------------------------------------
 
-FROM python:2.7.15-alpine
+FROM python:3.8.0-alpine
 
 
 ARG MVN_ARTIFACT_VERSION
