@@ -239,7 +239,7 @@ class Optimizer(object):
                 if op.function.func_type == "latency_between":  #TODO
                     if op.function.loc_a.name == d.name:
                         if op.function.loc_z.name in \
-                                _request.demands.keys():
+                                list(_request.demands.keys()):    # Python 3 Conversion -- dict object to list object
                             if _request.demands[
                                     op.function.loc_z.name].sort_base != 1:
                                 _request.demands[
@@ -247,7 +247,7 @@ class Optimizer(object):
                                 _open_demand_list.append(op.function.loc_z)
                     elif op.function.loc_z.name == d.name:
                         if op.function.loc_a.name in \
-                                _request.demands.keys():
+                                list(_request.demands.keys()):    # Python 3 Conversion -- dict object to list object
                             if _request.demands[
                                     op.function.loc_a.name].sort_base != 1:
                                 _request.demands[
@@ -257,7 +257,7 @@ class Optimizer(object):
                 elif op.function.func_type == "distance_between":
                     if op.function.loc_a.name == d.name:
                         if op.function.loc_z.name in \
-                                _request.demands.keys():
+                                list(_request.demands.keys()):    # Python 3 Conversion -- dict object to list object
                             if _request.demands[
                                     op.function.loc_z.name].sort_base != 1:
                                 _request.demands[
@@ -265,7 +265,7 @@ class Optimizer(object):
                                 _open_demand_list.append(op.function.loc_z)
                     elif op.function.loc_z.name == d.name:
                         if op.function.loc_a.name in \
-                                _request.demands.keys():
+                                list(_request.demands.keys()):    # Python 3 Conversion -- dict object to list object
                             if _request.demands[
                                     op.function.loc_a.name].sort_base != 1:
                                 _request.demands[

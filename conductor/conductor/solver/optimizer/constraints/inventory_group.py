@@ -21,7 +21,7 @@
 
 from oslo_log import log
 
-from constraint import Constraint
+from .constraint import Constraint    # Python 3 import statement relative imports
 
 LOG = log.getLogger(__name__)
 

@@ -420,7 +420,7 @@ class SolverService(cotyledon.Service):
 
             except Exception as err:
                 message = _LE("Plan {} status encountered a "
-                              "parsing error: {}").format(p.id, err.message)
+                              "parsing error: {}").format(p.id, err)
                 LOG.error(traceback.print_exc())
                 p.status = self.Plan.ERROR
                 p.message = message
@@ -766,7 +766,7 @@ class SolverService(cotyledon.Service):
         :param flavor_map: flavor map get
         :param directives: All the directives get from request
         '''
-        keys = flavor_map.keys()
+        keys = list(flavor_map.keys())     # Python 3 Conversion -- dict object to list object
         for ele in directives.get("directives"):
             for item in ele.get("directives"):
                 if "flavor_directives" in item.get("type"):

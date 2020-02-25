@@ -98,7 +98,7 @@ class TriageData(object):
                     ca['type'] ='dropped'
                     for cca in ca['constraints']:
                         for dl in dc['constraints']:
-                            if 'constraint_name_dropped' in dl.keys():
+                            if 'constraint_name_dropped' in list(dl.keys()):    # Python 3 Conversion -- dict object to list object
                                 if(cca['name'] == dl['constraint_name_dropped']):
                                     dc['status'] = "dropped"
         return self.triage
@@ -108,7 +108,7 @@ class TriageData(object):
             count = self.sorted_demand.index(demanHadNoCandidate.name)
             count = count-1
             if count == 0:
-                decision_rolba = decisionWeneedtoRollback.decisions.values()
+                decision_rolba = list(decisionWeneedtoRollback.decisions.values())   # Python 3 Conversion -- dict object to list object
                 for x in decision_rolba:
                     for canrb in self.triage['candidates']:
                         if x['node_id'] == canrb['node_id'] :
@@ -145,10 +145,10 @@ class TriageData(object):
             counter = 0
             d1 = []; d2 = []; d3 = []; d4 = []; d5 = []; d6 = []
             for fc in decision_list:
-                for final_cand in fc.values():
+                for final_cand in list(fc.values()):   # Python 3 Conversion -- dict object to list object
                     for final_resou in self.triage['candidates']:
                         if final_cand['node_id'] == final_resou['node_id']:
-                            if 'type' in final_resou.keys() :
+                            if 'type' in list(final_resou.keys()) :    # Python 3 Conversion -- dict object to list object
                                 if not final_resou['type'] == "dropped":
                                     final_resou['type'] = 'solution'
                                     final_resou['children'] = []
@@ -156,7 +156,7 @@ class TriageData(object):
                                 final_resou['type'] = 'solution'
                                 final_resou['children'] = []
 
-                        elif not 'type' in final_resou.keys():
+                        elif not 'type' in list(final_resou.keys()):    # Python 3 Conversion -- dict object to list object
                             final_resou['type'] = 'not tried'
             #
             for cand in self.triage['candidates']:

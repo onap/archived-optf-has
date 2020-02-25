@@ -290,7 +290,7 @@ class AAI(base.InventoryProviderBase):
                     keys = ('latitude', 'longitude', 'city', 'country',
                             'complex_name')
                     missing_keys = \
-                        list(set(keys).difference(complex_info.keys()))
+                        list(set(keys).difference(list(complex_info.keys())))   # Python 3 Conversion -- dict object to list object
                     LOG.error(_LE("Complex {} is missing {}, link: {}").
                               format(complex_id, missing_keys, complex_link))
                     LOG.debug("Complex {}: {}".
@@ -418,7 +418,7 @@ class AAI(base.InventoryProviderBase):
                 if not (latitude and longitude and city and country):
                     keys = ('latitude', 'longitude', 'city', 'country')
                     missing_keys = \
-                        list(set(keys).difference(complex_info.keys()))
+                        list(set(keys).difference(set(complex_info.keys())))
                     LOG.error(_LE("Complex {} is missing {}, link: {}").
                               format(complex_id, missing_keys, complex_link))
                     LOG.debug("Complex {}: {}".

@@ -109,7 +109,7 @@ class REST(object):
         }
         if headers:
             full_headers.update(headers)
-        full_url = '{}/{}'.format(self.server_url, path.lstrip('/'))
+        full_url = '{}/{}'.format(self.server_url, path.lstrip('/').rstrip('/'))
 
         # Prepare the request args
         try:
@@ -162,10 +162,11 @@ class REST(object):
                             json.dumps(response_dict)))
                     except ValueError:
                         LOG.debug("Response Body: {}".format(response.text))
+                #response._content = response._content.decode()
                 if response.ok:
                     break
             except requests.exceptions.RequestException as err:
-                LOG.error("Exception: %s", err.message)
+                LOG.error("Exception: %s", err.args)
 
         # Response.__bool__ returns false if status is not ok. Ruh roh!
         # That means we must check the object type vs treating it as a bool.
