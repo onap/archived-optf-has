@@ -664,6 +664,7 @@ class DataEndpoint(object):
         host_name = arg.get('host_name')
         clli_code = arg.get('clli_code')
 
+
         if host_name:
             results = self.ip_ext_manager.map_method(
                 'resolve_host_location',
