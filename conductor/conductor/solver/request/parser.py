@@ -331,7 +331,7 @@ class Parser(object):
             candidate_countries = ''
             for demand_id, demands in self.demands.items():
                 candidate_countries += demand_id
-                for candidte in demands.resources.values():
+                for candidte in list(demands.resources.values()):   # Python 3 Conversion -- dict object to list object
                     candidate_country_list.append(candidte["country"])
                     candidate_countries += candidte["country"]
                     candidate_countries += ','
@@ -401,7 +401,7 @@ class Parser(object):
 
         for demand_id, demands in self.demands.items():
             LOG.info("demand id " + demand_id)
-            for candidte in demands.resources.values():
+            for candidte in list(demands.resources.values()):    # Python 3 Conversion -- dict object to list object
                 LOG.info("candidate id " + candidte['candidate_id'])
                 dem_candidate = {demand_id: demands}
                 temp_candidates.update(dem_candidate)
@@ -409,7 +409,7 @@ class Parser(object):
         droped_candidates = ''
         for demand_id, demands in temp_candidates.items():
             droped_candidates += demand_id
-            for candidate in demands.resources.values():
+            for candidate in list(demands.resources.values()):   # Python 3 Conversion -- dict object to list object
                 if demand_id in self.obj_func_param and candidate["country"] in diff_bw_candidates_and_countries:
                     droped_candidates += candidate['candidate_id']
                     droped_candidates += ','
@@ -541,6 +541,6 @@ class Parser(object):
         self.reorder_constraint()
         for constraint_name, constraint in self.constraints.items():
             for d in constraint.demand_list:
-                if d in self.demands.keys():
+                if d in list(self.demands.keys()):     # Python 3 Conversion -- dict object to list object
                     self.demands[d].constraint_list.append(constraint)
         self.sort_constraint_by_rank()
