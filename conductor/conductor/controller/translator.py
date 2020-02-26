@@ -225,8 +225,8 @@ class Translator(object):
                             "{} {} has an invalid key {}".format(
                                 name, content_name, key))
 
-        demand_keys = self._demands.keys()
-        location_keys = self._locations.keys()
+        demand_keys = list(self._demands.keys())     # Python 3 Conversion -- dict object to list object
+        location_keys = list(self._locations.keys())     # Python 3 Conversion -- dict object to list object
         for constraint_name, constraint in self._constraints.items():
 
             # Require a single demand (string), or a list of one or more.
@@ -279,7 +279,7 @@ class Translator(object):
         # Traverse a dict
         elif type(obj) is dict:
             # Did we find a "{get_param: ...}" intrinsic?
-            if obj.keys() == ['get_param']:
+            if list(obj.keys()) == ['get_param']:
                 param_name = obj['get_param']
 
                 # The parameter name must be a string.
@@ -300,7 +300,7 @@ class Translator(object):
                 return self._parameters.get(param_name)
 
             # Not an intrinsic. Traverse as usual.
-            for key in obj.keys():
+            for key in list(obj.keys()):
                 # Add path to the breadcrumb trail.
                 new_path = list(path)
                 new_path.append(key)
@@ -393,7 +393,7 @@ class Translator(object):
                                 "not a dictionary".format(name))
 
                         # Must have only supported keys
-                        for key in candidate.keys():
+                        for key in list(candidate.keys()):
                             if key not in CANDIDATE_KEYS:
                                 raise TranslatorException(
                                     "Candidate with invalid key {} found "
@@ -657,7 +657,7 @@ class Translator(object):
                     # Make sure all required properties are present
                     required = constraint_def.get('required', [])
                     for req_prop in required:
-                        if req_prop not in value.keys():
+                        if req_prop not in list(value.keys()):
                             raise TranslatorException(
                                 "Required property '{}' not found in "
                                 "constraint named '{}'".format(
@@ -674,7 +674,7 @@ class Translator(object):
 
                     # Make sure there are no unknown properties
                     optional = constraint_def.get('optional', [])
-                    for prop_name in value.keys():
+                    for prop_name in list(value.keys()):
                         if prop_name not in required + optional:
                             raise TranslatorException(
                                 "Unknown property '{}' in "
@@ -685,7 +685,7 @@ class Translator(object):
                     # sure its value is one of the allowed ones.
                     allowed = constraint_def.get('allowed', {})
                     for prop_name, allowed_values in allowed.items():
-                        if prop_name in value.keys():
+                        if prop_name in list(value.keys()):
                             prop_value = value.get(prop_name, '')
                             if prop_value not in allowed_values:
                                 raise TranslatorException(
@@ -697,7 +697,7 @@ class Translator(object):
                     # Break all threshold-formatted values into parts
                     thresholds = constraint_def.get('thresholds', {})
                     for thr_prop, base_units in thresholds.items():
-                        if thr_prop in value.keys():
+                        if thr_prop in list(value.keys()):
                             expression = value.get(thr_prop)
                             thr = threshold.Threshold(expression, base_units)
                             value[thr_prop] = thr.parts
@@ -751,12 +751,12 @@ class Translator(object):
         if type(optimization_copy) is not dict:
             raise TranslatorException("Optimization must be a dictionary.")
 
-        goals = optimization_copy.keys()
+        goals = list(optimization_copy.keys())
         if goals != ['minimize']:
             raise TranslatorException(
                 "Optimization must contain a single goal of 'minimize'.")
 
-        funcs = optimization_copy['minimize'].keys()
+        funcs = list(optimization_copy['minimize'].keys())
         if funcs != ['sum']:
             raise TranslatorException(
                 "Optimization goal 'minimize' must "
@@ -779,9 +779,9 @@ class Translator(object):
             got_demand = False
             got_location = False
             for arg in args:
-                if not got_demand and arg in self._demands.keys():
+                if not got_demand and arg in list(self._demands.keys()):
                     got_demand = True
-                if not got_location and arg in self._locations.keys():
+                if not got_location and arg in list(self._locations.keys()):
                     got_location = True
             if not got_demand or not got_location:
                 raise TranslatorException(
@@ -801,9 +801,9 @@ class Translator(object):
             got_demand = False
             got_location = False
             for arg in args:
-                if not got_demand and arg in self._demands.keys():
+                if not got_demand and arg in list(self._demands.keys()):
                     got_demand = True
-                if not got_location and arg in self._locations.keys():
+                if not got_location and arg in list(self._locations.keys()):
                     got_location = True
             if not got_demand or not got_location:
                 raise TranslatorException(
@@ -818,47 +818,47 @@ class Translator(object):
             args = None
             nested = False
 
-            if operand.keys() == ['distance_between']:
+            if list(operand.keys()) == ['distance_between']:
                 # Value must be a list of length 2 with one
                 # location and one demand
                 function = 'distance_between'
                 args = get_distance_between_args(operand)
 
-            elif operand.keys() == ['product']:
+            elif list(operand.keys()) == ['product']:
                 for product_op in operand['product']:
                     if threshold.is_number(product_op):
                         weight = product_op
                     elif isinstance(product_op, dict):
-                        if product_op.keys() == ['latency_between']:
+                        if list(product_op.keys()) == ['latency_between']:
                             function = 'latency_between'
                             args = get_latency_between_args(product_op)
-                        elif product_op.keys() == ['distance_between']:
+                        elif list(product_op.keys()) == ['distance_between']:
                             function = 'distance_between'
                             args = get_distance_between_args(product_op)
-                        elif product_op.keys() == ['aic_version']:
+                        elif list(product_op.keys()) == ['aic_version']:
                             function = 'aic_version'
                             args = product_op.get('aic_version')
-                        elif product_op.keys() == ['hpa_score']:
+                        elif list(product_op.keys()) == ['hpa_score']:
                             function = 'hpa_score'
                             args = product_op.get('hpa_score')
                             if not self.is_hpa_policy_exists(args):
                                 raise TranslatorException(
                                     "HPA Score Optimization must include a "
                                     "HPA Policy constraint ")
-                        elif product_op.keys() == ['sum']:
+                        elif list(product_op.keys()) == ['sum']:
                             nested = True
                             nested_operands = product_op.get('sum')
                             for nested_operand in nested_operands:
-                                if nested_operand.keys() == ['product']:
+                                if list(nested_operand.keys()) == ['product']:
                                     nested_weight = weight
                                     for nested_product_op in nested_operand['product']:
                                         if threshold.is_number(nested_product_op):
                                             nested_weight = nested_weight * int(nested_product_op)
                                         elif isinstance(nested_product_op, dict):
-                                            if nested_product_op.keys() == ['latency_between']:
+                                            if list(nested_product_op.keys()) == ['latency_between']:
                                                 function = 'latency_between'
                                                 args = get_latency_between_args(nested_product_op)
-                                            elif nested_product_op.keys() == ['distance_between']:
+                                            elif list(nested_product_op.keys()) == ['distance_between']:
                                                 function = 'distance_between'
                                                 args = get_distance_between_args(nested_product_op)
                                     parsed['operands'].append(
@@ -920,7 +920,7 @@ class Translator(object):
                     if not reservation_details.get('properties'):
                         reservation_details['properties'] = {}
                     for demand in reservation_details.get('demands', []):
-                        if demand in demands.keys():
+                        if demand in list(demands.keys()):
                             reservation_demand = name + '_' + demand
                             parsed['demands'][reservation_demand] = copy.deepcopy(reservation_details)
                             parsed['demands'][reservation_demand]['name'] = name
@@ -963,7 +963,7 @@ class Translator(object):
             self.do_translation()
             self._ok = True
         except Exception as exc:
-            self._error_message = exc.message
+            self._error_message = exc.args
 
     @property
     def valid(self):

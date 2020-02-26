@@ -155,8 +155,8 @@ class MusicAPI(object):
             self.rest.session.headers['ns'] = CONF.music_api.aafns
             self.rest.session.headers['userId'] = CONF.music_api.aafuser
             self.rest.session.headers['password'] = music_pwd
-            self.rest.session.headers['Authorization'] = basic_auth_util.encode(CONF.music_api.aafuser,
-                                                                                CONF.music_api.aafpass)
+            self.rest.session.headers['Authorization'] = str(basic_auth_util.encode(CONF.music_api.aafuser,
+                                                                                CONF.music_api.aafpass))
 
         self.lock_ids = {}
 
@@ -178,7 +178,7 @@ class MusicAPI(object):
     def __del__(self):
         """Deletion."""
         if type(self.lock_ids) is dict:
-            for lock_name in self.lock_ids.keys():
+            for lock_name in list(self.lock_ids.keys()):  # Python 3 Conversion -- dict object to list object
                 self.lock_delete(lock_name)
 
     @staticmethod
@@ -250,7 +250,7 @@ class MusicAPI(object):
         #lock_id = self.lock_ids.get(lock_name)
         data = {
             'consistencyInfo': {
-                'type': 'atomic' if condition else 'eventual',
+                'type': 'atomic',
             }
         }
 

@@ -52,7 +52,9 @@ class AESCipher(object):
 
         self.bs = 32
         if key is None:
-            key = CONF.auth.appkey.encode()
+            key = CONF.auth.appkey # ---> python3.8 Code version code
+           # key= CONF.auth.appkey.encode() ---> Python 2.7 version code
+        # in Python 3+ key is already a b'' type so no need to encode it again.
 
         self.key = hashlib.sha256(key.encode()).digest()
 
