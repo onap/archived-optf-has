@@ -22,6 +22,30 @@
       "revId": "9b85d16a7105db2bcfe29ad7378181fa42e1a5ef",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a87eb7a1_b78e68af",
+        "filename": "conductor/conductor/common/music/api.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 143,
+      "author": {
+        "id": 6428
+      },
+      "writtenOn": "2020-02-26T14:26:18Z",
+      "side": 1,
+      "message": "Yes Shankar we should remove it. Somehow I missed this place to remove the lines.",
+      "parentUuid": "bf31d2e6_4e1f7e81",
+      "range": {
+        "startLine": 142,
+        "startChar": 7,
+        "endLine": 143,
+        "endChar": 51
+      },
+      "revId": "9b85d16a7105db2bcfe29ad7378181fa42e1a5ef",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
     }
   ]
 }
