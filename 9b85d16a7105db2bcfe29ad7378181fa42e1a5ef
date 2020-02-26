@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf31d2e6_4e1f7e81",
+        "filename": "conductor/conductor/common/music/api.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 143,
+      "author": {
+        "id": 2041
+      },
+      "writtenOn": "2020-02-26T02:28:07Z",
+      "side": 1,
+      "message": "Can we please remove these debug statements? Might be considered a risk of leaking credentials.",
+      "range": {
+        "startLine": 142,
+        "startChar": 7,
+        "endLine": 143,
+        "endChar": 51
+      },
+      "revId": "9b85d16a7105db2bcfe29ad7378181fa42e1a5ef",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
