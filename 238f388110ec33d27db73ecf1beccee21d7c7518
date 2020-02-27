@@ -105,6 +105,24 @@
       "revId": "238f388110ec33d27db73ecf1beccee21d7c7518",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b91e87f9_cb67eb63",
+        "filename": "conductor/requirements.txt",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 6428
+      },
+      "writtenOn": "2020-02-27T16:04:31Z",
+      "side": 1,
+      "message": "oh i see . Thanks",
+      "parentUuid": "060797c6_5c45f8b2",
+      "revId": "238f388110ec33d27db73ecf1beccee21d7c7518",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
     }
   ]
 }
