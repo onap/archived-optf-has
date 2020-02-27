@@ -33,7 +33,6 @@ def encode(user_id, password):
                 # like object so we need to convert the str into bytes
 
     user_pass = user_pass.encode()     # converting str into bytes form
-    base64_val = base64.b64encode(user_pass)
+    base64_val = base64.b64encode(user_pass).decode()
     authorization_val = _LE("Basic {}".format(base64_val))
-
     return authorization_val
