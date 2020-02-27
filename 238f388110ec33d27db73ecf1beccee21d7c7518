@@ -87,6 +87,24 @@
       "revId": "238f388110ec33d27db73ecf1beccee21d7c7518",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "060797c6_5c45f8b2",
+        "filename": "conductor/requirements.txt",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 2671
+      },
+      "writtenOn": "2020-02-27T16:02:15Z",
+      "side": 1,
+      "message": "pycrypto doesn\u0027t have support for python 3.8. pycryptodome is a fork of pycrypto which fixes some of the security vulnerabilities in pycrypto. So, I replaced pycrypto with pycryptodome. OSDF project also uses pycryptodome for encryprtion/decryption utility",
+      "parentUuid": "3fbb7de9_6bc256d2",
+      "revId": "238f388110ec33d27db73ecf1beccee21d7c7518",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
     }
   ]
 }
