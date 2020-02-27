@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2b9fe5f9_67cbebed",
+        "filename": "conductor/conductor/common/utils/basic_auth_util.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 6428
+      },
+      "writtenOn": "2020-02-27T18:09:03Z",
+      "side": 1,
+      "message": "Looks good for me. thanks",
+      "revId": "93ae0cde9d5f0e9858317922dec4f15b2767bb49",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
