@@ -41,7 +41,7 @@
         <sonar.sources>conductor/conductor</sonar.sources>
         <sonar.tests>conductor/conductor/tests</sonar.tests>
         <sonar.junit.reportsPath>conductor/xunit-results.xml</sonar.junit.reportsPath>
-        <sonar.python.coverage.reportPath>conductor/cover/coverage.xml</sonar.python.coverage.reportPath>
+        <sonar.python.coverage.reportPaths>conductor/cover/coverage.xml</sonar.python.coverage.reportPaths>
         <sonar.language>py</sonar.language>
         <sonar.pluginname>python</sonar.pluginname>
         <sonar.inclusions>**/**.py</sonar.inclusions>
