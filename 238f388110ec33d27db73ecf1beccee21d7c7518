@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "12b5dd93_1c0160c5",
+        "filename": "conductor/conductor/common/music/api.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 159,
+      "author": {
+        "id": 2671
+      },
+      "writtenOn": "2020-02-27T15:40:05Z",
+      "side": 1,
+      "message": "music_pwd is the decrypted password which has to be sent in the request to music. CONF.music_api.aafpass will hold the encrypted version of the password. So the request to the music will fail.",
+      "parentUuid": "3cc029fb_232dbcf4",
+      "revId": "238f388110ec33d27db73ecf1beccee21d7c7518",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "9e3091bb_17a68c3f",
         "filename": "conductor/requirements.txt",
         "patchSetId": 1
@@ -30,6 +48,24 @@
       "writtenOn": "2020-02-27T15:21:14Z",
       "side": 1,
       "message": "Why we importing these ? older version imports are working fine for me.",
+      "revId": "238f388110ec33d27db73ecf1beccee21d7c7518",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dc4f003e_9a33442c",
+        "filename": "conductor/requirements.txt",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 2671
+      },
+      "writtenOn": "2020-02-27T15:40:05Z",
+      "side": 1,
+      "message": "Did you try running them in python 3.8 virtual environment? I was facing this issue while running it in python 3.8 environment. But I didn\u0027t try running the docker container.",
+      "parentUuid": "9e3091bb_17a68c3f",
       "revId": "238f388110ec33d27db73ecf1beccee21d7c7518",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": true
