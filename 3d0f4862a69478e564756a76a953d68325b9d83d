@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e460dc24_ce3dff27",
+        "filename": "pom.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 6428
+      },
+      "writtenOn": "2020-02-27T15:24:56Z",
+      "side": 1,
+      "message": "looks fine for me if you tested and works.",
+      "revId": "3d0f4862a69478e564756a76a953d68325b9d83d",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
