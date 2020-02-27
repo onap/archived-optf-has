@@ -16,6 +16,23 @@
       "revId": "238f388110ec33d27db73ecf1beccee21d7c7518",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9e3091bb_17a68c3f",
+        "filename": "conductor/requirements.txt",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 6428
+      },
+      "writtenOn": "2020-02-27T15:21:14Z",
+      "side": 1,
+      "message": "Why we importing these ? older version imports are working fine for me.",
+      "revId": "238f388110ec33d27db73ecf1beccee21d7c7518",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
     }
   ]
 }
