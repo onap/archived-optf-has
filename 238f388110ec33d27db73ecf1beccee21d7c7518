@@ -69,6 +69,24 @@
       "revId": "238f388110ec33d27db73ecf1beccee21d7c7518",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3fbb7de9_6bc256d2",
+        "filename": "conductor/requirements.txt",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 6428
+      },
+      "writtenOn": "2020-02-27T15:50:15Z",
+      "side": 1,
+      "message": "Never mind Some how i already have -- lxml\u003e\u003d4.5.0 -- by default so i didn\u0027t have to change anything so this look good for me, but -- pycryptodome\u003d\u003d3.9.7 --  I didn\u0027t have to install this package though.",
+      "parentUuid": "dc4f003e_9a33442c",
+      "revId": "238f388110ec33d27db73ecf1beccee21d7c7518",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
     }
   ]
 }
