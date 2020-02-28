@@ -156,7 +156,7 @@ class MusicAPI(object):
             self.rest.session.headers['userId'] = CONF.music_api.aafuser
             self.rest.session.headers['password'] = music_pwd
             self.rest.session.headers['Authorization'] = str(basic_auth_util.encode(CONF.music_api.aafuser,
-                                                                                CONF.music_api.aafpass))
+                                                                                    music_pwd))
 
         self.lock_ids = {}
 
