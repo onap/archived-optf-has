@@ -1,6 +1,7 @@
 #
 # -------------------------------------------------------------------------
 #   Copyright (c) 2018 AT&T Intellectual Property
+#   Copyright (C) 2020 Wipro Limited.
 #
 #   Licensed under the Apache License, Version 2.0 (the "License");
 #   you may not use this file except in compliance with the License.
@@ -27,6 +28,7 @@ urls = (
   '/aai/v14/cloud-infrastructure/complexes/complex/DLLSTX233','get_complex_DLLSTX233',
   '/aai/v14/cloud-infrastructure/cloud-regions/cloud-region/HPA-cloud/cloud-region-1/flavors/', 'get_flavors_region_1',
   '/aai/v14/cloud-infrastructure/cloud-regions/cloud-region/HPA-cloud/cloud-region-2/flavors/', 'get_flavors_region_2',
+  '/aai/v14/nodes/service-instances', 'get_nssi',
 )
 
 
@@ -135,6 +137,23 @@ class get_flavors_region_2:
         web.header('X-TransactionId', trid)
         return json.dumps(json_data)
 
+
+class get_nssi:
+    def GET(self):
+        print("------------------------------------------------------")
+        replyfile = "get_nssi_response.json"
+        # replyToAaiGet (web, replydir, replyfile)
+        fullreply = replydir + replyfile
+        trid = web.ctx.env.get('X_TRANSACTIONID', '111111')
+        # print ("X-TransactionId : {}".format(trid))
+        print("this is the context : {}".format(web.ctx.fullpath))
+        with open(fullreply) as json_file:
+            json_data = json.load(json_file)
+            print(json_data)
+
+        web.header('Content-Type', 'application/json')
+        web.header('X-TransactionId', trid)
+        return json.dumps(json_data)
 
 
 if __name__ == "__main__": 

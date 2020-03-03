@@ -1,6 +1,7 @@
 #
 # -------------------------------------------------------------------------
 #   Copyright (c) 2015-2017 AT&T Intellectual Property
+#   Copyright (C) 2020 Wipro Limited.
 #
 #   Licensed under the Apache License, Version 2.0 (the "License");
 #   you may not use this file except in compliance with the License.
@@ -43,7 +44,7 @@ CONF = cfg.CONF
 VERSIONS = ["2016-11-01", "2017-10-10", "2018-02-01"]
 LOCATION_KEYS = ['latitude', 'longitude', 'host_name', 'clli_code']
 INVENTORY_PROVIDERS = ['aai']
-INVENTORY_TYPES = ['cloud', 'service', 'transport', 'vfmodule']
+INVENTORY_TYPES = ['cloud', 'service', 'transport', 'vfmodule', 'nssi']
 DEFAULT_INVENTORY_PROVIDER = INVENTORY_PROVIDERS[0]
 CANDIDATE_KEYS = ['candidate_id', 'cost', 'inventory_type', 'location_id',
                   'location_type']
@@ -66,6 +67,11 @@ CONSTRAINTS = {
     'attribute': {
         'split': True,
         'required': ['evaluate'],
+    },
+    'threshold': {
+        'split': True,
+        'required': ['attribute', 'threshold', 'operator'],
+        'optional': ['unit']
     },
     'distance_between_demands': {
         'required': ['distance'],
@@ -761,7 +767,6 @@ class Translator(object):
             raise TranslatorException(
                 "Optimization goal 'minimize' must "
                 "contain a single function of 'sum'.")
-
         operands = optimization_copy['minimize']['sum']
         if type(operands) is not list:
             # or len(operands) != 2:
