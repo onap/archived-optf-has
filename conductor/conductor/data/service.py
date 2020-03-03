@@ -1,6 +1,7 @@
 #
 # -------------------------------------------------------------------------
 #   Copyright (c) 2015-2017 AT&T Intellectual Property
+#   Copyright (C) 2020 Wipro Limited.
 #
 #   Licensed under the Apache License, Version 2.0 (the "License");
 #   you may not use this file except in compliance with the License.
@@ -60,6 +61,8 @@ DATA_OPTS = [
                default=2.0),
     cfg.FloatOpt('service_candidate_cost',
                default=1.0),
+    cfg.FloatOpt('nssi_candidate_cost',
+                 default=1.0),
 ]
 
 CONF.register_opts(DATA_OPTS, group='data')
