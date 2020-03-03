@@ -1,6 +1,7 @@
 #
 # -------------------------------------------------------------------------
 #   Copyright (c) 2015-2017 AT&T Intellectual Property
+#   Copyright (C) 2020 Wipro Limited.
 #
 #   Licensed under the Apache License, Version 2.0 (the "License");
 #   you may not use this file except in compliance with the License.
@@ -454,7 +455,7 @@ class SolverService(cotyledon.Service):
                 p.message = message
 
                 # Metrics to Prometheus
-                m_svc_name = p.template['parameters'].get('service_name', 'N/A')
+                m_svc_name = p.template.get('parameters', {}).get('service_name', 'N/A')
                 PC.VNF_FAILURE.labels('ONAP', m_svc_name).inc()
 
                 while 'FAILURE' in _is_success:
@@ -495,6 +496,9 @@ class SolverService(cotyledon.Service):
                                 "cloud_owner": resource.get("cloud_owner"),
                                 'aic_version': resource.get("cloud_region_version")},
                         }
+
+                        if rec["candidate"]["inventory_type"] == "nssi":
+                            rec["candidate"] = resource
 
                         if resource.get('vim-id'):
                             rec["candidate"]['vim-id'] = resource.get('vim-id')

@@ -1,6 +1,7 @@
 #
 # -------------------------------------------------------------------------
 #   Copyright (c) 2015-2017 AT&T Intellectual Property
+#   Copyright (C) 2020 Wipro Limited.
 #
 #   Licensed under the Apache License, Version 2.0 (the "License");
 #   you may not use this file except in compliance with the License.
@@ -104,8 +105,9 @@ class Search(object):
             msg = "--- demand = {}, chosen resource = {} at {}"
             for demand_name in _best_path.decisions:
                 resource = _best_path.decisions[demand_name]
-                LOG.debug(msg.format(demand_name, resource["candidate_id"],
-                                     resource["location_id"]))
+                if 'location_id' in resource:
+                    LOG.debug(msg.format(demand_name, resource["candidate_id"],
+                                         resource["location_id"]))
 
             msg = "--- total value of decision = {}"
             LOG.debug(msg.format(_best_path.total_value))
