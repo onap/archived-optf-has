@@ -2,6 +2,7 @@
 #
 # -------------------------------------------------------------------------
 #   Copyright (c) 2015-2017 AT&T Intellectual Property
+#   Copyright (C) 2020 Wipro Limited.
 #
 #   Licensed under the Apache License, Version 2.0 (the "License");
 #   you may not use this file except in compliance with the License.
@@ -37,6 +38,7 @@ from conductor.solver.optimizer.constraints \
     import service as service_constraint
 from conductor.solver.optimizer.constraints import vim_fit
 from conductor.solver.optimizer.constraints import zone
+from conductor.solver.optimizer.constraints import threshold
 from conductor.solver.request import demand
 from conductor.solver.request import objective
 from conductor.solver.request.functions import aic_version
@@ -207,6 +209,14 @@ class Parser(object):
                                                    _properties=c_property)
                 self.constraints[my_attribute_constraint.name] = \
                     my_attribute_constraint
+            elif constraint_type == "threshold":
+                c_property = constraint_info.get("properties")
+                my_threshold_constraint = \
+                    threshold.Threshold(constraint_id,
+                                        constraint_type,
+                                        constraint_demands,
+                                        _properties=c_property)
+                self.constraints[my_threshold_constraint.name] = my_threshold_constraint
             elif constraint_type == "hpa":
                 LOG.debug("Creating constraint - {}".format(constraint_type))
                 c_property = constraint_info.get("properties")
@@ -523,8 +533,10 @@ class Parser(object):
                 constraint.rank = 7
             elif constraint.constraint_type == "region_fit":
                 constraint.rank = 8
-            else:
+            elif constraint.constraint_type == "threshold":
                 constraint.rank = 9
+            else:
+                constraint.rank = 10
 
     def attr_sort(self, attrs=['rank']):
         # this helper for sorting the rank
