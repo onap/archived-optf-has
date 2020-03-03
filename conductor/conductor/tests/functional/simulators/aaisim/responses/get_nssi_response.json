@@ -1,0 +1,64 @@
+{"service-instance": [{
+    "service-instance-id": "1a636c4d-5e76-427e-bfd6-241a947224b0",
+    "service-instance-name": "nssi_test_0211",
+    "service-type": "embb",
+    "service-role": "nssi",
+    "environment-context": "cn",
+    "model-invariant-id": "21d57d4b-52ad-4d3c-a798-248b5bb9124a",
+    "model-version-id": "bfba363e-e39c-4bd9-a9d5-1371c28f4d22",
+    "resource-version": "1581418601616",
+    "orchestration-status": "active",
+    "relationship-list": {
+        "relationship": [
+            {
+                "related-to": "service-instance",
+                "relationship-label": "org.onap.relationships.inventory.ComposedOf",
+                "related-link": "/aai/v16/business/customers/customer/5GCustomer/service-subscriptions/service-subscription/5G/service-instances/service-instance/4115d3c8-dd59-45d6-b09d-e756dee9b518",
+                "relationship-data": [
+                    {
+                        "relationship-key": "customer.global-customer-id",
+                        "relationship-value": "5GCustomer"
+                    },
+                    {
+                        "relationship-key": "service-subscription.service-type",
+                        "relationship-value": "5G"
+                    },
+                    {
+                        "relationship-key": "service-instance.service-instance-id",
+                        "relationship-value": "4115d3c8-dd59-45d6-b09d-e756dee9b518"
+                    }
+                ],
+                "related-to-property": [
+                    {
+                        "property-key": "service-instance.service-instance-name",
+                        "property-value": "nsi_test_0211"
+                    }
+                ]
+            }
+        ]
+    },
+    "slice-profiles": {
+        "slice-profile": [
+            {
+                "profile-id": "cdad9f49-4201-4e3a-aac1-b0f27902c299",
+                "latency": 20,
+                "max-number-of-UEs": 0,
+                "coverage-area-TA-list": "[{\"province\":\"??\",\"city\":\"???\",\"county\":\"???\",\"street\":\"?????\"}]",
+                "ue-mobility-level": "stationary",
+                "resource-sharing-level": "0",
+                "exp-data-rate-UL": 100,
+                "exp-data-rate-DL": 100,
+                "activity-factor": 0,
+                "e2e-latency": 0,
+                "jitter": 0,
+                "survival-time": 0,
+                "exp-data-rate": 0,
+                "payload-size": 0,
+                "traffic-density": 0,
+                "conn-density": 0,
+                "reliability": 99.999,
+                "resource-version": "1581418602494"
+            }
+        ]
+    }
+}]}
