@@ -29,6 +29,7 @@ from conductor.common.utils import conductor_logging_util as log_util
 from conductor.data.plugins.inventory_provider import extensions as ip_ext
 from conductor.data.plugins.service_controller import extensions as sc_ext
 from conductor.data.plugins.vim_controller import extensions as vc_ext
+from conductor.data.plugins.File_system import extensions as fs_ext
 from conductor.i18n import _LE, _LI, _LW
 from oslo_config import cfg
 from oslo_log import log
@@ -87,6 +88,9 @@ class DataServiceLauncher(object):
         self.vc_ext_manager = (
             vc_ext.Manager(conf, 'conductor.vim_controller.plugin'))
         self.vc_ext_manager.initialize()
+        self.fs_ext_manager = (
+            fs_ext.Manager(conf, 'conductor.File_system.plugin'))
+        self.fs_ext_manager.initialize()
         self.sc_ext_manager = (
             sc_ext.Manager(conf, 'conductor.service_controller.plugin'))
         self.sc_ext_manager.initialize()
