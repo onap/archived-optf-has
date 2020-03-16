@@ -85,13 +85,13 @@ class TestRPCNoException(unittest.TestCase):
             a_arg.append(k)
         for key in sorted(self.plan_expected):
             b_arg.append(key)
-        self.assertEquals(rtn.get('error'), False)
-        self.assertEquals(a_arg, b_arg)
+        self.assertEqual(rtn.get('error'), False)
+        self.assertEqual(a_arg, b_arg)
         for k in sorted(rtn.get('response').get('plan')):
             a_arg.append(k)
         for key in sorted(self.plan_expected.get('plan')):
             b_arg.append(key)
-        self.assertEquals(a_arg, b_arg)
+        self.assertEqual(a_arg, b_arg)
 
     @patch('conductor.common.music.model.search.Query.all')
     def test_plan_get_same_schema(self, mock_query):
@@ -99,7 +99,7 @@ class TestRPCNoException(unittest.TestCase):
         mock_query.return_value = self.plan_mock
         rtn_get = self.r.plans_get(self._cvx, _id)
         plans = rtn_get.get('response').get('plans')
-        self.assertEquals(plans, self.the_plan_expected)
+        self.assertEqual(plans, self.the_plan_expected)
         self.assertFalse(rtn_get.get('error'))
 
     @patch('conductor.common.music.model.search.Query.all')
@@ -108,7 +108,7 @@ class TestRPCNoException(unittest.TestCase):
         _id = {}
         mock_call.return_value = self.plan_mock
         rtn = self.r.plans_delete(self._cvx, _id)
-        self.assertEquals(rtn.get('response'), {})
+        self.assertEqual(rtn.get('response'), {})
         self.assertFalse(rtn.get('error'))
 
     def tearDown(self):

@@ -148,7 +148,7 @@ class TestPlansItemController(base_api.BaseApiTest):
         actual_response = self.app.get(url=url, expect_errors=True, extra_environ=self.extra_environment)
         self.assertEqual(200, actual_response.status_int)
         self.assertJsonEqual(expected_response,
-                             json.loads(actual_response.body))
+                             json.loads(actual_response.body.decode()))
 
     @mock.patch('conductor.api.adapters.aaf.aaf_authentication.authenticate')
     @mock.patch('conductor.common.music.messaging.component.RPCClient.call')

@@ -53,7 +53,7 @@ class TestMusicApi(unittest.TestCase):
         response.ok = True
         response.text = '12345678'
         rest_mock.return_value = response
-        self.assertEquals('12345678', self.music_api._lock_id_create('temp'))
+        self.assertEqual('12345678', self.music_api._lock_id_create('temp'))
         self.mock_lock_id.start()
 
     @mock.patch('conductor.common.rest.REST.request')
@@ -64,7 +64,7 @@ class TestMusicApi(unittest.TestCase):
         response.ok = True
         response.text = 'true'
         rest_mock.return_value = response
-        self.assertEquals(True, self.music_api._lock_id_acquire('12345678'))
+        self.assertEqual(True, self.music_api._lock_id_acquire('12345678'))
         self.mock_lock_acquire.start()
 
     @mock.patch('conductor.common.rest.REST.request')
@@ -74,7 +74,7 @@ class TestMusicApi(unittest.TestCase):
         response.status_code = 200
         response.ok = True
         rest_mock.return_value = response
-        self.assertEquals(True, self.music_api._lock_id_release('12345678'))
+        self.assertEqual(True, self.music_api._lock_id_release('12345678'))
         self.mock_lock_release.start()
 
     def test_lock_name_generate(self):
@@ -86,7 +86,7 @@ class TestMusicApi(unittest.TestCase):
 
     def test_lock_create(self):
         expected = 'keyspace.votecount.pk_value'
-        self.assertEquals(expected, self.music_api.lock_create('keyspace',
+        self.assertEqual(expected, self.music_api.lock_create('keyspace',
                                                                'votecount',
                                                                'pk_value'))
 
@@ -97,7 +97,7 @@ class TestMusicApi(unittest.TestCase):
         response.status_code = 200
         response.ok = True
         rest_mock.return_value = response
-        self.assertEquals(True, self.music_api.lock_release('test-lock-name'))
+        self.assertEqual(True, self.music_api.lock_release('test-lock-name'))
         self.mock_lock_release.start()
 
     @mock.patch('conductor.common.rest.REST.request')
@@ -109,7 +109,7 @@ class TestMusicApi(unittest.TestCase):
         response.status_code = 200
         response.ok = True
         rest_mock.return_value = response
-        self.assertEquals(True, self.music_api.lock_delete('test-lock-name'))
+        self.assertEqual(True, self.music_api.lock_delete('test-lock-name'))
 
     @mock.patch('conductor.common.rest.REST.request')
     def test_keyspace_create(self, rest_mock):
@@ -118,7 +118,7 @@ class TestMusicApi(unittest.TestCase):
         response.status_code = 200
         response.ok = True
         rest_mock.return_value = response
-        self.assertEquals(True, self.music_api.keyspace_create('keyspace'))
+        self.assertEqual(True, self.music_api.keyspace_create('keyspace'))
 
     @mock.patch('conductor.common.rest.REST.request')
     def test_keyspace_delete(self, rest_mock):
@@ -127,7 +127,7 @@ class TestMusicApi(unittest.TestCase):
         response.status_code = 200
         response.ok = True
         rest_mock.return_value = response
-        self.assertEquals(True, self.music_api.keyspace_delete('keyspace'))
+        self.assertEqual(True, self.music_api.keyspace_delete('keyspace'))
 
     @mock.patch('conductor.common.rest.REST.request')
     def test_row_create(self, rest_mock):
@@ -140,7 +140,7 @@ class TestMusicApi(unittest.TestCase):
         response.status_code = 200
         response.ok = True
         rest_mock.return_value = response
-        self.assertEquals(True, self.music_api.row_create(**kwargs))
+        self.assertEqual(True, self.music_api.row_create(**kwargs))
 
     @mock.patch('conductor.common.rest.REST.request')
     # Following changes made by 'ikram'.
@@ -159,7 +159,7 @@ class TestMusicApi(unittest.TestCase):
         response.status_code = 200
         response.ok = True
         rest_mock.return_value = response
-        self.assertEquals(True, self.music_api.row_update(**kwargs))
+        self.assertEqual(True, self.music_api.row_update(**kwargs))
 
     @mock.patch('conductor.common.rest.REST.request')
     def test_row_read(self, rest_mock):
@@ -169,7 +169,7 @@ class TestMusicApi(unittest.TestCase):
         response.status_code = 200
         response.json.return_value = {'row 1': {'count': 2}}
         rest_mock.return_value = response
-        self.assertEquals({'row 1': {'count': 2}},
+        self.assertEqual({'row 1': {'count': 2}},
                           self.music_api.row_read(**kwargs))
 
     @mock.patch('conductor.common.rest.REST.request')
@@ -182,7 +182,7 @@ class TestMusicApi(unittest.TestCase):
         response.status_code = 200
         response.ok = True
         rest_mock.return_value = response
-        self.assertEquals(True, self.music_api.row_delete(**kwargs))
+        self.assertEqual(True, self.music_api.row_delete(**kwargs))
 
     def test_table_path_generate(self):
         keyspace = 'test-keyspace'
@@ -212,7 +212,7 @@ class TestMusicApi(unittest.TestCase):
         response.status_code = 200
         response.ok = True
         rest_mock.return_value = response
-        self.assertEquals(True, self.music_api.table_create(**kwargs))
+        self.assertEqual(True, self.music_api.table_create(**kwargs))
 
     @mock.patch('conductor.common.rest.REST.request')
     def test_table_delete(self, rest_mock):
@@ -227,7 +227,7 @@ class TestMusicApi(unittest.TestCase):
         response.status_code = 200
         response.ok = True
         rest_mock.return_value = response
-        self.assertEquals(True, self.music_api.table_delete(**kwargs))
+        self.assertEqual(True, self.music_api.table_delete(**kwargs))
 
     def test_version(self):
         with mock.patch.object(rest.REST, 'request',
@@ -236,7 +236,7 @@ class TestMusicApi(unittest.TestCase):
             response.status = 200
             response.text = 'MUSIC:2.2.14'
             rest_mock.return_value = response
-            self.assertEquals('MUSIC:2.2.14', self.music_api.version())
+            self.assertEqual('MUSIC:2.2.14', self.music_api.version())
 
     def test_row_url_path(self):
         keyspace = 'test-keyspace'

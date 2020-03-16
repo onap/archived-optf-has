@@ -38,7 +38,7 @@ class TestConstaintAccessDistance(unittest.TestCase, AccessDistance):
       a.sort()
       b.sort()
 
-      self.assertEquals(a, b)
+      self.assertEqual(a, b)
 
     def tearDown(self):
         pass

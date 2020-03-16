@@ -286,7 +286,7 @@ class TestDataEndpoint(unittest.TestCase):
         req_json = yaml.safe_load(open(req_json_file).read())
         candidate_list = req_json['candidate_list']
         (constraint_id, constraint_info) = \
-            hpa_json["conductor_solver"]["constraints"][0].items()[0]
+            list(hpa_json["conductor_solver"]["constraints"][0].items())[0]
         hpa_constraint = constraint_info['properties']
         flavorProperties = hpa_constraint['evaluate'][0]['flavorProperties']
         id = hpa_constraint['evaluate'][0]['id']
@@ -358,7 +358,7 @@ class TestDataEndpoint(unittest.TestCase):
         candidate_list = req_json['candidate_list']
         ext_mock1.return_value = ['MultiCloud']
         (constraint_id, constraint_info) = \
-            hpa_json["conductor_solver"]["constraints"][2].items()[0]
+            list(hpa_json["conductor_solver"]["constraints"][2].items())[0]
         vim_request = constraint_info['properties']['request']
         ctxt = {}
         candidate_list_copy = list(copy.deepcopy(candidate_list))

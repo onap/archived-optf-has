@@ -108,7 +108,7 @@ class TestNoExceptionTranslator(unittest.TestCase):
             self.Translator._locations, "locations")
         location = {'customer_loc': {
             'latitude': 32.89748, 'longitude': -97.040443}}
-        self.assertEquals(rtn, location)
+        self.assertEqual(rtn, location)
 
     @patch('conductor.common.music.messaging.component.RPCClient.call')
     def test_parse_locations(self, mock_call):
@@ -117,7 +117,7 @@ class TestNoExceptionTranslator(unittest.TestCase):
         }
         mock_call.return_value = {'resolved_location': {
             'latitude': 32.89748, 'longitude': -97.040443}}
-        self.assertEquals(
+        self.assertEqual(
             self.Translator.parse_locations(locations), locations)
 
     def test_parse_error_format_demands(self):
@@ -164,7 +164,7 @@ class TestNoExceptionTranslator(unittest.TestCase):
                                               'inventory_type': 'service',
                                               'service_type': '5G'}]}}
 
-        self.assertEquals(self.Translator.parse_demands(demands), rtn)
+        self.assertEqual(self.Translator.parse_demands(demands), rtn)
 
     @patch('conductor.common.music.messaging.component.RPCClient.call')
     def test_parse_demands_inventory_type_vfmodule(self, mock_call):
@@ -255,7 +255,7 @@ class TestNoExceptionTranslator(unittest.TestCase):
             }
         }
 
-        self.assertEquals(self.Translator.parse_demands(demands), rtn)
+        self.assertEqual(self.Translator.parse_demands(demands), rtn)
 
     @patch('conductor.common.music.messaging.component.RPCClient.call')
     def test_parse_demands_without_candidate(self, mock_call):
@@ -300,7 +300,7 @@ class TestNoExceptionTranslator(unittest.TestCase):
             }],
             'service_type': '5G'}]}}
 
-        self.assertEquals(self.Translator.parse_demands(demands), rtn)
+        self.assertEqual(self.Translator.parse_demands(demands), rtn)
 
     def test_parse_constraints(self):
         constraints = {'constraint_loc': {
@@ -317,7 +317,7 @@ class TestNoExceptionTranslator(unittest.TestCase):
                                         'value': 100.0},
                            'location': 'custom_loc'},
             'type': 'distance_to_location'}}
-        self.assertEquals(self.Translator.parse_constraints(constraints), rtn)
+        self.assertEqual(self.Translator.parse_constraints(constraints), rtn)
 
     def test_parse_hpa_constraints(self):
         hpa_constraint = {
@@ -407,7 +407,7 @@ class TestNoExceptionTranslator(unittest.TestCase):
             }
         }
 
-        self.assertEquals(self.Translator.parse_constraints(hpa_constraint),
+        self.assertEqual(self.Translator.parse_constraints(hpa_constraint),
                           rtn)
 
         hpa_constraint_2 = {
@@ -494,7 +494,7 @@ class TestNoExceptionTranslator(unittest.TestCase):
             }
         }
 
-        self.assertEquals(self.Translator.parse_constraints(hpa_constraint_2),
+        self.assertEqual(self.Translator.parse_constraints(hpa_constraint_2),
                           rtn_2)
 
     def test_parse_hpa_constraints_format_validation(self):
@@ -683,7 +683,7 @@ class TestNoExceptionTranslator(unittest.TestCase):
             }
         }
         self.maxDiff = None
-        self.assertEquals(expected_response, self.Translator.parse_constraints(
+        self.assertEqual(expected_response, self.Translator.parse_constraints(
             vim_fit_constraint))
         self.assertRaises(TranslatorException,
                           self.Translator.parse_constraints,
@@ -722,7 +722,7 @@ class TestNoExceptionTranslator(unittest.TestCase):
         self.Translator._locations = {'vG': '',
                                       'vGMuxInfra': '',
                                       'customer_loc': ''}
-        self.assertEquals(
+        self.assertEqual(
             self.Translator.parse_optimization(
                 opt), expected_parse)
 
@@ -762,7 +762,7 @@ class TestNoExceptionTranslator(unittest.TestCase):
                                       'customer_loc': ''}
         self.Translator._constraints = hpa_json["HAS_Template"]["constraints"]
         self.maxDiff = None
-        self.assertEquals(
+        self.assertEqual(
             self.Translator.parse_optimization(
                 opt), expected_parse)
 
@@ -806,7 +806,7 @@ class TestNoExceptionTranslator(unittest.TestCase):
                 }
             }
         }
-        self.assertEquals(
+        self.assertEqual(
             self.Translator.parse_reservations(resv), expected_resv)
 
     @patch('conductor.controller.translator.Translator.parse_constraints')
@@ -843,7 +843,7 @@ class TestNoExceptionTranslator(unittest.TestCase):
         mock_opt.return_value = {}
         mock_cons.return_value = {}
         self.Translator.do_translation()
-        self.assertEquals(self.Translator._translation, expected_format)
+        self.assertEqual(self.Translator._translation, expected_format)
 
     @patch('conductor.controller.translator.Translator.create_components')
     @patch('conductor.controller.translator.Translator.validate_components')
@@ -852,7 +852,7 @@ class TestNoExceptionTranslator(unittest.TestCase):
     def test_translate(self, mock_parse, mock_do_trans,
                        mock_valid, mock_create):
         self.Translator.translate()
-        self.assertEquals(self.Translator._ok, True)
+        self.assertEqual(self.Translator._ok, True)
 
     def tearDown(self):
         patch.stopall()
