@@ -1,6 +1,7 @@
 #
 # -------------------------------------------------------------------------
 #   Copyright (c) 2015-2017 AT&T Intellectual Property
+#   Copyright (C) 2020 Wipro Limited.
 #
 #   Licensed under the Apache License, Version 2.0 (the "License");
 #   you may not use this file except in compliance with the License.
@@ -1877,6 +1878,12 @@ class AAI(base.InventoryProviderBase):
                             # add candidate to demand candidates
                             resolved_demands[name].append(candidate)
 
+                elif inventory_type == 'nssi':
+                    if filtering_attributes and model_invariant_id:
+                        resolved_demands[name] = self.get_nssi_candidates(filtering_attributes,
+                                                                          model_invariant_id, model_version_id,
+                                                                          service_role, candidate_uniqueness)
+
                 else:
                     LOG.error("Unknown inventory_type "
                               " {}".format(inventory_type))
@@ -1947,4 +1954,83 @@ class AAI(base.InventoryProviderBase):
             directives = None
         return directives
 
+    def get_nssi_candidates(self, filtering_attributes, model_invariant_id, model_version_id, service_role,
+                            candidate_uniqueness):
+        raw_path = ('nodes/service-instances' +
+                    '?model-invariant-id={}'.format(model_invariant_id) +
+                    ('&model-version-id={}'.format(model_version_id) if model_version_id else '') +
+                    ('&service-role={}'.format(service_role) if service_role else '') +
+                    '&depth=2')
 
+        path = self._aai_versioned_path(raw_path)
+        aai_response = self._request('get', path, data=None)
+
+        if aai_response is None or aai_response.status_code != 200:
+            return None
+
+        return self.filter_nssi_candidates(aai_response.json(), filtering_attributes, candidate_uniqueness)
+
+    def filter_nssi_candidates(self, response_body, filtering_attributes, candidate_uniqueness):
+
+        candidates = list()
+        if filtering_attributes and response_body is not None:
+            nssi_instances = response_body.get("service-instance", [])
+
+            for nssi_instance in nssi_instances:
+
+                inventory_attributes = dict()
+                inventory_attributes["orchestration-status"] = nssi_instance.get('orchestration-status')
+                inventory_attributes["service-role"] = nssi_instance.get('service-role')
+
+                if self.match_inventory_attributes(filtering_attributes, inventory_attributes,
+                                                   nssi_instance.get('service-instance-id')):
+
+                    properties = list()
+                    relationships = nssi_instance['relationship-list']['relationship']
+                    for relationship in relationships:
+                        if relationship['related-to'] == 'service-instance':
+                            properties = relationship['related-to-property']
+
+                    nsi_name = None
+                    if properties:
+                        for prop in properties:
+                            if prop['property-key'] == 'service-instance.service-instance-name':
+                                nsi_name = prop['property-value']
+
+                    slice_profiles = nssi_instance.get('slice-profiles').get('slice-profile')
+                    slice_profile = min(slice_profiles, key=lambda x: x['latency'])
+
+                    candidate = dict()
+                    candidate['candidate_id'] = nssi_instance.get('service-instance-id')
+                    candidate['instance_name'] = nssi_instance.get('service-instance-name')
+                    candidate['cost'] = self.conf.data.nssi_candidate_cost
+                    candidate['candidate_type'] = 'nssi'
+                    candidate['inventory_type'] = 'nssi'
+                    candidate['inventory_provider'] = 'aai'
+                    candidate['domain'] = nssi_instance.get('environment-context')
+                    candidate['latency'] = slice_profile.get('latency')
+                    candidate['max_number_of_ues'] = slice_profile.get('max-number-of-UEs')
+                    candidate['coverage_area_ta_list'] = slice_profile.get('coverage-area-TA-list')
+                    candidate['ue_mobility_level'] = slice_profile.get('ue-mobility-level')
+                    candidate['resource_sharing_level'] = slice_profile.get('resource-sharing-level')
+                    candidate['exp_data_rate_ul'] = slice_profile.get('exp-data-rate-UL')
+                    candidate['exp_data_rate_dl'] = slice_profile.get('exp-data-rate-DL')
+                    candidate['area_traffic_cap_ul'] = slice_profile.get('area-traffic-cap-UL')
+                    candidate['area_traffic_cap_dl'] = slice_profile.get('area-traffic-cap-DL')
+                    candidate['activity_factor'] = slice_profile.get('activity-factor')
+                    candidate['e2e_latency'] = slice_profile.get('e2e-latency')
+                    candidate['jitter'] = slice_profile.get('jitter')
+                    candidate['survival_time'] = slice_profile.get('survival-time')
+                    candidate['exp_data_rate'] = slice_profile.get('exp-data-rate')
+                    candidate['payload_size'] = slice_profile.get('payload-size')
+                    candidate['traffic_density'] = slice_profile.get('traffic-density')
+                    candidate['conn_density'] = slice_profile.get('conn-density')
+                    candidate['reliability'] = slice_profile.get('reliability')
+                    candidate['service_area_dimension'] = slice_profile.get('service-area-dimension')
+                    candidate['cs_availability'] = slice_profile.get('cs-availability')
+                    candidate['uniqueness'] = candidate_uniqueness
+                    if nsi_name:
+                        candidate['nsi_name'] = nsi_name
+                    candidates.append(candidate)
+
+        return candidates

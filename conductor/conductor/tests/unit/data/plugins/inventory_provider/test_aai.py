@@ -1,6 +1,7 @@
 #
 # -------------------------------------------------------------------------
 #   Copyright (c) 2015-2017 AT&T Intellectual Property
+#   Copyright (C) 2020 Wipro Limited.
 #
 #   Licensed under the Apache License, Version 2.0 (the "License");
 #   you may not use this file except in compliance with the License.
@@ -731,4 +732,35 @@ tenant/3c6c471ada7747fe8ff7f28e100b61e8/vservers/vserver/00bddefc-126e-4e4f-a18d
         self.assertEqual(None, self.aai_ep.match_hpa(candidate_json['candidate_list'][1],
                                                      feature_json[5]))
 
+    def test_get_nssi_candidates(self):
+        nssi_response_file = './conductor/tests/unit/data/plugins/inventory_provider/nssi_response.json'
+        nssi_response = json.loads(open(nssi_response_file).read())
+        nssi_candidates_file = './conductor/tests/unit/data/plugins/inventory_provider/nssi_candidate.json'
+        nssi_candidates = json.loads(open(nssi_candidates_file).read())
+
+        service_role = 'nssi'
+        model_invariant_id = '21d57d4b-52ad-4d3c-a798-248b5bb9124a'
+        model_version_id = 'bfba363e-e39c-4bd9-a9d5-1371c28f4d22'
+        orchestration_status = 'active'
+        filtering_attributes = dict()
+        filtering_attributes['orchestration-status'] = orchestration_status
+        filtering_attributes['service-role'] = service_role
+        filtering_attributes['model-invariant-id'] = model_invariant_id
+        filtering_attributes['model-version-id'] = model_version_id
+
+        self.assertEqual(nssi_candidates, self.aai_ep.filter_nssi_candidates(nssi_response, filtering_attributes, "true"))
+
+        nssi_response['service-instance'][0]['orchestration-status'] = 'deactivated'
+
+        self.assertEqual([], self.aai_ep.filter_nssi_candidates(nssi_response, filtering_attributes, "true"))
+
+        nssi_response['service-instance'][0]['service-role'] = 'service'
+
+        self.assertEqual([], self.aai_ep.filter_nssi_candidates(nssi_response, filtering_attributes, "true"))
+
+        self.assertEqual([], self.aai_ep.filter_nssi_candidates(None, filtering_attributes, "true"))
+
+        self.assertEqual([], self.aai_ep.filter_nssi_candidates(None, None, "true"))
+
+        self.assertEqual([], self.aai_ep.filter_nssi_candidates(nssi_response, None, "true"))
 
