@@ -35,7 +35,7 @@ class TestVimFit(unittest.TestCase):
         req_json = yaml.safe_load(open(req_json_file).read())
 
         (constraint_id, constraint_info) = \
-            hpa_json["conductor_solver"]["constraints"][2].items()[0]
+            list(hpa_json["conductor_solver"]["constraints"][2].items())[0]
         c_property = constraint_info['properties']
         constraint_type = constraint_info['properties']
         constraint_demands = list()

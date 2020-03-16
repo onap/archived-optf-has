@@ -36,4 +36,4 @@ class TestRoot(base_api.BaseApiTest):
 
         self.assertEqual(200, actual_response.status_int)
         self.assertJsonEqual(expected_response,
-                             json.loads(actual_response.body))
+                             json.loads(actual_response.body.decode()))

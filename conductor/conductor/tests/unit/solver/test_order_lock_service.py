@@ -50,7 +50,7 @@ class TestOrdersLockingService(unittest.TestCase):
                                                                    plans=plans,
                                                                    order_lock=order_lock_inst)
 
-        self.assertEquals(actual_response, {plan_id: OrderLock.COMPLETED})
+        self.assertEqual(actual_response, {plan_id: OrderLock.COMPLETED})
 
     def test_update_order_status_and_get_effected_plans(self):
 
@@ -71,7 +71,7 @@ class TestOrdersLockingService(unittest.TestCase):
 
         actual_response = self.order_lock_svc.update_order_status_and_get_effected_plans(rehome_status=rehome_status,
                                                                                          service_resource_id='resource-id')
-        self.assertEquals(actual_response, plans)
+        self.assertEqual(actual_response, plans)
 
     def test_rehomes_for_service_resource(self):
 
@@ -92,7 +92,7 @@ class TestOrdersLockingService(unittest.TestCase):
         actual_response = self.order_lock_svc.rehomes_for_service_resource(rehome_status, 'resource-id', list())
         expect_response = [{'plan_id': plan_id, 'should_rehome': True}]
 
-        self.assertEquals(actual_response, expect_response)
+        self.assertEqual(actual_response, expect_response)
 
     def test_get_plans_by_id(self):
 
@@ -108,7 +108,7 @@ class TestOrdersLockingService(unittest.TestCase):
         self.order_lock_svc.OrderLock.query.get_plan_by_col = mock.MagicMock(return_value=order_locks)
         actual_response = self.order_lock_svc._get_plans_by_id('order_id')
 
-        self.assertEquals(actual_response, plans)
+        self.assertEqual(actual_response, plans)
 
 
 if __name__ == '__main__':

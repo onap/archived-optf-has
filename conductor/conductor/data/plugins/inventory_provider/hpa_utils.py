@@ -179,7 +179,7 @@ class HpaMatchProvider(object):
 
         f_unit = None
         f_value = None
-        for key, value in attrib_value.iteritems():
+        for key, value in attrib_value.items():
             if key == 'value':
                 f_value = value
             elif key == 'unit':
@@ -282,7 +282,7 @@ class HpaMatchProvider(object):
                                                req_attr_key, flavor_cfa)
                         if not flavor_feature_attr:
                             flavor_flag = False
-                        elif not self._compare_attribute(flavor_feature_attr[0],
+                        elif not self._compare_attribute(list(flavor_feature_attr)[0],
                                                        req_feature_attr):
                             flavor_flag = False
                     if not flavor_flag:
