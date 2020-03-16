@@ -75,7 +75,7 @@ class TestTranslatorServiceNoException(unittest.TestCase):
             mock_ok.return_value = True
         mock_ok_func.return_value = True
         self.translator_svc.translate(self.mock_plan)
-        self.assertEquals(self.mock_plan.status, 'translated')
+        self.assertEqual(self.mock_plan.status, 'translated')
 
 
     @patch('conductor.controller.translator.Translator.translate')
@@ -87,13 +87,13 @@ class TestTranslatorServiceNoException(unittest.TestCase):
             mock_ok.return_value = False
         mock_error.return_value = 'error'
         self.translator_svc.translate(self.mock_plan)
-        self.assertEquals(self.mock_plan.status, 'error')
+        self.assertEqual(self.mock_plan.status, 'error')
 
     def test_millisec_to_sec(self):
-        self.assertEquals(self.translator_svc.millisec_to_sec(1000), 1)
+        self.assertEqual(self.translator_svc.millisec_to_sec(1000), 1)
 
     def test_current_time_seconds(self):
-        self.assertEquals(self.translator_svc.current_time_seconds(),
+        self.assertEqual(self.translator_svc.current_time_seconds(),
                           int(round(time.time())))
 
     @patch('conductor.common.music.model.base.Base.insert')
