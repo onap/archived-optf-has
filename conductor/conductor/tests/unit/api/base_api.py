@@ -44,7 +44,7 @@ class BaseApiTest(oslo_test_base.BaseTestCase):
 
     extra_environment = {
         'AUTH_TYPE': 'Basic',
-        'HTTP_AUTHORIZATION': 'Basic {}'.format(base64.encodestring('admin:default').strip())}
+        'HTTP_AUTHORIZATION': 'Basic {}'.format(base64.encodestring('admin:default'.encode()).decode().strip())}
 
     def setUp(self):
         print("setup called ... ")
