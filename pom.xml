@@ -48,6 +48,11 @@
         <sonar.exclusions>**/tests/**,setup.py,**/lib/**</sonar.exclusions>
         <sonar.test.inclusions>**/tests/**.py</sonar.test.inclusions>
         <sonar.test.exclusions>**/**.py,setup.py,**/lib/**</sonar.test.exclusions>
+        <maven.build.timestamp.format>yyyyMMdd'T'HHmmss'Z'</maven.build.timestamp.format>
+		<has.build.timestamp>${maven.build.timestamp}</has.build.timestamp>
+		<has.project.version>${project.version}</has.project.version>
+		<has.docker.repository>nexus3.onap.org:10003</has.docker.repository>
+		<image.namespace>${has.docker.repository}/onap/optf-has</image.namespace>
     </properties>
 
     <build>
