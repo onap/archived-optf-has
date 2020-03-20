@@ -1,6 +1,6 @@
 #
 # -------------------------------------------------------------------------
-#   Copyright (c) 2018 Intel Corporation Intellectual Property
+#   Copyright (c) 2015-2017 AT&T Intellectual Property
 #
 #   Licensed under the Apache License, Version 2.0 (the "License");
 #   you may not use this file except in compliance with the License.
@@ -16,17 +16,23 @@
 #
 # -------------------------------------------------------------------------
 #
-import unittest
-import conductor.opts as OPTS
+
+import abc
+
+from oslo_log import log
+import six
+
+from conductor.data.plugins import base
+
+LOG = log.getLogger(__name__)
 
 
-class TestOPTS(unittest.TestCase):
-    def setUp(self):
-        self.listSize = 21
+@six.add_metaclass(abc.ABCMeta)
+class FileSystemBase(base.DataPlugin):
+    """Base class for File_sytem plugins"""
 
-    def test_list_lenth(self):
-        self.assertEqual(self.listSize, len(OPTS.list_opts()))
+    @abc.abstractmethod
+    def name(self):
+        """Return human-readable name."""
+        pass
 
-
-if __name__ == "__main__":
-    unittest.main()

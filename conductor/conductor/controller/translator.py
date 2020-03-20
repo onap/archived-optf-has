@@ -43,8 +43,8 @@ CONF = cfg.CONF
 
 VERSIONS = ["2016-11-01", "2017-10-10", "2018-02-01"]
 LOCATION_KEYS = ['latitude', 'longitude', 'host_name', 'clli_code']
-INVENTORY_PROVIDERS = ['aai']
-INVENTORY_TYPES = ['cloud', 'service', 'transport', 'vfmodule', 'nssi']
+INVENTORY_PROVIDERS = ['aai','file_system']
+INVENTORY_TYPES = ['cloud', 'service', 'transport', 'vfmodule', 'nssi','NST']
 DEFAULT_INVENTORY_PROVIDER = INVENTORY_PROVIDERS[0]
 CANDIDATE_KEYS = ['candidate_id', 'cost', 'inventory_type', 'location_id',
                   'location_type']
