@@ -1,0 +1,26 @@
+{
+
+
+
+
+  "NST": [
+
+    {
+      "NST_name": "NST1",
+      "latency": 10,
+      "reliability": 100
+
+
+
+    },
+
+    {
+      "NST_name": "NST2",
+      "latency": 1,
+      "reliability": 90
+
+
+    }
+
+  ]
+}

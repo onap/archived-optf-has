@@ -27,6 +27,7 @@ from conductor import messaging
 # from conductor import __file__ as conductor_root
 from conductor.common.music import messaging as music_messaging
 from conductor.common.utils import conductor_logging_util as log_util
+from conductor.data.plugins.file_system import extensions as fs_ext
 from conductor.data.plugins.inventory_provider import extensions as ip_ext
 from conductor.data.plugins.service_controller import extensions as sc_ext
 from conductor.data.plugins.vim_controller import extensions as vc_ext
@@ -90,6 +91,9 @@ class DataServiceLauncher(object):
         self.vc_ext_manager = (
             vc_ext.Manager(conf, 'conductor.vim_controller.plugin'))
         self.vc_ext_manager.initialize()
+        self.fs_ext_manager = (
+            fs_ext.Manager(conf, 'conductor.file_system.plugin'))
+        self.fs_ext_manager.initialize()
         self.sc_ext_manager = (
             sc_ext.Manager(conf, 'conductor.service_controller.plugin'))
         self.sc_ext_manager.initialize()
@@ -101,7 +105,8 @@ class DataServiceLauncher(object):
             target = music_messaging.Target(topic=topic)
             endpoints = [DataEndpoint(self.ip_ext_manager,
                                       self.vc_ext_manager,
-                                      self.sc_ext_manager), ]
+                                      self.sc_ext_manager,
+                                      self.fs_ext_manager), ]
             flush = not self.conf.data.concurrent
             kwargs = {'transport': transport,
                       'target': target,
@@ -115,11 +120,12 @@ class DataServiceLauncher(object):
 
 
 class DataEndpoint(object):
-    def __init__(self, ip_ext_manager, vc_ext_manager, sc_ext_manager):
+    def __init__(self, ip_ext_manager, vc_ext_manager, sc_ext_manager, fs_ext_manager):
 
         self.ip_ext_manager = ip_ext_manager
         self.vc_ext_manager = vc_ext_manager
         self.sc_ext_manager = sc_ext_manager
+        self.fs_ext_manager = fs_ext_manager
         self.plugin_cache = {}
         self.triage_data_trans = {
             'plan_id': None,
@@ -629,10 +635,17 @@ class DataEndpoint(object):
         plan_info = arg.get('plan_info')
         triage_translator_data = arg.get('triage_translator_data')
         resolved_demands = None
-        results = self.ip_ext_manager.map_method(
+        if(  demands.get('NST')):
+            results = self.fs_ext_manager.map_method(
+            'get_candidates',
+            demands, plan_info, triage_translator_data, dataFilePath ='conductor/conductor/data/plugins/file_system/NST.json'
+            )
+
+        else:
+            results = self.ip_ext_manager.map_method(
             'resolve_demands',
             demands, plan_info, triage_translator_data
-        )
+            )
         if results and len(results) > 0:
             resolved_demands = results[0]
             if self.triage_data_trans['plan_id']== None :

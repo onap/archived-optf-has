@@ -1,6 +1,6 @@
 #
 # -------------------------------------------------------------------------
-#   Copyright (c) 2018 Intel Corporation Intellectual Property
+#   Copyright (c) 2015-2017 AT&T Intellectual Property
 #
 #   Licensed under the Apache License, Version 2.0 (the "License");
 #   you may not use this file except in compliance with the License.
@@ -16,17 +16,17 @@
 #
 # -------------------------------------------------------------------------
 #
-import unittest
-import conductor.opts as OPTS
+
+from oslo_config import cfg
+
+from conductor.i18n import _
+
+FILE_SYSTEM_EXT_MANAGER_OPTS = [
+    cfg.ListOpt('extensions',
+                default=['config'],
+                help=_('Extensions list to use')),
+]
 
 
-class TestOPTS(unittest.TestCase):
-    def setUp(self):
-        self.listSize = 21
-
-    def test_list_lenth(self):
-        self.assertEqual(self.listSize, len(OPTS.list_opts()))
-
-
-if __name__ == "__main__":
-    unittest.main()
+def register_extension_manager_opts(cfg=cfg.CONF):
+    cfg.register_opts(FILE_SYSTEM_EXT_MANAGER_OPTS, 'file_system')
