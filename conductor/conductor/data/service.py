@@ -27,10 +27,10 @@ from conductor import messaging
 # from conductor import __file__ as conductor_root
 from conductor.common.music import messaging as music_messaging
 from conductor.common.utils import conductor_logging_util as log_util
+from conductor.data.plugins.file_system import extensions as fs_ext
 from conductor.data.plugins.inventory_provider import extensions as ip_ext
 from conductor.data.plugins.service_controller import extensions as sc_ext
 from conductor.data.plugins.vim_controller import extensions as vc_ext
-from conductor.data.plugins.file_system import extensions as fs_ext
 from conductor.i18n import _LE, _LI, _LW
 from oslo_config import cfg
 from oslo_log import log

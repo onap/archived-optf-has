@@ -17,15 +17,16 @@
 # -------------------------------------------------------------------------
 #
 
-import time
+import os
 import json
+import sys
+
 from oslo_config import cfg
 from oslo_log import log
-import os
-import sys
+
 from conductor.data.plugins.file_system import base
 from conductor.data.plugins.triage_translator.triage_translator import TraigeTranslator
-from conductor.i18n import _LE
+
 
 LOG = log.getLogger(__name__)
 

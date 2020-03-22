@@ -1,7 +1,9 @@
 import unittest
 
-import conductor.data.plugins.file_system.config as config
 from oslo_config import cfg
+
+import conductor.data.plugins.file_system.config as config
+
 
 class TestConfig(unittest.TestCase):
 
