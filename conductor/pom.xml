@@ -106,6 +106,10 @@
 								</tags>
 
 								<dockerFile>${project.basedir}/docker/Dockerfile</dockerFile>
+								<assembly>
+									<descriptor>${project.basedir}/docker/assembly/has-files.xml</descriptor>
+									<name>onap-has-tm</name>
+								</assembly>
 								<args>
 									<MVN_ARTIFACT_VERSION>${project.version}</MVN_ARTIFACT_VERSION>
 									<REPO>${project.repo}</REPO>
