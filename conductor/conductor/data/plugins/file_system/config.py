@@ -58,10 +58,11 @@ class CONFIG(base.FileSystemBase):
         # self.filter_candidates([])
         pass
 
-    def get_candidates(self, demands, plan_info, triage_translator_data):
+    def get_candidates(self, demands, plan_info, triage_translator_data, dataFilePath):
         self.triage_translator.getPlanIdNAme(plan_info['plan_name'], plan_info['plan_id'],triage_translator_data)
         resolved_demands = {}
-        with open('./conductor/conductor/data/plugins/file_system/NST.json', 'r') as openfile:
+
+        with open(dataFilePath, 'r') as openfile:
             nst_object = json.load(openfile)
             for name, requirements in demands.items():
                 self.triage_translator.addDemandsTriageTranslator(name, triage_translator_data)

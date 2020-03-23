@@ -638,7 +638,7 @@ class DataEndpoint(object):
         if(  demands.get('NST')):
             results = self.fs_ext_manager.map_method(
             'get_candidates',
-            demands, plan_info, triage_translator_data
+            demands, plan_info, triage_translator_data, dataFilePath ='conductor/conductor/data/plugins/file_system/NST.json'
             )
 
         else:
