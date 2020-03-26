@@ -139,6 +139,7 @@ class Translator(object):
         self.conf = conf
         self._template = copy.deepcopy(template)
         self._plan_name = plan_name
+        self._candidate_file_path = "conductor/conductor/data/plugins/file_system/NST.json"
         self._plan_id = plan_id
         self._translation = None
         self._valid = False
@@ -500,6 +501,7 @@ class Translator(object):
                 "plan_id": self._plan_id,
                 "plan_name": self._plan_name,
                 "keyspace": self.conf.keyspace,
+                "candidate_file_path": self._candidate_file_path
             }
             args = {
                 "demands": {

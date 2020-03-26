@@ -214,7 +214,8 @@ class TestDataEndpoint(unittest.TestCase):
         req_json = yaml.safe_load(open(req_json_file).read())
         ctxt = {
             'plan_id': uuid.uuid4(),
-            'keyspace': cfg.CONF.keyspace
+            'keyspace': cfg.CONF.keyspace,
+            'candidate_file_path' : './conductor/data/plugins/file_system/NST.json'
         }
         logutil_mock.return_value = uuid.uuid4()
         ext_mock.return_value = []
@@ -235,7 +236,13 @@ class TestDataEndpoint(unittest.TestCase):
               'trans': { 'plan_id': 'plan_abc', 'plan_name': 'plan_name', 'translator_triage': [ [] ] } } }
         self.assertEqual(expected_response,
                          self.data_ep.resolve_demands(ctxt, req_json))
-
+        req_json_for_nst = {'demands': {'NST': [{'provider': 'aai', 'inventory_type': 'NST', 'inventory_provider': 'file_system'}]},
+                            'plan_info': {'plan_id': uuid.uuid4(), 'plan_name': 'nst_selection'},
+                            'triage_translator_data': {'plan_id': None, 'plan_name': [None]}}
+        expected_response_for_nst = {'NST': [{'candidate_id': 'NST1', 'NST_name': 'NST1', 'cost': 2, 'inventory_provider': 'file_system', 'inventory_type': 'NST', 'latency': 10, 'reliability': 100},
+                                             {'candidate_id': 'NST2', 'NST_name': 'NST2', 'cost': 2, 'inventory_provider': 'file_system', 'inventory_type': 'NST', 'latency': 1, 'reliability': 90}]}
+        self.assertEqual(expected_response_for_nst,
+                         self.data_ep.resolve_demands(ctxt, req_json_for_nst ))
     @mock.patch.object(service.LOG, 'error')
     @mock.patch.object(service.LOG, 'debug')
     @mock.patch.object(service.LOG, 'info')
