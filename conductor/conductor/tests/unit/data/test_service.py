@@ -215,7 +215,7 @@ class TestDataEndpoint(unittest.TestCase):
         ctxt = {
             'plan_id': uuid.uuid4(),
             'keyspace': cfg.CONF.keyspace,
-            'candidate_file_path' : './conductor/data/plugins/file_system/NST.json'
+			'candidate_file_path' : './conductor/data/plugins/file_system/NST.json'
         }
         logutil_mock.return_value = uuid.uuid4()
         ext_mock.return_value = []
@@ -236,13 +236,17 @@ class TestDataEndpoint(unittest.TestCase):
               'trans': { 'plan_id': 'plan_abc', 'plan_name': 'plan_name', 'translator_triage': [ [] ] } } }
         self.assertEqual(expected_response,
                          self.data_ep.resolve_demands(ctxt, req_json))
+        ctxt_for_nst = {
+            'plan_id':'aa9acedb-7a66-4385-b88b-044e1dec5334',
+            'keyspace': 'conductor',
+            'candidate_file_path' : './conductor/data/plugins/file_system/NST.json'
+        }
         req_json_for_nst = {'plan_info': {'plan_name': 'nst_selection', 'plan_id': 'aa9acedb-7a66-4385-b88b-044e1dec5334'},
                             'triage_translator_data': {'plan_name': [None], 'plan_id': None},
                             'demands': {'NST': [{'inventory_type': 'NST', 'provider': 'aai', 'inventory_provider': 'file_system'}]}}
-        expected_response_for_nst = {'NST': [{'candidate_id': 'NST1', 'NST_name': 'NST1', 'cost': 2, 'inventory_provider': 'file_system', 'inventory_type': 'NST', 'latency': 10, 'reliability': 100},
-                                             {'candidate_id': 'NST2', 'NST_name': 'NST2', 'cost': 2, 'inventory_provider': 'file_system', 'inventory_type': 'NST', 'latency': 1, 'reliability': 90}]}
+        expected_response_for_nst ={'error': False, 'response': {'resolved_demands': {'NST': [{'candidate_id': 'NST1', 'NST_name': 'NST1', 'reliability': 100, 'cost': 2, 'latency': 10, 'inventory_type': 'NST', 'inventory_provider': 'file_system'}, {'candidate_id': 'NST2', 'NST_name': 'NST2', 'reliability': 90, 'cost': 2, 'latency': 1, 'inventory_type': 'NST', 'inventory_provider': 'file_system'}]}, 'trans': {'plan_name': 'nst_selection', 'translator_triage': [[{'translation_dropped': [], 'name': 'NST', 'latency_dropped': []}]], 'plan_id': 'aa9acedb-7a66-4385-b88b-044e1dec5334'}}}
         self.assertEqual(expected_response_for_nst,
-                         self.data_ep.resolve_demands(ctxt, req_json_for_nst ))
+                         self.data_ep.resolve_demands(ctxt_for_nst, req_json_for_nst ))
     @mock.patch.object(service.LOG, 'error')
     @mock.patch.object(service.LOG, 'debug')
     @mock.patch.object(service.LOG, 'info')
