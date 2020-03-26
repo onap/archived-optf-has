@@ -236,9 +236,9 @@ class TestDataEndpoint(unittest.TestCase):
               'trans': { 'plan_id': 'plan_abc', 'plan_name': 'plan_name', 'translator_triage': [ [] ] } } }
         self.assertEqual(expected_response,
                          self.data_ep.resolve_demands(ctxt, req_json))
-        req_json_for_nst = {'demands': {'NST': [{'provider': 'aai', 'inventory_type': 'NST', 'inventory_provider': 'file_system'}]},
-                            'plan_info': {'plan_id': uuid.uuid4(), 'plan_name': 'nst_selection'},
-                            'triage_translator_data': {'plan_id': None, 'plan_name': [None]}}
+        req_json_for_nst = {'plan_info': {'plan_name': 'nst_selection', 'plan_id': 'aa9acedb-7a66-4385-b88b-044e1dec5334'},
+                            'triage_translator_data': {'plan_name': [None], 'plan_id': None},
+                            'demands': {'NST': [{'inventory_type': 'NST', 'provider': 'aai', 'inventory_provider': 'file_system'}]}}
         expected_response_for_nst = {'NST': [{'candidate_id': 'NST1', 'NST_name': 'NST1', 'cost': 2, 'inventory_provider': 'file_system', 'inventory_type': 'NST', 'latency': 10, 'reliability': 100},
                                              {'candidate_id': 'NST2', 'NST_name': 'NST2', 'cost': 2, 'inventory_provider': 'file_system', 'inventory_type': 'NST', 'latency': 1, 'reliability': 90}]}
         self.assertEqual(expected_response_for_nst,
