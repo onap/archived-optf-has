@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "972c4c61_6fd5b6f6",
+        "filename": "conductor.conf",
+        "patchSetId": 3
+      },
+      "lineNbr": 628,
+      "author": {
+        "id": 2041
+      },
+      "writtenOn": "2020-04-01T16:54:07Z",
+      "side": 0,
+      "message": "What is this [config] block for ?",
+      "revId": "3223debecc9f305c1ab43441a38c9a017ccfd431",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}

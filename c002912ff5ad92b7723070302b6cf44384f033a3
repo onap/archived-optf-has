@@ -1,0 +1,225 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3d0c45e9_54823946",
+        "filename": "conductor/conductor/conf/file_system.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 2041
+      },
+      "writtenOn": "2020-04-01T16:54:07Z",
+      "side": 1,
+      "message": "Please fix.",
+      "revId": "c002912ff5ad92b7723070302b6cf44384f033a3",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "51b13eb9_fa35911a",
+        "filename": "conductor/conductor/controller/translator.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 2041
+      },
+      "writtenOn": "2020-04-01T16:54:07Z",
+      "side": 1,
+      "message": "non-capitalized to maintain consistency with others ?",
+      "revId": "c002912ff5ad92b7723070302b6cf44384f033a3",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8acf175e_4c64d6ed",
+        "filename": "conductor/conductor/data/plugins/file_system/NST.json",
+        "patchSetId": 3
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 2041
+      },
+      "writtenOn": "2020-04-01T16:54:07Z",
+      "side": 1,
+      "message": "Are these attributes loaded into the NST candidate as candidate attributes ? I remember seeing a cost attribute, but done recall seeing latency and reliability.",
+      "revId": "c002912ff5ad92b7723070302b6cf44384f033a3",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dd388aaf_e5403336",
+        "filename": "conductor/conductor/data/plugins/file_system/base.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 2041
+      },
+      "writtenOn": "2020-04-01T16:54:07Z",
+      "side": 1,
+      "message": "Please fix.",
+      "revId": "c002912ff5ad92b7723070302b6cf44384f033a3",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1a362e76_d56aa3fb",
+        "filename": "conductor/conductor/data/plugins/file_system/config.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 2041
+      },
+      "writtenOn": "2020-04-01T16:54:07Z",
+      "side": 1,
+      "message": "Please fix.",
+      "revId": "c002912ff5ad92b7723070302b6cf44384f033a3",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "34e4e4b4_d653ae0e",
+        "filename": "conductor/conductor/data/plugins/file_system/config.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 2041
+      },
+      "writtenOn": "2020-04-01T16:54:07Z",
+      "side": 1,
+      "message": "Please have a different name for the class, perhaps related to the filesystem being the inventory provider.",
+      "revId": "c002912ff5ad92b7723070302b6cf44384f033a3",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "77f09e58_900ff026",
+        "filename": "conductor/conductor/data/plugins/file_system/config.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 2041
+      },
+      "writtenOn": "2020-04-01T16:54:07Z",
+      "side": 1,
+      "message": "Please fix. Seems to be a copy paste brought in from SDN controller.",
+      "revId": "c002912ff5ad92b7723070302b6cf44384f033a3",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "60b3331a_f2f9bd88",
+        "filename": "conductor/conductor/data/plugins/file_system/config.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 2041
+      },
+      "writtenOn": "2020-04-01T16:54:07Z",
+      "side": 1,
+      "message": "Please have an exception handling - especially since JSON validation errors can occur very frequently.",
+      "revId": "c002912ff5ad92b7723070302b6cf44384f033a3",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e10fa17c_808e79cd",
+        "filename": "conductor/conductor/data/plugins/file_system/config.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 2041
+      },
+      "writtenOn": "2020-04-01T16:54:07Z",
+      "side": 1,
+      "message": "Please rename the variable - region would be a misnomer to represent a NST candidate.",
+      "revId": "c002912ff5ad92b7723070302b6cf44384f033a3",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e1900fb7_59f9c058",
+        "filename": "conductor/conductor/data/plugins/file_system/extensions.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 2041
+      },
+      "writtenOn": "2020-04-01T16:54:07Z",
+      "side": 1,
+      "message": "Please fix comment.",
+      "revId": "c002912ff5ad92b7723070302b6cf44384f033a3",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "da98afd4_f2a58cd3",
+        "filename": "conductor/conductor/data/plugins/file_system/extensions.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 2041
+      },
+      "writtenOn": "2020-04-01T16:54:07Z",
+      "side": 1,
+      "message": "Please fix comment.",
+      "revId": "c002912ff5ad92b7723070302b6cf44384f033a3",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f87506d1_6517b5f5",
+        "filename": "conductor/conductor/data/service.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 641,
+      "author": {
+        "id": 2041
+      },
+      "writtenOn": "2020-04-01T16:54:07Z",
+      "side": 1,
+      "message": "Please add this to config file Conductor.conf",
+      "revId": "c002912ff5ad92b7723070302b6cf44384f033a3",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "81019e66_19d87cc7",
+        "filename": "conductor/setup.cfg",
+        "patchSetId": 3
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 2041
+      },
+      "writtenOn": "2020-04-01T16:54:07Z",
+      "side": 1,
+      "message": "Please change the name of the class - config seems to indicate this is a configuration, but in reality this is an inventory sourced from the file system.",
+      "revId": "c002912ff5ad92b7723070302b6cf44384f033a3",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
