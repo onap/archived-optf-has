@@ -1880,9 +1880,9 @@ class AAI(base.InventoryProviderBase):
 
                 elif inventory_type == 'nssi':
                     if filtering_attributes and model_invariant_id:
-                        resolved_demands[name] = self.get_nssi_candidates(filtering_attributes,
-                                                                          model_invariant_id, model_version_id,
-                                                                          service_role, candidate_uniqueness)
+                        resolved_demands[name].append(self.get_nssi_candidates(filtering_attributes,
+                                                                               model_invariant_id, model_version_id,
+                                                                               service_role, candidate_uniqueness))
 
                 else:
                     LOG.error("Unknown inventory_type "

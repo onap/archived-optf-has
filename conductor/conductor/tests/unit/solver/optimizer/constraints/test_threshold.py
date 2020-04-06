@@ -31,30 +31,24 @@ class TestThreshold(unittest.TestCase):
         candidates_file = './conductor/tests/unit/data/plugins/inventory_provider/nssi_candidate.json'
         candidates = json.loads(open(candidates_file).read())
 
-        properties = {'attribute': 'latency', 'threshold': 30, 'operator': 'lte'}
+        properties = {'evaluate':
+                          [{'attribute': 'latency', 'threshold': 30, 'operator': 'lte'},
+                           {'attribute': 'exp_data_rate_ul', 'threshold': 70, 'operator': 'gte'}]}
 
-        threshold_obj = Threshold('urllc_threshold', 'threshold', ['URLLC'], _priority=0, _properties=properties)
+        threshold_obj = Threshold('urllc_threshold', 'threshold', ['URLLC'], _priority=0,
+                                  _properties=properties)
 
         decision_path = DecisionPath()
         decision_path.current_demand = Demand('URLLC')
 
         self.assertEqual(candidates, threshold_obj.solve(decision_path, candidates, None))
 
-        properties = {'attribute': 'latency', 'threshold': 10, 'operator': 'lte'}
+        properties = {'evaluate':
+                          [{'attribute': 'latency', 'threshold': 10, 'operator': 'lte'},
+                           {'attribute': 'exp_data_rate_ul', 'threshold': 120, 'operator': 'gte'}]}
 
-        threshold_obj = Threshold('urllc_threshold', 'threshold', ['URLLC'], _priority=0, _properties=properties)
-
-        self.assertEqual([], threshold_obj.solve(decision_path, candidates, None))
-
-        properties = {'attribute': 'exp_data_rate_ul', 'threshold': 70, 'operator': 'gte'}
-
-        threshold_obj = Threshold('urllc_threshold', 'threshold', ['URLLC'], _priority=0, _properties=properties)
-
-        self.assertEqual(candidates, threshold_obj.solve(decision_path, candidates, None))
-
-        properties = {'attribute': 'exp_data_rate_ul', 'threshold': 120, 'operator': 'gte'}
-
-        threshold_obj = Threshold('urllc_threshold', 'threshold', ['URLLC'], _priority=0, _properties=properties)
+        threshold_obj = Threshold('urllc_threshold', 'threshold', ['URLLC'], _priority=0,
+                                  _properties=properties)
 
         self.assertEqual([], threshold_obj.solve(decision_path, candidates, None))
 

@@ -783,6 +783,36 @@ class TestNoExceptionTranslator(unittest.TestCase):
                           self.Translator.parse_optimization, opt)
 
     @patch('conductor.controller.translator.Translator.create_components')
+    def test_parse_optimization_generic(self, mock_create):
+
+        expected_format = {'goal': 'min',
+                          'operands': [{'function': 'latency',
+                                        'function_param': ['URLLC_core'],
+                                        'operation': 'product',
+                                        'weight': 1.0},
+                                       {'function': 'latency',
+                                        'function_param': ['URLLC_ran'],
+                                        'operation': 'product',
+                                        'weight': 1.0}
+                                       ],
+                          'operation': 'sum'
+                          }
+
+        template_file = './conductor/tests/unit/controller/nssi_template.json'
+        template = yaml.safe_load(open(template_file).read())
+        opt = template['template']['optimization']
+        self.Translator._demands = template['template']['demands']
+        self.Translator_constraints = template['template']['constraints']
+
+        self.assertEqual(expected_format, self.Translator.parse_optimization(opt))
+
+        expected_format['goal'] = 'max'
+        opt['maximize'] = opt['minimize'].copy()
+        del opt['minimize']
+
+        self.assertEqual(expected_format, self.Translator.parse_optimization(opt))
+
+    @patch('conductor.controller.translator.Translator.create_components')
     def test_parse_reservation(self, mock_create):
         expected_resv = {
             'counter': 0,
