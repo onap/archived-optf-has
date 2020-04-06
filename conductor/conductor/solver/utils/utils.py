@@ -17,7 +17,9 @@
 # -------------------------------------------------------------------------
 #
 
+from functools import reduce
 import math
+import operator
 from oslo_log import log
 
 
@@ -30,6 +32,16 @@ OPERATIONS = {'gte': lambda x, y: x >= y,
               'lt': lambda x, y: x < y,
               'eq': lambda x, y: x == y
               }
+
+AGGREGATION_FUNCTIONS = {'sum': lambda x: reduce(operator.add, x),
+                         'min': lambda x: reduce(lambda a, b: a if a < b else b, x),
+                         'max': lambda x: reduce(lambda a, b: a if a < b else b, x),
+                         'avg': lambda x: reduce(operator.add, x) / len(x)}
+
+OPT_OPERATIONS = {'sum': operator.add,
+                  'product': operator.mul,
+                  'min': lambda a, b: a if a < b else b,
+                  'max': lambda a, b: a if a > b else b}
 
 
 def compute_air_distance(_src, _dst):

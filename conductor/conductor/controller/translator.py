@@ -72,6 +72,9 @@ CONSTRAINTS = {
         'split': True,
         'required': ['evaluate'],
     },
+    'aggregation': {
+        'required': ['evaluate'],
+    },
     'distance_between_demands': {
         'required': ['distance'],
         'thresholds': {
@@ -118,6 +121,9 @@ HPA_FEATURES = ['architecture', 'hpa-feature', 'hpa-feature-attributes',
 HPA_OPTIONAL = ['score']
 HPA_ATTRIBUTES = ['hpa-attribute-key', 'hpa-attribute-value', 'operator']
 HPA_ATTRIBUTES_OPTIONAL = ['unit']
+OPTIMIZATION_GOALS = {'minimize': 'min',
+                      'maximize': 'max'}
+OPTIMIZATION_OPERATIONS = ['sum', 'product', 'min', 'max']
 
 
 class TranslatorException(Exception):
@@ -748,8 +754,8 @@ class Translator(object):
 
         optimization_copy = copy.deepcopy(optimization)
         parsed = {
-            "goal": "min",
-            "operation": "sum",
+            "goal": "",
+            "operation": "",
             "operands": [],
         }
 
@@ -757,16 +763,20 @@ class Translator(object):
             raise TranslatorException("Optimization must be a dictionary.")
 
         goals = list(optimization_copy.keys())
-        if goals != ['minimize']:
+        if len(goals) != 1 or goals[0] not in OPTIMIZATION_GOALS:
             raise TranslatorException(
-                "Optimization must contain a single goal of 'minimize'.")
-
-        funcs = list(optimization_copy['minimize'].keys())
-        if funcs != ['sum']:
+                "Optimization must contain a "
+                "single goal from {}".format(str(list(OPTIMIZATION_GOALS.keys()))))
+        goal = goals[0]
+        parsed['goal'] = OPTIMIZATION_GOALS[goal]
+        funcs = list(optimization_copy[goal].keys())
+        if len(funcs) != 1 or funcs[0] not in OPTIMIZATION_OPERATIONS:
             raise TranslatorException(
-                "Optimization goal 'minimize' must "
-                "contain a single function of 'sum'.")
-        operands = optimization_copy['minimize']['sum']
+                "Optimization goal {} must contain a single function from {}"
+                .format(goal, str(OPTIMIZATION_OPERATIONS)))
+        func = funcs[0]
+        parsed['operation'] = func
+        operands = optimization_copy[goal][func]
         if type(operands) is not list:
             # or len(operands) != 2:
             raise TranslatorException(
@@ -879,6 +889,15 @@ class Translator(object):
                         "Optimization products must include at least "
                         "one 'distance_between' function call and "
                         "one optional number to be used as a weight.")
+
+            elif len(list(operand.keys())) == 1:
+                function = list(operand.keys())[0]
+                args = operand.get(function)
+                if args not in self._demands:
+                    raise TranslatorException(
+                        "Optimization arguments {} must "
+                        "include a valid demand name".format(args))
+                args = [args]
 
             # We now have our weight/function_param.
             if not nested:

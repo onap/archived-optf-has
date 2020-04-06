@@ -27,6 +27,8 @@ import random
 
 from conductor.solver.optimizer.constraints \
     import access_distance as access_dist
+from conductor.solver.optimizer.constraints.aggregation \
+    import CrossDemandAttributeAggregation
 from conductor.solver.optimizer.constraints \
     import aic_distance as aic_dist
 from conductor.solver.optimizer.constraints \
@@ -42,6 +44,7 @@ from conductor.solver.optimizer.constraints import threshold
 from conductor.solver.request import demand
 from conductor.solver.request import objective
 from conductor.solver.request.functions import aic_version
+from conductor.solver.request.functions import attribute
 from conductor.solver.request.functions import cost
 from conductor.solver.request.functions import distance_between
 from conductor.solver.request.functions import hpa_score
@@ -217,6 +220,13 @@ class Parser(object):
                                         constraint_demands,
                                         _properties=c_property)
                 self.constraints[my_threshold_constraint.name] = my_threshold_constraint
+            elif constraint_type == "aggregation":
+                c_property = constraint_info.get("properties")
+                my_aggregation_constraint = CrossDemandAttributeAggregation(constraint_id,
+                                                                            constraint_type,
+                                                                            constraint_demands,
+                                                                            _properties=c_property)
+                self.constraints[my_aggregation_constraint.name] = my_aggregation_constraint
             elif constraint_type == "hpa":
                 LOG.debug("Creating constraint - {}".format(constraint_type))
                 c_property = constraint_info.get("properties")
@@ -300,6 +310,11 @@ class Parser(object):
                 elif operand_data["function"] == "hpa_score":
                     func = hpa_score.HPAScore("hpa_score")
                     operand.function = func
+                else:
+                    func = attribute.Attribute("attribute", operand_data["function"],
+                                               operand_data["function_param"][0])
+                    operand.function = func
+                    self.latencyTriage.takeOpimaztionType(operand_data["function"])
 
                 self.objective.operand_list.append(operand)
             self.latencyTriage.updateTriageLatencyDB(self.plan_id, self.request_id)
@@ -535,8 +550,10 @@ class Parser(object):
                 constraint.rank = 8
             elif constraint.constraint_type == "threshold":
                 constraint.rank = 9
-            else:
+            elif constraint.constraint_type == "aggregation":
                 constraint.rank = 10
+            else:
+                constraint.rank = 11
 
     def attr_sort(self, attrs=['rank']):
         # this helper for sorting the rank

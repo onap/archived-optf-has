@@ -18,6 +18,7 @@
 #
 
 from conductor.solver.request import demand
+from conductor.solver.utils.utils import OPT_OPERATIONS
 # from conductor.solver.resource import region
 # from conductor.solver.resource import service
 
@@ -33,8 +34,7 @@ class Objective(object):
         value = 0.0
 
         for op in self.operand_list:
-            if self.operation == "sum":
-                value += op.compute(_decision_path, _request)
+            value = OPT_OPERATIONS.get(self.operation)(value, op.compute(_decision_path, _request))
 
         _decision_path.cumulated_value = value
         _decision_path.total_value = \
@@ -173,6 +173,11 @@ class Operand(object):
                     loc_z = cei.get_candidate_location(resource_z)
 
                     value = self.function.compute(loc_a, loc_z)
+
+        elif self.function.func_type == "attribute":
+            if self.function.demand in _decision_path.decisions:
+                resource = _decision_path.decisions[self.function.demand]
+                value = self.function.compute(resource)
 
         if self.operation == "product":
             value *= self.weight
