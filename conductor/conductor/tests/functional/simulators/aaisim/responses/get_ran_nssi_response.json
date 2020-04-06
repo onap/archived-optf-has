@@ -1,0 +1,320 @@
+{"service-instance": [{
+    "service-instance-id": "15045356-773e-11ea-bc55-0242ac130003",
+    "service-instance-name": "nssi_ran_test_0211",
+    "service-type": "embb",
+    "service-role": "nssi",
+    "environment-context": "cn",
+    "model-invariant-id": "aa2d56ea-773d-11ea-bc55-0242ac130003",
+    "model-version-id": "d6296806-773d-11ea-bc55-0242ac130003",
+    "resource-version": "1581418601616",
+    "orchestration-status": "active",
+    "relationship-list": {
+        "relationship": [
+            {
+                "related-to": "service-instance",
+                "relationship-label": "org.onap.relationships.inventory.ComposedOf",
+                "related-link": "/aai/v16/business/customers/customer/5GCustomer/service-subscriptions/service-subscription/5G/service-instances/service-instance/4115d3c8-dd59-45d6-b09d-e756dee9b518",
+                "relationship-data": [
+                    {
+                        "relationship-key": "customer.global-customer-id",
+                        "relationship-value": "5GCustomer"
+                    },
+                    {
+                        "relationship-key": "service-subscription.service-type",
+                        "relationship-value": "5G"
+                    },
+                    {
+                        "relationship-key": "service-instance.service-instance-id",
+                        "relationship-value": "4115d3c8-dd59-45d6-b09d-e756dee9b518"
+                    }
+                ],
+                "related-to-property": [
+                    {
+                        "property-key": "service-instance.service-instance-name",
+                        "property-value": "nsi_test_0211"
+                    }
+                ]
+            }
+        ]
+    },
+    "slice-profiles": {
+        "slice-profile": [
+            {
+                "profile-id": "fa1cf01e-773f-11ea-bc55-0242ac130003",
+                "latency": 30,
+                "max-number-of-UEs": 0,
+                "coverage-area-TA-list": "[{\"province\":\"??\",\"city\":\"???\",\"county\":\"???\",\"street\":\"?????\"}]",
+                "ue-mobility-level": "stationary",
+                "resource-sharing-level": "0",
+                "exp-data-rate-UL": 100,
+                "exp-data-rate-DL": 100,
+                "activity-factor": 0,
+                "e2e-latency": 0,
+                "jitter": 0,
+                "survival-time": 0,
+                "exp-data-rate": 0,
+                "payload-size": 0,
+                "traffic-density": 0,
+                "conn-density": 0,
+                "reliability": 99.999,
+                "resource-version": "1581418602494"
+            }
+        ]
+    }
+},
+{
+    "service-instance-id": "0dfe3d50-773f-11ea-bc55-0242ac130003",
+    "service-instance-name": "nssi_ran_test_0215",
+    "service-type": "embb",
+    "service-role": "nssi",
+    "environment-context": "cn",
+    "model-invariant-id": "aa2d56ea-773d-11ea-bc55-0242ac130003",
+    "model-version-id": "d6296806-773d-11ea-bc55-0242ac130003",
+    "resource-version": "1581418601616",
+    "orchestration-status": "active",
+    "relationship-list": {
+        "relationship": [
+            {
+                "related-to": "service-instance",
+                "relationship-label": "org.onap.relationships.inventory.ComposedOf",
+                "related-link": "/aai/v16/business/customers/customer/5GCustomer/service-subscriptions/service-subscription/5G/service-instances/service-instance/10e62a0e-75ab-11ea-bc55-0242ac130003",
+                "relationship-data": [
+                    {
+                        "relationship-key": "customer.global-customer-id",
+                        "relationship-value": "5GCustomer"
+                    },
+                    {
+                        "relationship-key": "service-subscription.service-type",
+                        "relationship-value": "5G"
+                    },
+                    {
+                        "relationship-key": "service-instance.service-instance-id",
+                        "relationship-value": "10e62a0e-75ab-11ea-bc55-0242ac130003"
+                    }
+                ],
+                "related-to-property": [
+                    {
+                        "property-key": "service-instance.service-instance-name",
+                        "property-value": "nsi_test_0215"
+                    }
+                ]
+            }
+        ]
+    },
+    "slice-profiles": {
+        "slice-profile": [
+            {
+                "profile-id": "e9a115b2-773f-11ea-bc55-0242ac130003",
+                "latency": 60,
+                "max-number-of-UEs": 0,
+                "coverage-area-TA-list": "[{\"province\":\"??\",\"city\":\"???\",\"county\":\"???\",\"street\":\"?????\"}]",
+                "ue-mobility-level": "stationary",
+                "resource-sharing-level": "0",
+                "exp-data-rate-UL": 100,
+                "exp-data-rate-DL": 100,
+                "activity-factor": 0,
+                "e2e-latency": 0,
+                "jitter": 0,
+                "survival-time": 0,
+                "exp-data-rate": 0,
+                "payload-size": 0,
+                "traffic-density": 0,
+                "conn-density": 0,
+                "reliability": 99.999,
+                "resource-version": "1581418602494"
+            }
+        ]
+    }
+},
+{
+    "service-instance-id": "8ecfc4da-773f-11ea-bc55-0242ac130003",
+    "service-instance-name": "nssi_ran_test_0216",
+    "service-type": "embb",
+    "service-role": "nssi",
+    "environment-context": "cn",
+    "model-invariant-id": "aa2d56ea-773d-11ea-bc55-0242ac130003",
+    "model-version-id": "d6296806-773d-11ea-bc55-0242ac130003",
+    "resource-version": "1581418601616",
+    "orchestration-status": "active",
+    "relationship-list": {
+        "relationship": [
+            {
+                "related-to": "service-instance",
+                "relationship-label": "org.onap.relationships.inventory.ComposedOf",
+                "related-link": "/aai/v16/business/customers/customer/5GCustomer/service-subscriptions/service-subscription/5G/service-instances/service-instance/4e70594e-75ab-11ea-bc55-0242ac130003",
+                "relationship-data": [
+                    {
+                        "relationship-key": "customer.global-customer-id",
+                        "relationship-value": "5GCustomer"
+                    },
+                    {
+                        "relationship-key": "service-subscription.service-type",
+                        "relationship-value": "5G"
+                    },
+                    {
+                        "relationship-key": "service-instance.service-instance-id",
+                        "relationship-value": "4e70594e-75ab-11ea-bc55-0242ac130003"
+                    }
+                ],
+                "related-to-property": [
+                    {
+                        "property-key": "service-instance.service-instance-name",
+                        "property-value": "nsi_test_0216"
+                    }
+                ]
+            }
+        ]
+    },
+    "slice-profiles": {
+        "slice-profile": [
+            {
+                "profile-id": "dd7ec3b0-773f-11ea-bc55-0242ac130003",
+                "latency": 15,
+                "max-number-of-UEs": 0,
+                "coverage-area-TA-list": "[{\"province\":\"??\",\"city\":\"???\",\"county\":\"???\",\"street\":\"?????\"}]",
+                "ue-mobility-level": "stationary",
+                "resource-sharing-level": "0",
+                "exp-data-rate-UL": 100,
+                "exp-data-rate-DL": 100,
+                "activity-factor": 0,
+                "e2e-latency": 0,
+                "jitter": 0,
+                "survival-time": 0,
+                "exp-data-rate": 0,
+                "payload-size": 0,
+                "traffic-density": 0,
+                "conn-density": 0,
+                "reliability": 99.99,
+                "resource-version": "1581418602494"
+            }
+        ]
+    }
+},
+{
+    "service-instance-id": "9a310140-773f-11ea-bc55-0242ac130003",
+    "service-instance-name": "nssi_ran_test_0218",
+    "service-type": "embb",
+    "service-role": "nssi",
+    "environment-context": "cn",
+    "model-invariant-id": "aa2d56ea-773d-11ea-bc55-0242ac130003",
+    "model-version-id": "d6296806-773d-11ea-bc55-0242ac130003",
+    "resource-version": "1581418601616",
+    "orchestration-status": "active",
+    "relationship-list": {
+        "relationship": [
+            {
+                "related-to": "service-instance",
+                "relationship-label": "org.onap.relationships.inventory.ComposedOf",
+                "related-link": "/aai/v16/business/customers/customer/5GCustomer/service-subscriptions/service-subscription/5G/service-instances/service-instance/a69d4aa6-776c-11ea-bc55-0242ac130003",
+                "relationship-data": [
+                    {
+                        "relationship-key": "customer.global-customer-id",
+                        "relationship-value": "5GCustomer"
+                    },
+                    {
+                        "relationship-key": "service-subscription.service-type",
+                        "relationship-value": "5G"
+                    },
+                    {
+                        "relationship-key": "service-instance.service-instance-id",
+                        "relationship-value": "a69d4aa6-776c-11ea-bc55-0242ac130003"
+                    }
+                ],
+                "related-to-property": [
+                    {
+                        "property-key": "service-instance.service-instance-name",
+                        "property-value": "nsi_test_0230"
+                    }
+                ]
+            }
+        ]
+    },
+    "slice-profiles": {
+        "slice-profile": [
+            {
+                "profile-id": "d0e12576-773f-11ea-bc55-0242ac130003",
+                "latency": 40,
+                "max-number-of-UEs": 0,
+                "coverage-area-TA-list": "[{\"province\":\"??\",\"city\":\"???\",\"county\":\"???\",\"street\":\"?????\"}]",
+                "ue-mobility-level": "stationary",
+                "resource-sharing-level": "0",
+                "exp-data-rate-UL": 100,
+                "exp-data-rate-DL": 100,
+                "activity-factor": 0,
+                "e2e-latency": 0,
+                "jitter": 0,
+                "survival-time": 0,
+                "exp-data-rate": 0,
+                "payload-size": 0,
+                "traffic-density": 0,
+                "conn-density": 0,
+                "reliability": 99.99,
+                "resource-version": "1581418602494"
+            }
+        ]
+    }
+},
+{
+    "service-instance-id": "a70e6010-773f-11ea-bc55-0242ac130003",
+    "service-instance-name": "nssi_ran_test_0219",
+    "service-type": "embb",
+    "service-role": "nssi",
+    "environment-context": "cn",
+    "model-invariant-id": "aa2d56ea-773d-11ea-bc55-0242ac130003",
+    "model-version-id": "d6296806-773d-11ea-bc55-0242ac130003",
+    "resource-version": "1581418601616",
+    "orchestration-status": "active",
+    "relationship-list": {
+        "relationship": [
+            {
+                "related-to": "service-instance",
+                "relationship-label": "org.onap.relationships.inventory.ComposedOf",
+                "related-link": "/aai/v16/business/customers/customer/5GCustomer/service-subscriptions/service-subscription/5G/service-instances/service-instance/feea160e-2f2b-4d33-8dd1-de423000b9d4",
+                "relationship-data": [
+                    {
+                        "relationship-key": "customer.global-customer-id",
+                        "relationship-value": "5GCustomer"
+                    },
+                    {
+                        "relationship-key": "service-subscription.service-type",
+                        "relationship-value": "5G"
+                    },
+                    {
+                        "relationship-key": "service-instance.service-instance-id",
+                        "relationship-value": "feea160e-2f2b-4d33-8dd1-de423000b9d4"
+                    }
+                ],
+                "related-to-property": [
+                    {
+                        "property-key": "service-instance.service-instance-name",
+                        "property-value": "nsi_test_0222"
+                    }
+                ]
+            }
+        ]
+    },
+    "slice-profiles": {
+        "slice-profile": [
+            {
+                "profile-id": "b58da4ca-773f-11ea-bc55-0242ac130003",
+                "latency": 10,
+                "max-number-of-UEs": 0,
+                "coverage-area-TA-list": "[{\"province\":\"??\",\"city\":\"???\",\"county\":\"???\",\"street\":\"?????\"}]",
+                "ue-mobility-level": "stationary",
+                "resource-sharing-level": "0",
+                "exp-data-rate-UL": 100,
+                "exp-data-rate-DL": 100,
+                "activity-factor": 0,
+                "e2e-latency": 0,
+                "jitter": 0,
+                "survival-time": 0,
+                "exp-data-rate": 0,
+                "payload-size": 0,
+                "traffic-density": 0,
+                "conn-density": 0,
+                "reliability": 99.9,
+                "resource-version": "1581418602494"
+            }
+        ]
+    }
+}]}
