@@ -28,7 +28,7 @@ urls = (
   '/aai/v14/cloud-infrastructure/complexes/complex/DLLSTX233','get_complex_DLLSTX233',
   '/aai/v14/cloud-infrastructure/cloud-regions/cloud-region/HPA-cloud/cloud-region-1/flavors/', 'get_flavors_region_1',
   '/aai/v14/cloud-infrastructure/cloud-regions/cloud-region/HPA-cloud/cloud-region-2/flavors/', 'get_flavors_region_2',
-  '/aai/v14/nodes/service-instances', 'get_nssi',
+  '/aai/v14/nodes/service-instances?', 'get_nssi',
 )
 
 
@@ -141,7 +141,11 @@ class get_flavors_region_2:
 class get_nssi:
     def GET(self):
         print("------------------------------------------------------")
-        replyfile = "get_nssi_response.json"
+        inputs = web.input()
+        if inputs.get('model-invariant-id') == "21d57d4b-52ad-4d3c-a798-248b5bb9124a":
+            replyfile = "get_core_nssi_response.json"
+        else:
+            replyfile = "get_ran_nssi_response.json"
         # replyToAaiGet (web, replydir, replyfile)
         fullreply = replydir + replyfile
         trid = web.ctx.env.get('X_TRANSACTIONID', '111111')
