@@ -28,35 +28,40 @@ ENV https_proxy $HTTPS_PROXY
 ENV CON_ADDR "127.0.0.1"
 ENV CON_PORT "8091"
 EXPOSE ${CON_PORT}
+ENV APP_USER "onap"
+ENV APP_GROUP "onap"
 
+RUN addgroup -S $APP_GROUP && adduser -S -G $APP_USER $APP_GROUP
+
+# Creete the required directories
 RUN mkdir -p /etc/nginx/ssl && \
-mkdir -p /var/log/conductor && \
-mkdir -p /run/conductor && \
-mkdir -p /run/nginx
+    mkdir -p /var/log/conductor && \
+    mkdir -p /run/conductor && \
+    mkdir -p /run/nginx
 
+# Install the required libraries
 RUN apk --update add py-setuptools && \
-apk add unzip && \
-apk add curl && \
-apk add wget && \
-apk add fcgiwrap && \
-apk add bash vim && \
-apk add nginx
+    apk add unzip && \
+    apk add curl && \
+    apk add wget && \
+    apk add fcgiwrap && \
+    apk add bash vim && \
+    apk add nginx && \
+    apk add py2-pip libpq python-dev && \
+    pip install --upgrade pip && \
+    apk add --virtual build-dependencies build-base linux-headers pcre-dev libffi-dev libxslt-dev libressl-dev && \
+    pip install uwsgi
 
-RUN apk add py2-pip libpq python-dev
-RUN pip install --upgrade pip
-RUN apk add --virtual build-dependencies build-base linux-headers pcre-dev libffi-dev libxslt-dev libressl-dev
-RUN pip install uwsgi
-
-#RUN wget -O /opt/has.zip "https://nexus.onap.org/service/local/artifact/maven/redirect?r=${REPO}&g=org.onap.optf.has&a=optf-has-conductor&e=zip&v=${MVN_ARTIFACT_VERSION}" && \
-#    unzip -q -o -B /opt/has.zip -d /opt/has && \
-#    rm -f /opt/has.zip
-
+# Get, Install, cleanup and setup
 COPY onap-has-tm/optf-has-conductor-${MVN_ARTIFACT_VERSION}.zip /tmp/optf-has.zip
 RUN unzip -q -o -B /tmp/optf-has.zip -d /opt/has && rm -f /tmp/optf-has.zip
 
 #PKG-INFO file must also exists in the conductor folder (i.e. besides and inside the of_has.egg-info folder). The zip file for distro above is missing it
 RUN cp /opt/has/conductor/of_has.egg-info/PKG-INFO /opt/has/conductor
 RUN pip install -e /opt/has/conductor
-
 COPY app.wsgi /etc/nginx/conductor.wsgi
 COPY api_paste.ini /usr/local/etc/conductor/api_paste.ini
+
+# Set ownership to application user
+RUN chown $APP_USER:$APP_GROUP -R /opt/has/ /var/log/
+USER $APP_USER
