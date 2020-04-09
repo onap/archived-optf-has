@@ -545,7 +545,7 @@ class SolverService(cotyledon.Service):
                                 m_hpa_score = resource.get("hpa_score", 0)
                                 m_svc_name = p.template['parameters'].get(
                                     'service_name', 'N/A')
-                                for vnfc, flavor in resource.get("flavor_map").iteritems():
+                                for vnfc, flavor in resource.get("flavor_map").items():
                                     PC.VNF_COMPUTE_PROFILES.labels('ONAP',
                                                                    m_svc_name,
                                                                    demand_name,
