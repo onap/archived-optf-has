@@ -16,6 +16,24 @@
       "revId": "b7456dd98a8302ffda6938f3609d49cb69ab6608",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "20774c07_6a7a2ae2",
+        "filename": "conductor/docker/Dockerfile",
+        "patchSetId": 1
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1739
+      },
+      "writtenOn": "2020-04-09T14:58:21Z",
+      "side": 1,
+      "message": "I guess it is better to have /opt/has too owned by onap sure. But /var/log is the only folder where \u0027onap\u0027 user will write to. But sure - chown /opt/has as well?",
+      "parentUuid": "fe2461ad_5fc26deb",
+      "revId": "b7456dd98a8302ffda6938f3609d49cb69ab6608",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
     }
   ]
 }
