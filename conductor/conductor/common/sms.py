@@ -104,7 +104,7 @@ def load_secrets():
     config.set_override('username', secret_dict['aai']['username'], 'aai')
     config.set_override('password', secret_dict['aai']['password'], 'aai')
     config.set_override('username', secret_dict['conductor_api']['username'], 'conductor_api')
-    config.set_override('password', decrypt_pass(secret_dict['conductor_api']['password']), 'conductor_api')
+    config.set_override('password', secret_dict['conductor_api']['password'], 'conductor_api')
     config.set_override('aafuser', secret_dict['music_api']['aafuser'], 'music_api')
     config.set_override('aafpass', secret_dict['music_api']['aafpass'], 'music_api')
     config.set_override('aafns', secret_dict['music_api']['aafns'], 'music_api')
