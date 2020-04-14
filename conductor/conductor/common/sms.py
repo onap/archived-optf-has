@@ -116,7 +116,7 @@ def load_secrets():
 
 
 def decrypt_pass(passwd):
-    if passwd == '' or passwd == 'NA':
+    if not CONF.auth.appkey or passwd == '' or passwd == 'NA':
         return passwd
     else:
         return cipherUtils.AESCipher.get_instance().decrypt(passwd)
