@@ -28,7 +28,7 @@
 
     <groupId>org.onap.optf.has</groupId>
     <artifactId>optf-has-conductor</artifactId>
-    <version>2.0.1-SNAPSHOT</version>
+    <version>2.0.2-SNAPSHOT</version>
 
     <name>optf-has-conductor</name>
     <description>Homing Allocation Service/Conductor</description>
