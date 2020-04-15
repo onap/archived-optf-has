@@ -83,7 +83,7 @@ def clear_cache():
 def authenticate(uid, passwd):
     aafUser = None
     username = CONF.conductor_api.username
-    password = cipherUtils.AESCipher.get_instance().decrypt(CONF.conductor_api.password)
+    password = CONF.conductor_api.password
     if username == uid and password == passwd:
         aafUser = CONF.aaf_api.aaf_conductor_user
     else:
@@ -120,8 +120,8 @@ def has_valid_permissions(userPerms):
             userType = userPerm["type"]
             userInstance = userPerm["instance"]
             userAction = userPerm["action"]
-            if userType == permType and userInstance == permInstance and \
-                (userAction == permAction or userAction == "*"):
+            if userType == permType and (userInstance == permInstance or permInstance == "*") and \
+                (userAction == permAction or permAction == "*"):
                 # FS - trace
                 LOG.info("User has valid permissions ")
                 return True
@@ -133,7 +133,7 @@ Make the remote aaf api call if user is not in the cache.
 Return the perms
 """
 def get_aaf_permissions(aafUser):
-    key = base64.b64encode("{}".format(aafUser), "ascii")
+    key = base64.b64encode("{}".format(aafUser).encode())
     time_delta = timedelta(hours = CONF.aaf_api.aaf_cache_expiry_hrs)
 
     perms = perm_cache.get(key)
@@ -159,7 +159,7 @@ def remote_api(aafUser):
         "server_url": server_url,
         "retries": CONF.aaf_api.aaf_retries,
         "username": CONF.aaf_api.username,
-        "password": cipherUtils.AESCipher.get_instance().decrypt(CONF.aaf_api.password),
+        "password": CONF.aaf_api.password,
         "log_debug": LOG.debug,
         "read_timeout": CONF.aaf_api.aaf_timeout,
         "cert_file": CONF.aaf_api.aaf_cert_file,

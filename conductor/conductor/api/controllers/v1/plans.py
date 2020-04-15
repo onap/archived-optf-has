@@ -326,7 +326,7 @@ def check_auth():
             plan = False
             auth_str = pecan.request.headers['Authorization']
             user_pw = auth_str.split(' ')[1]
-            decode_user_pw = base64.b64decode(user_pw)
+            decode_user_pw = base64.b64decode(user_pw.encode()).decode()
             list_id_pw = decode_user_pw.split(':')
             LOG.error("Incorrect username={} / password={}".format(list_id_pw[0], list_id_pw[1]))
     except:

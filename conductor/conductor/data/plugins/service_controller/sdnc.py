@@ -67,7 +67,7 @@ class SDNC(base.ServiceControllerBase):
         self.conf = CONF
 
         self.base = self.conf.sdnc.server_url.rstrip('/')
-        self.password = cipherUtils.AESCipher.get_instance().decrypt(self.conf.sdnc.password)
+        self.password = self.conf.sdnc.password
         self.timeout = self.conf.sdnc.sdnc_rest_timeout
         self.verify = False
         self.retries = self.conf.sdnc.sdnc_retries

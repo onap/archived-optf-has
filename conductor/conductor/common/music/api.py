@@ -138,7 +138,7 @@ class MusicAPI(object):
         }
         self.rest = rest.REST(**kwargs)
 
-        music_pwd = cipherUtils.AESCipher.get_instance().decrypt(CONF.music_api.aafpass)
+        music_pwd = CONF.music_api.aafpass
         # Set one parameter for connection mode
         # Currently depend on music version
         if CONF.music_api.enable_https_mode:

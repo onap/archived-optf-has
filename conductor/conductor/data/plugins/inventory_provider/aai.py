@@ -111,7 +111,7 @@ class AAI(base.InventoryProviderBase):
         self.timeout = self.conf.aai.aai_rest_timeout
         self.retries = self.conf.aai.aai_retries
         self.username = self.conf.aai.username
-        self.password = cipherUtils.AESCipher.get_instance().decrypt(self.conf.aai.password)
+        self.password = self.conf.aai.password
         self.triage_translator=TraigeTranslator()
 
         # Cache is initially empty
