@@ -37,7 +37,8 @@ RUN addgroup -S $APP_GROUP && adduser -S -G $APP_USER $APP_GROUP
 RUN mkdir -p /etc/nginx/ssl && \
     mkdir -p /var/log/conductor && \
     mkdir -p /run/conductor && \
-    mkdir -p /run/nginx
+    mkdir -p /run/nginx && \
+    mkdir -p /var/tmp/nginx
 
 # Install the required libraries
 RUN apk --update add py-setuptools && \
@@ -63,5 +64,5 @@ COPY app.wsgi /etc/nginx/conductor.wsgi
 COPY api_paste.ini /usr/local/etc/conductor/api_paste.ini
 
 # Set ownership to application user
-RUN chown $APP_USER:$APP_GROUP -R /opt/has/ /var/log/
+RUN chown $APP_USER:$APP_GROUP -R /opt/has/ /var/log/ /var/lib/nginx /var/tmp/nginx /run/nginx /run/conductor
 USER $APP_USER
