@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dc2e320a_0c5c8374",
+        "filename": "conductor/conductor/controller/translator.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 777,
+      "author": {
+        "id": 2041
+      },
+      "writtenOn": "2020-04-22T04:27:11Z",
+      "side": 1,
+      "message": "Do we have the unit tests for this? It would be great if we can have some examples of what objective functions we could define. I\u0027m thinking minimally we should verify minimize/maximize (Sum of Products) which is representative of multi-objective optimization.",
+      "revId": "70dd1268c1fb27592f4de7bddc778e3e84f754b9",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "da59d7bc_a711c728",
+        "filename": "conductor/conductor/solver/optimizer/constraints/aggregation.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 2041
+      },
+      "writtenOn": "2020-04-22T04:27:11Z",
+      "side": 1,
+      "message": "Should we name it a bit more descriptively ? Something that depicts cross demand Attribute aggregation ?",
+      "revId": "70dd1268c1fb27592f4de7bddc778e3e84f754b9",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7cc21f19_caee4a5f",
+        "filename": "conductor/conductor/solver/optimizer/constraints/aggregation.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 2041
+      },
+      "writtenOn": "2020-04-22T04:27:11Z",
+      "side": 1,
+      "message": "If I understood this right, this assumes that the aggregation will act on ALL demands, which may not be true in all cases. For instance, if the policy is to only threshold the sum of the latency for transport and RAN, and ignore the core, this would include the core in the aggregation if the core demand is solved first right ?\n\nI\u0027m guessing the policy should specify explicitly which demands the aggregation should apply to, and only the decided candidates for those demands should be included in the aggregation.",
+      "revId": "70dd1268c1fb27592f4de7bddc778e3e84f754b9",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ecc0705f_05dbe327",
+        "filename": "conductor/conductor/solver/request/objective.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 2041
+      },
+      "writtenOn": "2020-04-22T04:27:11Z",
+      "side": 1,
+      "message": "does this cumulatively add the value for each operand in the objective function ?",
+      "revId": "70dd1268c1fb27592f4de7bddc778e3e84f754b9",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
