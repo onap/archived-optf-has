@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "4fe965d8_b3de7811",
+        "filename": "conductor/conductor/controller/translator.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 777,
+      "author": {
+        "id": 2671
+      },
+      "writtenOn": "2020-04-22T05:49:13Z",
+      "side": 1,
+      "message": "Sure Shankar. I will create a couple of test cases which includes the existing functionalities also",
+      "parentUuid": "dc2e320a_0c5c8374",
+      "revId": "70dd1268c1fb27592f4de7bddc778e3e84f754b9",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "da59d7bc_a711c728",
         "filename": "conductor/conductor/solver/optimizer/constraints/aggregation.py",
         "patchSetId": 1
@@ -30,6 +48,47 @@
       "writtenOn": "2020-04-22T04:27:11Z",
       "side": 1,
       "message": "Should we name it a bit more descriptively ? Something that depicts cross demand Attribute aggregation ?",
+      "revId": "70dd1268c1fb27592f4de7bddc778e3e84f754b9",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "911e4553_d58bb013",
+        "filename": "conductor/conductor/solver/optimizer/constraints/aggregation.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 2671
+      },
+      "writtenOn": "2020-04-22T05:49:13Z",
+      "side": 1,
+      "message": "You have any suggestions? or will CrossDemandAttributeAggregation do okay?",
+      "parentUuid": "da59d7bc_a711c728",
+      "revId": "70dd1268c1fb27592f4de7bddc778e3e84f754b9",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e187e3f3_fc1e54cb",
+        "filename": "conductor/conductor/solver/optimizer/constraints/aggregation.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 2671
+      },
+      "writtenOn": "2020-04-22T05:49:13Z",
+      "side": 1,
+      "message": "demand_list came from the constraint that we are sending to the conductor.",
+      "range": {
+        "startLine": 38,
+        "startChar": 8,
+        "endLine": 38,
+        "endChar": 39
+      },
       "revId": "70dd1268c1fb27592f4de7bddc778e3e84f754b9",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": true
@@ -53,6 +112,24 @@
     },
     {
       "key": {
+        "uuid": "84b5d007_e27abe6e",
+        "filename": "conductor/conductor/solver/optimizer/constraints/aggregation.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 2671
+      },
+      "writtenOn": "2020-04-22T05:49:13Z",
+      "side": 1,
+      "message": "I haven\u0027t really thought of that. But the policy will specify the demands explicitly. It is part of the instance variable of this class. The solver uses only the demands in that list. The scenario that you have described should also be covered. I will add some test cases for this scenario and check how it\u0027s working.",
+      "parentUuid": "7cc21f19_caee4a5f",
+      "revId": "70dd1268c1fb27592f4de7bddc778e3e84f754b9",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "ecc0705f_05dbe327",
         "filename": "conductor/conductor/solver/request/objective.py",
         "patchSetId": 1
@@ -64,6 +141,24 @@
       "writtenOn": "2020-04-22T04:27:11Z",
       "side": 1,
       "message": "does this cumulatively add the value for each operand in the objective function ?",
+      "revId": "70dd1268c1fb27592f4de7bddc778e3e84f754b9",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "aff6093b_2753ddab",
+        "filename": "conductor/conductor/solver/request/objective.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 2671
+      },
+      "writtenOn": "2020-04-22T05:49:13Z",
+      "side": 1,
+      "message": "Yes. It will self.operation will do the mathematical operation specified in self.operation. If it is sum, it will add each operand in the objective function. OPT_OPERATIONS is a dictionary that holds the methods for operations like(sum, product, min, max)",
+      "parentUuid": "ecc0705f_05dbe327",
       "revId": "70dd1268c1fb27592f4de7bddc778e3e84f754b9",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": true
