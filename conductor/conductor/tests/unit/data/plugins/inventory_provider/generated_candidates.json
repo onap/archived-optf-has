@@ -1,0 +1,302 @@
+[
+    {
+        "candidate_id": "c5bff81d-e0de-45df-9a5c-72dd8696a901",
+        "candidate_type": "nssi",
+        "cost": 1.0,
+        "inventory_provider": "generator",
+        "inventory_type": "nssi",
+        "latency": 5,
+        "reliability": 99.99,
+        "uniqueness": "true"
+    },
+    {
+        "candidate_id": "8c92180c-26e3-47c7-8df3-fcf12c248606",
+        "candidate_type": "nssi",
+        "cost": 1.0,
+        "inventory_provider": "generator",
+        "inventory_type": "nssi",
+        "latency": 5,
+        "reliability": 99.999,
+        "uniqueness": "true"
+    },
+    {
+        "candidate_id": "d13ead23-e768-4bd1-886d-e0d8de014931",
+        "candidate_type": "nssi",
+        "cost": 1.0,
+        "inventory_provider": "generator",
+        "inventory_type": "nssi",
+        "latency": 6,
+        "reliability": 99.99,
+        "uniqueness": "true"
+    },
+    {
+        "candidate_id": "47c84e0a-7f7e-41f1-bdc2-38856de96a1c",
+        "candidate_type": "nssi",
+        "cost": 1.0,
+        "inventory_provider": "generator",
+        "inventory_type": "nssi",
+        "latency": 6,
+        "reliability": 99.999,
+        "uniqueness": "true"
+    },
+    {
+        "candidate_id": "cc3dd37f-2f0f-4733-9657-b864fcc327c0",
+        "candidate_type": "nssi",
+        "cost": 1.0,
+        "inventory_provider": "generator",
+        "inventory_type": "nssi",
+        "latency": 7,
+        "reliability": 99.99,
+        "uniqueness": "true"
+    },
+    {
+        "candidate_id": "3d95ebf5-ad71-4898-b011-80943d6d67f3",
+        "candidate_type": "nssi",
+        "cost": 1.0,
+        "inventory_provider": "generator",
+        "inventory_type": "nssi",
+        "latency": 7,
+        "reliability": 99.999,
+        "uniqueness": "true"
+    },
+    {
+        "candidate_id": "fae0f131-cc17-4c80-84d1-b4ec90ea216a",
+        "candidate_type": "nssi",
+        "cost": 1.0,
+        "inventory_provider": "generator",
+        "inventory_type": "nssi",
+        "latency": 8,
+        "reliability": 99.99,
+        "uniqueness": "true"
+    },
+    {
+        "candidate_id": "aa39b3ed-8fd7-4013-ae6a-4b7b32201664",
+        "candidate_type": "nssi",
+        "cost": 1.0,
+        "inventory_provider": "generator",
+        "inventory_type": "nssi",
+        "latency": 8,
+        "reliability": 99.999,
+        "uniqueness": "true"
+    },
+    {
+        "candidate_id": "7beb2493-feb1-478f-850a-81d49fcc6e09",
+        "candidate_type": "nssi",
+        "cost": 1.0,
+        "inventory_provider": "generator",
+        "inventory_type": "nssi",
+        "latency": 9,
+        "reliability": 99.99,
+        "uniqueness": "true"
+    },
+    {
+        "candidate_id": "3bff4bee-9ba3-41be-8ed2-001b25bc2d56",
+        "candidate_type": "nssi",
+        "cost": 1.0,
+        "inventory_provider": "generator",
+        "inventory_type": "nssi",
+        "latency": 9,
+        "reliability": 99.999,
+        "uniqueness": "true"
+    },
+    {
+        "candidate_id": "350baccf-072f-4371-a7be-5b19a6dfd31b",
+        "candidate_type": "nssi",
+        "cost": 1.0,
+        "inventory_provider": "generator",
+        "inventory_type": "nssi",
+        "latency": 10,
+        "reliability": 99.99,
+        "uniqueness": "true"
+    },
+    {
+        "candidate_id": "d43f8590-a2d5-4c33-ae6f-ce8817c11878",
+        "candidate_type": "nssi",
+        "cost": 1.0,
+        "inventory_provider": "generator",
+        "inventory_type": "nssi",
+        "latency": 10,
+        "reliability": 99.999,
+        "uniqueness": "true"
+    },
+    {
+        "candidate_id": "b37943fa-bfea-4149-8254-8fd80d22bd4e",
+        "candidate_type": "nssi",
+        "cost": 1.0,
+        "inventory_provider": "generator",
+        "inventory_type": "nssi",
+        "latency": 11,
+        "reliability": 99.99,
+        "uniqueness": "true"
+    },
+    {
+        "candidate_id": "b21ce156-8b0a-4af6-a0a3-f0093000e040",
+        "candidate_type": "nssi",
+        "cost": 1.0,
+        "inventory_provider": "generator",
+        "inventory_type": "nssi",
+        "latency": 11,
+        "reliability": 99.999,
+        "uniqueness": "true"
+    },
+    {
+        "candidate_id": "1e54453a-3d40-405a-821f-b57ea33f9bb0",
+        "candidate_type": "nssi",
+        "cost": 1.0,
+        "inventory_provider": "generator",
+        "inventory_type": "nssi",
+        "latency": 12,
+        "reliability": 99.99,
+        "uniqueness": "true"
+    },
+    {
+        "candidate_id": "f26946a3-db3d-48d5-8bbd-0620f459904b",
+        "candidate_type": "nssi",
+        "cost": 1.0,
+        "inventory_provider": "generator",
+        "inventory_type": "nssi",
+        "latency": 12,
+        "reliability": 99.999,
+        "uniqueness": "true"
+    },
+    {
+        "candidate_id": "583d6ddf-fbbc-4b47-9655-c205c30a625a",
+        "candidate_type": "nssi",
+        "cost": 1.0,
+        "inventory_provider": "generator",
+        "inventory_type": "nssi",
+        "latency": 13,
+        "reliability": 99.99,
+        "uniqueness": "true"
+    },
+    {
+        "candidate_id": "a4aedbb8-b9cb-4476-a6ef-6f51e16ab352",
+        "candidate_type": "nssi",
+        "cost": 1.0,
+        "inventory_provider": "generator",
+        "inventory_type": "nssi",
+        "latency": 13,
+        "reliability": 99.999,
+        "uniqueness": "true"
+    },
+    {
+        "candidate_id": "7a48a511-4303-43be-a758-b35b1de92106",
+        "candidate_type": "nssi",
+        "cost": 1.0,
+        "inventory_provider": "generator",
+        "inventory_type": "nssi",
+        "latency": 14,
+        "reliability": 99.99,
+        "uniqueness": "true"
+    },
+    {
+        "candidate_id": "3fcf9c64-d816-4cf6-b216-926b5a9023bd",
+        "candidate_type": "nssi",
+        "cost": 1.0,
+        "inventory_provider": "generator",
+        "inventory_type": "nssi",
+        "latency": 14,
+        "reliability": 99.999,
+        "uniqueness": "true"
+    },
+    {
+        "candidate_id": "17c46498-b622-4fc5-8254-2261318347fc",
+        "candidate_type": "nssi",
+        "cost": 1.0,
+        "inventory_provider": "generator",
+        "inventory_type": "nssi",
+        "latency": 15,
+        "reliability": 99.99,
+        "uniqueness": "true"
+    },
+    {
+        "candidate_id": "8005dd52-5d6c-4f7d-b992-7f5650e1a235",
+        "candidate_type": "nssi",
+        "cost": 1.0,
+        "inventory_provider": "generator",
+        "inventory_type": "nssi",
+        "latency": 15,
+        "reliability": 99.999,
+        "uniqueness": "true"
+    },
+    {
+        "candidate_id": "203802d4-44c8-4251-9977-401880992ac0",
+        "candidate_type": "nssi",
+        "cost": 1.0,
+        "inventory_provider": "generator",
+        "inventory_type": "nssi",
+        "latency": 16,
+        "reliability": 99.99,
+        "uniqueness": "true"
+    },
+    {
+        "candidate_id": "728343ef-e41e-405e-b626-f3dcffe02e65",
+        "candidate_type": "nssi",
+        "cost": 1.0,
+        "inventory_provider": "generator",
+        "inventory_type": "nssi",
+        "latency": 16,
+        "reliability": 99.999,
+        "uniqueness": "true"
+    },
+    {
+        "candidate_id": "77ac7fea-8452-4c83-9bdc-c1f4ce5c7314",
+        "candidate_type": "nssi",
+        "cost": 1.0,
+        "inventory_provider": "generator",
+        "inventory_type": "nssi",
+        "latency": 17,
+        "reliability": 99.99,
+        "uniqueness": "true"
+    },
+    {
+        "candidate_id": "971ef4bf-fa71-4e9c-9b1b-dbfa6b28bb39",
+        "candidate_type": "nssi",
+        "cost": 1.0,
+        "inventory_provider": "generator",
+        "inventory_type": "nssi",
+        "latency": 17,
+        "reliability": 99.999,
+        "uniqueness": "true"
+    },
+    {
+        "candidate_id": "9925d2b3-24a8-40e6-844d-f7d7b4cb5437",
+        "candidate_type": "nssi",
+        "cost": 1.0,
+        "inventory_provider": "generator",
+        "inventory_type": "nssi",
+        "latency": 18,
+        "reliability": 99.99,
+        "uniqueness": "true"
+    },
+    {
+        "candidate_id": "b862a417-6e59-4946-995e-b562420199f0",
+        "candidate_type": "nssi",
+        "cost": 1.0,
+        "inventory_provider": "generator",
+        "inventory_type": "nssi",
+        "latency": 18,
+        "reliability": 99.999,
+        "uniqueness": "true"
+    },
+    {
+        "candidate_id": "719b0a26-7a6e-4fab-9547-f4194620ed4a",
+        "candidate_type": "nssi",
+        "cost": 1.0,
+        "inventory_provider": "generator",
+        "inventory_type": "nssi",
+        "latency": 19,
+        "reliability": 99.99,
+        "uniqueness": "true"
+    },
+    {
+        "candidate_id": "0f00caf7-a985-4256-b160-5d98894dae1b",
+        "candidate_type": "nssi",
+        "cost": 1.0,
+        "inventory_provider": "generator",
+        "inventory_type": "nssi",
+        "latency": 19,
+        "reliability": 99.999,
+        "uniqueness": "true"
+    }
+]
