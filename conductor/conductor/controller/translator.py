@@ -70,8 +70,7 @@ CONSTRAINTS = {
     },
     'threshold': {
         'split': True,
-        'required': ['attribute', 'threshold', 'operator'],
-        'optional': ['unit']
+        'required': ['evaluate'],
     },
     'distance_between_demands': {
         'required': ['distance'],

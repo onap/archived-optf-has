@@ -24,6 +24,14 @@ from oslo_log import log
 LOG = log.getLogger(__name__)
 
 
+OPERATIONS = {'gte': lambda x, y: x >= y,
+              'lte': lambda x, y: x <= y,
+              'gt': lambda x, y: x > y,
+              'lt': lambda x, y: x < y,
+              'eq': lambda x, y: x == y
+              }
+
+
 def compute_air_distance(_src, _dst):
     """Compute Air Distance
 
