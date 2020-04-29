@@ -118,6 +118,8 @@ class MusicAPI(object):
 
         LOG.info(_LI("Initializing Music API"))
         server_url = CONF.music_api.server_url.rstrip('/')
+        if server_url and server_url.startswith('https'):
+            CONF.music_api.enable_https_mode = True
         if not server_url:
             # host/port/path are deprecated and should not be used anymore.
             # Defaults removed from oslo_config to give more incentive.
@@ -142,8 +144,6 @@ class MusicAPI(object):
         # Set one parameter for connection mode
         # Currently depend on music version
         if CONF.music_api.enable_https_mode:
-            self.rest.server_url = 'https://{}:{}/{}'.format(
-                host, port, version, path.rstrip('/').lstrip('/'))
             self.rest.session.verify = CONF.music_api.certificate_authority_bundle_file
 
         if CONF.music_api.music_new_version:
