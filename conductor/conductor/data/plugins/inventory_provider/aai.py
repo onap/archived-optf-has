@@ -1880,9 +1880,9 @@ class AAI(base.InventoryProviderBase):
 
                 elif inventory_type == 'nssi':
                     if filtering_attributes and model_invariant_id:
-                        resolved_demands[name] = self.get_nssi_candidates(filtering_attributes,
-                                                                          model_invariant_id, model_version_id,
-                                                                          service_role, candidate_uniqueness)
+                        resolved_demands[name].append(self.get_nssi_candidates(filtering_attributes,
+                                                                               model_invariant_id, model_version_id,
+                                                                               service_role, candidate_uniqueness))
 
                 else:
                     LOG.error("Unknown inventory_type "
@@ -1977,7 +1977,6 @@ class AAI(base.InventoryProviderBase):
             nssi_instances = response_body.get("service-instance", [])
 
             for nssi_instance in nssi_instances:
-
                 inventory_attributes = dict()
                 inventory_attributes["orchestration-status"] = nssi_instance.get('orchestration-status')
                 inventory_attributes["service-role"] = nssi_instance.get('service-role')
@@ -1985,17 +1984,9 @@ class AAI(base.InventoryProviderBase):
                 if self.match_inventory_attributes(filtering_attributes, inventory_attributes,
                                                    nssi_instance.get('service-instance-id')):
 
-                    properties = list()
-                    relationships = nssi_instance['relationship-list']['relationship']
-                    for relationship in relationships:
-                        if relationship['related-to'] == 'service-instance':
-                            properties = relationship['related-to-property']
+                    nsi_link = self._get_aai_rel_link(response_body, 'service-instance')
 
-                    nsi_name = None
-                    if properties:
-                        for prop in properties:
-                            if prop['property-key'] == 'service-instance.service-instance-name':
-                                nsi_name = prop['property-value']
+                    nsi_info = self.get_nsi_info(nsi_link)
 
                     slice_profiles = nssi_instance.get('slice-profiles').get('slice-profile')
                     slice_profile = min(slice_profiles, key=lambda x: x['latency'])
@@ -2029,8 +2020,25 @@ class AAI(base.InventoryProviderBase):
                     candidate['service_area_dimension'] = slice_profile.get('service-area-dimension')
                     candidate['cs_availability'] = slice_profile.get('cs-availability')
                     candidate['uniqueness'] = candidate_uniqueness
-                    if nsi_name:
-                        candidate['nsi_name'] = nsi_name
+                    if nsi_info:
+                        candidate['nsi_name'] = nsi_info.get('instance_name')
+                        candidate['nsi_id'] = nsi_info.get('instance_id')
+                        candidate['nsi_model_version_id'] = nsi_info.get('model_version_id')
+                        candidate['nsi_model_invariant_id'] = nsi_info.get('model_invariant_id')
                     candidates.append(candidate)
 
         return candidates
+
+    def get_nsi_info(self, nsi_link):
+        nsi_info = dict()
+        if nsi_link:
+            nsi_link_path = self._get_aai_path_from_link(nsi_link)
+            nsi_response = self._request('get', nsi_link_path, data=None)
+            if nsi_response and nsi_response.status_code == 200:
+                nsi_response_body = nsi_response.json()
+                nsi_info['instance_id'] = nsi_response_body.get('service-instance-id')
+                nsi_info['instance_name'] = nsi_response_body.get('service-instance-name')
+                nsi_info['model_version_id'] = nsi_response_body.get('model-version-id')
+                nsi_info['model_invariant_id'] = nsi_response_body.get('model-invariant-id')
+
+        return nsi_info

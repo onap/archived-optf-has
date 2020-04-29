@@ -27,6 +27,9 @@
       "reliability":null,
       "cost":1.0,
       "nsi_name": "nsi_test_0211",
+      "nsi_id": "4115d3c8-dd59-45d6-b09d-e756dee9b518",
+      "nsi_model_version_id": "8b664b11-6646-4776-9f59-5c3de46da2d6",
+      "nsi_model_invariant_id": "39b10fe6-efcc-40bc-8184-c38414b80771", 
       "instance_name": "nssi_test_0211",
       "uniqueness": "true"
    }
