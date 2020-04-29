@@ -1880,7 +1880,7 @@ class AAI(base.InventoryProviderBase):
 
                 elif inventory_type == 'nssi':
                     if filtering_attributes and model_invariant_id:
-                        resolved_demands[name].append(self.get_nssi_candidates(filtering_attributes,
+                        resolved_demands[name].extend(self.get_nssi_candidates(filtering_attributes,
                                                                                model_invariant_id, model_version_id,
                                                                                service_role, candidate_uniqueness))
 
@@ -1984,7 +1984,7 @@ class AAI(base.InventoryProviderBase):
                 if self.match_inventory_attributes(filtering_attributes, inventory_attributes,
                                                    nssi_instance.get('service-instance-id')):
 
-                    nsi_link = self._get_aai_rel_link(response_body, 'service-instance')
+                    nsi_link = self._get_aai_rel_link(nssi_instance, 'service-instance')
 
                     nsi_info = self.get_nsi_info(nsi_link)
 
@@ -2033,7 +2033,8 @@ class AAI(base.InventoryProviderBase):
         nsi_info = dict()
         if nsi_link:
             nsi_link_path = self._get_aai_path_from_link(nsi_link)
-            nsi_response = self._request('get', nsi_link_path, data=None)
+            path = self._aai_versioned_path(nsi_link_path)
+            nsi_response = self._request('get', path, data=None)
             if nsi_response and nsi_response.status_code == 200:
                 nsi_response_body = nsi_response.json()
                 nsi_info['instance_id'] = nsi_response_body.get('service-instance-id')
