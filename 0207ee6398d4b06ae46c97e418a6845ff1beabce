@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8f1c1d58_83a679e1",
+        "filename": "conductor/conductor/common/music/api.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 121,
+      "author": {
+        "id": 2923
+      },
+      "writtenOn": "2020-04-29T19:02:43Z",
+      "side": 1,
+      "message": "can\u0027t this be rewritten to \n\nif server_url and server_url.startswith(\u0027https\u0027)",
+      "revId": "0207ee6398d4b06ae46c97e418a6845ff1beabce",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
