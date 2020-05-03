@@ -1,0 +1,22 @@
+{
+  "plan_info": {
+    "plan_name": "plan_abc",
+    "plan_id": "plan_id_abc"
+  },
+  "demands": {
+    "NST": [{
+      "inventory_type": "NST",
+      "inventory_provider": "file_system",
+      "filtering_attributes": {},
+      "provider": "aai",
+      "service_type": "",
+      "service_resource_id": ""
+    }]
+  },
+  "triage_translator_data": {
+    "plan_name": "plan_triage_abc",
+    "plan_id": "plan_triage_id_abc",
+    "translator_triage": [],
+    "dropped_candidates": []
+  }
+}
