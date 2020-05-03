@@ -22,7 +22,7 @@ import conductor.opts as OPTS
 
 class TestOPTS(unittest.TestCase):
     def setUp(self):
-        self.listSize = 19
+        self.listSize = 21
 
     def test_list_lenth(self):
         self.assertEqual(self.listSize, len(OPTS.list_opts()))
