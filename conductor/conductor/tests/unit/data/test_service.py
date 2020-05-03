@@ -28,6 +28,7 @@ import yaml
 from conductor.common.utils import conductor_logging_util as log_util
 from conductor.data.plugins.inventory_provider import extensions as ip_ext
 from conductor.data.plugins.service_controller import extensions as sc_ext
+from conductor.data.plugins.file_system import extensions as fs_ext
 from conductor.data.plugins.vim_controller import extensions as vc_ext
 from conductor.data.service import DataEndpoint
 from oslo_config import cfg
@@ -42,10 +43,13 @@ class TestDataEndpoint(unittest.TestCase):
             vc_ext.Manager(cfg.CONF, 'conductor.vim_controller.plugin'))
         sc_ext_manager = (
             sc_ext.Manager(cfg.CONF, 'conductor.service_controller.plugin'))
+        fs_ext_manager = (
+            fs_ext.Manager(cfg.CONF, 'conductor.file_system.plugin'))
 
         self.data_ep = DataEndpoint(ip_ext_manager,
                                     vc_ext_manager,
-                                    sc_ext_manager)
+                                    sc_ext_manager,
+                                    fs_ext_manager)
 
     def tearDown(self):
         pass
@@ -231,6 +235,24 @@ class TestDataEndpoint(unittest.TestCase):
               'trans': { 'plan_id': 'plan_abc', 'plan_name': 'plan_name', 'translator_triage': [ [] ] } } }
         self.assertEqual(expected_response,
                          self.data_ep.resolve_demands(ctxt, req_json))
+
+        ctxt = {
+            'plan_name': 'plan_abc',
+            'plan_id': 'plan_id_abc',
+            'keyspace': cfg.CONF.keyspace
+
+        }
+        result_json_file = './conductor/tests/unit/data/result_NST.json'
+        request_json_file = './conductor/tests/unit/data/demands_NST.json'
+        req_json = yaml.safe_load(open(request_json_file).read())
+        res_json = yaml.safe_load(open(result_json_file).read())
+        ext_mock.return_value=[]
+        ext_mock.return_value.append(res_json['response']['resolved_demands'])
+
+        self.assertEqual(res_json,
+                         self.data_ep.resolve_demands(ctxt, req_json))
+
+
 
     @mock.patch.object(service.LOG, 'error')
     @mock.patch.object(service.LOG, 'debug')

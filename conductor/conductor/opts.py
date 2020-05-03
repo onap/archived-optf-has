@@ -29,11 +29,13 @@ import conductor.common.sms
 import conductor.conf.inventory_provider
 import conductor.conf.service_controller
 import conductor.conf.vim_controller
+import conductor.conf.file_system
 import conductor.controller.service
 import conductor.controller.translator_svc
 import conductor.data.plugins.inventory_provider.aai
 import conductor.data.plugins.service_controller.sdnc
 import conductor.data.plugins.vim_controller.multicloud
+import conductor.data.plugins.file_system.filereader
 import conductor.reservation.service
 import conductor.service
 import conductor.solver.service
@@ -65,6 +67,10 @@ def list_opts():
             conductor.conf.vim_controller.VIM_CONTROLLER_EXT_MANAGER_OPTS)),
         ('multicloud',
          conductor.data.plugins.vim_controller.multicloud.MULTICLOUD_OPTS),
+        ('file_system', itertools.chain(
+            conductor.conf.file_system.FILE_SYSTEM_EXT_MANAGER_OPTS)),
+        ('filereader',
+         conductor.data.plugins.file_system.filereader.FILEREADER_OPTS),
         ('service_controller', itertools.chain(
             conductor.conf.service_controller.
             SVC_CONTROLLER_EXT_MANAGER_OPTS)),
