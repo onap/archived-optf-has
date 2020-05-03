@@ -572,8 +572,11 @@ class SolverService(cotyledon.Service):
                         # LOG.debug(msg.format(_best_path.total_value))
                         # msg = "--- total cost of decision = {}"
                         # LOG.debug(msg.format(_best_path.total_cost))
-                        current_rec[demand_name] = rec
-
+                        if rec["candidate"]["inventory_type"] == "NST":
+                            new_rec = resource
+                            current_rec[demand_name] = new_rec
+                        else:
+                            current_rec[demand_name] = rec
                     recommendations.append(current_rec)
 
                 # Update the plan with the solution
