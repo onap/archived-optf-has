@@ -3,11 +3,7 @@
     'trans': {
       'plan_name': 'plan_triage_abc',
       'translator_triage': [
-        [{
-          'name': 'NST',
-          'translation_dropped': [],
-          'latency_dropped': []
-        }]
+        []
       ],
       'plan_id': 'plan_triage_id_abc'
     },
