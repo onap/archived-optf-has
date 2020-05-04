@@ -246,24 +246,8 @@ class TestDataEndpoint(unittest.TestCase):
         request_json_file = './conductor/tests/unit/data/demands_NST.json'
         req_json = yaml.safe_load(open(request_json_file).read())
         res_json = yaml.safe_load(open(result_json_file).read())
-		ext_mock.return_value = [{'NST': [{'name': 'EmbbNst', 'id': 'EmbbNst_1', 'expDataRateUL': 1000,
-                                           'coverageAreaTAList': 'Beijing;Beijing;HaidanDistrict;WanshouluStreet',
-                                           'uplink': 5, 'cost': 2, 'uniqueness': 'true', 'plmnIdList': '39-00',
-                                           'modeluuid': 'fe6c82b9-4e53-4322-a671-e2d8637bfbb7', 'activityFactor': '0',
-                                           'skip_post_instantiation_configuration': 'true',
-                                           'controller_actor': 'SO-REF-DATA', 'downlink': 8,
-                                           'maxNumberofUEs': 10000, 'inventory_provider': 'file_system',
-                                           'areaTrafficCapUL': 100, 'areas': ' area1|area2', 'uEMobilityLevel': 'stationary',
-                                           'sNSSAI': '01-3226E7D1', 'modelinvariantuuid': '7d7df980-cb81-45f8-bad9-4e5ad2876393',
-                                           'sST': 'embb', 'resourceSharingLevel': 'shared', 'areaTrafficCapDL': 10, 'reliability': 95,
-                                           'expDataRateDL': 10, 'candidate_id': 'EmbbNst', 'inventory_type': 'NST', 'latency': 20},
-                                          {'name': 'EmbbNST_2', 'id': 'EmbbNST_2_id', 'expDataRateUL': 30, 'maxNumberofUEs': 300,
-                                           'uplink': 7, 'cost': 2, 'uniqueness': 'true', 'inventory_provider': 'file_system', 'candidate_id': 'EmbbNST_2',
-                                           'skip_post_instantiation_configuration': 'true', 'controller_actor': 'SO-REF-DATA', 'downlink': 1,
-                                           'latency': 3, 'areaTrafficCapUL': 100, 'areas': ' area1|area2', 'uEMobilityLevel': 'stationary',
-                                           'modelinvariantuuid': '087f11b4-aca0-4341-8104-e5bb2b73285g', 'resourceSharingLevel': 'shared',
-                                           'areaTrafficCapDL': 100, 'expDataRateDL': 10, 'modeluuid': '7981375e-5e0a-4bf5-93fa-f3e3c02f2b15',
-                                           'inventory_type': 'NST'}]}]
+        ext_mock.return_value=[]
+        ext_mock.return_value.append(res_json['response']['resolved_demands'])
 
         self.assertEqual(res_json,
                          self.data_ep.resolve_demands(ctxt, req_json))
