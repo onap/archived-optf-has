@@ -236,6 +236,21 @@ class TestDataEndpoint(unittest.TestCase):
         self.assertEqual(expected_response,
                          self.data_ep.resolve_demands(ctxt, req_json))
 
+        ctxt = {
+            'plan_name': 'plan_abc',
+            'plan_id': 'plan_id_abc',
+            'keyspace': cfg.CONF.keyspace
+
+        }
+        result_json_file = './conductor/tests/unit/data/result_NST.json'
+        request_json_file = './conductor/tests/unit/data/demands_NST.json'
+        req_json = yaml.safe_load(open(request_json_file).read())
+        res_json = yaml.safe_load(open(result_json_file).read())
+        self.assertEqual(res_json,
+                         self.data_ep.resolve_demands(ctxt, req_json))
+
+
+
     @mock.patch.object(service.LOG, 'error')
     @mock.patch.object(service.LOG, 'debug')
     @mock.patch.object(service.LOG, 'info')
