@@ -4,7 +4,6 @@
 Homing Specification Guide
 ==========================
 
-*Updated: 10 October 2017*
 
 This document describes the Homing Template format, used by the Homing
 service. It is a work in progress and subject to frequent revision.
