@@ -1,5 +1,6 @@
 .. This work is licensed under a Creative Commons Attribution 4.0 International License.
 .. Copyright (C) 2017-2018 AT&T Intellectual Property. All rights reserved.
+.. Copyright (C) 2020 Wipro Limited. All rights reserved.
 
 Homing Specification Guide
 ==========================
@@ -159,7 +160,8 @@ Placemark
 An address expressed in geographic region-agnostic terms (referred to as
 a *placemark*).
 
-*Support for this schema is deferred.*
+*This is an example as of Frankfurt release. Support for this schema is
+ deferred to subsequent release.*
 
 +-----------------------------------+----------------------------------+
 | Key                               | Value                            |
@@ -189,10 +191,9 @@ a *placemark*).
 |                                   | information for the placemark.   |
 +-----------------------------------+----------------------------------+
 
-**Questions**
-
--  What geocoder can we use to convert placemarks to a
-   latitude/longitude?
+**Note:**
+-  A geocoder could be used to convert placemarks to a
+   latitude/longitude
 
 Examples
 ~~~~~~~~
@@ -237,63 +238,70 @@ Demand criteria is dependent upon the inventory provider in use.
 
 **Provider-agnostic Schema**
 
-+---------------------------------+------------------------------------+
-| Key                             | Value                              |
-+=================================+====================================+
-| ``inventory_provider``          | A HAS-supported inventory          |
-|                                 | provider.                          |
-+---------------------------------+------------------------------------+
-| ``inventory_type``              | The reserved word ``cloud`` (for   |
-|                                 | cloud regions) or the reserved     |
-|                                 | word ``service`` (for existing     |
-|                                 | service instances). Exactly one    |
-|                                 | inventory type may be specified.   |
-+---------------------------------+------------------------------------+
-| ``attributes`` (Optional)       | A list of key-value pairs, that is |
-|                                 | used to select inventory           |
-|                                 | candidates that match *all* the    |
-|                                 | specified attributes. The key      |
-|                                 | should be a uniquely identifiable  |
-|                                 | attribute at the inventory         |
-|                                 | provider.                          |
-+---------------------------------+------------------------------------+
-| ``service_type`` (Optional)     | If ``inventory_type`` is           |
-|                                 | ``service``, a list of one or more |
-|                                 | provider-defined service types. If |
-|                                 | only one service type is           |
-|                                 | specified, it may appear without   |
-|                                 | list markers (``[]``).             |
-+---------------------------------+------------------------------------+
-| ``service_id`` (Optional)       | If ``inventory_type`` is           |
-|                                 | ``service``, a list of one or more |
-|                                 | provider-defined service ids. If   |
-|                                 | only one service id is specified,  |
-|                                 | it may appear without list markers |
-|                                 | (``[]``).                          |
-+---------------------------------+------------------------------------+
-| ``default_cost`` (Optional)     | The default cost of an inventory   |
-|                                 | candidate, expressed as currency.  |
-|                                 | This must be specified if the      |
-|                                 | inventory provider may not always  |
-|                                 | return a cost.                     |
-+---------------------------------+------------------------------------+
-| ``required_candidates``         | A list of one or more candidates   |
-| (Optional)                      | from which a solution will be      |
-|                                 | explored. Must be a valid          |
-|                                 | candidate as described in the      |
-|                                 | **candidate schema**.              |
-+---------------------------------+------------------------------------+
-| ``excluded_candidates``         | A list of one or more candidates   |
-| (Optional)                      | that should be excluded from the   |
-|                                 | search space. Must be a valid      |
-|                                 | candidate as described in the      |
-|                                 | **candidate schema**.              |
-+---------------------------------+------------------------------------+
-| ``existing_placement``          | The current placement for the      |
-| (Optional)                      | demand. Must be a valid candidate  |
-|                                 | as described in the **candidate    |
-|                                 | schema**.                          |
-+---------------------------------+------------------------------------+
++-----------------------------+------------------------------------+
+| Key                         | Value                              |
++=============================+====================================+
+| ``inventory_provider``      | A HAS-supported inventory          |
+|                             | provider.                          |
++-----------------------------+------------------------------------+
+| ``inventory_type``          | The reserved words ``cloud``       |
+|                             | (cloud regions), ``service`` (for  |
+|                             | existing service instances),       |
+|                             | ``vfmodule`` (for vf instances),   |
+|                             | ``nssi`` (for slice subnet         |
+|                             | instances). Exactly one inventory  |
+|                             | type may be specified.             |
++-----------------------------+------------------------------------+
+| ``attributes`` (Optional)   | A list of key-value pairs, that is |
+|                             | used to select inventory           |
+|                             | candidates that match *all* the    |
+|                             | specified attributes. The key      |
+|                             | should be a uniquely identifiable  |
+|                             | attribute at the inventory         |
+|                             | provider.                          |
++-----------------------------+------------------------------------+
+| ``service_type`` (Optional) | If ``inventory_type`` is           |
+|                             | ``service``, a list of one or more |
+|                             | provider-defined service types. If |
+|                             | only one service type is           |
+|                             | specified, it may appear without   |
+|                             | list markers (``[]``).             |
++-----------------------------+------------------------------------+
+| ``service_id`` (Optional)   | If ``inventory_type`` is           |
+|                             | ``service``, a list of one or more |
+|                             | provider-defined service ids. If   |
+|                             | only one service id is specified,  |
+|                             | it may appear without list markers |
+|                             | (``[]``).                          |
++-----------------------------+------------------------------------+
+| ``default_cost`` (Optional) | The default cost of an inventory   |
+|                             | candidate, expressed as currency.  |
+|                             | This must be specified if the      |
+|                             | inventory provider may not always  |
+|                             | return a cost.                     |
++-----------------------------+------------------------------------+
+| ``required_candidates``     | A list of one or more candidates   |
+| (Optional)                  | from which a solution will be      |
+|                             | explored. Must be a valid          |
+|                             | candidate as described in the      |
+|                             | **candidate schema**.              |
++-----------------------------+------------------------------------+
+| ``excluded_candidates``     | A list of one or more candidates   |
+| (Optional)                  | that should be excluded from the   |
+|                             | search space. Must be a valid      |
+|                             | candidate as described in the      |
+|                             | **candidate schema**.              |
++-----------------------------+------------------------------------+
+| ``existing_placement``      | The current placement for the      |
+| (Optional)                  | demand. Must be a valid candidate  |
+|                             | as described in the **candidate    |
+|                             | schema**.                          |
++-----------------------------+------------------------------------+
+
+**Note**
+
+- The demand attributes in the template come from either policy or from
+  a northbound request scope.
 
 .. _examples-1:
 
@@ -306,73 +314,80 @@ for ONAP.
 
 **Inventory Provider Criteria**
 
-+---------------------------------+------------------------------------+
-| Key                             | Value                              |
-+=================================+====================================+
-| ``inventory_provider``          | Examples: ``aai``, ``multicloud``. |
-+---------------------------------+------------------------------------+
-| ``inventory_type``              | The reserved word ``cloud`` (for   |
-|                                 | new inventory) or the reserved     |
-|                                 | word ``service`` (for existing     |
-|                                 | inventory). Exactly one inventory  |
-|                                 | type may be specified.             |
-+---------------------------------+------------------------------------+
-| ``attributes`` (Optional)       | A list of key-value pairs to match |
-|                                 | against inventory when drawing     |
-|                                 | candidates.                        |
-+---------------------------------+------------------------------------+
-| ``service_type`` (Optional)     | Examples may include ``vG``,       |
-|                                 | ``vG_MuxInfra``, etc.              |
-+---------------------------------+------------------------------------+
-| ``service_id`` (Optional)       | Must be a valid service id.        |
-|                                 | Examples may include ``vCPE``,     |
-|                                 | ``VoLTE``, etc.                    |
-+---------------------------------+------------------------------------+
-| ``default_cost`` (Optional)     | The default cost of an inventory   |
-|                                 | candidate, expressed as a unitless |
-|                                 | number.                            |
-+---------------------------------+------------------------------------+
-| ``required_candidates``         | A list of one or more valid        |
-| (Optional)                      | candidates. See **Candidate        |
-|                                 | Schema** for details.              |
-+---------------------------------+------------------------------------+
-| ``excluded_candidates``         | A list of one or more valid        |
-| (Optional)                      | candidates. See **Candidate        |
-|                                 | Schema** for details.              |
-+---------------------------------+------------------------------------+
-| ``existing_placement``          | A single valid candidate,          |
-| (Optional)                      | representing the current placement |
-|                                 | for the demand. See **candidate    |
-|                                 | schema** for details.              |
-+---------------------------------+------------------------------------+
++-----------------------------+------------------------------------+
+| Key                         | Value                              |
++=============================+====================================+
+| ``inventory_provider``      | Examples: ``aai``, ``multicloud``. |
++-----------------------------+------------------------------------+
+| ``inventory_type``          | The reserved words ``cloud``       |
+|                             | (cloud regions), ``service`` (for  |
+|                             | existing service instances),       |
+|                             | ``vfmodule`` (for vf instances),   |
+|                             | ``nssi`` (for slice subnet         |
+|                             | instances). Exactly one inventory  |
+|                             | type may be specified.             |
++-----------------------------+------------------------------------+
+| ``attributes`` (Optional)   | A list of key-value pairs to match |
+|                             | against inventory when drawing     |
+|                             | candidates.                        |
++-----------------------------+------------------------------------+
+| ``service_type`` (Optional) | Examples may include ``vG``,       |
+|                             | ``vG_MuxInfra``, etc.              |
++-----------------------------+------------------------------------+
+| ``service_id`` (Optional)   | Must be a valid service id.        |
+|                             | Examples may include ``vCPE``,     |
+|                             | ``VoLTE``, etc.                    |
++-----------------------------+------------------------------------+
+| ``default_cost`` (Optional) | The default cost of an inventory   |
+|                             | candidate, expressed as a unitless |
+|                             | number.                            |
++-----------------------------+------------------------------------+
+| ``required_candidates``     | A list of one or more valid        |
+| (Optional)                  | candidates. See **Candidate        |
+|                             | Schema** for details.              |
++-----------------------------+------------------------------------+
+| ``excluded_candidates``     | A list of one or more valid        |
+| (Optional)                  | candidates. See **Candidate        |
+|                             | Schema** for details.              |
++-----------------------------+------------------------------------+
+| ``existing_placement``      | A single valid candidate,          |
+| (Optional)                  | representing the current placement |
+|                             | for the demand. See **candidate    |
+|                             | schema** for details.              |
++-----------------------------+------------------------------------+
 
 **Candidate Schema**
 
-The following is the schema for a valid ``candidate``: \*
-``candidate_id`` uniquely identifies a candidate. Currently, it is
-either a Service Instance ID or Cloud Region ID. \* ``candidate_type``
-identifies the type of the candidate. Currently, it is either ``cloud``
-or ``service``. \* ``inventory_type`` is defined as described in
-**Inventory Provider Criteria** (above). \* ``inventory_provider``
-identifies the inventory from which the candidate was drawn. \*
-``host_id`` is an ID of a specific host (used only when referring to
-service/existing inventory). \* ``cost`` is expressed as a unitless
-number. \* ``location_id`` is always a location ID of the specified
-location type (e.g., for a type of ``cloud`` this will be an Cloud
-Region ID). \* ``location_type`` is an inventory provider supported
-location type. \* ``latitude`` is a valid latitude corresponding to the
-*location_id*. \* ``longitude`` is a valid longitude corresponding to
-the *location_id*. \* ``city`` (Optional) city corresponding to the
-*location_id*. \* ``state`` (Optional) state corresponding to the
-*location_id*. \* ``country`` (Optional) country corresponding to the
-*location_id*. \* ``region`` (Optional) geographic region corresponding
-to the *location_id*. \* ``complex_name`` (Optional) Name of the complex
-corresponding to the *location_id*. \* ``cloud_owner`` (Optional) refers
-to the *cloud owner* (e.g., ``azure``, ``aws``, ``att``, etc.). \*
-``cloud_region_version`` (Optional) is an inventory provider supported
-version of the cloud region. \* ``physical_location_id`` (Optional) is
-an inventory provider supported CLLI code corresponding to the cloud
-region.
+The following is the schema for a valid ``candidate``:
+
+- ``candidate_id`` uniquely identifies a candidate. Currently, it is
+  either a Service Instance ID or Cloud Region ID.
+- ``candidate_type`` identifies the type of the candidate. Currently, it
+  is either ``cloud`` or ``service``. \* ``inventory_type`` is defined
+  as described in **Inventory Provider Criteria** (above).
+- ``inventory_provider`` identifies the inventory from which the
+  candidate was drawn. \*
+- ``host_id`` is an ID of a specific host (used only when referring to
+  service/existing inventory).
+- ``cost`` is expressed as a unitless number.
+- ``location_id`` is always a location ID of the specified location type
+  (e.g., for a type of ``cloud`` this will be an Cloud Region ID).
+- ``location_type`` is an inventory provider supported location type.
+- ``latitude`` is a valid latitude corresponding to the *location_id*.
+- ``longitude`` is a valid longitude corresponding to the *location_id*.
+- ``city`` (Optional) city corresponding to the *location_id*.
+- ``state`` (Optional) state corresponding to the *location_id*.
+- ``country`` (Optional) country corresponding to the *location_id*.
+- ``region`` (Optional) geographic region corresponding to the
+  *location_id*.
+- ``complex_name`` (Optional) Name of the complex corresponding to the
+  *location_id*.
+- ``cloud_owner`` (Optional) refers to the *cloud owner*
+  (e.g., ``azure``, ``aws``, ``att``, etc.).
+- ``cloud_region_version`` (Optional) is an inventory provider supported
+  version of the cloud region.
+- ``physical_location_id`` (Optional) is an inventory provider supported
+  CLLI code corresponding to the cloud region.
 
 **Examples**
 
@@ -620,9 +635,122 @@ region.
         }
     }
 
-**Questions** \* Currently, candidates are either service instances or
-cloud regions. As new services are on-boarded, this can be evolved to
-represent different types of resources.
+**vfmodule candidate**
+
+.. code-block:: json
+
+    {
+        "candidate_id": "d187d743-5932-4fb9-a42d-db0a5be5ba7e",
+        "city": "example-city-val-27150",
+        "cloud_owner": "CloudOwner",
+        "cloud_region_version": "1",
+        "complex_name": "clli1",
+        "cost": 1.0,
+        "country": "example-country-val-94173",
+        "existing_placement": "false",
+        "host_id": "vFW-PKG-MC",
+        "inventory_provider": "aai",
+        "inventory_type": "vfmodule",
+        "ipv4-oam-address": "oam_network_zb4J",
+        "ipv6-oam-address": "",
+        "latitude": "example-latitude-val-89101",
+        "location_id": "RegionOne",
+        "location_type": "att_aic",
+        "longitude": "32.89948",
+        "nf-id": "fcbff633-47cc-4f38-a98d-4ba8285bd8b6",
+        "nf-name": "vFW-PKG-MC",
+        "nf-type": "vnf",
+        "passthrough_attributes": {
+            "td-role": "anchor"
+        },
+        "physical_location_id": "clli1",
+        "port_key": "vlan_port",
+        "region": "example-region-val-13893",
+        "service_instance_id": "3e8d118c-10ca-4b4b-b3db-089b5e9e6a1c",
+        "service_resource_id": "vPGN-XX",
+        "sriov_automation": "false",
+        "state": "example-state-val-59487",
+        "uniqueness": "false",
+        "vf-module-id": "d187d743-5932-4fb9-a42d-db0a5be5ba7e",
+        "vf-module-name": "vnf-pkg-r1-t2-mc",
+        "vim-id": "CloudOwner_RegionOne",
+        "vlan_key": "vlan_key",
+        "vnf-type": "5G_EVE_Demo/5G_EVE_PKG 0",
+        "vservers": [
+            {
+                "l-interfaces": [
+                    {
+                        "interface-id": "4b333af1-90d6-42ae-8389-d440e6ff0e93",
+                        "interface-name": "vnf-pkg-r1-t2-mc-vpg_private_2_port-mf7lu55usq7i",
+                        "ipv4-addresses": [
+                            "10.100.100.2"
+                        ],
+                        "ipv6-addresses": [],
+                        "macaddr": "fa:16:3e:c4:07:7f",
+                        "network-id": "59763a33-3296-4dc8-9ee6-2bdcd63322fc",
+                        "network-name": ""
+                    },
+                    {
+                        "interface-id": "85dd57e9-6e3a-48d0-a784-4598d627e798",
+                        "interface-name": "vnf-pkg-r1-t2-mc-vpg_private_1_port-734xxixicw6r",
+                        "ipv4-addresses": [
+                            "10.0.110.2"
+                        ],
+                        "ipv6-addresses": [],
+                        "macaddr": "fa:16:3e:b5:86:38",
+                        "network-id": "cdb4bc25-2412-4b77-bbd5-791a02f8776d",
+                        "network-name": ""
+                    },
+                    {
+                        "interface-id": "edaff25a-878e-4706-ad52-4e3d51cf6a82",
+                        "interface-name": "vnf-pkg-r1-t2-mc-vpg_private_0_port-e5qdm3p5ijhe",
+                        "ipv4-addresses": [
+                            "192.168.10.200"
+                        ],
+                        "ipv6-addresses": [],
+                        "macaddr": "fa:16:3e:ff:d8:6f",
+                        "network-id": "932ac514-639a-45b2-b1a3-4c5bb708b5c1",
+                        "network-name": ""
+                    }
+                ],
+                "vserver-id": "00bddefc-126e-4e4f-a18d-99b94d8d9a30",
+                "vserver-name": "zdfw1fwl01pgn01"
+            }
+        ]
+    }
+
+**nssi candidate**
+
+.. code-block:: json
+
+    {
+        "candidate_id": "1a636c4d-5e76-427e-bfd6-241a947224b0",
+        "candidate_type": "nssi",
+        "conn_density": 0,
+        "cost": 1.0,
+        "domain": "cn",
+        "e2e_latency": 0,
+        "exp_data_rate": 0,
+        "exp_data_rate_dl": 100,
+        "exp_data_rate_ul": 100,
+        "instance_name": "nssi_test_0211",
+        "inventory_provider": "aai",
+        "inventory_type": "nssi",
+        "jitter": 0,
+        "latency": 20,
+        "max_number_of_ues": 0,
+        "nsi_id": "4115d3c8-dd59-45d6-b09d-e756dee9b518",
+        "nsi_model_invariant_id": "39b10fe6-efcc-40bc-8184-c38414b80771",
+        "nsi_model_version_id": "8b664b11-6646-4776-9f59-5c3de46da2d6",
+        "nsi_name": "nsi_test_0211",
+        "payload_size": 0,
+        "reliability": 99.99,
+        "resource_sharing_level": "0",
+        "survival_time": 0,
+        "traffic_density": 0,
+        "ue_mobility_level": "stationary",
+        "uniqueness": "true"
+    }
 
 **Examples**
 
@@ -658,7 +786,11 @@ The following examples illustrate two demands:
       - inventory_provider: aai
         inventory_type: cloud
 
-**Questions** \* Do we need to support cost as a function ?
+**Note**
+
+- Cost could be used to specify the cost of choosing a specific
+  candidate. For example, choosing an existing VNF instance can be less
+  costlier than creating a new instance.
 
 Constraints
 -----------
@@ -794,7 +926,7 @@ Constraint Types
 +-------------------------------------------+--------------------------+
 
 *Note: Constraint names marked “Deferred” **will not** be supported in
-the initial release of HAS.*
+the current release of HAS.*
 
 Threshold Values
 ~~~~~~~~~~~~~~~~
@@ -1589,10 +1721,10 @@ settings.
 
 **Notes**
 
--  For ONAP Beijing release the REQUEST_DICT is of the following format as
+-  For the current release the REQUEST_DICT is of the following format as
    defined by the policy for vim_fit. The REQUEST_DICT is an opaque request
    object defined through policy, so it is not restricted to this format. In
-   ONAP Beijing release MultiCloud supports the check_vim_capacity using the
+   the current release MultiCloud supports the check_vim_capacity using the
    following grammar.
 
    .. code-block:: json
@@ -1630,15 +1762,15 @@ This constraint has no properties.
         type: inventory_group
         demands: [demand_1, demand_2]
 
-*Note: Only pair-wise groups are supported at this time. If three or
-more demands are specified, only the first two will be used.*
+*Note: Only pair-wise groups are supported at this time. The list must
+have only two demands.*
 
 License
 ~~~~~~~
 
 Constrain demands according to license availability.
 
-*Support for this constraint is deferred.*
+*Support for this constraint is deferred to a later release.*
 
 **Schema**
 
@@ -1666,7 +1798,7 @@ Network Between Demands
 Constrain each pairwise combination of two or more demands by network
 requirements.
 
-*Support for this constraint is deferred.*
+*Support for this constraint is deferred to a later release.*
 
 **Schema**
 
@@ -1708,7 +1840,7 @@ Network To Location
 Constrain one or more demands by network requirements relative to a
 specific location.
 
-*Support for this constraint is deferred.*
+*Support for this constraint is deferred to a later release.*
 
 **Schema**
 
@@ -1751,7 +1883,7 @@ Constrain each demand by its cluster capability requirements. For
 example, as described by an OpenStack Heat template and operational
 environment.
 
-*Support for this constraint is deferred.*
+*Support for this constraint is deferred to a later release.*
 
 **Schema**
 
@@ -1786,6 +1918,10 @@ environment.
           specification: heat
           template: http://repository/my/stack_template
           environment: http://repository/my/stack_environment
+
+**Note:**
+
+- The status of the constraint support is of Frankfurt release.
 
 Reservations
 ------------
@@ -1899,8 +2035,6 @@ While the template format supports any number of arrangements of
 numbers, operators, and functions, HAS’s solver presently expects a very
 specific arrangement.
 
-Until further notice:
-
 -  Optimizations must conform to a single goal of ``minimize`` followed
    by a ``sum`` operator.
 -  The sum can consist of two ``distance_between`` function calls, or
@@ -1939,10 +2073,10 @@ there is a point of diminishing returns in terms of readability!
 
 **Notes**
 
--  In the first version, we do not support more than one dimension in
-   the optimization (e.g., Minimize distance and cost). For supporting
-   multiple dimensions we would need a function the normalize the unit
-   across dimensions.
+-  We do not support more than one dimension in the optimization
+   (e.g., Minimize distance and cost). For supporting multiple
+   dimensions we would need a function the normalize the unit across
+   dimensions.
 
 Intrinsic Functions
 -------------------
@@ -2008,10 +2142,11 @@ would be of that file’s contents.
 -  ``file:///path/to/stack_template.yaml``
 -  ``http://hostname/environment.yaml``
 
-**Questions**
+**Note**
 
 -  If Homing will only be accessed over DMaaP, files will need to be
-   embedded using the Homing API request format.
+   embedded using the Homing API request format. This will be a
+   consideration when DMaaP integration happens.
 
 get_param
 ~~~~~~~~~
