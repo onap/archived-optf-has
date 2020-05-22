@@ -252,13 +252,17 @@ Demand criteria is dependent upon the inventory provider in use.
 |                             | instances). Exactly one inventory  |
 |                             | type may be specified.             |
 +-----------------------------+------------------------------------+
-| ``attributes`` (Optional)   | A list of key-value pairs, that is |
-|                             | used to select inventory           |
+| ``filtering_attributes``    | A list of key-value pairs, that is |
+| (Optional)                  | used to select inventory           |
 |                             | candidates that match *all* the    |
 |                             | specified attributes. The key      |
 |                             | should be a uniquely identifiable  |
 |                             | attribute at the inventory         |
 |                             | provider.                          |
++-----------------------------+------------------------------------+
+| ``passthrough_attributes``  | A list of key-value pairs, that    |
+| (Optional)                  | will be added to the candidate's   |
+|                             | attribute directly from template.  |
 +-----------------------------+------------------------------------+
 | ``service_type`` (Optional) | If ``inventory_type`` is           |
 |                             | ``service``, a list of one or more |
@@ -327,9 +331,13 @@ for ONAP.
 |                             | instances). Exactly one inventory  |
 |                             | type may be specified.             |
 +-----------------------------+------------------------------------+
-| ``attributes`` (Optional)   | A list of key-value pairs to match |
-|                             | against inventory when drawing     |
+| ``filtering attributes``    | A list of key-value pairs to match |
+|  (Optional)                 | against inventory when drawing     |
 |                             | candidates.                        |
++-----------------------------+------------------------------------+
+| ``passthrough_attributes``  | A list of key-value pairs, that    |
+| (Optional)                  | will be added to the candidate's   |
+|                             | attribute directly from template.  |
 +-----------------------------+------------------------------------+
 | ``service_type`` (Optional) | Examples may include ``vG``,       |
 |                             | ``vG_MuxInfra``, etc.              |
