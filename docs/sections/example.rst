@@ -226,8 +226,93 @@ This is similar to the first example except that it has an additional distance
 constraint which specifies that the distance of each vnf from the customer
 location must be less than 500km.
 
+Example 3
+---------
+
+.. code:: json
+
+    {
+        "files": {},
+        "limit": 10,
+        "name": "urllc_sample",
+        "num_solution": "10",
+        "template": {
+            "constraints": {
+                "URLLC_core_Threshold": {
+                    "demands": [
+                        "URLLC_core"
+                    ],
+                    "properties": {
+                        "evaluate": [
+                            {
+                                "attribute": "latency",
+                                "operator": "lte",
+                                "threshold": 30,
+                                "unit": "ms"
+                            }
+                        ]
+                    },
+                    "type": "threshold"
+                },
+                "URLLC_ran_Threshold": {
+                    "demands": [
+                        "URLLC_ran"
+                    ],
+                    "properties": {
+                        "evaluate": [
+                            {
+                                "attribute": "latency",
+                                "operator": "lte",
+                                "threshold": 30,
+                                "unit": "ms"
+                            }
+                        ]
+                    },
+                    "type": "threshold"
+                }
+            },
+            "demands": {
+                "URLLC_core": [
+                    {
+                        "filtering_attributes": {
+                            "model-invariant-id": "21d57d4b-52ad-4d3c-a798-248b5bb9124a",
+                            "model-version-id": "bfba363e-e39c-4bd9-a9d5-1371c28f4d22",
+                            "orchestration-status": "active",
+                            "service-role": "nssi"
+                        },
+                        "inventory_provider": "aai",
+                        "inventory_type": "nssi",
+                        "region": "RegionOne",
+                        "unique": "true"
+                    }
+                ],
+                "URLLC_ran": [
+                    {
+                        "filtering_attributes": {
+                            "model-invariant-id": "aa2d56ea-773d-11ea-bc55-0242ac130003",
+                            "model-version-id": "d6296806-773d-11ea-bc55-0242ac130003",
+                            "orchestration-status": "active",
+                            "service-role": "nssi"
+                        },
+                        "inventory_provider": "aai",
+                        "inventory_type": "nssi",
+                        "region": "RegionOne",
+                        "unique": "true"
+                    }
+                ]
+            },
+            "homing_template_version": "2018-02-01"
+        },
+        "timeout": 1200
+    }
+
+This template is for the selecting the NSSI instances for Network
+Slicing use case. The demand here is the Slice subnets and the threshold
+constraint specifies that the latency of the the subnets must be less
+than a particular threshold.
+
+
 Contact
 -------
 
 Shankar Narayanan shankarpnsn@gmail.com
-a
