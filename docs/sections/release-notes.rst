@@ -27,7 +27,7 @@ Release Data
 | **OOF Project**                      |                                      |
 |                                      |                                      |
 +--------------------------------------+--------------------------------------+
-| **Docker images**                    | - optf-has 2.0.0                     |
+| **Docker images**                    | - optf-has 2.0.4                     |
 |                                      |                                      |
 +--------------------------------------+--------------------------------------+
 | **Release designation**              | 6.0.0 frankfurt                      |
@@ -41,7 +41,24 @@ Release Data
 New features
 ------------
 
+- Passthrough attributes has been added to placement request.
+- HAS container to run as non-root user.
+- HAS Component has be upgraded to Python 3.8.
+- New inventory type NSSI is added.
+- Functionality has been added to AAI plugin to get the nssi candidates
+  from AAI.
+- New constraint named ``threshold`` has been added to the solver.
 
+Bug Fixes
+=========
+
+- OPTFRA-734 Nginx failing to start as non-root user.
+- OPTFRA-733 AAF authentication fails while handling API requests.
+- OPTFRA-746 Add NSI id to NSSI candidate.
+- OPTFRA-747 Music api not using server url in https mode.
+- OPTFRA-728 HPA CSIT test failures.
+- OPTFRA-726 Nginx needs to run as root.
+- OPTFRA-630 Sonar failing jobs.
 
 Known Limitations, Issues and Workarounds
 =========================================
@@ -61,6 +78,10 @@ Workarounds
 Security Notes
 --------------
 
+**Fixed Security issues**
+
+All HAS containers were running as root user which is fixed in this
+release under OPTFRA-711.
 
 References
 ==========
