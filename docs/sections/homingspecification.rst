@@ -192,6 +192,7 @@ a *placemark*).
 +-----------------------------------+----------------------------------+
 
 **Note:**
+
 -  A geocoder could be used to convert placemarks to a
    latitude/longitude
 
@@ -923,6 +924,10 @@ Constraint Types
 |                                           | of demands and a         |
 |                                           | specific                 |
 |                                           | location/address.        |
++-------------------------------------------+--------------------------+
+| ``threshold``                             | Constraint that checks if|
+|                                           | an attribute is within   |
+|                                           | the threshold.           |
 +-------------------------------------------+--------------------------+
 
 *Note: Constraint names marked “Deferred” **will not** be supported in
@@ -1918,6 +1923,48 @@ environment.
           specification: heat
           template: http://repository/my/stack_template
           environment: http://repository/my/stack_environment
+
+Threshold
+~~~~~~~~~
+
+Constrain each demand by an attribute which is within a certain
+threshold.
+
+**Schema**
+
++---------------+--------------------------------------------------------+
+| Property      | Value                                                  |
++===============+========================================================+
+| ``evaluate``  | List of  attributes and its threshold                  |
++---------------+--------------------------------------------------------+
+
++-------------------------+------------------------------------------+
+| Property for evaluation | Value                                    |
++=========================+==========================================+
+| ``attribute``           | Attribute of a candidate                 |
++-------------------------+------------------------------------------+
+| ``threshold``           | Threshold Value                          |
++-------------------------+------------------------------------------+
+| ``operator``            | Condition to check. Supported Values are |
+|                         | ``gte``, ``lte``, ``lt``, ``gt``, ``eq`` |
++-------------------------+------------------------------------------+
+| ``unit`` (optional)     | Attribute's unit of measurement          |
++-------------------------+------------------------------------------+
+
+.. code:: yaml
+
+    urllc_threshold:
+      type: threshold
+      demands: ['URLLC']
+      properties:
+        evaluate:
+        - attribute: latency
+          operator: lte
+          threshold: 50
+          unit: ms
+        - attribute: reliability
+          operator: gte
+          threshold: 99.99
 
 **Note:**
 
