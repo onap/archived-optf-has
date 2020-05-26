@@ -46,4 +46,4 @@ is an orchestration service, or Nova is a compute service.
    ./sections/homingspecification.rst
    Example Homing Templates <./sections/example.rst>
    ./sections/release-notes.rst
-
+   ./sections/upgradestrategy.rst
