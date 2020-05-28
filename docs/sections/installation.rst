@@ -242,7 +242,7 @@ directory:
 
 .. code:: bash
 
-    $ git clone https://gerrit.onap.org/r/optf/has
+    $ git clone --depth 1 https://gerrit.onap.org/r/optf/has
     Cloning into 'conductor'...
     remote: Counting objects: 2291, done.
     remote: Compressing objects:  88% (1918/2179)   
