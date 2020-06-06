@@ -49,9 +49,9 @@ RUN apk --update add py-setuptools && \
     apk add bash vim && \
     apk add nginx && \
     apk add py2-pip libpq python-dev && \
-    pip install --upgrade pip && \
+    pip install --no-cache-dir --upgrade pip && \
     apk add --virtual build-dependencies build-base linux-headers pcre-dev libffi-dev libxslt-dev libressl-dev && \
-    pip install uwsgi
+    pip install --no-cache-dir uwsgi
 
 # Get, Install, cleanup and setup
 COPY onap-has-tm/optf-has-conductor-${MVN_ARTIFACT_VERSION}.zip /tmp/optf-has.zip
@@ -59,7 +59,7 @@ RUN unzip -q -o -B /tmp/optf-has.zip -d /opt/has && rm -f /tmp/optf-has.zip
 
 #PKG-INFO file must also exists in the conductor folder (i.e. besides and inside the of_has.egg-info folder). The zip file for distro above is missing it
 RUN cp /opt/has/conductor/of_has.egg-info/PKG-INFO /opt/has/conductor
-RUN pip install -e /opt/has/conductor
+RUN pip install --no-cache-dir -e /opt/has/conductor
 COPY app.wsgi /etc/nginx/conductor.wsgi
 COPY api_paste.ini /usr/local/etc/conductor/api_paste.ini
 

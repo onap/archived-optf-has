@@ -29,8 +29,8 @@ run_tox_test()
     rm -rf ./venv-tox ./.tox
     virtualenv ./venv-tox
     source ./venv-tox/bin/activate
-    pip install --upgrade pip
-    pip install --upgrade tox argparse
+    pip install --no-cache-dir --upgrade pip
+    pip install --no-cache-dir --upgrade tox argparse
     pip freeze
     tox -e cover
     deactivate
