@@ -223,9 +223,9 @@ Once the configuration is in place, installation is simple:
 
 .. code:: bash
 
-    $ pip install of-has
+    $ pip install --no-cache-dir of-has
 
-To upgrade or downgrade, simply re-run ``pip install`` using the
+To upgrade or downgrade, simply re-run ``pip install --no-cache-dir`` using the
 appropriate ``pip`` command line options.
 
 **NOTE**: Be sure proxy settings are in place if they're required to
@@ -251,14 +251,14 @@ directory:
     Receiving objects: 100% (2291/2291), 477.59 KiB | 0 bytes/s, done.
     Resolving deltas: 100% (1422/1422), done.
     $ cd conductor
-    $ pip install .
+    $ pip install --no-cache-dir .
 
 The latest source can be pulled from ONAP at any time and reinstalled:
 
 .. code:: bash
 
     $ git pull
-    $ pip install .
+    $ pip install --no-cache-dir .
 
 Verifying Installation
 ~~~~~~~~~~~~~~~~~~~~~~

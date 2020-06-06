@@ -26,8 +26,8 @@ WORKDIR /opt/aafsim
 ADD ./  /opt/aafsim
 
 # Install any needed packages specified in requirements.txt
-RUN pip install web.py
-RUN pip install oslo.log
+RUN pip install --no-cache-dir web.py
+RUN pip install --no-cache-dir oslo.log
 
 # Make port 80 available to the world outside this container
 EXPOSE 8100

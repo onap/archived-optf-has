@@ -26,7 +26,7 @@ WORKDIR /opt/aaisim
 ADD ./  /opt/aaisim
 
 # Install any needed packages specified in requirements.txt
-RUN pip install web.py
+RUN pip install --no-cache-dir web.py
 
 # Make port 80 available to the world outside this container
 EXPOSE 8081
