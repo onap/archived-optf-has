@@ -19,7 +19,6 @@
       "candidate_type":"nssi",
       "traffic_density":0,
       "payload_size":0,
-      "exp_data_rate_dl":100,
       "jitter":0,
       "survival_time":0,
       "resource_sharing_level":"0",
