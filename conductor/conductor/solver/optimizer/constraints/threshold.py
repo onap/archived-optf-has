@@ -48,9 +48,9 @@ class Threshold(constraint.Constraint):
                 operation = OPERATIONS.get(prop.get('operator'))
 
                 attribute_value = candidate.get(attribute)
-                if not operation(attribute_value, threshold):
+                if not attribute_value or not operation(attribute_value, threshold):
                     conflict_list.append(candidate)
-                    continue
+                    break
 
         filtered_candidates = [c for c in _candidate_list if c not in conflict_list]
 
