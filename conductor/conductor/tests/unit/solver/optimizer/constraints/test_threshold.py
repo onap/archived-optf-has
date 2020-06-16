@@ -30,7 +30,7 @@ class TestThreshold(unittest.TestCase):
 
         candidates_file = './conductor/tests/unit/data/plugins/inventory_provider/nssi_candidate.json'
         candidates = json.loads(open(candidates_file).read())
-
+        # test 1
         properties = {'evaluate':
                           [{'attribute': 'latency', 'threshold': 30, 'operator': 'lte'},
                            {'attribute': 'exp_data_rate_ul', 'threshold': 70, 'operator': 'gte'}]}
@@ -43,9 +43,20 @@ class TestThreshold(unittest.TestCase):
 
         self.assertEqual(candidates, threshold_obj.solve(decision_path, candidates, None))
 
+        # test 2
         properties = {'evaluate':
                           [{'attribute': 'latency', 'threshold': 10, 'operator': 'lte'},
                            {'attribute': 'exp_data_rate_ul', 'threshold': 120, 'operator': 'gte'}]}
+
+        threshold_obj = Threshold('urllc_threshold', 'threshold', ['URLLC'], _priority=0,
+                                  _properties=properties)
+
+        self.assertEqual([], threshold_obj.solve(decision_path, candidates, None))
+
+        # test 3
+        properties = {'evaluate':
+                          [{'attribute': 'latency', 'threshold': 10, 'operator': 'lte'},
+                           {'attribute': 'area_traffic_cap', 'threshold': 120, 'operator': 'gte'}]}
 
         threshold_obj = Threshold('urllc_threshold', 'threshold', ['URLLC'], _priority=0,
                                   _properties=properties)
