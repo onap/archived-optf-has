@@ -3,11 +3,11 @@ project: 'optf-has'
 project_creation_date: '2017-07-06'
 lifecycle_state: 'Incubation'
 project_lead: &onap_releng_ptl
-  name: 'Shankaranarayanan Puzhavakath Narayanan'
-  email: 'snarayanan@research.att.com'
-  id: 'snarayanan'
-  company: 'ATT'
-  timezone: 'America/Bedminster'
+  name: 'Krishna Moorthy'
+  email: 'krishna.moorthy6@wipro.com'
+  id: 'krishnaa96'
+  company: 'Wipro'
+  timezone: 'India/IST UTC+5:30'
 project_category: ''
 primary_contact: *onap_releng_ptl
 issue_tracking:
@@ -46,11 +46,11 @@ committers:
     company: 'ATT'
     id: 'amartell'
     timezone: 'America/New_York'
-  - name: 'Krishna Moorthy'
-    email: 'krishna.moorthy6@wipro.com'
-    company: 'Wipro'
-    id: 'krishnaa96'
-    timezone: 'India/IST UTC+5:30'
+  - name: 'Shankaranarayanan Puzhavakath Narayanan'
+    email: 'snarayanan@research.att.com'
+    company: 'ATT'
+    id: 'snarayanan'
+    timezone: 'America/Bedminster'
 tsc:
   approval: 'https://lists.onap.org/pipermail/onap-tsc'
   changes:
