@@ -1,7 +1,7 @@
 ---
 project: 'optf-has'
 project_creation_date: '2017-07-06'
-lifecycle_state: 'Incubation'
+lifecycle_state: 'Mature'
 project_lead: &onap_releng_ptl
   name: 'Krishna Moorthy'
   email: 'krishna.moorthy6@wipro.com'
