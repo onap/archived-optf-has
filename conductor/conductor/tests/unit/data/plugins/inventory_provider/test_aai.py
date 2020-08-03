@@ -52,7 +52,6 @@ class TestAAI(unittest.TestCase):
         self.assertEqual('/{}/query?format=id'.format(self.conf.aai.server_url_version),
                          self.aai_ep._aai_versioned_path("/query?format=id"))
 
-
     def test_resolve_clli_location(self):
 
         req_json_file = './conductor/tests/unit/data/plugins/inventory_provider/_request_clli_location.json'
@@ -150,9 +149,10 @@ class TestAAI(unittest.TestCase):
                                                                                return_value=regions_list)
         self.mock_resolve_cloud_regions_by_cloud_region_id.start()
 
-        self.mock_resolove_v_server_for_candidate = mock.patch.object(AAI, 'resolove_v_server_for_candidate',
+
+        self.mock_resolve_v_server_for_candidate = mock.patch.object(AAI, 'resolve_v_server_for_candidate',
                                                                       return_value=demand_service_response)
-        self.mock_resolove_v_server_for_candidate.start()
+        self.mock_resolve_v_server_for_candidate.start()
 
         complex_link = {"link": "/aai/v10/complex-id", "d_value": 'test-id'}
         self.mock_resolve_complex_info_link_for_v_server = mock.patch.object(AAI,
@@ -165,7 +165,7 @@ class TestAAI(unittest.TestCase):
 
         flavor_info = regions_response["region-name"]["flavors"]
         self.maxDiff = None
-        self.assertEqual({u'demand_name': [
+        self.assertCountEqual({u'demand_name': [
             {'candidate_id': u'service-instance-id', 'city': None,
              'cloud_owner': u'cloud-owner',
              'uniqueness': 'true',
@@ -249,9 +249,9 @@ class TestAAI(unittest.TestCase):
                                                                                return_value=regions)
         self.mock_resolve_cloud_regions_by_cloud_region_id.start()
 
-        self.mock_resolove_v_server_for_candidate = mock.patch.object(AAI, 'resolove_v_server_for_candidate',
+        self.mock_resolve_v_server_for_candidate = mock.patch.object(AAI, 'resolve_v_server_for_candidate',
                                                                       return_value=v_server)
-        self.mock_resolove_v_server_for_candidate.start()
+        self.mock_resolve_v_server_for_candidate.start()
 
         complex_link = {"link": "/aai/v14/cloud-infrastructure/complexes/complex/clli1", "d_value": 'clli1'}
         self.mock_resolve_complex_info_link_for_v_server = mock.patch.object(AAI,
@@ -327,9 +327,9 @@ class TestAAI(unittest.TestCase):
                                                                                return_value=regions)
         self.mock_resolve_cloud_regions_by_cloud_region_id.start()
 
-        self.mock_resolove_v_server_for_candidate = mock.patch.object(AAI, 'resolove_v_server_for_candidate',
+        self.mock_resolve_v_server_for_candidate = mock.patch.object(AAI, 'resolve_v_server_for_candidate',
                                                                        return_value=v_server)
-        self.mock_resolove_v_server_for_candidate.start()
+        self.mock_resolve_v_server_for_candidate.start()
 
         complex_link = {"link": "/aai/v14/cloud-infrastructure/complexes/complex/clli1", "d_value": 'clli1'}
         self.mock_resolve_complex_info_link_for_v_server = mock.patch.object(AAI, 'resolve_complex_info_link_for_v_server',
@@ -356,9 +356,8 @@ class TestAAI(unittest.TestCase):
         self.mock_get_request = mock.patch.object(AAI, '_request', return_value=response)
         self.mock_get_request.start()
 
-        self.assertEqual({u'city': u'Middletown', u'latitude': u'28.543251', u'longitude': u'-81.377112', u'country': u'USA', u'region': u'SE'} ,
+        self.assertEqual({u'city': u'Middletown', u'latitude': u'28.543251', u'longitude': u'-81.377112', u'country': u'USA', u'region': u'SE'},
                          self.aai_ep._get_complex("/v10/complex/complex_id", "complex_id"))
-
 
     def test_check_network_roles(self):
 
@@ -374,7 +373,6 @@ class TestAAI(unittest.TestCase):
         self.mock_get_request.start()
         self.assertEqual(set(['test-cloud-value']) ,
                         self.aai_ep.check_network_roles("network_role_id"))
-
 
     def test_check_candidate_role(self):
 
@@ -488,10 +486,9 @@ class TestAAI(unittest.TestCase):
         region_response_file = './conductor/tests/unit/data/plugins/inventory_provider/vfmodule_region.json'
         region_response = json.loads(open(region_response_file).read())
 
-        candidate = dict()
-        candidate['candidate_id'] = 'some_id'
-        candidate['location_id'] = 'some_location_id'
-        candidate['inventory_type'] = 'service'
+        candidate_id = 'some_id'
+        location_id = 'some_location_id'
+        inventory_type = 'service'
 
         response = mock.MagicMock()
         response.status_code = 200
@@ -501,13 +498,13 @@ class TestAAI(unittest.TestCase):
         self.mock_get_request = mock.patch.object(AAI, '_request', return_value=response)
         self.mock_get_request.start()
 
-        link_rl_data = self.aai_ep.resolve_complex_info_link_for_v_server(candidate, v_server, None,
+        link_rl_data = self.aai_ep.resolve_complex_info_link_for_v_server(candidate_id, v_server, None,
                                                                           cloud_region_id, service_type,
                                                                           demand_name, triage_translator_data)
         self.assertEqual(None, link_rl_data)
 
         complex_link = {"link": "/aai/v14/cloud-infrastructure/complexes/complex/clli1", "d_value": 'clli1'}
-        link_rl_data = self.aai_ep.resolve_complex_info_link_for_v_server(candidate, v_server, cloud_owner,
+        link_rl_data = self.aai_ep.resolve_complex_info_link_for_v_server(candidate_id, v_server, cloud_owner,
                                                                           cloud_region_id, service_type,
                                                                           demand_name, triage_translator_data)
         self.assertEqual(complex_link, link_rl_data)
@@ -533,26 +530,25 @@ class TestAAI(unittest.TestCase):
         self.mock_get_complex = mock.patch.object(AAI, '_get_complex', return_value=complex_response)
         self.mock_get_complex.start()
 
-        self.aai_ep.build_complex_info_for_candidate(candidate, None, complex_list_empty, service_type, demand_name,
+        self.aai_ep.build_complex_info_for_candidate(candidate['candidate_id'], candidate['location_id'], None, complex_list_empty, candidate['inventory_type'], demand_name,
                                                      triage_translator_data)
         self.assertEqual(initial_candidate, candidate)
         self.assertEqual(1, TraigeTranslator.collectDroppedCandiate.call_count)
 
-        self.aai_ep.build_complex_info_for_candidate(candidate, None, complex_list, service_type, demand_name,
+        self.aai_ep.build_complex_info_for_candidate(candidate['candidate_id'], candidate['location_id'], None, complex_list, candidate['inventory_type'], demand_name,
                                                      triage_translator_data)
         self.assertEqual(initial_candidate, candidate)
         self.assertEqual(2, TraigeTranslator.collectDroppedCandiate.call_count)
 
         complex_list.pop()
-        self.aai_ep.build_complex_info_for_candidate(candidate, None, complex_list, service_type, demand_name,
+        self.aai_ep.build_complex_info_for_candidate(candidate['candidate_id'], candidate['location_id'], None, complex_list, candidate['inventory_type'], demand_name,
                                                      triage_translator_data)
 
-        self.assertEqual(candidate, {'city': u'example-city-val-27150', 'country': u'example-country-val-94173',
-                                     'region': u'example-region-val-13893', 'inventory_type': 'service',
-                                     'longitude': u'32.89948', 'state': u'example-state-val-59487',
+        self.assertEqual(self.aai_ep.build_complex_info_for_candidate(candidate['candidate_id'], candidate['location_id'], None, complex_list, candidate['inventory_type'], demand_name,
+                                                     triage_translator_data), {'city': u'example-city-val-27150', 'country': u'example-country-val-94173',
+                                     'region': u'example-region-val-13893', 'longitude': u'32.89948', 'state': u'example-state-val-59487',
                                      'physical_location_id': 'clli1', 'latitude': u'example-latitude-val-89101',
-                                     'complex_name': u'clli1', 'location_id': 'some_location_id',
-                                     'candidate_id': 'some_id'})
+                                     'complex_name': u'clli1'})
         self.assertEqual(2, TraigeTranslator.collectDroppedCandiate.call_count)
 
     def test_resolve_vnf_parameters(self):
@@ -561,8 +557,8 @@ class TestAAI(unittest.TestCase):
         demand_name = 'vPGN'
         service_type = 'vFW'
         candidate = dict()
-        candidate['candidate_id'] = 'some_id'
-        candidate['location_id'] = 'some_location_id'
+        candidate_id = 'some_id'
+        location_id = 'some_location_id'
         candidate['inventory_type'] = 'service'
 
         generic_vnf_list_file = './conductor/tests/unit/data/plugins/inventory_provider/vfmodule_service_generic_vnf_list.json'
@@ -572,26 +568,22 @@ class TestAAI(unittest.TestCase):
         region_response_file = './conductor/tests/unit/data/plugins/inventory_provider/vfmodule_region.json'
         region_response = json.loads(open(region_response_file).read())
 
-        self.assertEqual("CloudOwner",
-                         self.aai_ep.resolve_cloud_owner_for_vnf(candidate, good_vnf, service_type,
-                                                                 demand_name, triage_translator_data).get('d_value'))
-        self.assertIsNone(self.aai_ep.resolve_cloud_owner_for_vnf(candidate, bad_vnf, service_type,
-                                                                  demand_name, triage_translator_data))
-
         regions = list()
         regions.append(region_response)
         self.mock_get_regions = mock.patch.object(AAI, 'resolve_cloud_regions_by_cloud_region_id',
                                                   return_value=regions)
         self.mock_get_regions.start()
 
-        cloud_region_rl_data, cloud_region_ver_rl_data = self.aai_ep.resolve_cloud_region_id_and_version_for_vnf(
-            candidate, good_vnf, service_type, demand_name, triage_translator_data)
-        self.assertEqual("RegionOne", cloud_region_rl_data.get('d_value'))
-        self.assertEqual("1", cloud_region_ver_rl_data.get('d_value'))
+        good_cloud_info = self.aai_ep.resolve_cloud_for_vnf(candidate_id, location_id, good_vnf, service_type,
+                                                                 demand_name, triage_translator_data)
+        bad_cloud_info = self.aai_ep.resolve_cloud_for_vnf(candidate_id, location_id, bad_vnf, service_type,
+                                                                 demand_name, triage_translator_data)
+        self.assertEqual("CloudOwner", good_cloud_info['cloud_owner'])
+        self.assertEqual("RegionOne", good_cloud_info['location_id'])
+        self.assertEqual("1", good_cloud_info['cloud_region_version'])
 
-        self.assertEqual((None, None),
-                         self.aai_ep.resolve_cloud_region_id_and_version_for_vnf(candidate, bad_vnf, service_type,
-                                                                                 demand_name, triage_translator_data))
+        self.assertIsNone(bad_cloud_info)
+
         v_server_links = list()
         v_server_links.append("/aai/v14/cloud-infrastructure/cloud-regions/cloud-region/CloudOwner/RegionOne/tenants/\
 tenant/3c6c471ada7747fe8ff7f28e100b61e8/vservers/vserver/00bddefc-126e-4e4f-a18d-99b94d8d9a30")
@@ -601,14 +593,14 @@ tenant/3c6c471ada7747fe8ff7f28e100b61e8/vservers/vserver/00bddefc-126e-4e4f-a18d
 
         customer_id = 'Demonstration'
         self.assertEqual(customer_id,
-                         self.aai_ep.resolve_global_customer_id_for_vnf(candidate, good_vnf, customer_id, service_type,
+                         self.aai_ep.resolve_global_customer_id_for_vnf(candidate_id, location_id, good_vnf, customer_id, service_type,
                                                                         demand_name,
                                                                         triage_translator_data).get('d_value'))
         self.assertEqual("3e8d118c-10ca-4b4b-b3db-089b5e9e6a1c",
-                         self.aai_ep.resolve_service_instance_id_for_vnf(candidate, good_vnf, customer_id, service_type,
+                         self.aai_ep.resolve_service_instance_id_for_vnf(candidate_id, location_id, good_vnf, customer_id, service_type,
                                                                          demand_name,
                                                                          triage_translator_data).get('d_value'))
-        self.assertIsNone(self.aai_ep.resolve_service_instance_id_for_vnf(candidate, bad_vnf, customer_id, service_type,
+        self.assertIsNone(self.aai_ep.resolve_service_instance_id_for_vnf(candidate_id, location_id, bad_vnf, customer_id, service_type,
                                                                           demand_name, triage_translator_data))
 
     def test_add_passthrough_parameters(self):
