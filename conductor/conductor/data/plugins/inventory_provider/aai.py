@@ -18,22 +18,26 @@
 # -------------------------------------------------------------------------
 #
 
+import copy
+import json
 import re
 import time
 import uuid
-import copy
 
-import json
+from oslo_config import cfg
+from oslo_log import log
 
 from conductor.common import rest
 from conductor.data.plugins import constants
-from conductor.common.utils import cipherUtils
 from conductor.data.plugins.inventory_provider import base
 from conductor.data.plugins.inventory_provider import hpa_utils
+from conductor.data.plugins.inventory_provider.candidates.candidate import Candidate
+from conductor.data.plugins.inventory_provider.candidates.cloud_candidate import Cloud
+from conductor.data.plugins.inventory_provider.candidates.service_candidate import Service
+from conductor.data.plugins.inventory_provider.candidates.transport_candidate import Transport
+from conductor.data.plugins.inventory_provider.candidates.vfmodule_candidate import VfModule
 from conductor.data.plugins.triage_translator.triage_translator import TraigeTranslator
 from conductor.i18n import _LE, _LI
-from oslo_config import cfg
-from oslo_log import log
 
 LOG = log.getLogger(__name__)
 
@@ -112,7 +116,7 @@ class AAI(base.InventoryProviderBase):
         self.retries = self.conf.aai.aai_retries
         self.username = self.conf.aai.username
         self.password = self.conf.aai.password
-        self.triage_translator=TraigeTranslator()
+        self.triage_translator = TraigeTranslator()
 
         # Cache is initially empty
         self._aai_cache = {}
@@ -143,7 +147,8 @@ class AAI(base.InventoryProviderBase):
         """Return human-readable name."""
         return "A&AI"
 
-    def _get_version_from_string(self, string):
+    @staticmethod
+    def _get_version_from_string(string):
         """Extract version number from string"""
         return re.sub("[^0-9.]", "", string)
 
@@ -198,11 +203,10 @@ class AAI(base.InventoryProviderBase):
         }
         self.rest = rest.REST(**kwargs)
 
-
     def _refresh_cache(self):
         """Refresh the A&AI cache."""
         if not self.last_refresh_time or \
-            (time.time() - self.last_refresh_time) > \
+                (time.time() - self.last_refresh_time) > \
                 self.cache_refresh_interval * 60:
             # TODO(jdandrea): This is presently brute force.
             # It does not persist to Music. A general purpose ORM caching
@@ -243,7 +247,8 @@ class AAI(base.InventoryProviderBase):
                 cloud_type = region.get('cloud-type')
                 cloud_zone = region.get('cloud-zone')
 
-                physical_location_list = self._get_aai_rel_link_data(data = region, related_to = 'complex', search_key = 'complex.physical-location-id')
+                physical_location_list = self._get_aai_rel_link_data(data=region, related_to='complex',
+                                                                     search_key='complex.physical-location-id')
                 if len(physical_location_list) > 0:
                     physical_location_id = physical_location_list[0].get('d_value')
 
@@ -291,7 +296,8 @@ class AAI(base.InventoryProviderBase):
                     keys = ('latitude', 'longitude', 'city', 'country',
                             'complex_name')
                     missing_keys = \
-                        list(set(keys).difference(list(complex_info.keys())))   # Python 3 Conversion -- dict object to list object
+                        list(set(keys).difference(
+                            list(complex_info.keys())))  # Python 3 Conversion -- dict object to list object
                     LOG.error(_LE("Complex {} is missing {}, link: {}").
                               format(complex_id, missing_keys, complex_link))
                     LOG.debug("Complex {}: {}".
@@ -391,39 +397,46 @@ class AAI(base.InventoryProviderBase):
             )
         return response
 
+    @staticmethod
+    def check_sriov_automation(aic_version, demand_name, candidate_name):
+        """Check if specific candidate has SRIOV automation available or no"""
+        if aic_version:
+            LOG.debug(_LI("Demand {}, candidate {} has an AIC version number {}").format(demand_name, candidate_name,
+                                                                                         aic_version))
+            if aic_version == "X.Y":
+                return True
+        return False
+
     def _get_complex(self, complex_link, complex_id=None):
+
         if not self.complex_last_refresh_time or \
-           (time.time() - self.complex_last_refresh_time) > \
-           self.complex_cache_refresh_interval * 60:
+                (time.time() - self.complex_last_refresh_time) > \
+                self.complex_cache_refresh_interval * 60:
             self._aai_complex_cache.clear()
         if complex_id and complex_id in self._aai_complex_cache:
             return self._aai_complex_cache[complex_id]
         else:
-            path = self._aai_versioned_path(
-                self._get_aai_path_from_link(complex_link))
-            response = self._request(
-                path=path, context="complex", value=complex_id)
+            path = self._aai_versioned_path(self._get_aai_path_from_link(complex_link))
+            response = self._request(path=path, context="complex", value=complex_id)
             if response is None:
                 return
             if response.status_code == 200:
                 complex_info = response.json()
                 if 'complex' in complex_info:
                     complex_info = complex_info.get('complex')
+
                 latitude = complex_info.get('latitude')
                 longitude = complex_info.get('longitude')
                 city = complex_info.get('city')
                 country = complex_info.get('country')
-
-                # removed the state check for countries in Europe
-                # that do not always enter states
+                # removed the state check for countries in Europe that do not always enter states
                 if not (latitude and longitude and city and country):
                     keys = ('latitude', 'longitude', 'city', 'country')
                     missing_keys = \
                         list(set(keys).difference(set(complex_info.keys())))
                     LOG.error(_LE("Complex {} is missing {}, link: {}").
                               format(complex_id, missing_keys, complex_link))
-                    LOG.debug("Complex {}: {}".
-                              format(complex_id, complex_info))
+                    LOG.debug("Complex {}: {}".format(complex_id, complex_info))
                     return
 
                 if complex_id:  # cache only if complex_id is given
@@ -580,7 +593,7 @@ class AAI(base.InventoryProviderBase):
     def resolve_host_location(self, host_name):
         path = self._aai_versioned_path('/query?format=id')
         data = {"start": ["network/pnfs/pnf/" + host_name,
-                "cloud-infrastructure/pservers/pserver/" + host_name],
+                          "cloud-infrastructure/pservers/pserver/" + host_name],
                 "query": "query/ucpe-instance"
                 }
         response = self._request('put', path=path, data=data,
@@ -694,22 +707,6 @@ class AAI(base.InventoryProviderBase):
         if context and value:
             LOG.debug("{} details: {}".format(context, value))
 
-    def check_sriov_automation(self, aic_version, demand_name, candidate_name):
-
-        """Check if specific candidate has SRIOV automation available or not
-
-        Used by resolve_demands
-        """
-
-        if aic_version:
-            LOG.debug(_LI("Demand {}, candidate {} has an AIC version "
-                          "number {}").format(demand_name, candidate_name,
-                                              aic_version)
-                      )
-            if aic_version == "X.Y":
-                return True
-        return False
-
     def match_candidate_attribute(self, candidate, attribute_name,
                                   restricted_value, demand_name,
                                   inventory_type):
@@ -718,8 +715,8 @@ class AAI(base.InventoryProviderBase):
         Used by resolve_demands
         """
         if restricted_value and \
-           restricted_value is not '' and \
-           candidate[attribute_name] != restricted_value:
+                restricted_value is not '' and \
+                candidate[attribute_name] != restricted_value:
             LOG.info(_LI("Demand: {} "
                          "Discarded {} candidate as "
                          "it doesn't match the "
@@ -738,13 +735,13 @@ class AAI(base.InventoryProviderBase):
         value = None
         for i in range(0, len(vserver_list)):
             if value and \
-               value != vserver_list[i].get('d_value'):
+                    value != vserver_list[i].get('d_value'):
                 return False
             value = vserver_list[i].get('d_value')
         return True
 
     def match_inventory_attributes(self, template_attributes,
-                                    inventory_attributes, candidate_id):
+                                   inventory_attributes, candidate_id):
 
         for attribute_key, attribute_values in template_attributes.items():
 
@@ -764,17 +761,17 @@ class AAI(base.InventoryProviderBase):
 
             if match_type == 'any':
                 if attribute_key not in inventory_attributes or \
-                   (len(attribute_values) > 0 and
-                   inventory_attributes[attribute_key] not in attribute_values):
+                        (len(attribute_values) > 0 and
+                         inventory_attributes[attribute_key] not in attribute_values):
                     return False
             elif match_type == 'not':
                 # drop the candidate when
                 # 1). field exists in AAI and 2). value is not null or empty 3). value is one of those in the 'not' list
                 # Remember, this means if the property is not returned at all from AAI, that still can be a candidate.
                 if attribute_key in inventory_attributes and \
-                    inventory_attributes[attribute_key] and \
-                    inventory_attributes[attribute_key] in attribute_values:
-                     return False
+                        inventory_attributes[attribute_key] and \
+                        inventory_attributes[attribute_key] in attribute_values:
+                    return False
 
         return True
 
@@ -788,12 +785,12 @@ class AAI(base.InventoryProviderBase):
         body = response.json()
         return body.get("generic-vnf", [])
 
-    def resolove_v_server_for_candidate(self, candidate, vs_link, add_interfaces, demand_name, triage_translator_data):
+    def resolve_v_server_for_candidate(self, candidate_id, location_id, vs_link, add_interfaces, demand_name, triage_translator_data):
         if not vs_link:
             LOG.error(_LE("{} VSERVER link information not "
                           "available from A&AI").format(demand_name))
-            self.triage_translator.collectDroppedCandiate(candidate['candidate_id'],
-                                                          candidate['location_id'], demand_name,
+            self.triage_translator.collectDroppedCandiate(candidate_id,
+                                                          location_id, demand_name,
                                                           triage_translator_data,
                                                           reason="VSERVER link information not")
             return None  # move ahead with the next vnf
@@ -805,8 +802,8 @@ class AAI(base.InventoryProviderBase):
             LOG.error(_LE("{} VSERVER path information not "
                           "available from A&AI - {}").
                       format(demand_name, vs_path))
-            self.triage_translator.collectDroppedCandiate(candidate['candidate_id'],
-                                                          candidate['location_id'], demand_name,
+            self.triage_translator.collectDroppedCandiate(candidate_id,
+                                                          location_id, demand_name,
                                                           triage_translator_data,
                                                           reason="VSERVER path information not available from A&AI")
             return None  # move ahead with the next vnf
@@ -815,30 +812,27 @@ class AAI(base.InventoryProviderBase):
             path=path, context="demand, VSERVER",
             value="{}, {}".format(demand_name, vs_path))
         if response is None or response.status_code != 200:
-            self.triage_translator.collectDroppedCandiate(candidate['candidate_id'],
-                                                          candidate['location_id'], demand_name,
+            self.triage_translator.collectDroppedCandiate(candidate_id,
+                                                          location_id, demand_name,
                                                           triage_translator_data,
                                                           reason=response.status_code)
             return None
         return response.json()
 
-    def resolve_vf_modules_for_generic_vnf(self, candidate, vnf, demand_name, triage_translator_data):
+    def resolve_vf_modules_for_generic_vnf(self, candidate_id, location_id, vnf, demand_name, triage_translator_data):
         raw_path = '/network/generic-vnfs/generic-vnf/{}?depth=1'.format(vnf.get("vnf-id"))
         path = self._aai_versioned_path(raw_path)
 
         response = self._request('get', path=path, data=None)
         if response is None or response.status_code != 200:
-            self.triage_translator.collectDroppedCandiate(candidate['candidate_id'],
-                                                          candidate['location_id'], demand_name,
-                                                          triage_translator_data,
-                                                          reason=response)
+            self.triage_translator.collectDroppedCandiate(candidate_id, location_id, demand_name,
+                                                          triage_translator_data, reason=response)
             return None
         generic_vnf_details = response.json()
 
         if generic_vnf_details is None or not generic_vnf_details.get('vf-modules') \
                 or not generic_vnf_details.get('vf-modules').get('vf-module'):
-            self.triage_translator.collectDroppedCandiate(candidate['candidate_id'],
-                                                          candidate['location_id'], demand_name,
+            self.triage_translator.collectDroppedCandiate(candidate_id, location_id, demand_name,
                                                           triage_translator_data,
                                                           reason="Generic-VNF No detailed data for VF-modules")
             return None
@@ -901,7 +895,7 @@ class AAI(base.InventoryProviderBase):
             vs_link_list.append(rl_data_list[i].get('link'))
         return vs_link_list
 
-    def resolve_complex_info_link_for_v_server(self, candidate, v_server, cloud_owner, cloud_region_id, service_type,
+    def resolve_complex_info_link_for_v_server(self, candidate_id, v_server, cloud_owner, cloud_region_id, service_type,
                                                demand_name, triage_translator_data):
         related_to = "pserver"
         rl_data_list = self._get_aai_rel_link_data(
@@ -913,8 +907,7 @@ class AAI(base.InventoryProviderBase):
             self._log_multiple_item_error(
                 demand_name, service_type, related_to, "item",
                 "VSERVER", v_server)
-            self.triage_translator.collectDroppedCandiate(candidate['candidate_id'],
-                                                          candidate['location_id'], demand_name,
+            self.triage_translator.collectDroppedCandiate(candidate_id, cloud_region_id, demand_name,
                                                           triage_translator_data, reason="item VSERVER")
             return None
         rl_data = rl_data_list[0]
@@ -928,10 +921,8 @@ class AAI(base.InventoryProviderBase):
             # if HPA_feature is disabled
             if not self.conf.HPA_enabled:
                 # Triage Tool Feature Changes
-                self.triage_translator.collectDroppedCandiate(candidate['candidate_id'],
-                                                              candidate['location_id'], demand_name,
-                                                              triage_translator_data,
-                                                              reason="ps link not found")
+                self.triage_translator.collectDroppedCandiate(candidate_id, cloud_region_id, demand_name,
+                                                              triage_translator_data, reason="ps link not found")
                 return None
             else:
                 if not (cloud_owner and cloud_region_id):
@@ -939,8 +930,7 @@ class AAI(base.InventoryProviderBase):
                               "available from A&AI".
                               format(demand_name))
                     # Triage Tool Feature Changes
-                    self.triage_translator.collectDroppedCandiate(candidate['candidate_id'],
-                                                                  candidate['location_id'], demand_name,
+                    self.triage_translator.collectDroppedCandiate(candidate_id, cloud_region_id, demand_name,
                                                                   triage_translator_data,
                                                                   reason="Cloud owner and cloud region "
                                                                          "id not found")
@@ -955,10 +945,8 @@ class AAI(base.InventoryProviderBase):
                                          data=None)
                 if response is None or response.status_code != 200:
                     # Triage Tool Feature Changes
-                    self.triage_translator.collectDroppedCandiate(candidate['candidate_id'],
-                                                                  candidate['location_id'], demand_name,
-                                                                  triage_translator_data,
-                                                                  reason=response)
+                    self.triage_translator.collectDroppedCandiate(candidate_id, cloud_region_id, demand_name,
+                                                                  triage_translator_data, reason=response)
                     return None
                 body = response.json()
         else:
@@ -968,20 +956,16 @@ class AAI(base.InventoryProviderBase):
                               "not found in A&AI: {}").
                           format(demand_name, ps_link))
                 # Triage Tool Feature Changes
-                self.triage_translator.collectDroppedCandiate(candidate['candidate_id'],
-                                                              candidate['location_id'], demand_name,
-                                                              triage_translator_data,
-                                                              reason="ps path not found")
+                self.triage_translator.collectDroppedCandiate(candidate_id, cloud_region_id, demand_name,
+                                                              triage_translator_data, reason="ps path not found")
                 return None  # move ahead with the next vnf
             path = self._aai_versioned_path(ps_path)
             response = self._request(
                 path=path, context="PSERVER", value=ps_path)
             if response is None or response.status_code != 200:
                 # Triage Tool Feature Changes
-                self.triage_translator.collectDroppedCandiate(candidate['candidate_id'],
-                                                              candidate['location_id'], demand_name,
-                                                              triage_translator_data,
-                                                              reason=response)
+                self.triage_translator.collectDroppedCandiate(candidate_id, cloud_region_id, demand_name,
+                                                              triage_translator_data, reason=response)
                 return None
             body = response.json()
 
@@ -996,68 +980,47 @@ class AAI(base.InventoryProviderBase):
             if not self.match_vserver_attribute(rl_data_list):
                 self._log_multiple_item_error(
                     demand_name, service_type, related_to, search_key, "PSERVER", body)
-                self.triage_translator.collectDroppedCandiate(candidate['candidate_id'], candidate['location_id'],
-                                                              demand_name, triage_translator_data,
-                                                              reason="PSERVER error")
+                self.triage_translator.collectDroppedCandiate(candidate_id, cloud_region_id, demand_name,
+                                                              triage_translator_data, reason="PSERVER error")
                 return None
         return rl_data_list[0]
 
-    def resolve_cloud_region_id_and_version_for_vnf(self, candidate, vnf, service_type, demand_name,
-                                                    triage_translator_data):
+    def resolve_cloud_for_vnf(self, candidate_id, location_id, vnf, service_type, demand_name, triage_translator_data):
         related_to = "vserver"
-        search_key = "cloud-region.cloud-region-id"
+        search_keys = ["cloud-region.cloud-owner", "cloud-region.cloud-region-id"]
+        cloud_info = dict()
+        for search_key in search_keys:
+            rl_data_list = self._get_aai_rel_link_data(
+                data=vnf, related_to=related_to,
+                search_key=search_key)
 
-        rl_data_list = self._get_aai_rel_link_data(
-            data=vnf,
-            related_to=related_to,
-            search_key=search_key
-        )
-        if len(rl_data_list) > 1:
-            if not self.match_vserver_attribute(rl_data_list):
-                self._log_multiple_item_error(
-                    demand_name, service_type, related_to, search_key,
-                    "VNF", vnf)
-                self.triage_translator.collectDroppedCandiate(candidate['candidate_id'],
-                                                              candidate['location_id'], demand_name,
-                                                              triage_translator_data,
-                                                              reason="VNF error")
-                return None, None
-        cloud_region_rl_data = rl_data_list[0]
-        cloud_region_id = cloud_region_rl_data.get('d_value')
+            if len(rl_data_list) > 1:
+                if not self.match_vserver_attribute(rl_data_list):
+                    self._log_multiple_item_error(
+                        demand_name, service_type, related_to, search_key,
+                        "VNF", vnf)
+                    self.triage_translator.collectDroppedCandiate(candidate_id,
+                                                                  location_id, demand_name,
+                                                                  triage_translator_data,
+                                                                  reason="VNF error")
+                    return None
+            cloud_info[search_key.split(".")[1].replace('-', '_')] = rl_data_list[0].get('d_value') if rl_data_list[
+                0] else None
+        cloud_info['cloud_region_version'] = self.get_cloud_region_version(cloud_info['cloud_region_id'])
+        cloud_info['location_type'] = 'att_aic'
+        cloud_info['location_id'] = cloud_info.pop('cloud_region_id')
+        return cloud_info
 
-        # get version for service candidate
-        cloud_region_version_rl_data = {'d_value': ''}
+    def get_cloud_region_version(self, cloud_region_id):
         if cloud_region_id:
             regions = self.resolve_cloud_regions_by_cloud_region_id(cloud_region_id)
             if regions is None:
-                return cloud_region_rl_data, None
-
+                return None
             for region in regions:
                 if "cloud-region-version" in region:
-                    cloud_region_version_rl_data['d_value'] = self._get_version_from_string(region["cloud-region-version"])
+                    return self._get_version_from_string(region["cloud-region-version"])
 
-        return cloud_region_rl_data, cloud_region_version_rl_data
-
-    def resolve_cloud_owner_for_vnf(self, candidate, vnf, service_type, demand_name, triage_translator_data):
-        related_to = "vserver"
-        search_key = "cloud-region.cloud-owner"
-        rl_data_list = self._get_aai_rel_link_data(
-            data=vnf, related_to=related_to,
-            search_key=search_key)
-
-        if len(rl_data_list) > 1:
-            if not self.match_vserver_attribute(rl_data_list):
-                self._log_multiple_item_error(
-                    demand_name, service_type, related_to, search_key,
-                    "VNF", vnf)
-                self.triage_translator.collectDroppedCandiate(candidate['candidate_id'],
-                                                              candidate['location_id'], demand_name,
-                                                              triage_translator_data,
-                                                              reason="VNF error")
-                return None
-        return rl_data_list[0]
-
-    def resolve_global_customer_id_for_vnf(self, candidate, vnf, customer_id, service_type, demand_name,
+    def resolve_global_customer_id_for_vnf(self, candidate_id, location_id, vnf, customer_id, service_type, demand_name,
                                            triage_translator_data):
         related_to = "service-instance"
         search_key = "customer.global-customer-id"
@@ -1073,13 +1036,13 @@ class AAI(base.InventoryProviderBase):
             if not self.match_vserver_attribute(rl_data_list):
                 self._log_multiple_item_error(
                     demand_name, service_type, related_to, search_key, "VNF", vnf)
-                self.triage_translator.collectDroppedCandiate(candidate['candidate_id'], candidate['location_id'],
+                self.triage_translator.collectDroppedCandiate(candidate_id, location_id,
                                                               demand_name, triage_translator_data,
                                                               reason=" match_vserver_attribute generic-vnf")
                 return None
         return rl_data_list[0]
 
-    def resolve_service_instance_id_for_vnf(self, candidate, vnf, customer_id, service_type, demand_name,
+    def resolve_service_instance_id_for_vnf(self, candidate_id, location_id, vnf, customer_id, service_type, demand_name,
                                             triage_translator_data):
         related_to = "service-instance"
         search_key = "service-instance.service-instance-id"
@@ -1095,20 +1058,19 @@ class AAI(base.InventoryProviderBase):
             if not self.match_vserver_attribute(rl_data_list):
                 self._log_multiple_item_error(
                     demand_name, service_type, related_to, search_key, "VNF", vnf)
-                self.triage_translator.collectDroppedCandiate(candidate['candidate_id'], candidate['location_id'],
+                self.triage_translator.collectDroppedCandiate(candidate_id, location_id,
                                                               demand_name, triage_translator_data,
                                                               reason="multiple_item_error generic-vnf")
                 return None
         return rl_data_list[0]
 
-    def build_complex_info_for_candidate(self, candidate, vnf, complex_list, service_type, demand_name,
+    def build_complex_info_for_candidate(self, candidate_id, location_id, vnf, complex_list, service_type, demand_name,
                                          triage_translator_data):
         if not complex_list or \
                 len(complex_list) < 1:
             LOG.error("Complex information not "
                       "available from A&AI")
-            self.triage_translator.collectDroppedCandiate(candidate['candidate_id'],
-                                                          candidate['location_id'], demand_name,
+            self.triage_translator.collectDroppedCandiate(candidate_id, location_id, demand_name,
                                                           triage_translator_data,
                                                           reason="Complex information not available from A&AI")
             return
@@ -1123,8 +1085,7 @@ class AAI(base.InventoryProviderBase):
                 self._log_multiple_item_error(
                     demand_name, service_type, related_to, search_key,
                     "VNF", vnf)
-                self.triage_translator.collectDroppedCandiate(candidate['candidate_id'],
-                                                              candidate['location_id'], demand_name,
+                self.triage_translator.collectDroppedCandiate(candidate_id, location_id, demand_name,
                                                               triage_translator_data,
                                                               reason="Generic-vnf error")
                 return
@@ -1138,8 +1099,7 @@ class AAI(base.InventoryProviderBase):
             LOG.debug("{} complex information not "
                       "available from A&AI - {}".
                       format(demand_name, complex_link))
-            self.triage_translator.collectDroppedCandiate(candidate['candidate_id'],
-                                                          candidate['location_id'], demand_name,
+            self.triage_translator.collectDroppedCandiate(candidate_id, location_id, demand_name,
                                                           triage_translator_data,
                                                           reason="Complex information not available from A&AI")
             return  # move ahead with the next vnf
@@ -1152,32 +1112,18 @@ class AAI(base.InventoryProviderBase):
                 LOG.debug("{} complex information not "
                           "available from A&AI - {}".
                           format(demand_name, complex_link))
-                self.triage_translator.collectDroppedCandiate(candidate['candidate_id'],
-                                                              candidate['location_id'], demand_name,
+                self.triage_translator.collectDroppedCandiate(candidate_id, location_id, demand_name,
                                                               triage_translator_data,
                                                               reason="Complex information not available from A&AI")
                 return  # move ahead with the next vnf
-            candidate['physical_location_id'] = \
-                complex_id
-            candidate['complex_name'] = \
-                complex_info.get('complex-name')
-            candidate['latitude'] = \
-                complex_info.get('latitude')
-            candidate['longitude'] = \
-                complex_info.get('longitude')
-            candidate['state'] = \
-                complex_info.get('state')
-            candidate['country'] = \
-                complex_info.get('country')
-            candidate['city'] = \
-                complex_info.get('city')
-            candidate['region'] = \
-                complex_info.get('region')
+
+            complex_info = self.build_complex_dict(complex_info, '')
+            return complex_info
 
     def resolve_demands(self, demands, plan_info, triage_translator_data):
         """Resolve demands into inventory candidate lists"""
 
-        self.triage_translator.getPlanIdNAme(plan_info['plan_name'], plan_info['plan_id'],triage_translator_data)
+        self.triage_translator.getPlanIdNAme(plan_info['plan_name'], plan_info['plan_id'], triage_translator_data)
 
         resolved_demands = {}
         for name, requirements in demands.items():
@@ -1189,9 +1135,9 @@ class AAI(base.InventoryProviderBase):
                 candidate_uniqueness = requirement.get('unique', 'true')
                 filtering_attributes = requirement.get('filtering_attributes')
                 passthrough_attributes = requirement.get('passthrough_attributes')
-                #TODO: may need to support multiple service_type and customer_id in the futrue
+                # TODO: may need to support multiple service_type and customer_id in the futrue
 
-                #TODO: make it consistent for dash and underscore
+                # TODO: make it consistent for dash and underscore
 
                 if filtering_attributes:
                     # catch equipment-role and service-type from template
@@ -1241,63 +1187,27 @@ class AAI(base.InventoryProviderBase):
                 service_resource_id = requirement.get('service_resource_id') \
                     if requirement.get('service_resource_id') else ''
 
-                # add all the candidates of cloud type
                 if inventory_type == 'cloud':
                     # load region candidates from cache
                     regions = self._get_regions()
-
                     if not regions or len(regions) < 1:
-                        LOG.debug("Region information is not "
-                                  "available in cache")
+                        LOG.debug("Region information is not available in cache")
                     for region_id, region in regions.items():
                         # Pick only candidates from the restricted_region
-
-                        candidate = dict()
-                        candidate['inventory_provider'] = 'aai'
-                        candidate['service_resource_id'] = service_resource_id
-                        candidate['inventory_type'] = 'cloud'
-                        candidate['candidate_id'] = region_id
-                        candidate['location_id'] = region_id
-                        candidate['location_type'] = 'att_aic'
-                        candidate['cost'] = self.conf.data.cloud_candidate_cost
-                        candidate['cloud_region_version'] = \
-                            self._get_version_from_string(
-                                region['cloud_region_version'])
-                        candidate['cloud_owner'] = \
-                            region['cloud_owner']
-
-                        candidate['physical_location_id'] = \
-                            region['complex']['complex_id']
-                        candidate['complex_name'] = \
-                            region['complex']['complex_name']
-                        candidate['latitude'] = \
-                            region['complex']['latitude']
-                        candidate['longitude'] = \
-                            region['complex']['longitude']
-                        candidate['city'] = \
-                            region['complex']['city']
-                        candidate['state'] = \
-                            region['complex']['state']
-                        candidate['region'] = \
-                            region['complex']['region']
-                        candidate['country'] = \
-                            region['complex']['country']
-                        candidate['uniqueness'] = candidate_uniqueness
-
-                        # Added vim-id for short-term workaround
-                        if self.conf.HPA_enabled:
-                            candidate['vim-id'] = \
-                                region['cloud_owner'] + '_' + region_id
-                            # Added for HPA
-                            candidate['flavors'] = \
-                                region['flavors']
-
-                        if self.check_sriov_automation(
-                                candidate['cloud_region_version'], name,
-                                candidate['candidate_id']):
-                            candidate['sriov_automation'] = 'true'
-                        else:
-                            candidate['sriov_automation'] = 'false'
+                        info = Candidate.build_candidate_info('aai', inventory_type, self.conf.data.cloud_candidate_cost,
+                                                              candidate_uniqueness, region_id, service_resource_id)
+                        cloud = self.resolve_cloud_for_region(region, region_id)
+                        complex_info = self.build_complex_dict(region['complex'], inventory_type)
+                        flavors = self.resolve_flavors_for_region(region['flavors'])
+                        other = dict()
+                        other['vim-id'] = self.get_vim_id(cloud['cloud_owner'], cloud['location_id'])
+                        other['sriov_automation'] = 'true' if self.check_sriov_automation(cloud['cloud_region_version'],
+                                                                                          name,
+                                                                                          info['candidate_id']) \
+                                                                                          else 'false'
+                        cloud_candidate = Cloud(info=info, cloud_region=cloud, complex=complex_info, flavors=flavors,
+                                                additional_fields=other)
+                        candidate = cloud_candidate.convert_nested_dict_to_dict()
 
                         cloud_region_attr = dict()
                         cloud_region_attr['cloud-owner'] = region['cloud_owner']
@@ -1307,9 +1217,12 @@ class AAI(base.InventoryProviderBase):
                         cloud_region_attr['complex-name'] = region['complex_name']
                         cloud_region_attr['physical-location-id'] = region['physical_location_id']
 
-                        if filtering_attributes and (not self.match_inventory_attributes(filtering_attributes, cloud_region_attr, candidate['candidate_id'])):
-                            self.triage_translator.collectDroppedCandiate(candidate['candidate_id'], candidate['location_id'], name, triage_translator_data,
-                                                                         reason='attributes and match invetory attributes')
+                        if filtering_attributes and (not self.match_inventory_attributes(filtering_attributes,
+                                                                                         cloud_region_attr, candidate['candidate_id'])):
+                            self.triage_translator.collectDroppedCandiate(candidate['candidate_id'],
+                                                                          candidate['location_id'], name,
+                                                                          triage_translator_data,
+                                                                          reason='attributes and match invetory attributes')
                             continue
 
                         if conflict_identifier:
@@ -1321,197 +1234,24 @@ class AAI(base.InventoryProviderBase):
 
                         self.assign_candidate_existing_placement(candidate, existing_placement)
 
-                        # Pick only candidates not in the excluded list
-                        # if excluded candidate list is provided
-                        if excluded_candidates and self.match_candidate_by_list(candidate, excluded_candidates, True, name, triage_translator_data):
+                        # Pick only candidates not in the excluded list, if excluded candidate list is provided
+                        if excluded_candidates and self.match_candidate_by_list(candidate, excluded_candidates, True,
+                                                                                name, triage_translator_data):
                             continue
 
-                        # Pick only candidates in the required list
-                        # if required candidate list is provided
-                        if required_candidates and not self.match_candidate_by_list(candidate, required_candidates, False, name, triage_translator_data):
+                        # Pick only candidates in the required list, if required candidate list is provided
+                        if required_candidates and not self.match_candidate_by_list(candidate, required_candidates,
+                                                                                    False, name,
+                                                                                    triage_translator_data):
                             continue
 
-                        self.add_passthrough_attributes(candidate, passthrough_attributes, name, triage_translator_data)
+                        self.add_passthrough_attributes(candidate, passthrough_attributes, name)
                         # add candidate to demand candidates
                         resolved_demands[name].append(candidate)
                         LOG.debug(">>>>>>> Candidate <<<<<<<")
                         LOG.debug(json.dumps(candidate, indent=4))
 
-                elif (inventory_type == 'service') \
-                        and customer_id:
-
-                    # First level query to get the list of generic vnfs
-                    vnf_by_model_invariant = list()
-                    if filtering_attributes and model_invariant_id:
-
-                        raw_path = '/network/generic-vnfs/' \
-                                   '?model-invariant-id={}&depth=0'.format(model_invariant_id)
-                        if model_version_id:
-                            raw_path = '/network/generic-vnfs/' \
-                                       '?model-invariant-id={}&model-version-id={}&depth=0'.format(model_invariant_id, model_version_id)
-                        path = self._aai_versioned_path(raw_path)
-                        vnf_by_model_invariant = self.first_level_service_call(path, name, service_type)
-
-                    vnf_by_service_type = list()
-                    if service_type or equipment_role:
-                        path = self._aai_versioned_path(
-                            '/network/generic-vnfs/'
-                            '?equipment-role={}&depth=0'.format(service_type))
-                        vnf_by_service_type = self.first_level_service_call(path, name, service_type)
-
-                    generic_vnf = vnf_by_model_invariant + vnf_by_service_type
-                    vnf_dict = dict()
-
-                    for vnf in generic_vnf:
-                        # if this vnf already appears, skip it
-                        vnf_id = vnf.get('vnf-id')
-                        if vnf_id in vnf_dict:
-                            continue
-
-                        # add vnf (with vnf_id as key) to the dictionary
-                        vnf_dict[vnf_id] = vnf
-
-                        # create a default candidate
-                        candidate = dict()
-                        candidate['inventory_provider'] = 'aai'
-                        candidate['service_resource_id'] = service_resource_id
-                        candidate['inventory_type'] = inventory_type
-                        candidate['candidate_id'] = ''
-                        candidate['location_id'] = ''
-                        candidate['location_type'] = 'att_aic'
-                        candidate['host_id'] = ''
-                        candidate['cost'] = self.conf.data.service_candidate_cost
-                        candidate['cloud_owner'] = ''
-                        candidate['cloud_region_version'] = ''
-                        candidate['vlan_key'] = vlan_key
-                        candidate['port_key'] = port_key
-                        candidate['uniqueness'] = candidate_uniqueness
-
-                        # start populating the candidate
-                        candidate['host_id'] = vnf.get("vnf-name")
-
-                        rl_data = self.resolve_cloud_owner_for_vnf(candidate, vnf, service_type, name,
-                                                                   triage_translator_data)
-                        if rl_data is None:
-                            continue
-                        else:
-                            cloud_owner = rl_data.get('d_value')
-
-                        candidate['cloud_owner'] = cloud_owner
-
-                        cloud_region_id_rl_data, cloud_region_version_rl_data = self.resolve_cloud_region_id_and_version_for_vnf(
-                            candidate, vnf, service_type, name, triage_translator_data)
-
-                        if cloud_region_id_rl_data is None or cloud_region_version_rl_data is None:
-                            continue
-
-                        cloud_region_id = cloud_region_id_rl_data.get('d_value')
-                        cloud_region_version = cloud_region_version_rl_data.get('d_value')
-                        candidate['location_id'] = cloud_region_id
-                        candidate['cloud_region_version'] = cloud_region_version
-
-                        # Added vim-id for short-term workaround
-                        if self.conf.HPA_enabled:
-                            if not cloud_owner:
-                                continue
-                            candidate['vim-id'] = \
-                                candidate['cloud_owner'] + '_' + cloud_region_id
-
-                        if self.check_sriov_automation(
-                                candidate['cloud_region_version'], name,
-                                candidate['host_id']):
-                            candidate['sriov_automation'] = 'true'
-                        else:
-                            candidate['sriov_automation'] = 'false'
-
-                        rl_data = self.resolve_global_customer_id_for_vnf(candidate, vnf, customer_id, service_type,
-                                                                          name, triage_translator_data)
-                        if rl_data is None:
-                            continue
-                        else:
-                            vs_cust_id = rl_data.get('d_value')
-
-                        rl_data = self.resolve_service_instance_id_for_vnf(candidate, vnf, customer_id,
-                                                                           service_type, name, triage_translator_data)
-                        if rl_data is None:
-                            continue
-                        else:
-                            vs_service_instance_id = rl_data.get('d_value')
-
-                        if vs_cust_id and vs_cust_id == customer_id:
-                            candidate['candidate_id'] = \
-                                vs_service_instance_id
-                        else:  # vserver is for a different customer
-                            self.triage_translator.collectDroppedCandiate(candidate['candidate_id'],
-                                                                          candidate['location_id'], name,
-                                                                          triage_translator_data,
-                                                                          reason= "vserver is for a different customer")
-                            continue
-
-                        # Second level query to get the pserver from vserver
-                        complex_list = list()
-                        vs_link_list = self.resolve_v_server_links_for_vnf(vnf)
-
-                        for vs_link in vs_link_list:
-
-                            body = self.resolove_v_server_for_candidate(candidate, vs_link, True, name,
-                                                                        triage_translator_data)
-                            if body is None:
-                                continue
-
-                            rl_data = self.resolve_complex_info_link_for_v_server(candidate, body, cloud_owner,
-                                                                                  cloud_region_id, service_type,
-                                                                                  name, triage_translator_data)
-                            if rl_data is None:
-                                continue
-
-                            complex_list.append(rl_data)
-
-                        self.build_complex_info_for_candidate(candidate, vnf, complex_list, service_type, name,
-                                                              triage_translator_data)
-
-                        if "complex_name" not in candidate:
-                            continue
-
-                        # add specifal parameters for comparsion
-                        vnf['global-customer-id'] = customer_id
-                        vnf['customer-id'] = customer_id
-                        vnf['cloud-region-id'] = cloud_region_id
-                        vnf['physical-location-id'] = candidate.get('physical_location_id')
-
-                        if filtering_attributes and not self.match_inventory_attributes(filtering_attributes, vnf, candidate['candidate_id']):
-                            self.triage_translator.collectDroppedCandiate(candidate['candidate_id'], candidate['location_id'], name, triage_translator_data,
-                                                                         reason="attibute check error")
-                            continue
-                        self.assign_candidate_existing_placement(candidate, existing_placement)
-
-                        # Pick only candidates not in the excluded list
-                        # if excluded candidate list is provided
-                        if excluded_candidates and self.match_candidate_by_list(candidate, excluded_candidates, True,
-                                                                                name, triage_translator_data):
-                            continue
-
-                        # Pick only candidates in the required list
-                        # if required candidate list is provided
-                        if required_candidates and not self.match_candidate_by_list(candidate, required_candidates,
-                                                                                    False, name, triage_translator_data):
-                            continue
-
-                        # add the candidate to the demand
-                        # Pick only candidates from the restricted_region
-                        # or restricted_complex
-                        if not self.match_region(candidate, restricted_region_id, restricted_complex_id, name,
-                                                 triage_translator_data):
-                            continue
-                        else:
-                            self.add_passthrough_attributes(candidate, passthrough_attributes, name, triage_translator_data)
-                            resolved_demands[name].append(candidate)
-                            LOG.debug(">>>>>>> Candidate <<<<<<<")
-                            LOG.debug(json.dumps(candidate, indent=4))
-
-                elif (inventory_type == 'vfmodule') \
-                        and customer_id:
-
+                elif (inventory_type == 'service') and customer_id:
                     # First level query to get the list of generic vnfs
                     vnf_by_model_invariant = list()
                     if filtering_attributes and model_invariant_id:
@@ -1540,173 +1280,220 @@ class AAI(base.InventoryProviderBase):
                         vnf_id = vnf.get('vnf-id')
                         if vnf_id in vnf_dict:
                             continue
-
                         # add vnf (with vnf_id as key) to the dictionary
                         vnf_dict[vnf_id] = vnf
+                        vnf_info = dict()
+                        vnf_info['host_id'] = vnf.get("vnf-name")
+                        vlan_info = self.build_vlan_info(vlan_key, port_key)
+                        cloud = self.resolve_cloud_for_vnf('', '', vnf, service_type, name, triage_translator_data)
+                        if cloud['location_id'] is None or cloud['cloud_owner'] is None or \
+                                cloud['cloud_region_version'] is None:
+                            continue
 
-                        # create a default candidate
-                        candidate = dict()
-                        candidate['inventory_provider'] = 'aai'
-                        candidate['service_resource_id'] = service_resource_id
-                        candidate['inventory_type'] = inventory_type
-                        candidate['candidate_id'] = ''
-                        candidate['location_id'] = ''
-                        candidate['location_type'] = 'att_aic'
-                        candidate['host_id'] = ''
-                        candidate['cost'] = self.conf.data.service_candidate_cost
-                        candidate['cloud_owner'] = ''
-                        candidate['cloud_region_version'] = ''
-                        candidate['vlan_key'] = vlan_key
-                        candidate['port_key'] = port_key
-                        candidate['uniqueness'] = candidate_uniqueness
-
-                        # start populating the candidate
-                        candidate['host_id'] = vnf.get("vnf-name")
-
-                        candidate['nf-name'] = vnf.get("vnf-name")
-                        candidate['nf-id'] = vnf.get("vnf-id")
-                        candidate['nf-type'] = 'vnf'
-                        candidate['vnf-type'] = vnf.get("vnf-type")
-                        candidate['ipv4-oam-address'] = ''
-                        candidate['ipv6-oam-address'] = ''
-
-                        if vnf.get("ipv4-oam-address"):
-                            candidate['ipv4-oam-address'] = vnf.get("ipv4-oam-address")
-                        if vnf.get("ipv6-oam-address"):
-                            candidate['ipv6-oam-address'] = vnf.get("ipv6-oam-address")
-
-                        rl_data = self.resolve_global_customer_id_for_vnf(candidate, vnf, customer_id, service_type,
-                                                                          name, triage_translator_data)
+                        rl_data = self.resolve_global_customer_id_for_vnf('', cloud['location_id'], vnf, customer_id,
+                                                                          service_type, name, triage_translator_data)
                         if rl_data is None:
                             continue
                         else:
                             vs_cust_id = rl_data.get('d_value')
-
-                        rl_data = self.resolve_service_instance_id_for_vnf(candidate, vnf, customer_id,
+                        rl_data = self.resolve_service_instance_id_for_vnf('', cloud['location_id'], vnf, customer_id,
                                                                            service_type, name, triage_translator_data)
                         if rl_data is None:
                             continue
                         else:
                             vs_service_instance_id = rl_data.get('d_value')
 
+                        # INFO
                         if vs_cust_id and vs_cust_id == customer_id:
-                            candidate['service_instance_id'] = vs_service_instance_id
+                            info = Candidate.build_candidate_info('aai', inventory_type,
+                                                                  self.conf.data.service_candidate_cost,
+                                                                  candidate_uniqueness, vs_service_instance_id,
+                                                                  service_resource_id)
                         else:  # vserver is for a different customer
+                            self.triage_translator.collectDroppedCandiate('', cloud['location_id'], name,
+                                                                          triage_translator_data,
+                                                                          reason="vserver is for a different customer")
+                            continue
+                        # Added vim-id for short-term workaround
+                        other = dict()
+                        other['vim-id'] = self.get_vim_id(cloud['cloud_owner'], cloud['location_id'])
+                        other['sriov_automation'] = 'true' if self.check_sriov_automation(
+                            cloud['cloud_region_version'], name, info['candidate_id'])  else 'false'
+
+                        # Second level query to get the pserver from vserver
+                        complex_list = list()
+                        for complex_link in self.resolve_v_server_and_complex_link_for_vnf(info['candidate_id'], cloud,
+                                                                                           vnf, name,
+                                                                                           triage_translator_data,
+                                                                                           service_type):
+                            complex_list.append(complex_link[1])
+                        complex_info = self.build_complex_info_for_candidate(info['candidate_id'], cloud['location_id'],
+                                                                             vnf, complex_list, service_type, name,
+                                                                             triage_translator_data)
+                        if "complex_name" not in complex_info:
+                            continue
+
+                        service_candidate = Service(info=info, cloud_region=cloud, complex=complex_info,
+                                                    generic_vnf=vnf_info, additional_fields=other, vlan=vlan_info)
+                        candidate = service_candidate.convert_nested_dict_to_dict()
+
+                        # add specifal parameters for comparsion
+                        vnf['global-customer-id'] = customer_id
+                        vnf['customer-id'] = customer_id
+                        vnf['cloud-region-id'] = cloud.get('cloud_region_id')
+                        vnf['physical-location-id'] = complex_info.get('physical_location_id')
+
+                        if filtering_attributes and not self.match_inventory_attributes(filtering_attributes, vnf,
+                                                                                        candidate['candidate_id']):
                             self.triage_translator.collectDroppedCandiate(candidate['candidate_id'],
                                                                           candidate['location_id'], name,
+                                                                          triage_translator_data,
+                                                                          reason="attibute check error")
+                            continue
+                        self.assign_candidate_existing_placement(candidate, existing_placement)
+
+                        # Pick only candidates not in the excluded list
+                        # if excluded candidate list is provided
+                        if excluded_candidates and self.match_candidate_by_list(candidate, excluded_candidates, True,
+                                                                                name, triage_translator_data):
+                            continue
+
+                        # Pick only candidates in the required list
+                        # if required candidate list is provided
+                        if required_candidates and not self.match_candidate_by_list(candidate, required_candidates,
+                                                                                    False, name,
+                                                                                    triage_translator_data):
+                            continue
+
+                        # add the candidate to the demand
+                        # Pick only candidates from the restricted_region
+                        # or restricted_complex
+                        if not self.match_region(candidate, restricted_region_id, restricted_complex_id, name,
+                                                 triage_translator_data):
+                            continue
+                        else:
+                            self.add_passthrough_attributes(candidate, passthrough_attributes, name)
+                            resolved_demands[name].append(candidate)
+                            LOG.debug(">>>>>>> Candidate <<<<<<<")
+                            LOG.debug(json.dumps(candidate, indent=4))
+
+                elif (inventory_type == 'vfmodule') and customer_id:
+
+                    # First level query to get the list of generic vnfs
+                    vnf_by_model_invariant = list()
+                    if filtering_attributes and model_invariant_id:
+
+                        raw_path = '/network/generic-vnfs/' \
+                                   '?model-invariant-id={}&depth=0'.format(model_invariant_id)
+                        if model_version_id:
+                            raw_path = '/network/generic-vnfs/' \
+                                       '?model-invariant-id={}&model-version-id={}&depth=0'.format(model_invariant_id,
+                                                                                                   model_version_id)
+                        path = self._aai_versioned_path(raw_path)
+                        vnf_by_model_invariant = self.first_level_service_call(path, name, service_type)
+
+                    vnf_by_service_type = list()
+                    if service_type or equipment_role:
+                        path = self._aai_versioned_path('/network/generic-vnfs/'
+                                                        '?equipment-role={}&depth=0'.format(service_type))
+                        vnf_by_service_type = self.first_level_service_call(path, name, service_type)
+
+                    generic_vnf = vnf_by_model_invariant + vnf_by_service_type
+                    vnf_dict = dict()
+
+                    for vnf in generic_vnf:
+                        # if this vnf already appears, skip it
+                        vnf_id = vnf.get('vnf-id')
+                        if vnf_id in vnf_dict:
+                            continue
+                        # add vnf (with vnf_id as key) to the dictionary
+                        vnf_dict[vnf_id] = vnf
+
+                        # INFO
+                        info = Candidate.build_candidate_info('aai', inventory_type, self.conf.data.service_candidate_cost,
+                                                              candidate_uniqueness, "", service_resource_id)
+                        # VLAN INFO
+                        vlan_info = self.build_vlan_info(vlan_key, port_key)
+                        # Generic VNF Info
+                        vnf_info = self.get_vnf_info(vnf)
+
+                        rl_data = self.resolve_global_customer_id_for_vnf('', '', vnf, customer_id,
+                                                                          service_type, name, triage_translator_data)
+                        if rl_data is None:
+                            continue
+                        else:
+                            vs_cust_id = rl_data.get('d_value')
+
+                        rl_data = self.resolve_service_instance_id_for_vnf('', '', vnf, customer_id,
+                                                                           service_type, name, triage_translator_data)
+                        if rl_data is None:
+                            continue
+                        else:
+                            vs_service_instance_id = rl_data.get('d_value')
+
+                        service_info = dict()
+                        if vs_cust_id and vs_cust_id == customer_id:
+                            service_info['service_instance_id'] = vs_service_instance_id
+                        else:  # vserver is for a different customer
+                            self.triage_translator.collectDroppedCandiate('', '', name,
                                                                           triage_translator_data,
                                                                           reason="candidate is for a different customer")
                             continue
 
-                        vf_modules_list = self.resolve_vf_modules_for_generic_vnf(candidate, vnf, name,
+                        vf_modules_list = self.resolve_vf_modules_for_generic_vnf('', '', vnf, name,
                                                                                   triage_translator_data)
                         if vf_modules_list is None:
                             continue
 
-                        candidate_base = candidate
                         for vf_module in vf_modules_list:
                             # for vfmodule demands we allow to have vfmodules from different cloud regions
-                            candidate = copy.deepcopy(candidate_base)
-                            candidate['candidate_id'] = vf_module.get("vf-module-id")
-                            candidate['vf-module-name'] = vf_module.get("vf-module-name")
-                            candidate['vf-module-id'] = vf_module.get("vf-module-id")
-
-                            rl_data = self.resolve_cloud_owner_for_vnf(candidate, vf_module, service_type, name,
-                                                                       triage_translator_data)
-                            if rl_data is None:
-                                continue
-                            else:
-                                cloud_owner = rl_data.get('d_value')
-                            candidate['cloud_owner'] = cloud_owner
-
-                            cloud_region_id_rl_data, cloud_region_version_rl_data = self.resolve_cloud_region_id_and_version_for_vnf(
-                                candidate, vf_module, service_type, name, triage_translator_data)
-
-                            if cloud_region_id_rl_data is None or cloud_region_version_rl_data is None:
+                            info['candidate_id'] = vf_module.get("vf-module-id")
+                            vf_module_info = self.get_vf_module(vf_module)
+                            cloud = self.resolve_cloud_for_vnf(info['candidate_id'], '', vf_module, service_type, name,
+                                                               triage_translator_data)
+                            if cloud['location_id'] is None or cloud['cloud_owner'] is None or \
+                                    cloud['cloud_region_version'] is None:
                                 continue
 
-                            cloud_region_id = cloud_region_id_rl_data.get('d_value')
-                            cloud_region_version = cloud_region_version_rl_data.get('d_value')
-                            candidate['location_id'] = cloud_region_id
-                            candidate['cloud_region_version'] = cloud_region_version
-
-                            # Added vim-id for short-term workaround
-                            if self.conf.HPA_enabled:
-                                if not cloud_owner:
-                                    continue
-                                candidate['vim-id'] = \
-                                    candidate['cloud_owner'] + '_' + cloud_region_id
-
-                            if self.check_sriov_automation(
-                                    candidate['cloud_region_version'], name,
-                                    candidate['host_id']):
-                                candidate['sriov_automation'] = 'true'
-                            else:
-                                candidate['sriov_automation'] = 'false'
+                            # OTHER - Added vim-id for short-term workaround
+                            other = dict()
+                            other['vim-id'] = self.get_vim_id(cloud['cloud_owner'], cloud['location_id'])
+                            other['sriov_automation'] = 'true' if self.check_sriov_automation(
+                                cloud['cloud_region_version'], name, info['candidate_id']) else 'false'
 
                             # Second level query to get the pserver from vserver
-                            candidate['vservers'] = list()
+                            vserver_info = dict()
+                            vserver_info['vservers'] = list()
                             complex_list = list()
-                            vs_link_list = self.resolve_v_server_links_for_vnf(vf_module)
-
-                            for vs_link in vs_link_list:
-
-                                body = self.resolove_v_server_for_candidate(candidate, vs_link, True, name,
-                                                                            triage_translator_data)
-                                if body is None:
-                                    continue
-
+                            for v_server, complex_link in self.resolve_v_server_and_complex_link_for_vnf(info['candidate_id'],
+                                                                                                         cloud, vnf, name,
+                                                                                                         triage_translator_data,
+                                                                                                         service_type):
+                                complex_list.append(complex_link)
                                 candidate_vserver = dict()
-                                candidate_vserver['vserver-id'] = body.get('vserver-id')
-                                candidate_vserver['vserver-name'] = body.get('vserver-name')
-
-                                rl_data = self.resolve_complex_info_link_for_v_server(candidate, body, cloud_owner,
-                                                                                      cloud_region_id, service_type,
-                                                                                      name, triage_translator_data)
-                                if rl_data is None:
-                                    continue
-
-                                #Interfaces info
-                                if not body.get('l-interfaces') or not body.get('l-interfaces').get('l-interface'):
-                                    self.triage_translator.collectDroppedCandiate(candidate['candidate_id'],
-                                                                                  candidate['location_id'], name,
-                                                                                  triage_translator_data,
-                                                                                  reason="VF-server interfaces error")
-                                    continue
+                                candidate_vserver['vserver-id'] = v_server.get('vserver-id')
+                                candidate_vserver['vserver-name'] = v_server.get('vserver-name')
+                                l_interfaces = self.get_l_interfaces_from_vserver(info['candidate_id'], cloud['location_id'],
+                                                                                  v_server, name, triage_translator_data)
+                                if l_interfaces:
+                                    candidate_vserver['l-interfaces'] = l_interfaces
                                 else:
-                                    l_interfaces = body.get('l-interfaces').get('l-interface')
-                                    candidate_vserver['l-interfaces'] = list()
+                                    continue
+                                vserver_info['vservers'].append(candidate_vserver)
 
-                                    for l_interface in l_interfaces:
-                                        vserver_interface = dict()
-                                        vserver_interface['interface-id'] = l_interface.get('interface-id')
-                                        vserver_interface['interface-name'] = l_interface.get('interface-name')
-                                        vserver_interface['macaddr'] = l_interface.get('macaddr')
-                                        vserver_interface['network-id'] = l_interface.get('network-name')
-                                        vserver_interface['network-name'] = ''
-                                        vserver_interface['ipv4-addresses'] = list()
-                                        vserver_interface['ipv6-addresses'] = list()
-
-                                        if l_interface.get('l3-interface-ipv4-address-list'):
-                                            for ip_address_info in l_interface.get('l3-interface-ipv4-address-list'):
-                                                vserver_interface['ipv4-addresses'].\
-                                                    append(ip_address_info.get('l3-interface-ipv4-address'))
-
-                                        if l_interface.get('l3-interface-ipv6-address-list'):
-                                            for ip_address_info in l_interface.get('l3-interface-ipv6-address-list'):
-                                                vserver_interface['ipv6-addresses'].\
-                                                    append(ip_address_info.get('l3-interface-ipv6-address'))
-
-                                        candidate_vserver['l-interfaces'].append(vserver_interface)
-
-                                complex_list.append(rl_data)
-                                candidate['vservers'].append(candidate_vserver)
-
-                            self.build_complex_info_for_candidate(candidate, vnf, complex_list, service_type, name,
-                                                                  triage_translator_data)
-
-                            if candidate.get("complex_name") is None:
+                            # COMPLEX
+                            complex_info = self.build_complex_info_for_candidate(info['candidate_id'],
+                                                                                 cloud['location_id'], vnf, complex_list,
+                                                                                 service_type, name,
+                                                                                 triage_translator_data)
+                            if complex_info.get("complex_name") is None:
                                 continue
+
+                            vf_module_candidate = VfModule(complex=complex_info, info=info, generic_vnf=vnf_info,
+                                                           cloud_region=cloud, service_instance=service_info,
+                                                           vf_module=vf_module_info, vserver=vserver_info,
+                                                           additional_fields=other, vlan=vlan_info)
+                            candidate = vf_module_candidate.convert_nested_dict_to_dict()
 
                             ##add vf-module parameters for filtering
                             vnf_vf_module_inventory = copy.deepcopy(vnf)
@@ -1714,12 +1501,13 @@ class AAI(base.InventoryProviderBase):
                             # add specifal parameters for comparsion
                             vnf_vf_module_inventory['global-customer-id'] = customer_id
                             vnf_vf_module_inventory['customer-id'] = customer_id
-                            vnf_vf_module_inventory['cloud-region-id'] = cloud_region_id
-                            vnf_vf_module_inventory['physical-location-id'] = candidate.get('physical_location_id')
+                            vnf_vf_module_inventory['cloud-region-id'] = cloud.get('location_id')
+                            vnf_vf_module_inventory['physical-location-id'] = complex_info.get('physical_location_id')
                             vnf_vf_module_inventory['service_instance_id'] = vs_service_instance_id
 
-                            if filtering_attributes and not self.match_inventory_attributes(filtering_attributes, vnf_vf_module_inventory,
-                                                                                  candidate['candidate_id']):
+                            if filtering_attributes and not self.match_inventory_attributes(filtering_attributes,
+                                                                                            vnf_vf_module_inventory,
+                                                                                            candidate['candidate_id']):
                                 self.triage_translator.collectDroppedCandiate(candidate['candidate_id'],
                                                                               candidate['location_id'], name,
                                                                               triage_translator_data,
@@ -1729,7 +1517,8 @@ class AAI(base.InventoryProviderBase):
 
                             # Pick only candidates not in the excluded list
                             # if excluded candidate list is provided
-                            if excluded_candidates and self.match_candidate_by_list(candidate, excluded_candidates, True,
+                            if excluded_candidates and self.match_candidate_by_list(candidate, excluded_candidates,
+                                                                                    True,
                                                                                     name, triage_translator_data):
                                 continue
 
@@ -1747,91 +1536,73 @@ class AAI(base.InventoryProviderBase):
                                                      triage_translator_data):
                                 continue
                             else:
-                                self.add_passthrough_attributes(candidate, passthrough_attributes, name, triage_translator_data)
+                                self.add_passthrough_attributes(candidate, passthrough_attributes, name)
                                 resolved_demands[name].append(candidate)
                                 LOG.debug(">>>>>>> Candidate <<<<<<<")
+                                with open("vf.log", mode='w') as log_file:
+                                    log_file.write(">>>>>>>Vf Candidate <<<<<<<")
+                                    log_file.write(json.dumps(candidate, indent=4))
                                 LOG.debug(json.dumps(candidate, indent=4))
 
                 elif inventory_type == 'transport' \
-                     and customer_id and service_type and \
-                     service_subscription and service_role:
+                        and customer_id and service_type and \
+                        service_subscription and service_role:
+
                     path = self._aai_versioned_path('business/customers/customer/{}/service-subscriptions/'
                                                     'service-subscription/{}/service-instances'
                                                     '?service-type={}&service-role={}'.format(customer_id,
                                                                                               service_subscription,
                                                                                               service_type,
                                                                                               service_role))
-
                     response = self._request('get', path=path, data=None)
-
                     if response is None or response.status_code != 200:
-                        self.triage_translator.collectDroppedCandiate(candidate['candidate_id'], candidate['location_id'], name, triage_translator_data,
-                                                                     reason=response.status_code)
+                        self.triage_translator.collectDroppedCandiate("", "", name,
+                                                                      triage_translator_data,
+                                                                      reason=response.status_code)
                         continue
-
                     body = response.json()
-
                     transport_vnfs = body.get('service-instance', [])
 
                     for vnf in transport_vnfs:
-
                         # create a default candidate
-                        candidate = dict()
-                        candidate['inventory_provider'] = 'aai'
-                        candidate['service_resource_id'] = service_resource_id
-                        candidate['inventory_type'] = 'transport'
-                        candidate['candidate_id'] = ''
-                        candidate['location_id'] = ''
-                        candidate['location_type'] = 'att_aic'
-                        candidate['uniqueness'] = candidate_uniqueness
-                        candidate['cost'] = self.conf.data.transport_candidate_cost
-
+                        other = dict()
+                        other['location_id'] = ''
+                        other['location_type'] = 'att_aic'
+                        # INFO
                         vnf_service_instance_id = vnf.get('service-instance-id')
                         if vnf_service_instance_id:
-                            candidate['candidate_id'] = vnf_service_instance_id
+                            info = Candidate.build_candidate_info('aai', inventory_type,
+                                                                  self.conf.data.transport_candidate_cost,
+                                                                  candidate_uniqueness, vnf_service_instance_id,
+                                                                  service_resource_id)
                         else:
-                            self.triage_translator.collectDroppedCandiate(candidate['candidate_id'], candidate['location_id'], name,triage_translator_data,
-                                                                         reason="service-instance-id error ")
-
+                            self.triage_translator.collectDroppedCandiate('', other['location_id'], name, triage_translator_data,
+                                                                          reason="service-instance-id error ")
                             continue
 
-                        related_to = "zone"
-                        zone_link = self._get_aai_rel_link(
-                            data=vnf, related_to=related_to)
-
-                        if not zone_link:
-                            LOG.error("Zone information not available"
-                                      "from A&AI for transport candidates")
-                            self.triage_translator.collectDroppedCandiate(candidate['candidate_id'], candidate['location_id'], name, triage_translator_data,
-                                                                         reason="Zone information not available from A&AI for transport candidates")
-
+                        # ZONE
+                        zone_info = dict()
+                        zone = self.resolve_zone_for_vnf(info['candidate_id'], other['location_id'], vnf, name,
+                                                         triage_translator_data)
+                        if zone:
+                            zone_info['zone_id'] = zone.get('zone-id')
+                            zone_info['zone_name'] = zone.get('zone-name')
+                        else:
                             continue
 
-                        zone_aai_path = self._get_aai_path_from_link(zone_link)
-
-                        response = self._request('get', path=zone_aai_path, data=None)
-
-                        if response is None or response.status_code != 200:
-                            self.triage_translator.collectDroppedCandiate(candidate['candidate_id'], candidate['location_id'], name, triage_translator_data,
-                                                                         reason=response.status_code)
-
-                            continue
-                        body = response.json()
-
-                        candidate['zone_id'] = body.get('zone-id')
-                        candidate['zone_name'] = body.get('zone-name')
-
+                        # COMPLEX
                         related_to = "complex"
                         search_key = "complex.physical-location-id"
                         rel_link_data_list = self._get_aai_rel_link_data(
-                            data=body,
+                            data=zone,
                             related_to=related_to,
                             search_key=search_key
                         )
 
                         if len(rel_link_data_list) > 1:
-                            self.triage_translator.collectDroppedCandiate(candidate['candidate_id'], candidate['location_id'], name, triage_translator_data,
-                                                                         reason="rel_link_data_list error")
+                            self.triage_translator.collectDroppedCandiate(info['candidate_id'], other['location_id'], name,
+                                                                          triage_translator_data,
+                                                                          reason="rel_link_data_list error")
 
                             continue
                         rel_link_data = rel_link_data_list[0]
@@ -1842,8 +1613,9 @@ class AAI(base.InventoryProviderBase):
                             LOG.debug("{} complex information not "
                                       "available from A&AI - {}".
                                       format(name, complex_link))
-                            self.triage_translator.collectDroppedCandiate(candidate['candidate_id'], candidate['location_id'], name, triage_translator_data,
-                                                                         reason="complex information not available from A&AI")
+                            self.triage_translator.collectDroppedCandiate(info['candidate_id'], other['location_id'], name,
+                                                                          triage_translator_data,
+                                                                          reason="complex information not available from A&AI")
                             continue
                         else:
                             complex_info = self._get_complex(
@@ -1854,27 +1626,16 @@ class AAI(base.InventoryProviderBase):
                                 LOG.debug("{} complex information not "
                                           "available from A&AI - {}".
                                           format(name, complex_link))
-                                self.triage_translator.collectDroppedCandiate(candidate['candidate_id'], candidate['location_id'], name, triage_translator_data,
-                                                                             reason="complex information not available from A&AI")
+                                self.triage_translator.collectDroppedCandiate(info['candidate_id'], other['location_id'], name,
+                                                                              triage_translator_data,
+                                                                              reason="complex information not available from A&AI")
                                 continue  # move ahead with the next vnf
-                            candidate['physical_location_id'] = \
-                                complex_id
-                            candidate['complex_name'] = \
-                                complex_info.get('complex-name')
-                            candidate['latitude'] = \
-                                complex_info.get('latitude')
-                            candidate['longitude'] = \
-                                complex_info.get('longitude')
-                            candidate['state'] = \
-                                complex_info.get('state')
-                            candidate['country'] = \
-                                complex_info.get('country')
-                            candidate['city'] = \
-                                complex_info.get('city')
-                            candidate['region'] = \
-                                complex_info.get('region')
 
-                            self.add_passthrough_attributes(candidate, passthrough_attributes, name, triage_translator_data)
+                            complex_info = self.build_complex_dict(complex_info, inventory_type)
+                            transport_candidate = Transport(info=info, zone=zone_info, complex=complex_info, additional_fiels=other)
+                            candidate = transport_candidate.convert_nested_dict_to_dict()
+
+                            self.add_passthrough_attributes(candidate, passthrough_attributes, name)
                             # add candidate to demand candidates
                             resolved_demands[name].append(candidate)
 
@@ -1889,13 +1650,150 @@ class AAI(base.InventoryProviderBase):
                               " {}".format(inventory_type))
         return resolved_demands
 
-    def add_passthrough_attributes(self, candidate, passthrough_attributes, demand_name, triage_translator_data):
+    @staticmethod
+    def build_complex_dict(aai_complex, inv_type):
+        complex_info = dict()
+        valid_keys = ['physical-location-id', 'complex-name', 'latitude', 'longitude', 'state', 'country', 'city',
+                      'region']
+        # for cloud type, complex_id instead of physical-location-id - note
+        if inv_type == "cloud":
+            for valid_key in valid_keys:
+                if '-' in valid_key:
+                    complex_info[valid_key.replace('-', '_')] = aai_complex.get('complex_id') if valid_key == 'physical-location-id' else \
+                        aai_complex.get(valid_key.replace('-', '_'))
+                else:
+                    complex_info[valid_key] = aai_complex.get(valid_key)
+        else:
+            for valid_key in valid_keys:
+                if '-' in valid_key:
+                    complex_info[valid_key.replace('-', '_')] = aai_complex.get(valid_key)
+                else:
+                    complex_info[valid_key] = aai_complex.get(valid_key)
+        return complex_info
+
+    @staticmethod
+    def build_vlan_info(vlan_key, port_key):
+        vlan_info = dict()
+        vlan_info['vlan_key'] = vlan_key
+        vlan_info['port_key'] = port_key
+        return vlan_info
+
+    def resolve_flavors_for_region(self, flavors_obj):
+        if self.conf.HPA_enabled:
+            flavors = dict()
+            flavors['flavors'] = flavors_obj
+        return flavors
+
+    def resolve_v_server_and_complex_link_for_vnf(self, candidate_id, cloud, vnf, name, triage_translator_data,
+                                                  service_type):
+        vs_link_list = self.resolve_v_server_links_for_vnf(vnf)
+        for vs_link in vs_link_list:
+            body = self.resolve_v_server_for_candidate(candidate_id, cloud['location_id'],
+                                                       vs_link, True, name, triage_translator_data)
+            if body is None:
+                continue
+            rl_data = self.resolve_complex_info_link_for_v_server(candidate_id, body,
+                                                                  cloud['cloud_owner'], cloud['location_id'],
+                                                                  service_type, name, triage_translator_data)
+            if rl_data is None:
+                continue
+            yield body, rl_data
+
+    def get_l_interfaces_from_vserver(self, candidate_id, location_id, v_server, name, triage_translator_data):
+        if not v_server.get('l-interfaces') or not v_server.get('l-interfaces').get('l-interface'):
+            self.triage_translator.collectDroppedCandiate(candidate_id,
+                                                          location_id, name,
+                                                          triage_translator_data,
+                                                          reason="VF-server interfaces error")
+            return None
+        else:
+            l_interfaces = v_server.get('l-interfaces').get('l-interface')
+            l_interfaces_list = list()
+
+            for l_interface in l_interfaces:
+                vserver_interface = dict()
+                vserver_interface['interface-id'] = l_interface.get('interface-id')
+                vserver_interface['interface-name'] = l_interface.get('interface-name')
+                vserver_interface['macaddr'] = l_interface.get('macaddr')
+                vserver_interface['network-id'] = l_interface.get('network-name')
+                vserver_interface['network-name'] = ''
+                vserver_interface['ipv4-addresses'] = list()
+                vserver_interface['ipv6-addresses'] = list()
+
+                if l_interface.get('l3-interface-ipv4-address-list'):
+                    for ip_address_info in l_interface.get('l3-interface-ipv4-address-list'):
+                        vserver_interface['ipv4-addresses']. \
+                            append(ip_address_info.get('l3-interface-ipv4-address'))
+
+                if l_interface.get('l3-interface-ipv6-address-list'):
+                    for ip_address_info in l_interface.get('l3-interface-ipv6-address-list'):
+                        vserver_interface['ipv6-addresses']. \
+                            append(ip_address_info.get('l3-interface-ipv6-address'))
+
+                l_interfaces_list.append(vserver_interface)
+            return l_interfaces_list
+
+    @staticmethod
+    def get_vnf_info(vnf):
+        # some validation should happen
+        vnf_info = dict()
+        vnf_info['host_id'] = vnf.get("vnf-name")
+        vnf_info['nf-name'] = vnf.get("vnf-name")
+        vnf_info['nf-id'] = vnf.get("vnf-id")
+        vnf_info['nf-type'] = 'vnf'
+        vnf_info['vnf-type'] = vnf.get("vnf-type")
+        vnf_info['ipv4-oam-address'] = vnf.get("ipv4-oam-address") if vnf.get("ipv4-oam-address") else ""
+        vnf_info['ipv6-oam-address'] = vnf.get("ipv6-oam-address") if vnf.get("ipv6-oam-address") else ""
+        return vnf_info
+
+    @staticmethod
+    def resolve_cloud_for_region(region, region_id):
+        cloud = dict()
+        valid_keys = ['cloud_owner', 'cloud_region_version', 'location_id']
+        for valid_key in valid_keys:
+            cloud[valid_key] = region.get(valid_key) if not valid_key == 'location_id' else region_id
+        cloud['location_type'] = 'att_aic'
+        return cloud
+
+    @staticmethod
+    def get_vf_module(vf_module):
+        vf_module_info = dict()
+        vf_module_info['vf-module-name'] = vf_module.get("vf-module-name")
+        vf_module_info['vf-module-id'] = vf_module.get("vf-module-id")
+        return vf_module_info
+
+    def get_vim_id(self, cloud_owner, cloud_region_id):
+        if self.conf.HPA_enabled:
+            return cloud_owner + '_' + cloud_region_id
+
+    @staticmethod
+    def add_passthrough_attributes(candidate, passthrough_attributes, demand_name):
         if passthrough_attributes is None:
             return
         if len(passthrough_attributes.items()) > 0:
             candidate['passthrough_attributes'] = dict()
-        for key, value in passthrough_attributes.items():
-            candidate['passthrough_attributes'][key] = value
+            for key, value in passthrough_attributes.items():
+                candidate['passthrough_attributes'][key] = value
+
+    def resolve_zone_for_vnf(self, candidate_id, location_id, vnf, name, triage_translator_data):
+        related_to = "zone"
+        zone_link = self._get_aai_rel_link(
+            data=vnf, related_to=related_to)
+        if not zone_link:
+            LOG.error("Zone information not available from A&AI for transport candidates")
+            self.triage_translator.collectDroppedCandiate(candidate_id, location_id,
+                                                          name, triage_translator_data,
+                                                          reason="Zone information not available from A&AI for transport candidates")
+            return None
+        zone_aai_path = self._get_aai_path_from_link(zone_link)
+        response = self._request('get', path=zone_aai_path, data=None)
+        if response is None or response.status_code != 200:
+            self.triage_translator.collectDroppedCandiate(candidate_id, location_id, name,
+                                                          triage_translator_data,
+                                                          reason=response.status_code)
+            return None
+        body = response.json()
+        return body
 
     def match_region(self, candidate, restricted_region_id, restricted_complex_id, demand_name, triage_translator_data):
         if self.match_candidate_attribute(
