@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "39d7c22d_466e709c",
+        "filename": "conductor/conductor/data/plugins/inventory_provider/aai.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 2671
+      },
+      "writtenOn": "2020-08-10T09:17:01Z",
+      "side": 1,
+      "message": "Order imports if possible.",
+      "range": {
+        "startLine": 35,
+        "startChar": 0,
+        "endLine": 35,
+        "endChar": 24
+      },
+      "revId": "d44648fd8afd68150d64b043b9e7d6a899670ae1",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "eb191dfd_b800baab",
+        "filename": "conductor/conductor/data/plugins/inventory_provider/aai.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 1651,
+      "author": {
+        "id": 2671
+      },
+      "writtenOn": "2020-08-10T09:17:01Z",
+      "side": 1,
+      "message": "Can this be part of the candidate class, so that other inventory providers can also use them?",
+      "range": {
+        "startLine": 1651,
+        "startChar": 8,
+        "endLine": 1651,
+        "endChar": 28
+      },
+      "revId": "d44648fd8afd68150d64b043b9e7d6a899670ae1",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
