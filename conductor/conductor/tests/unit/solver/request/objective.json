@@ -1,0 +1,97 @@
+[
+    {
+        "goal": "minimize",
+        "operation_function": {
+            "operands": [
+                {
+                    "function": "attribute",
+                    "params": {
+                        "attribute": "latency",
+                        "demand": "urllc_core"
+                    }
+                }
+            ],
+            "operator": "sum"
+        }
+    },
+    {
+        "goal": "maximize",
+        "operation_function": {
+            "operands": [
+                {
+                    "normalization": {
+                        "end": 1000,
+                        "start": 100
+                    },
+                    "operation_function": {
+                        "operands": [
+                            {
+                                "function": "attribute",
+                                "params": {
+                                    "attribute": "throughput",
+                                    "demand": "urllc_core"
+                                },
+                                "weight": 1.0
+                            },
+                            {
+                                "function": "attribute",
+                                "params": {
+                                    "attribute": "throughput",
+                                    "demand": "urllc_ran"
+                                },
+                                "weight": 1.0
+                            },
+                            {
+                                "function": "attribute",
+                                "params": {
+                                    "attribute": "throughput",
+                                    "demand": "urllc_transport"
+                                },
+                                "weight": 1.0
+                            }
+                        ],
+                        "operator": "min"
+                    },
+                    "weight": 2.0
+                },
+                {
+                    "normalization": {
+                        "end": 5,
+                        "start": 50
+                    },
+                    "operation_function": {
+                        "operands": [
+                            {
+                                "function": "attribute",
+                                "params": {
+                                    "attribute": "latency",
+                                    "demand": "urllc_core"
+                                },
+                                "weight": 1.0
+                            },
+                            {
+                                "function": "attribute",
+                                "params": {
+                                    "attribute": "latency",
+                                    "demand": "urllc_ran"
+                                },
+                                "weight": 1.0
+                            },
+                            {
+                                "function": "attribute",
+                                "params": {
+                                    "attribute": "latency",
+                                    "demand": "urllc_transport"
+                                },
+                                "weight": 1.0
+                            }
+                        ],
+                        "operator": "sum"
+                    },
+                    "weight": 1.0
+                }
+            ],
+            "operator": "sum"
+        }
+    }
+]

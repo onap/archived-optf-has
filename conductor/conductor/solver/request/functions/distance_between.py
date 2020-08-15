@@ -2,6 +2,7 @@
 #
 # -------------------------------------------------------------------------
 #   Copyright (c) 2015-2017 AT&T Intellectual Property
+#   Copyright (C) 2020 Wipro Limited.
 #
 #   Licensed under the Apache License, Version 2.0 (the "License");
 #   you may not use this file except in compliance with the License.
@@ -18,12 +19,14 @@
 # -------------------------------------------------------------------------
 #
 
+from conductor.solver.request.functions.location_function import LocationFunction
 from conductor.solver.utils import utils
 
 
-class DistanceBetween(object):
+class DistanceBetween(LocationFunction):
 
     def __init__(self, _type):
+        super(DistanceBetween, self).__init__()
         self.func_type = _type
 
         self.loc_a = None
