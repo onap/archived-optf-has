@@ -1,0 +1,138 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "description": "The root schema comprises the entire JSON document.",
+    "required": [
+        "goal",
+        "operation_function"
+    ],
+    "title": "The root schema",
+    "properties": {
+        "goal": {
+            "description": "Goal of the optimization.",
+            "enum": [
+                "minimize",
+                "maximize"
+            ],
+            "title": "The goal schema",
+            "type": "string"
+        },
+        "operation_function": {
+            "$id": "#operation_function",
+            "description": "The operation function that has to be optimized.",
+            "required": [
+                "operator",
+                "operands"
+            ],
+            "title": "The operation_function schema",
+            "properties": {
+                "operator": {
+                    "description": "The operation which will be a part of the objective function.",
+                    "enum": [
+                        "sum",
+                        "min",
+                        "max"
+                    ],
+                    "title": "The operator schema",
+                    "type": "string"
+                },
+                "operands": {
+                    "description": "The operand on which the operation is to be performed.",
+                    "title": "The operands schema",
+                    "type": "array",
+                    "additionalItems": true,
+                    "items": {
+                        "anyOf": [
+                            {
+                                "default": {},
+                                "description": "An explanation about the purpose of this instance.",
+                                "required": [
+                                    "function",
+                                    "params"
+                                ],
+                                "title": "function operand schema",
+                                "properties": {
+                                    "function": {
+                                        "default": "",
+                                        "description": "Function to be performed on the parameters",
+                                        "enum": [
+                                            "distance_between",
+                                            "latency_between",
+                                            "attribute"
+                                        ],
+                                        "title": "The function schema",
+                                        "type": "string"
+                                    },
+                                    "weight": {
+                                        "default": 1.0,
+                                        "description": "Weight for the operand.",
+                                        "title": "The weight schema",
+                                        "type": "number"
+                                    },
+                                    "params": {
+                                        "description": "key-value pair which will be passed as kwargs to the function.",
+                                        "title": "The params schema",
+                                        "type": "object",
+                                        "additionalProperties": true
+                                    },
+                                    "normalization": {
+                                        "description": "Set of values used to normalize the operand.",
+                                        "$id": "#normalization",
+                                        "required": [
+                                            "start",
+                                            "end"
+                                        ],
+                                        "title": "The normalization schema",
+                                        "properties": {
+                                            "start": {
+                                                "description": "Start of the range.",
+                                                "title": "The start schema",
+                                                "type": "number"
+                                            },
+                                            "end": {
+                                                "description": "End of the range.",
+                                                "title": "The end schema",
+                                                "type": "number"
+                                            }
+                                        },
+                                        "additionalProperties": true
+                                    }
+                                },
+                                "additionalProperties": true
+                            },
+                            {
+                                "description": "operation function operand.",
+                                "required": [
+                                    "operation_function"
+                                ],
+                                "title": "The operation function operand schema",
+                                "properties": {
+                                    "operation_function": {
+                                        "description": "The operation function which same as the top level object.",
+                                        "title": "The operation_function schema",
+                                        "$ref": "#/properties/operation_function",
+                                        "additionalProperties": true
+                                    },
+                                    "normalization": {
+                                        "description": "Set of values used to normalize the operand.",
+                                        "title": "The normalization schema",
+                                        "$ref": "#/properties/operation_function/properties/operands/items/anyOf/0/properties/normalization",
+                                        "additionalProperties": true
+                                    },
+                                    "weight": {
+                                        "default": 1.0,
+                                        "description": "An explanation about the purpose of this instance.",
+                                        "title": "The weight schema",
+                                        "type": "number"
+                                    }
+                                },
+                                "additionalProperties": true
+                            }
+                        ]
+                    }
+                }
+            },
+            "additionalProperties": true
+        }
+    },
+    "additionalProperties": true
+}

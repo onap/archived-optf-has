@@ -1,6 +1,7 @@
 #
 # -------------------------------------------------------------------------
 #   Copyright (c) 2015-2018 AT&T Intellectual Property
+#   Copyright (C) 2020 Wipro Limited.
 #
 #   Licensed under the Apache License, Version 2.0 (the "License");
 #   you may not use this file except in compliance with the License.
@@ -19,6 +20,7 @@
 
 from conductor.solver.utils import utils
 
+
 class LatencyBetween(object):
     def __init__(self, _type):
         self.func_type = _type
@@ -32,4 +34,12 @@ class LatencyBetween(object):
 
         return latency
 
+    def get_args_from_params(self, decision_path, request, params):
+        demand = params.get('demand')
+        location = params.get('location')
 
+        resource = decision_path.decisions[demand]
+        loc_a = request.cei.get_candidate_location(resource)
+        loc_z = request.location.get(location)
+
+        return loc_a, loc_z

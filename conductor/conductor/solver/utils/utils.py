@@ -1,6 +1,7 @@
 #
 # -------------------------------------------------------------------------
 #   Copyright (c) 2015-2017 AT&T Intellectual Property
+#   Copyright (C) 2020 Wipro Limited.
 #
 #   Licensed under the Apache License, Version 2.0 (the "License");
 #   you may not use this file except in compliance with the License.
@@ -17,7 +18,9 @@
 # -------------------------------------------------------------------------
 #
 
+from functools import reduce
 import math
+import operator
 from oslo_log import log
 
 
@@ -32,6 +35,11 @@ OPERATIONS = {'gte': lambda x, y: x >= y,
               }
 
 
+OPERATOR_FUNCTIONS = {'sum': lambda x: reduce(operator.add, x),
+                      'min': lambda x: reduce(lambda a, b: a if a < b else b, x),
+                      'max': lambda x: reduce(lambda a, b: a if a < b else b, x)}
+
+
 def compute_air_distance(_src, _dst):
     """Compute Air Distance
 
@@ -40,13 +48,11 @@ def compute_air_distance(_src, _dst):
     output: air distance as km
     """
     distance = 0.0
-    latency_score = 0.0
 
     if _src == _dst:
         return distance
 
     radius = 6371.0  # km
-
 
     dlat = math.radians(_dst[0] - _src[0])
     dlon = math.radians(_dst[1] - _src[1])
@@ -60,18 +66,18 @@ def compute_air_distance(_src, _dst):
     return distance
 
 
-def compute_latency_score(_src,_dst, _region_group):
+def compute_latency_score(_src, _dst, _region_group):
     """Compute the Network latency score between src and dst"""
     earth_half_circumference = 20000
     region_group_weight = _region_group.get(_dst[2])
 
-    if region_group_weight == 0 or region_group_weight is None :
+    if region_group_weight == 0 or region_group_weight is None:
         LOG.debug("Computing the latency score based on distance between : ")
-        latency_score = compute_air_distance(_src,_dst)
-    elif _region_group > 0 :
+        latency_score = compute_air_distance(_src, _dst)
+    elif _region_group > 0:
         LOG.debug("Computing the latency score ")
         latency_score = compute_air_distance(_src, _dst) + region_group_weight * earth_half_circumference
-    LOG.debug("Finished Computing the latency score: "+str(latency_score))
+    LOG.debug("Finished Computing the latency score: " + str(latency_score))
     return latency_score
 
 

@@ -24,104 +24,36 @@ import json
 import os
 import uuid
 
-import six
-import yaml
-from conductor import __file__ as conductor_root
-from conductor import messaging
-from conductor import service
-
-from conductor.common import threshold
-from conductor.common.music import messaging as music_messaging
-from conductor.data.plugins.triage_translator.triage_translator_data import TraigeTranslatorData
-from conductor.data.plugins.triage_translator.triage_translator import TraigeTranslator
 from oslo_config import cfg
 from oslo_log import log
+import six
+import yaml
+
+from conductor import __file__ as conductor_root
+from conductor.common.music import messaging as music_messaging
+from conductor.common import threshold
+from conductor.controller.translator_utils import CANDIDATE_KEYS
+from conductor.controller.translator_utils import CONSTRAINT_KEYS
+from conductor.controller.translator_utils import CONSTRAINTS
+from conductor.controller.translator_utils import DEFAULT_INVENTORY_PROVIDER
+from conductor.controller.translator_utils import DEMAND_KEYS
+from conductor.controller.translator_utils import HPA_ATTRIBUTES
+from conductor.controller.translator_utils import HPA_ATTRIBUTES_OPTIONAL
+from conductor.controller.translator_utils import HPA_FEATURES
+from conductor.controller.translator_utils import HPA_OPTIONAL
+from conductor.controller.translator_utils import INVENTORY_PROVIDERS
+from conductor.controller.translator_utils import INVENTORY_TYPES
+from conductor.controller.translator_utils import LOCATION_KEYS
+from conductor.controller.translator_utils import TranslatorException
+from conductor.controller.translator_utils import VERSIONS
+from conductor.data.plugins.triage_translator.triage_translator import TraigeTranslator
+from conductor.data.plugins.triage_translator.triage_translator_data import TraigeTranslatorData
+from conductor import messaging
+from conductor import service
 
 LOG = log.getLogger(__name__)
 
 CONF = cfg.CONF
-
-VERSIONS = ["2016-11-01", "2017-10-10", "2018-02-01"]
-LOCATION_KEYS = ['latitude', 'longitude', 'host_name', 'clli_code']
-INVENTORY_PROVIDERS = ['aai', 'generator']
-INVENTORY_TYPES = ['cloud', 'service', 'transport', 'vfmodule', 'nssi']
-DEFAULT_INVENTORY_PROVIDER = INVENTORY_PROVIDERS[0]
-CANDIDATE_KEYS = ['candidate_id', 'cost', 'inventory_type', 'location_id',
-                  'location_type']
-DEMAND_KEYS = ['filtering_attributes', 'passthrough_attributes', 'candidates', 'complex', 'conflict_identifier',
-               'customer_id', 'default_cost', 'excluded_candidates',
-               'existing_placement', 'flavor', 'inventory_provider',
-               'inventory_type', 'port_key', 'region', 'required_candidates',
-               'service_id', 'service_resource_id', 'service_subscription',
-               'service_type', 'subdivision', 'unique', 'vlan_key']
-CONSTRAINT_KEYS = ['type', 'demands', 'properties']
-CONSTRAINTS = {
-    # constraint_type: {
-    #   split: split into individual constraints, one per demand
-    #   required: list of required property names,
-    #   optional: list of optional property names,
-    #   thresholds: dict of property/base-unit pairs for threshold parsing
-    #   allowed: dict of keys and allowed values (if controlled vocab);
-    #            only use this for Conductor-controlled values!
-    # }
-    'attribute': {
-        'split': True,
-        'required': ['evaluate'],
-    },
-    'threshold': {
-        'split': True,
-        'required': ['evaluate'],
-    },
-    'distance_between_demands': {
-        'required': ['distance'],
-        'thresholds': {
-            'distance': 'distance'
-        },
-    },
-    'distance_to_location': {
-        'split': True,
-        'required': ['distance', 'location'],
-        'thresholds': {
-            'distance': 'distance'
-        },
-    },
-    'instance_fit': {
-        'split': True,
-        'required': ['controller'],
-        'optional': ['request'],
-    },
-    'inventory_group': {},
-    'region_fit': {
-        'split': True,
-        'required': ['controller'],
-        'optional': ['request'],
-    },
-    'zone': {
-        'required': ['qualifier', 'category'],
-        'optional': ['location'],
-        'allowed': {'qualifier': ['same', 'different'],
-                    'category': ['disaster', 'region', 'complex', 'country',
-                                 'time', 'maintenance']},
-    },
-    'vim_fit': {
-        'split': True,
-        'required': ['controller'],
-        'optional': ['request'],
-    },
-    'hpa': {
-        'split': True,
-        'required': ['evaluate'],
-    },
-}
-HPA_FEATURES = ['architecture', 'hpa-feature', 'hpa-feature-attributes',
-                'hpa-version', 'mandatory', 'directives']
-HPA_OPTIONAL = ['score']
-HPA_ATTRIBUTES = ['hpa-attribute-key', 'hpa-attribute-value', 'operator']
-HPA_ATTRIBUTES_OPTIONAL = ['unit']
-
-
-class TranslatorException(Exception):
-    pass
 
 
 class Translator(object):
@@ -136,13 +68,14 @@ class Translator(object):
 
     def __init__(self, conf, plan_name, plan_id, template):
         self.conf = conf
+        self.translator_version = 'BASE'
         self._template = copy.deepcopy(template)
         self._plan_name = plan_name
         self._plan_id = plan_id
         self._translation = None
         self._valid = False
         self._ok = False
-        self.triageTranslatorData= TraigeTranslatorData()
+        self.triageTranslatorData = TraigeTranslatorData()
         self.triageTranslator = TraigeTranslator()
         # Set up the RPC service(s) we want to talk to.
         self.data_service = self.setup_rpc(self.conf, "data")
@@ -178,10 +111,10 @@ class Translator(object):
         self._valid = False
 
         # Check version
-        if self._version not in VERSIONS:
+        if self._version not in VERSIONS.get(self.translator_version):
             raise TranslatorException(
                 "conductor_template_version must be one "
-                "of: {}".format(', '.join(VERSIONS)))
+                "of: {}".format(', '.join(VERSIONS.get(self.translator_version))))
 
         # Check top level structure
         components = {
@@ -504,7 +437,7 @@ class Translator(object):
                 "demands": {
                     name: requirements,
                 },
-                "plan_info":{
+                "plan_info": {
                     "plan_id": self._plan_id,
                     "plan_name": self._plan_name
                 },
@@ -517,9 +450,9 @@ class Translator(object):
             for requirement in requirements:
                 required_candidates = requirement.get("required_candidates")
                 excluded_candidates = requirement.get("excluded_candidates")
-                if (required_candidates and
-                    excluded_candidates and
-                    set(map(lambda entry: entry['candidate_id'],
+                if (required_candidates
+                    and excluded_candidates
+                    and set(map(lambda entry: entry['candidate_id'],
                             required_candidates))
                     & set(map(lambda entry: entry['candidate_id'],
                               excluded_candidates))):
@@ -939,9 +872,7 @@ class Translator(object):
         if not self.valid:
             raise TranslatorException("Can't translate an invalid template.")
 
-        request_type = self._parameters.get("request_type") \
-                       or self._parameters.get("REQUEST_TYPE") \
-                       or ""
+        request_type = self._parameters.get("request_type") or self._parameters.get("REQUEST_TYPE") or ""
 
         self._translation = {
             "conductor_solver": {
@@ -950,7 +881,6 @@ class Translator(object):
                 "request_type": request_type,
                 "locations": self.parse_locations(self._locations),
                 "demands": self.parse_demands(self._demands),
-                "objective": self.parse_optimization(self._optmization),
                 "constraints": self.parse_constraints(self._constraints),
                 "objective": self.parse_optimization(self._optmization),
                 "reservations": self.parse_reservations(self._reservations),

@@ -1,7 +1,5 @@
-#!/usr/bin/env python
 #
 # -------------------------------------------------------------------------
-#   Copyright (c) 2015-2017 AT&T Intellectual Property
 #   Copyright (C) 2020 Wipro Limited.
 #
 #   Licensed under the Apache License, Version 2.0 (the "License");
@@ -19,28 +17,16 @@
 # -------------------------------------------------------------------------
 #
 
-from conductor.solver.utils import utils
 
-
-class DistanceBetween(object):
+class Attribute(object):
 
     def __init__(self, _type):
         self.func_type = _type
 
-        self.loc_a = None
-        self.loc_z = None
-
-    def compute(self, _loc_a, _loc_z):
-        distance = utils.compute_air_distance(_loc_a, _loc_z)
-
-        return distance
+    def compute(self, candidate, attribute):
+        return candidate.get(attribute)
 
     def get_args_from_params(self, decision_path, request, params):
         demand = params.get('demand')
-        location = params.get('location')
-
-        resource = decision_path.decisions[demand]
-        loc_a = request.cei.get_candidate_location(resource)
-        loc_z = request.location.get(location)
-
-        return loc_a, loc_z
+        attribute = params.get('attribute')
+        return decision_path.decisions[demand], attribute

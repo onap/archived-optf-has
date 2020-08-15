@@ -18,6 +18,7 @@
 #
 """Test classes for translator_svc"""
 
+import os
 import unittest
 import uuid
 import time
@@ -50,6 +51,9 @@ class TestTranslatorServiceNoException(unittest.TestCase):
         cfg.CONF.set_override('timeout', 10, 'controller')
         cfg.CONF.set_override('limit', 1, 'controller')
         cfg.CONF.set_override('concurrent', True, 'controller')
+        cfg.CONF.set_override('opt_schema_file',
+                              os.path.join(os.path.dirname(__file__), 'opt_schema.json'),
+                              'controller')
         cfg.CONF.set_override('keyspace',
                               'conductor_rpc', 'messaging_server')
         cfg.CONF.set_override('certificate_authority_bundle_file', '../AAF_RootCA.cer', 'music_api')
@@ -76,7 +80,6 @@ class TestTranslatorServiceNoException(unittest.TestCase):
         mock_ok_func.return_value = True
         self.translator_svc.translate(self.mock_plan)
         self.assertEqual(self.mock_plan.status, 'translated')
-
 
     @patch('conductor.controller.translator.Translator.translate')
     @patch('conductor.controller.translator.Translator.error_message')

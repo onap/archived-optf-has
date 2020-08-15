@@ -2,6 +2,7 @@
 #
 # -------------------------------------------------------------------------
 #   Copyright (c) 2015-2017 AT&T Intellectual Property
+#   Copyright (C) 2020 Wipro Limited.
 #
 #   Licensed under the Apache License, Version 2.0 (the "License");
 #   you may not use this file except in compliance with the License.
@@ -53,6 +54,10 @@ class Greedy(search.Search):
                 _objective.compute(decision_path)
                 if _objective.goal == "min":
                     if decision_path.total_value < bound_value:
+                        bound_value = decision_path.total_value
+                        best_resource = candidate
+                elif _objective.goal == "max":
+                    if decision_path.total_value > bound_value:
                         bound_value = decision_path.total_value
                         best_resource = candidate
 
