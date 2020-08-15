@@ -1,6 +1,7 @@
 #
 # -------------------------------------------------------------------------
 #   Copyright (c) 2015-2017 AT&T Intellectual Property
+#   Copyright (C) 2020 Wipro Limited.
 #
 #   Licensed under the Apache License, Version 2.0 (the "License");
 #   you may not use this file except in compliance with the License.
@@ -17,8 +18,6 @@
 # -------------------------------------------------------------------------
 #
 
-import json
-import os
 import socket
 import time
 
@@ -27,12 +26,18 @@ import futurist
 from oslo_config import cfg
 from oslo_log import log
 
+from conductor.common.config_loader import load_config_file
 from conductor.common.music import api
 from conductor.common.music import messaging as music_messaging
-from conductor.controller import translator
-from conductor.i18n import _LE, _LI
-from conductor import messaging
 from conductor.common.utils import conductor_logging_util as log_util
+from conductor.controller.generic_objective_translator import GenericObjectiveTranslator
+from conductor.controller.translator import Translator
+from conductor.controller.translator_utils import TranslatorException
+from conductor.controller.translator_utils import VERSIONS
+from conductor.i18n import _LE
+from conductor.i18n import _LI
+from conductor import messaging
+
 
 LOG = log.getLogger(__name__)
 
@@ -46,7 +51,11 @@ CONTROLLER_OPTS = [
                     'Default value is 1.'),
     cfg.IntOpt('max_translation_counter',
                default=1,
-               min=1)
+               min=1),
+    cfg.StrOpt('opt_schema_file',
+               default='opt_schema.json',
+               help='json schema file which will be used to validate the '
+                    'optimization object for the new template version'),
 ]
 
 CONF.register_opts(CONTROLLER_OPTS, group='controller')
@@ -64,7 +73,7 @@ class TranslatorService(cotyledon.Service):
 
     def __init__(self, worker_id, conf, **kwargs):
         """Initializer"""
-        LOG.debug("%s" % self.__class__.__name__)
+        LOG.debug("{}".format(self.__class__.__name__))
         super(TranslatorService, self).__init__(worker_id)
         self._init(conf, **kwargs)
         self.running = True
@@ -73,6 +82,7 @@ class TranslatorService(cotyledon.Service):
         self.conf = conf
         self.Plan = kwargs.get('plan_class')
         self.kwargs = kwargs
+        self.opt_schema = load_config_file(str(self.conf.controller.opt_schema_file))
 
         # Set up the RPC service(s) we want to talk to.
         self.data_service = self.setup_rpc(conf, "data")
@@ -138,8 +148,16 @@ class TranslatorService(cotyledon.Service):
         try:
             LOG.info(_LI("Requesting plan {} translation").format(
                 plan.id))
-            trns = translator.Translator(
-                self.conf, plan.name, plan.id, plan.template)
+            template_version = plan.template.get("homing_template_version")
+            if template_version in VERSIONS['BASE']:
+                trns = Translator(self.conf, plan.name, plan.id, plan.template)
+            elif template_version in VERSIONS['GENERIC']:
+                trns = GenericObjectiveTranslator(self.conf, plan.name, plan.id, plan.template, self.opt_schema)
+            else:
+                raise TranslatorException(
+                    "conductor_template_version must be one "
+                    "of: {}".format(', '.join([x for v in VERSIONS.values() for x in v])))
+
             trns.translate()
 
             if trns.ok:
@@ -164,7 +182,8 @@ class TranslatorService(cotyledon.Service):
             plan.status = self.Plan.ERROR
 
         _is_success = 'FAILURE'
-        while 'FAILURE' in _is_success and (self.current_time_seconds() - self.millisec_to_sec(plan.updated)) <= self.conf.messaging_server.timeout:
+        while 'FAILURE' in _is_success and (self.current_time_seconds() - self.millisec_to_sec(plan.updated)) \
+                <= self.conf.messaging_server.timeout:
             _is_success = plan.update(condition=self.translation_owner_condition)
             LOG.info(_LI("Changing the template status from translating to {}, "
                          "atomic update response from MUSIC {}").format(plan.status, _is_success))
@@ -214,13 +233,12 @@ class TranslatorService(cotyledon.Service):
                 break
 
             # TODO(larry): sychronized clock among Conducotr VMs, or use an offset
-            elif plan.status == self.Plan.TRANSLATING and \
-                (self.current_time_seconds() - self.millisec_to_sec(plan.updated)) > self.conf.messaging_server.timeout:
+            elif plan.status == self.Plan.TRANSLATING and (self.current_time_seconds()
+                                                           - self.millisec_to_sec(plan.updated)) \
+                    > self.conf.messaging_server.timeout:
                 plan.status = self.Plan.TEMPLATE
                 plan.update(condition=self.translating_status_condition)
                 break
-
-
 
             elif plan.timedout:
                 # TODO(jdandrea): How to tell all involved to stop working?
@@ -229,7 +247,7 @@ class TranslatorService(cotyledon.Service):
 
     def run(self):
         """Run"""
-        LOG.debug("%s" % self.__class__.__name__)
+        LOG.debug("{}".format(self.__class__.__name__))
         # Look for templates to translate from within a thread
         executor = futurist.ThreadPoolExecutor()
 
@@ -240,12 +258,12 @@ class TranslatorService(cotyledon.Service):
 
     def terminate(self):
         """Terminate"""
-        LOG.debug("%s" % self.__class__.__name__)
+        LOG.debug("{}".format(self.__class__.__name__))
         self.running = False
         self._gracefully_stop()
         super(TranslatorService, self).terminate()
 
     def reload(self):
         """Reload"""
-        LOG.debug("%s" % self.__class__.__name__)
+        LOG.debug("{}".format(self.__class__.__name__))
         self._restart()

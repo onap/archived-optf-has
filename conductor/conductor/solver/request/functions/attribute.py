@@ -1,6 +1,5 @@
 #
 # -------------------------------------------------------------------------
-#   Copyright (c) 2015-2018 AT&T Intellectual Property
 #   Copyright (C) 2020 Wipro Limited.
 #
 #   Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,20 +17,16 @@
 # -------------------------------------------------------------------------
 #
 
-from conductor.solver.request.functions.location_function import LocationFunction
-from conductor.solver.utils import utils
 
+class Attribute(object):
 
-class LatencyBetween(LocationFunction):
     def __init__(self, _type):
-        super(LatencyBetween, self).__init__()
         self.func_type = _type
 
-        self.loc_a = None
-        self.loc_z = None
-        self.region_group = None
+    def compute(self, candidate, attribute):
+        return candidate.get(attribute)
 
-    def compute(self, _loc_a, _loc_z):
-        latency = utils.compute_latency_score(_loc_a, _loc_z, self.region_group)
-
-        return latency
+    def get_args_from_params(self, decision_path, request, params):
+        demand = params.get('demand')
+        attribute = params.get('attribute')
+        return decision_path.decisions[demand], attribute

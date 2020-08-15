@@ -19,11 +19,10 @@
 # -------------------------------------------------------------------------
 #
 
-
-# import json
 import collections
 import operator
-import random
+
+from oslo_log import log
 
 from conductor.solver.optimizer.constraints \
     import access_distance as access_dist
@@ -36,28 +35,30 @@ from conductor.solver.optimizer.constraints \
     import inventory_group
 from conductor.solver.optimizer.constraints \
     import service as service_constraint
+from conductor.solver.optimizer.constraints import threshold
 from conductor.solver.optimizer.constraints import vim_fit
 from conductor.solver.optimizer.constraints import zone
-from conductor.solver.optimizer.constraints import threshold
 from conductor.solver.request import demand
-from conductor.solver.request import objective
 from conductor.solver.request.functions import aic_version
 from conductor.solver.request.functions import cost
 from conductor.solver.request.functions import distance_between
 from conductor.solver.request.functions import hpa_score
 from conductor.solver.request.functions import latency_between
+from conductor.solver.request import generic_objective
 from conductor.solver.request import objective
 from conductor.solver.triage_tool.traige_latency import TriageLatency
-from oslo_log import log
+
 
 LOG = log.getLogger(__name__)
+
+V2_IDS = ["2020-08-13"]
 
 
 # FIXME(snarayanan): This is really a SolverRequest (or Request) object
 class Parser(object):
 
-    demands = None  # type: Dict[Any, Any]
-    locations = None  # type: Dict[Any, Any]
+    demands = None
+    locations = None
     obj_func_param = None
 
     def __init__(self, _region_gen=None):
@@ -241,6 +242,9 @@ class Parser(object):
         if "objective" not in json_template["conductor_solver"] \
                 or not json_template["conductor_solver"]["objective"]:
             self.objective = objective.Objective()
+        elif json_template["conductor_solver"]["version"] in V2_IDS:
+            objective_function = json_template["conductor_solver"]["objective"]
+            self.objective = generic_objective.GenericObjective(objective_function)
         else:
             input_objective = json_template["conductor_solver"]["objective"]
             self.objective = objective.Objective()
@@ -305,11 +309,11 @@ class Parser(object):
             self.latencyTriage.updateTriageLatencyDB(self.plan_id, self.request_id)
 
     def assign_region_group_weight(self, countries, regions):
-        """ assign the latency group value to the country and returns a map"""
+        """assign the latency group value to the country and returns a map"""
         LOG.info("Processing Assigning Latency Weight to Countries ")
 
-        countries = self.resolve_countries(countries, regions,
-                                           self.get_candidate_country_list())  # resolve the countries based on region type
+        # resolve the countries based on region type
+        countries = self.resolve_countries(countries, regions, self.get_candidate_country_list())
         region_latency_weight = collections.OrderedDict()
         weight = 0
 
@@ -320,7 +324,8 @@ class Parser(object):
         try:
             l_weight = ''
             for i, e in enumerate(countries):
-                if e is None: continue
+                if e is None:
+                    continue
                 for k, x in enumerate(e.split(',')):
                     region_latency_weight[x] = weight
                     l_weight += x + " : " + str(weight)
@@ -406,7 +411,6 @@ class Parser(object):
 
     def drop_no_latency_rule_candidates(self, diff_bw_candidates_and_countries):
 
-        cadidate_list_ = list()
         temp_candidates = dict()
 
         for demand_id, demands in self.demands.items():
@@ -423,29 +427,10 @@ class Parser(object):
                 if demand_id in self.obj_func_param and candidate["country"] in diff_bw_candidates_and_countries:
                     droped_candidates += candidate['candidate_id']
                     droped_candidates += ','
-                    self.latencyTriage.latencyDroppedCandiate(candidate['candidate_id'], demand_id, reason="diff_bw_candidates_and_countries,Latecy weight ")
+                    self.latencyTriage.latencyDroppedCandiate(candidate['candidate_id'], demand_id,
+                                                              reason="diff_bw_candidates_and_countries,Latecy weight ")
                     self.demands[demand_id].resources.pop(candidate['candidate_id'])
         LOG.info("dropped " + droped_candidates)
-
-        # for demand_id, candidate_list in self.demands:
-        #     LOG.info("Candidates for demand " + demand_id)
-        #     cadidate_list_ = self.demands[demand_id]['candidates']
-        #     droped_candidates = ''
-        #     xlen = cadidate_list_.__len__() - 1
-        #     len = xlen
-        #     # LOG.info("Candidate List Length "+str(len))
-        #     for i in range(len + 1):
-        #         # LOG.info("iteration " + i)
-        #         LOG.info("Candidate Country " + cadidate_list_[xlen]["country"])
-        #         if cadidate_list_[xlen]["country"] in diff_bw_candidates_and_countries:
-        #             droped_candidates += cadidate_list_[xlen]["country"]
-        #             droped_candidates += ','
-        #             self.demands[demand_id]['candidates'].remove(cadidate_list_[xlen])
-        #             # filter(lambda candidate: candidate in candidate_list["candidates"])
-        #             # LOG.info("Droping Cadidate not eligible for latency weight. Candidate ID " + cadidate_list_[xlen]["candidate_id"] + " Candidate Country: "+cadidate_list_[xlen]["country"])
-        #             xlen = xlen - 1
-        #         if xlen < 0: break
-        #     LOG.info("Dropped Candidate Countries " + droped_candidates + " from demand " + demand_id)
 
     def process_wildcard_rules(self, candidates_country_list, countries_list, ):
         LOG.info("Processing the rules for " + countries_list.__getitem__(countries_list.__len__() - 1))
@@ -482,9 +467,10 @@ class Parser(object):
         LOG.info("Available countries after processing diff between " + ac)
 
     def filter_invalid_rules(self, countries_list, regions_map):
-        invalid_rules = list();
+        invalid_rules = list()
         for i, e in enumerate(countries_list):
-            if e is None: continue
+            if e is None:
+                continue
 
             for k, region in enumerate(e.split(',')):
                 LOG.info("Processing the Rule for  " + region)
