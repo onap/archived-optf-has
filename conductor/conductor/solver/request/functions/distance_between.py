@@ -33,3 +33,13 @@ class DistanceBetween(object):
         distance = utils.compute_air_distance(_loc_a, _loc_z)
 
         return distance
+
+    def get_args_from_params(self, decision_path, request, params):
+        demand = params.get('demand')
+        location = params.get('location')
+
+        resource = decision_path.decisions[demand]
+        loc_a = request.cei.get_candidate_location(resource)
+        loc_z = request.location.get(location)
+
+        return loc_a, loc_z

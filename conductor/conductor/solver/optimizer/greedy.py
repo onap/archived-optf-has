@@ -55,6 +55,10 @@ class Greedy(search.Search):
                     if decision_path.total_value < bound_value:
                         bound_value = decision_path.total_value
                         best_resource = candidate
+                elif _objective.goal == "max":
+                    if decision_path.total_value > bound_value:
+                        bound_value = decision_path.total_value
+                        best_resource = candidate
 
             if best_resource is not None:
                 decision_path.decisions[demand.name] = best_resource

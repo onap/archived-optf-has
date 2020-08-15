@@ -1,0 +1,150 @@
+{
+    "constraints": {
+        "cloud_version_capabilities": {
+            "demands": [
+                "vGMuxInfra"
+            ],
+            "properties": {
+                "evaluate": {
+                    "cloud_provider": "AWS",
+                    "cloud_version": "1.11.84"
+                }
+            },
+            "type": "attribute"
+        },
+        "colocation": {
+            "demands": [
+                "vGMuxInfra",
+                "vG"
+            ],
+            "properties": {
+                "category": "region",
+                "qualifier": "same"
+            },
+            "type": "zone"
+        },
+        "constraint_vgmux_customer": {
+            "demands": [
+                "vGMuxInfra"
+            ],
+            "properties": {
+                "distance": "<\u00a0100\u00a0km",
+                "location": "customer_loc"
+            },
+            "type": "distance_to_location"
+        },
+        "numa_cpu_pin_capabilities": {
+            "demands": [
+                "vG"
+            ],
+            "properties": {
+                "evaluate": {
+                    "numa_topology": "numa_spanning",
+                    "vcpu_pinning": true
+                }
+            },
+            "type": "attribute"
+        }
+    },
+    "demands": {
+        "vG": [
+            {
+                "attributes": {
+                    "customer_id": "some_company",
+                    "equipment_type": "vG",
+                    "modelId": "vG_model_id"
+                },
+                "excluded_candidates": [
+                    {
+                        "candidate_id": "1ac71fb8-ad43-4e16-9459-c3f372b8236d"
+                    }
+                ],
+                "existing_placement": [
+                    {
+                        "candidate_id": "21d5f3e8-e714-4383-8f99-cc480144505a"
+                    }
+                ],
+                "inventory_provider": "aai",
+                "inventory_type": "service"
+            },
+            {
+                "inventory_provider": "aai",
+                "inventory_type": "cloud"
+            }
+        ],
+        "vGMuxInfra": [
+            {
+                "attributes": {
+                    "customer_id": "some_company",
+                    "equipment_type": "vG_Mux"
+                },
+                "excluded_candidates": [
+                    {
+                        "candidate_id": "1ac71fb8-ad43-4e16-9459-c3f372b8236d"
+                    }
+                ],
+                "existing_placement": [
+                    {
+                        "candidate_id": "21d5f3e8-e714-4383-8f99-cc480144505a"
+                    }
+                ],
+                "inventory_provider": "aai",
+                "inventory_type": "service"
+            }
+        ]
+    },
+    "homing_template_version": "2020-08-13",
+    "locations": {
+        "customer_loc": {
+            "latitude": {
+                "get_param": "customer_lat"
+            },
+            "longitude": {
+                "get_param": "customer_long"
+            }
+        }
+    },
+    "optimization": {
+        "goal": "minimize",
+        "operation_function": {
+            "operands": [
+                {
+                    "function": "distance_between",
+                    "params": {
+                        "demand": "vG",
+                        "location": "customer_loc"
+                    },
+                    "weight": 1.0
+                },
+                {
+                    "normalization": {
+                        "end": 5,
+                        "start": 50
+                    },
+                    "operation_function": {
+                        "operands": [
+                            {
+                                "function": "attribute",
+                                "params": {
+                                    "attribute": "latency",
+                                    "demand": "vG"
+                                },
+                                "weight": 1.0
+                            }
+                        ],
+                        "operator": "sum"
+                    },
+                    "weight": 1.0
+                }
+            ],
+            "operator": "sum"
+        }
+    },
+    "parameters": {
+        "customer_lat": 32.89748,
+        "customer_long": -97.040443,
+        "service_id": "vcpe_service_id",
+        "service_name": "Residential vCPE"
+    }
+}
+

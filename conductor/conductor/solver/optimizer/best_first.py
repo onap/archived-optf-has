@@ -88,13 +88,16 @@ class BestFirst(search.Search):
 
                     # check closeness for this decision
                     np.set_decision_id(p, candidate.name)
-                    if np.decision_id in list(close_paths.keys()):    # Python 3 Conversion -- dict object to list object
+                    if np.decision_id in list(close_paths.keys()):  # Python 3 Conversion -- dict object to list object
                         valid_candidate = False
 
                     ''' for base comparison heuristic '''
                     # TODO(gjung): how to know this is about min
                     if _objective.goal == "min":
                         if np.total_value >= heuristic_solution.total_value:
+                            valid_candidate = False
+                    elif _objective.goal == "max":
+                        if np.total_value <= heuristic_solution.total_value:
                             valid_candidate = False
 
                     if valid_candidate is True:
@@ -141,7 +144,7 @@ class BestFirst(search.Search):
             best_resource = None
             for candidate in candidate_list:
                 _decision_path.decisions[demand.name] = candidate
-                _objective.compute(_decision_path) #TODO call the compute of latencyBetween
+                _objective.compute(_decision_path)
                 if _objective.goal == "min":
                     if _decision_path.total_value < bound_value:
                         bound_value = _decision_path.total_value

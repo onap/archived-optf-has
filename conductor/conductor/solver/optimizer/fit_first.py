@@ -23,7 +23,6 @@ import time
 
 from conductor.solver.optimizer import decision_path as dpath
 from conductor.solver.optimizer import search
-from conductor.solver.triage_tool.triage_data import TriageData
 
 LOG = log.getLogger(__name__)
 
@@ -98,9 +97,8 @@ class FitFirst(search.Search):
                     candidate_version = candidate \
                         .get("cloud_region_version").encode('utf-8')
                     if _decision_path.total_value < bound_value or \
-                       (_decision_path.total_value == bound_value and
-                       self._compare_version(candidate_version,
-                                             version_value) > 0):
+                            (_decision_path.total_value == bound_value and self._compare_version(candidate_version,
+                                                                                                 version_value) > 0):
                         bound_value = _decision_path.total_value
                         version_value = candidate_version
                         best_resource = candidate
@@ -116,6 +114,11 @@ class FitFirst(search.Search):
                         bound_value = _decision_path.total_value
                         best_resource = candidate
 
+                elif _objective.goal == "max":
+                    if _decision_path.total_value > bound_value:
+                        bound_value = _decision_path.total_value
+                        best_resource = candidate
+
             # Rollback if we don't have any candidate picked for
             # the demand.
             if best_resource is None:
@@ -124,7 +127,7 @@ class FitFirst(search.Search):
                 # candidate) back in the list so that it can be picked
                 # up in the next iteration of the recursion
                 _demand_list.insert(0, demand)
-                self.triageSolver.rollBackStatus(_decision_path.current_demand,_decision_path)
+                self.triageSolver.rollBackStatus(_decision_path.current_demand, _decision_path)
                 return None  # return None back to the recursion
             else:
                 # best resource is found, add to the decision path
