@@ -1,0 +1,19 @@
+{
+                "profile-id": "cdad9f49-4201-4e3a-aac1-b0f27902c299",
+                "latency": 20,
+                "max-number-of-UEs": 0,
+                "coverage-area-TA-list": "[{\"province\":\"??\",\"city\":\"???\",\"county\":\"???\",\"street\":\"?????\"}]",
+                "ue-mobility-level": "stationary",
+                "resource-sharing-level": "0",
+                "exp-data-rate-UL": 100,
+                "exp-data-rate-DL": 100,
+                "activity-factor": 0,
+                "e2e-latency": 0,
+                "jitter": 0,
+                "survival-time": 0,
+                "exp-data-rate": 0,
+                "payload-size": 0,
+                "traffic-density": 0,
+                "conn-density": 0,
+                "resource-version": "1581418602494"
+}

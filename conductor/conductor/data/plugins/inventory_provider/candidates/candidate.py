@@ -17,16 +17,17 @@
 # -------------------------------------------------------------------------
 #
 
-class Candidate:
+class Candidate(object):
     def __init__(self, info):
         self.candidate_id = info.get('candidate_id')
         if info.get('candidate_type'):
             self.candidate_type = info.get('candidate_type')
+        if info.get('service_resource_id'):
+            self.service_resource_id = info.get('service_resource_id')
         self.inventory_provider = info.get('inventory_provider')
         self.inventory_type = info.get('inventory_type')
         self.uniqueness = info.get('uniqueness')
         self.cost = info.get('cost')
-        self.service_resource_id = info.get('service_resource_id', None)
 
     def convert_nested_dict_to_dict(self):
         candidate = dict()

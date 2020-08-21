@@ -731,38 +731,18 @@ tenant/3c6c471ada7747fe8ff7f28e100b61e8/vservers/vserver/00bddefc-126e-4e4f-a18d
         nssi_candidates_file = './conductor/tests/unit/data/plugins/inventory_provider/nssi_candidate.json'
         nssi_candidates = json.loads(open(nssi_candidates_file).read())
 
-        nsi_info = {'instance_name': 'nsi_test_0211',
-                    'instance_id': '4115d3c8-dd59-45d6-b09d-e756dee9b518',
-                    'model_version_id': '8b664b11-6646-4776-9f59-5c3de46da2d6',
-                    'model_invariant_id': '39b10fe6-efcc-40bc-8184-c38414b80771'}
-
-        self.nsi_patcher = mock.patch('conductor.data.plugins.inventory_provider.aai.AAI.get_nsi_info',
-                                      return_value=nsi_info)
-        self.nsi_patcher.start()
-
         service_role = 'nssi'
-        model_invariant_id = '21d57d4b-52ad-4d3c-a798-248b5bb9124a'
-        model_version_id = 'bfba363e-e39c-4bd9-a9d5-1371c28f4d22'
-        orchestration_status = 'active'
-        filtering_attributes = dict()
-        filtering_attributes['orchestration-status'] = orchestration_status
-        filtering_attributes['service-role'] = service_role
-        filtering_attributes['model-invariant-id'] = model_invariant_id
-        filtering_attributes['model-version-id'] = model_version_id
+        second_level_filter = dict()
+        second_level_filter['service-role'] = service_role
 
-        self.assertEqual(nssi_candidates, self.aai_ep.filter_nssi_candidates(nssi_response, filtering_attributes, "true"))
-
-        nssi_response['service-instance'][0]['orchestration-status'] = 'deactivated'
-
-        self.assertEqual([], self.aai_ep.filter_nssi_candidates(nssi_response, filtering_attributes, "true"))
+        self.assertEqual(nssi_candidates, self.aai_ep.filter_nssi_candidates(nssi_response, second_level_filter, "true"))
 
         nssi_response['service-instance'][0]['service-role'] = 'service'
 
-        self.assertEqual([], self.aai_ep.filter_nssi_candidates(nssi_response, filtering_attributes, "true"))
+        self.assertEqual([], self.aai_ep.filter_nssi_candidates(nssi_response, second_level_filter, "true"))
 
-        self.assertEqual([], self.aai_ep.filter_nssi_candidates(None, filtering_attributes, "true"))
+        self.assertEqual([], self.aai_ep.filter_nssi_candidates(None, second_level_filter, "true"))
 
         self.assertEqual([], self.aai_ep.filter_nssi_candidates(None, None, "true"))
 
         self.assertEqual([], self.aai_ep.filter_nssi_candidates(nssi_response, None, "true"))
-
