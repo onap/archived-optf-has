@@ -725,44 +725,60 @@ tenant/3c6c471ada7747fe8ff7f28e100b61e8/vservers/vserver/00bddefc-126e-4e4f-a18d
         self.assertEqual(None, self.aai_ep.match_hpa(candidate_json['candidate_list'][1],
                                                      feature_json[5]))
 
-    def test_get_nssi_candidates(self):
+    def test_filter_nssi_candidates(self):
         nssi_response_file = './conductor/tests/unit/data/plugins/inventory_provider/nssi_response.json'
         nssi_response = json.loads(open(nssi_response_file).read())
         nssi_candidates_file = './conductor/tests/unit/data/plugins/inventory_provider/nssi_candidate.json'
         nssi_candidates = json.loads(open(nssi_candidates_file).read())
 
-        nsi_info = {'instance_name': 'nsi_test_0211',
-                    'instance_id': '4115d3c8-dd59-45d6-b09d-e756dee9b518',
-                    'model_version_id': '8b664b11-6646-4776-9f59-5c3de46da2d6',
-                    'model_invariant_id': '39b10fe6-efcc-40bc-8184-c38414b80771'}
-
-        self.nsi_patcher = mock.patch('conductor.data.plugins.inventory_provider.aai.AAI.get_nsi_info',
-                                      return_value=nsi_info)
-        self.nsi_patcher.start()
-
         service_role = 'nssi'
-        model_invariant_id = '21d57d4b-52ad-4d3c-a798-248b5bb9124a'
-        model_version_id = 'bfba363e-e39c-4bd9-a9d5-1371c28f4d22'
-        orchestration_status = 'active'
-        filtering_attributes = dict()
-        filtering_attributes['orchestration-status'] = orchestration_status
-        filtering_attributes['service-role'] = service_role
-        filtering_attributes['model-invariant-id'] = model_invariant_id
-        filtering_attributes['model-version-id'] = model_version_id
-
-        self.assertEqual(nssi_candidates, self.aai_ep.filter_nssi_candidates(nssi_response, filtering_attributes, "true"))
-
-        nssi_response['service-instance'][0]['orchestration-status'] = 'deactivated'
-
-        self.assertEqual([], self.aai_ep.filter_nssi_candidates(nssi_response, filtering_attributes, "true"))
+        second_level_filter = dict()
+        second_level_filter['service-role'] = service_role
+        default_attributes = dict()
+        default_attributes['creation_cost'] =1
+        self.assertEqual(nssi_candidates, self.aai_ep.filter_nxi_candidates(nssi_response, second_level_filter,
+                                                                            default_attributes, "true", service_role))
 
         nssi_response['service-instance'][0]['service-role'] = 'service'
 
-        self.assertEqual([], self.aai_ep.filter_nssi_candidates(nssi_response, filtering_attributes, "true"))
+        self.assertEqual([], self.aai_ep.filter_nxi_candidates(nssi_response, second_level_filter, default_attributes,
+                                                               "true", service_role))
 
-        self.assertEqual([], self.aai_ep.filter_nssi_candidates(None, filtering_attributes, "true"))
+        self.assertEqual([], self.aai_ep.filter_nxi_candidates(None, second_level_filter, default_attributes,
+                                                               "true", service_role))
 
-        self.assertEqual([], self.aai_ep.filter_nssi_candidates(None, None, "true"))
+        self.assertEqual([], self.aai_ep.filter_nxi_candidates(None, None, default_attributes, "true", service_role))
 
-        self.assertEqual([], self.aai_ep.filter_nssi_candidates(nssi_response, None, "true"))
+        self.assertEqual(nssi_candidates, self.aai_ep.filter_nxi_candidates(nssi_response, None, default_attributes,
+                                                                            "true", service_role))
+        del nssi_candidates[0]['creation_cost']
+        self.assertEqual(nssi_candidates, self.aai_ep.filter_nxi_candidates(nssi_response, None, None, "true",
+                                                                            service_role))
 
+    def test_resolve_demands_inventory_type_nssi(self):
+        self.aai_ep.conf.HPA_enabled = True
+        TraigeTranslator.getPlanIdNAme = mock.MagicMock(return_value=None)
+        TraigeTranslator.addDemandsTriageTranslator = mock.MagicMock(return_value=None)
+
+        plan_info = {
+            'plan_name': 'name',
+            'plan_id': 'id'
+        }
+        triage_translator_data = None
+
+        demands_list_file = './conductor/tests/unit/data/plugins/inventory_provider/nssi_demand_list.json'
+        demands_list = json.loads(open(demands_list_file).read())
+
+        nssi_response_file = './conductor/tests/unit/data/plugins/inventory_provider/nssi_response.json'
+        nssi_response = json.loads(open(nssi_response_file).read())
+        nssi_candidates_file = './conductor/tests/unit/data/plugins/inventory_provider/nssi_candidate.json'
+        nssi_candidates = json.loads(open(nssi_candidates_file).read())
+        result = dict()
+        result['embb_cn'] = nssi_candidates
+
+        self.mock_get_nxi_candidates = mock.patch.object(AAI, 'get_nxi_candidates',
+                                                         return_value=nssi_response)
+        self.mock_get_nxi_candidates.start()
+
+        self.assertEqual(result, self.aai_ep.resolve_demands(demands_list, plan_info=plan_info,
+                                                             triage_translator_data=triage_translator_data))
