@@ -26,14 +26,14 @@ import uuid
 
 import six
 import yaml
+
 from conductor import __file__ as conductor_root
+from conductor.common.music import messaging as music_messaging
+from conductor.common import threshold
+from conductor.data.plugins.triage_translator.triage_translator import TraigeTranslator
+from conductor.data.plugins.triage_translator.triage_translator_data import TraigeTranslatorData
 from conductor import messaging
 from conductor import service
-
-from conductor.common import threshold
-from conductor.common.music import messaging as music_messaging
-from conductor.data.plugins.triage_translator.triage_translator_data import TraigeTranslatorData
-from conductor.data.plugins.triage_translator.triage_translator import TraigeTranslator
 from oslo_config import cfg
 from oslo_log import log
 
@@ -48,8 +48,8 @@ INVENTORY_TYPES = ['cloud', 'service', 'transport', 'vfmodule', 'nssi']
 DEFAULT_INVENTORY_PROVIDER = INVENTORY_PROVIDERS[0]
 CANDIDATE_KEYS = ['candidate_id', 'cost', 'inventory_type', 'location_id',
                   'location_type']
-DEMAND_KEYS = ['filtering_attributes', 'passthrough_attributes', 'candidates', 'complex', 'conflict_identifier',
-               'customer_id', 'default_cost', 'excluded_candidates',
+DEMAND_KEYS = ['filtering_attributes', 'passthrough_attributes', 'default_attributes', 'candidates', 'complex',
+               'conflict_identifier', 'customer_id', 'default_cost', 'excluded_candidates',
                'existing_placement', 'flavor', 'inventory_provider',
                'inventory_type', 'port_key', 'region', 'required_candidates',
                'service_id', 'service_resource_id', 'service_subscription',
@@ -142,7 +142,7 @@ class Translator(object):
         self._translation = None
         self._valid = False
         self._ok = False
-        self.triageTranslatorData= TraigeTranslatorData()
+        self.triageTranslatorData = TraigeTranslatorData()
         self.triageTranslator = TraigeTranslator()
         # Set up the RPC service(s) we want to talk to.
         self.data_service = self.setup_rpc(self.conf, "data")
@@ -504,7 +504,7 @@ class Translator(object):
                 "demands": {
                     name: requirements,
                 },
-                "plan_info":{
+                "plan_info": {
                     "plan_id": self._plan_id,
                     "plan_name": self._plan_name
                 },
@@ -517,10 +517,8 @@ class Translator(object):
             for requirement in requirements:
                 required_candidates = requirement.get("required_candidates")
                 excluded_candidates = requirement.get("excluded_candidates")
-                if (required_candidates and
-                    excluded_candidates and
-                    set(map(lambda entry: entry['candidate_id'],
-                            required_candidates))
+                if (required_candidates and excluded_candidates and set(map(lambda entry: entry['candidate_id'],
+                                                                        required_candidates))
                     & set(map(lambda entry: entry['candidate_id'],
                               excluded_candidates))):
                     raise TranslatorException(
@@ -939,9 +937,7 @@ class Translator(object):
         if not self.valid:
             raise TranslatorException("Can't translate an invalid template.")
 
-        request_type = self._parameters.get("request_type") \
-                       or self._parameters.get("REQUEST_TYPE") \
-                       or ""
+        request_type = self._parameters.get("request_type") or self._parameters.get("REQUEST_TYPE") or ""
 
         self._translation = {
             "conductor_solver": {
@@ -952,7 +948,6 @@ class Translator(object):
                 "demands": self.parse_demands(self._demands),
                 "objective": self.parse_optimization(self._optmization),
                 "constraints": self.parse_constraints(self._constraints),
-                "objective": self.parse_optimization(self._optmization),
                 "reservations": self.parse_reservations(self._reservations),
             }
         }
