@@ -1,0 +1,17 @@
+{
+    "embb_cn": [{
+        "inventory_provider": "aai",
+        "inventory_type": "nssi",
+        "unique": "true",
+        "filtering_attributes": {
+            "model-version-id": "bfba363e-e39c-4bd9-a9d5-1371c28f4d22",
+            "model-invariant-id": "21d57d4b-52ad-4d3c-a798-248b5bb9124a",
+            "orchestration-status": "active",
+            "service-role": "nssi",
+            "environment-context": "shared"
+        },
+        "default_attributes": {
+            "creation-cost": 1
+        }
+    }]
+}

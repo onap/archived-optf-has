@@ -48,8 +48,8 @@ INVENTORY_TYPES = ['cloud', 'service', 'transport', 'vfmodule', 'nssi']
 DEFAULT_INVENTORY_PROVIDER = INVENTORY_PROVIDERS[0]
 CANDIDATE_KEYS = ['candidate_id', 'cost', 'inventory_type', 'location_id',
                   'location_type']
-DEMAND_KEYS = ['filtering_attributes', 'passthrough_attributes', 'candidates', 'complex', 'conflict_identifier',
-               'customer_id', 'default_cost', 'excluded_candidates',
+DEMAND_KEYS = ['filtering_attributes', 'passthrough_attributes', 'default_attributes', 'candidates', 'complex',
+               'conflict_identifier', 'customer_id', 'default_cost', 'excluded_candidates',
                'existing_placement', 'flavor', 'inventory_provider',
                'inventory_type', 'port_key', 'region', 'required_candidates',
                'service_id', 'service_resource_id', 'service_subscription',
