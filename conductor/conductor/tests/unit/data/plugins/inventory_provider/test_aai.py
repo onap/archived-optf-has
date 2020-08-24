@@ -782,3 +782,50 @@ tenant/3c6c471ada7747fe8ff7f28e100b61e8/vservers/vserver/00bddefc-126e-4e4f-a18d
 
         self.assertEqual(result, self.aai_ep.resolve_demands(demands_list, plan_info=plan_info,
                                                              triage_translator_data=triage_translator_data))
+
+    def test_filter_nsi_candidates(self):
+        nsi_response_file = './conductor/tests/unit/data/plugins/inventory_provider/nsi_response.json'
+        nsi_response = json.loads(open(nsi_response_file).read())
+        nsi_candidates_file = './conductor/tests/unit/data/plugins/inventory_provider/nsi_candidate.json'
+        nsi_candidates = json.loads(open(nsi_candidates_file).read())
+
+        service_role = 'nsi'
+        second_level_filter = dict()
+        second_level_filter['service-role'] = service_role
+        default_attributes = dict()
+        default_attributes['creation_cost'] = 1
+
+        self.assertEqual(nsi_candidates, self.aai_ep.filter_nxi_candidates(nsi_response, second_level_filter,
+                                                                           default_attributes, "true", service_role))
+        nsi_response['service-instance'][0]['service-role'] = 'service'
+
+        self.assertEqual([], self.aai_ep.filter_nxi_candidates(nsi_response, second_level_filter, default_attributes,
+                                                               "true", service_role))
+
+    def test_resolve_demands_inventory_type_nsi(self):
+        self.aai_ep.conf.HPA_enabled = True
+        TraigeTranslator.getPlanIdNAme = mock.MagicMock(return_value=None)
+        TraigeTranslator.addDemandsTriageTranslator = mock.MagicMock(return_value=None)
+
+        plan_info = {
+            'plan_name': 'name',
+            'plan_id': 'id'
+        }
+        triage_translator_data = None
+
+        demands_list_file = './conductor/tests/unit/data/plugins/inventory_provider/nsi_demand_list.json'
+        demands_list = json.loads(open(demands_list_file).read())
+
+        nsi_response_file = './conductor/tests/unit/data/plugins/inventory_provider/nsi_response.json'
+        nsi_response = json.loads(open(nsi_response_file).read())
+        nsi_candidates_file = './conductor/tests/unit/data/plugins/inventory_provider/nsi_candidate.json'
+        nsi_candidates = json.loads(open(nsi_candidates_file).read())
+        result = dict()
+        result['embb_nst'] = nsi_candidates
+
+        self.mock_get_nxi_candidates = mock.patch.object(AAI, 'get_nxi_candidates',
+                                                         return_value=nsi_response)
+        self.mock_get_nxi_candidates.start()
+        self.maxDiff = None
+        self.assertEqual(result, self.aai_ep.resolve_demands(demands_list, plan_info=plan_info,
+                                                             triage_translator_data=triage_translator_data))

@@ -1649,7 +1649,7 @@ class AAI(base.InventoryProviderBase):
                             # add candidate to demand candidates
                             resolved_demands[name].append(candidate)
 
-                elif inventory_type == 'nssi':
+                elif inventory_type == 'nssi' or inventory_type == 'nsi':
                     if filtering_attributes and model_invariant_id:
                         second_level_match = aai_utils.get_first_level_and_second_level_filter(filtering_attributes,
                                                                                                "service_instance")
