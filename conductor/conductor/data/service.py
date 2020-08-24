@@ -54,14 +54,16 @@ DATA_OPTS = [
                      'mode. When set to False, data will flush any abandoned '
                      'messages at startup.'),
     cfg.FloatOpt('existing_placement_cost',
-               default=-8000.0,
-               help='Default value is -8000, which is the diameter of the earth. '
-                    'The distance cannot larger than this value'),
+                 default=-8000.0,
+                 help='Default value is -8000, which is the diameter of the earth.The distance cannot larger than '
+                      'this value'),
     cfg.FloatOpt('cloud_candidate_cost',
-               default=2.0),
+                 default=2.0),
     cfg.FloatOpt('service_candidate_cost',
-               default=1.0),
+                 default=1.0),
     cfg.FloatOpt('nssi_candidate_cost',
+                 default=1.0),
+    cfg.FloatOpt('nsi_candidate_cost',
                  default=1.0),
 ]
 
@@ -84,14 +86,11 @@ class DataServiceLauncher(object):
 
     def init_extension_managers(self, conf):
         """Initialize extension managers."""
-        self.ip_ext_manager = (
-            ip_ext.Manager(conf, 'conductor.inventory_provider.plugin'))
+        self.ip_ext_manager = (ip_ext.Manager(conf, 'conductor.inventory_provider.plugin'))
         self.ip_ext_manager.initialize()
-        self.vc_ext_manager = (
-            vc_ext.Manager(conf, 'conductor.vim_controller.plugin'))
+        self.vc_ext_manager = (vc_ext.Manager(conf, 'conductor.vim_controller.plugin'))
         self.vc_ext_manager.initialize()
-        self.sc_ext_manager = (
-            sc_ext.Manager(conf, 'conductor.service_controller.plugin'))
+        self.sc_ext_manager = (sc_ext.Manager(conf, 'conductor.service_controller.plugin'))
         self.sc_ext_manager.initialize()
 
     def run(self):
@@ -237,7 +236,7 @@ class DataEndpoint(object):
                     discard_set.add(candidate.get("candidate_id"))
         return discard_set
 
-    #(TODO:Larry) merge this function with the "get_candidate_discard_set"
+    # (TODO:Larry) merge this function with the "get_candidate_discard_set"
     def get_candidate_discard_set_by_cloud_region(self, value, candidate_list, value_attrib):
         discard_set = set()
 
@@ -259,7 +258,6 @@ class DataEndpoint(object):
                 discard_set.add(candidate.get("candidate_id"))
 
         return discard_set
-
 
     def get_inventory_group_candidates(self, ctx, arg):
         candidate_list = arg["candidate_list"]
@@ -639,7 +637,7 @@ class DataEndpoint(object):
                 self.triage_data_trans['plan_name'] = triage_translator_data['plan_name']
                 self.triage_data_trans['plan_id'] = triage_translator_data['plan_id']
                 self.triage_data_trans['translator_triage'].append(triage_translator_data['dropped_candidates'])
-            elif (not self.triage_data_trans['plan_id'] == triage_translator_data['plan_id']) :
+            elif not self.triage_data_trans['plan_id'] == triage_translator_data['plan_id'] :
                 self.triage_data_trans = {
                     'plan_id': None,
                     'plan_name': None,
@@ -655,7 +653,7 @@ class DataEndpoint(object):
 
         return {'response': {'resolved_demands': resolved_demands,
                              'trans': self.triage_data_trans},
-                'error': error  }
+                'error': error}
 
     def resolve_location(self, ctx, arg):
 
@@ -666,7 +664,6 @@ class DataEndpoint(object):
 
         host_name = arg.get('host_name')
         clli_code = arg.get('clli_code')
-
 
         if host_name:
             results = self.ip_ext_manager.map_method(
