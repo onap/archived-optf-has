@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ce66fe78_2bffeb8f",
+        "filename": "conductor/conductor/solver/request/functions/latency_between.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 2923
+      },
+      "writtenOn": "2020-08-27T15:47:44Z",
+      "side": 1,
+      "message": "This method is duplicated in 2 files.  Wouldn\u0027t it better to move this method to a common function?",
+      "revId": "30c50dfa736560e1ae9425409423dcc072630ab7",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
