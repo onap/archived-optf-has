@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2b6727d3_f400a115",
+        "filename": "conductor/conductor/data/plugins/inventory_provider/utils/aai_utils.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 2671
+      },
+      "writtenOn": "2020-08-31T07:57:51Z",
+      "side": 1,
+      "message": "declare constants in UPPER CASE.",
+      "range": {
+        "startLine": 20,
+        "startChar": 0,
+        "endLine": 20,
+        "endChar": 12
+      },
+      "revId": "b6829db3f753b8a7cfe30d14d44ea2e2805be1c3",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8631c7ef_69cd8613",
+        "filename": "conductor/conductor/data/plugins/inventory_provider/utils/aai_utils.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 2671
+      },
+      "writtenOn": "2020-08-31T07:57:51Z",
+      "side": 1,
+      "message": "format() will be more readable than string concatenation.",
+      "range": {
+        "startLine": 44,
+        "startChar": 14,
+        "endLine": 44,
+        "endChar": 43
+      },
+      "revId": "b6829db3f753b8a7cfe30d14d44ea2e2805be1c3",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1ca3e567_932c2b75",
+        "filename": "conductor/conductor/data/plugins/inventory_provider/utils/aai_utils.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 2671
+      },
+      "writtenOn": "2020-08-31T07:57:51Z",
+      "side": 1,
+      "message": "From the latest modeling discussion, this will be environement-context",
+      "range": {
+        "startLine": 76,
+        "startChar": 25,
+        "endLine": 76,
+        "endChar": 41
+      },
+      "revId": "b6829db3f753b8a7cfe30d14d44ea2e2805be1c3",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
