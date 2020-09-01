@@ -48,6 +48,30 @@
     },
     {
       "key": {
+        "uuid": "bffe0dcc_dcbfad55",
+        "filename": "conductor/conductor/data/plugins/inventory_provider/utils/aai_utils.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 2671
+      },
+      "writtenOn": "2020-09-01T06:14:56Z",
+      "side": 1,
+      "message": "Please address this too.",
+      "parentUuid": "8631c7ef_69cd8613",
+      "range": {
+        "startLine": 44,
+        "startChar": 14,
+        "endLine": 44,
+        "endChar": 43
+      },
+      "revId": "b6829db3f753b8a7cfe30d14d44ea2e2805be1c3",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "1ca3e567_932c2b75",
         "filename": "conductor/conductor/data/plugins/inventory_provider/utils/aai_utils.py",
         "patchSetId": 4
