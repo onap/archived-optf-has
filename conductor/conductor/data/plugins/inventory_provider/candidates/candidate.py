@@ -17,6 +17,7 @@
 # -------------------------------------------------------------------------
 #
 
+
 class Candidate(object):
     def __init__(self, info):
         self.candidate_id = info.get('candidate_id')

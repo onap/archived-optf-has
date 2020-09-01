@@ -33,7 +33,7 @@ class TestThreshold(unittest.TestCase):
         # test 1
         properties = {'evaluate':
                           [{'attribute': 'latency', 'threshold': 30, 'operator': 'lte'},
-                           {'attribute': 'exp_data_rate_UL', 'threshold': 70, 'operator': 'gte'}]}
+                           {'attribute': 'exp_data_rate_ul', 'threshold': 70, 'operator': 'gte'}]}
 
         threshold_obj = Threshold('urllc_threshold', 'threshold', ['URLLC'], _priority=0,
                                   _properties=properties)
