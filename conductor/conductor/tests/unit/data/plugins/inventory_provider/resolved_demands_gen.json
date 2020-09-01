@@ -1,0 +1,175 @@
+{
+    "embb": [],
+    "urllc": [
+        {
+            "core_latency": 15,
+            "core_reliability": 99.999,
+            "cost": 1.0,
+            "inventory_provider": "generator",
+            "inventory_type": "slice_profiles",
+            "latency": 15,
+            "reliability": 99.999,
+            "uniqueness": "true"
+        },
+        {
+            "core_latency": 16,
+            "core_reliability": 99.999,
+            "cost": 1.0,
+            "inventory_provider": "generator",
+            "inventory_type": "slice_profiles",
+            "latency": 16,
+            "reliability": 99.999,
+            "uniqueness": "true"
+        },
+        {
+            "core_latency": 17,
+            "core_reliability": 99.999,
+            "cost": 1.0,
+            "inventory_provider": "generator",
+            "inventory_type": "slice_profiles",
+            "latency": 17,
+            "reliability": 99.999,
+            "uniqueness": "true"
+        },
+        {
+            "core_latency": 18,
+            "core_reliability": 99.999,
+            "cost": 1.0,
+            "inventory_provider": "generator",
+            "inventory_type": "slice_profiles",
+            "latency": 18,
+            "reliability": 99.999,
+            "uniqueness": "true"
+        },
+        {
+            "core_latency": 19,
+            "core_reliability": 99.999,
+            "cost": 1.0,
+            "inventory_provider": "generator",
+            "inventory_type": "slice_profiles",
+            "latency": 19,
+            "reliability": 99.999,
+            "uniqueness": "true"
+        },
+        {
+            "core_latency": 15,
+            "core_reliability": 99.999,
+            "cost": 1.0,
+            "inventory_provider": "generator",
+            "inventory_type": "slice_profiles",
+            "latency": 33,
+            "ran_latency": 18,
+            "ran_reliability": 99.99,
+            "reliability": 99.99,
+            "uniqueness": "true"
+        },
+        {
+            "core_latency": 15,
+            "core_reliability": 99.999,
+            "cost": 1.0,
+            "inventory_provider": "generator",
+            "inventory_type": "slice_profiles",
+            "latency": 34,
+            "ran_latency": 19,
+            "ran_reliability": 99.99,
+            "reliability": 99.99,
+            "uniqueness": "true"
+        },
+        {
+            "core_latency": 16,
+            "core_reliability": 99.999,
+            "cost": 1.0,
+            "inventory_provider": "generator",
+            "inventory_type": "slice_profiles",
+            "latency": 34,
+            "ran_latency": 18,
+            "ran_reliability": 99.99,
+            "reliability": 99.99,
+            "uniqueness": "true"
+        },
+        {
+            "core_latency": 16,
+            "core_reliability": 99.999,
+            "cost": 1.0,
+            "inventory_provider": "generator",
+            "inventory_type": "slice_profiles",
+            "latency": 35,
+            "ran_latency": 19,
+            "ran_reliability": 99.99,
+            "reliability": 99.99,
+            "uniqueness": "true"
+        },
+        {
+            "core_latency": 17,
+            "core_reliability": 99.999,
+            "cost": 1.0,
+            "inventory_provider": "generator",
+            "inventory_type": "slice_profiles",
+            "latency": 35,
+            "ran_latency": 18,
+            "ran_reliability": 99.99,
+            "reliability": 99.99,
+            "uniqueness": "true"
+        },
+        {
+            "core_latency": 17,
+            "core_reliability": 99.999,
+            "cost": 1.0,
+            "inventory_provider": "generator",
+            "inventory_type": "slice_profiles",
+            "latency": 36,
+            "ran_latency": 19,
+            "ran_reliability": 99.99,
+            "reliability": 99.99,
+            "uniqueness": "true"
+        },
+        {
+            "core_latency": 18,
+            "core_reliability": 99.999,
+            "cost": 1.0,
+            "inventory_provider": "generator",
+            "inventory_type": "slice_profiles",
+            "latency": 36,
+            "ran_latency": 18,
+            "ran_reliability": 99.99,
+            "reliability": 99.99,
+            "uniqueness": "true"
+        },
+        {
+            "core_latency": 18,
+            "core_reliability": 99.999,
+            "cost": 1.0,
+            "inventory_provider": "generator",
+            "inventory_type": "slice_profiles",
+            "latency": 37,
+            "ran_latency": 19,
+            "ran_reliability": 99.99,
+            "reliability": 99.99,
+            "uniqueness": "true"
+        },
+        {
+            "core_latency": 19,
+            "core_reliability": 99.999,
+            "cost": 1.0,
+            "inventory_provider": "generator",
+            "inventory_type": "slice_profiles",
+            "latency": 37,
+            "ran_latency": 18,
+            "ran_reliability": 99.99,
+            "reliability": 99.99,
+            "uniqueness": "true"
+        },
+        {
+            "core_latency": 19,
+            "core_reliability": 99.999,
+            "cost": 1.0,
+            "inventory_provider": "generator",
+            "inventory_type": "slice_profiles",
+            "latency": 38,
+            "ran_latency": 19,
+            "ran_reliability": 99.99,
+            "reliability": 99.99,
+            "uniqueness": "true"
+        }
+    ]
+}
