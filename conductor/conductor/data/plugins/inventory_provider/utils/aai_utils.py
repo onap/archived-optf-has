@@ -28,7 +28,7 @@ def convert_hyphen_to_under_score(hyphened_dict):
     if hyphened_dict:
         for key in hyphened_dict:
             if '-' in key:
-                converted_dict[key.replace('-', '_')] = hyphened_dict[key]
+                converted_dict[key.replace('-', '_').lower()] = hyphened_dict[key]
             else:
                 converted_dict[key] = hyphened_dict[key]
         if 'resource_version' in converted_dict:

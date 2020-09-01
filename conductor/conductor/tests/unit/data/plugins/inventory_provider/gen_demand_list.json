@@ -1,0 +1,66 @@
+{
+    "embb": [
+        {
+            "filtering_attributes": {
+                "equipment-role": "TEST",
+                "global-customer-id": "customer-123",
+                "service-type": "TEST"
+            },
+            "inventory_provider": "generator",
+            "inventory_type": "nssi"
+        }
+    ],
+    "urllc": [
+        {
+            "filtering_attributes": {
+                "core": {
+                    "latency": {
+                        "max": 20,
+                        "min": 15,
+                        "steps": 1
+                    },
+                    "reliability": {
+                        "values": [
+                            99.999
+                        ]
+                    }
+                }
+            },
+            "inventory_provider": "generator",
+            "inventory_type": "slice_profiles",
+            "unique": "true"
+        },
+        {
+            "filtering_attributes": {
+                "core": {
+                    "latency": {
+                        "max": 20,
+                        "min": 15,
+                        "steps": 1
+                    },
+                    "reliability": {
+                        "values": [
+                            99.999
+                        ]
+                    }
+                },
+                "ran": {
+                    "latency": {
+                        "max": 20,
+                        "min": 18,
+                        "steps": 1
+                    },
+                    "reliability": {
+                        "values": [
+                            99.99
+                        ]
+                    }
+                }
+            },
+            "inventory_provider": "generator",
+            "inventory_type": "slice_profiles",
+            "unique": "true"
+        }
+    ]
+}
+

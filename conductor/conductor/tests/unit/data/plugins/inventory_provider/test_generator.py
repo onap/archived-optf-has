@@ -37,20 +37,16 @@ class TestGenerator(unittest.TestCase):
         candidates_file = './conductor/tests/unit/data/plugins/inventory_provider/generated_candidates.json'
         expected_candidates = json.loads(open(candidates_file).read())
 
-        #uuids = [candidate['candidate_id'] for candidate in expected_candidates]
-
-        #self.patcher = patch('uuid.uuid4', side_effect=uuids)
-        #self.patcher.start()
-
         generator = Generator()
 
-        filtering_attributes = {'latency': {'min': 5, 'max': 20, 'steps': 1},
-                                'reliability': {'values': [99.99, 99.999]}}
+        filtering_attributes = {'core': {'latency': {'min': 15, 'max': 20, 'steps': 1},
+                                         'reliability': {'values': [99.999]}},
+                                'ran': {'latency': {'min': 10, 'max': 20, 'steps': 1},
+                                        'reliability': {'values': [99.99]},
+                                        'coverage_area_ta_list': {'values': ['City: Chennai']}}}
 
-        generated_candidates = generator.generate_candidates('nssi', filtering_attributes,
+        generated_candidates = generator.generate_candidates('slice_profiles', filtering_attributes,
                                                              candidate_uniqueness='true')
-        #with open('/home/krishna/actual_candidates.json', 'w') as f:
-        #    f.write(json.dumps(generated_candidates))
 
         for candidate in generated_candidates:
             self.assertIsNotNone(candidate['candidate_id'])
@@ -63,3 +59,19 @@ class TestGenerator(unittest.TestCase):
 
         self.assertEqual([], generator.generate_candidates('cloud', filtering_attributes,
                                                            candidate_uniqueness='true'))
+
+    def test_resolve_demands(self):
+        demands_file = './conductor/tests/unit/data/plugins/inventory_provider/gen_demand_list.json'
+        demands = json.loads(open(demands_file).read())
+
+        resolved_demands_file = './conductor/tests/unit/data/plugins/inventory_provider/resolved_demands_gen.json'
+        expected_resolved_demands = json.loads(open(resolved_demands_file).read())
+
+        generator = Generator()
+        resolved_demands = generator.resolve_demands(demands, plan_info=None, triage_translator_data=None)
+        for demand, candidate_list in resolved_demands.items():
+            for candidate in candidate_list:
+                self.assertIsNotNone(candidate['candidate_id'])
+                del candidate['candidate_id']
+
+        self.assertEqual(expected_resolved_demands, resolved_demands)
