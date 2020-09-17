@@ -15,7 +15,7 @@
 #
 # -------------------------------------------------------------------------
 
-FROM python:3.8.0-alpine
+FROM nexus3.onap.org:10001/onap/integration-python:7.0.1
 
 
 ARG MVN_ARTIFACT_VERSION
@@ -31,24 +31,19 @@ EXPOSE ${CON_PORT}
 ENV APP_USER "onap"
 ENV APP_GROUP "onap"
 
-RUN addgroup -S $APP_GROUP && adduser -S -G $APP_USER $APP_GROUP
+USER root
 
 # Creete the required directories
 RUN mkdir -p /etc/nginx/ssl && \
     mkdir -p /var/log/conductor && \
-    mkdir -p /run/conductor && \
-    mkdir -p /run/nginx && \
-    mkdir -p /var/tmp/nginx
+    mkdir -p /run/conductor
 
 # Install the required libraries
-RUN apk --update add py-setuptools && \
-    apk add unzip && \
+RUN apk --update add unzip && \
     apk add curl && \
     apk add wget && \
     apk add fcgiwrap && \
     apk add bash vim && \
-    apk add nginx && \
-    apk add py2-pip libpq python-dev && \
     pip install --no-cache-dir --upgrade pip && \
     apk add --virtual build-dependencies build-base linux-headers pcre-dev libffi-dev libxslt-dev libressl-dev && \
     pip install --no-cache-dir uwsgi
@@ -64,5 +59,5 @@ COPY app.wsgi /etc/nginx/conductor.wsgi
 COPY api_paste.ini /usr/local/etc/conductor/api_paste.ini
 
 # Set ownership to application user
-RUN chown $APP_USER:$APP_GROUP -R /opt/has/ /var/log/ /var/lib/nginx /var/tmp/nginx /run/nginx /run/conductor
+RUN chown $APP_USER:$APP_GROUP -R /opt/has/ /var/log/ /run/conductor
 USER $APP_USER
