@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0055464a_6de9558f",
+        "filename": "conductor/docker/Dockerfile",
+        "patchSetId": 1
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 2923
+      },
+      "writtenOn": "2020-09-18T13:21:17Z",
+      "side": 1,
+      "message": "remove \u0027\u0026\u0026 \\\u0027",
+      "revId": "7b7d2bf5108d738b4d892f64d45ba2ffdf0b5a15",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
