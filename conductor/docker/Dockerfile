@@ -45,7 +45,7 @@ RUN apk --update add unzip && \
     apk add fcgiwrap && \
     apk add bash vim && \
     pip install --no-cache-dir --upgrade pip && \
-    apk add --virtual build-dependencies build-base linux-headers pcre-dev libffi-dev libxslt-dev libressl-dev && \
+    apk add --virtual build-dependencies build-base linux-headers pcre-dev libffi-dev libxslt-dev openssl-dev && \
     pip install --no-cache-dir uwsgi
 
 # Get, Install, cleanup and setup
