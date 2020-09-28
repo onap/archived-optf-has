@@ -18,21 +18,33 @@
 #
 
 import itertools
+from operator import eq
+from operator import ge
+from operator import le
 import uuid
 
 from oslo_log import log
 
 from conductor.data.plugins.inventory_provider import base
 from conductor.data.plugins.inventory_provider.candidates.candidate import Candidate
+from conductor.data.plugins.inventory_provider.candidates.slice_profiles_candidate import get_slice_requirements
 from conductor.data.plugins.inventory_provider.candidates.slice_profiles_candidate import SliceProfilesCandidate
 
 LOG = log.getLogger(__name__)
+
+
+OPERATORS = {'gte': ge,
+             'lte': le,
+             'eq': eq}
 
 
 class Generator(base.InventoryProviderBase):
 
     def __init__(self):
         """Initialize variables"""
+        pass
+
+    def initialize(self):
         pass
 
     def name(self):
@@ -48,22 +60,26 @@ class Generator(base.InventoryProviderBase):
                 inventory_type = requirement.get('inventory_type').lower()
                 candidate_uniqueness = requirement.get('unique', 'true')
                 filtering_attributes = requirement.get('filtering_attributes')
+                default_fields = requirement.get('default_attributes')
                 resolved_demands[name].extend(self.generate_candidates(inventory_type,
                                                                        filtering_attributes,
-                                                                       candidate_uniqueness))
+                                                                       candidate_uniqueness,
+                                                                       default_fields))
 
         return resolved_demands
 
-    def generate_candidates(self, inventory_type, filtering_attributes, candidate_uniqueness):
+    def generate_candidates(self, inventory_type, filtering_attributes, candidate_uniqueness, default_fields):
 
         if inventory_type == "slice_profiles":
-            return self.generate_slice_profile_candidates(filtering_attributes, inventory_type, candidate_uniqueness)
+            return self.generate_slice_profile_candidates(filtering_attributes, inventory_type,
+                                                          candidate_uniqueness, default_fields)
         else:
             LOG.debug("No functionality implemented for \
                       generating candidates for inventory_type {}".format(inventory_type))
             return []
 
-    def generate_slice_profile_candidates(self, filtering_attributes, inventory_type, candidate_uniqueness):
+    def generate_slice_profile_candidates(self, filtering_attributes, inventory_type,
+                                          candidate_uniqueness, default_fields):
         """Generates a list of slice profile candidate based on the filtering attributes,
 
            A sample filtering attribute is given below
@@ -76,7 +92,7 @@ class Generator(base.InventoryProviderBase):
             generates combination of slice profile tuples from the each subnet.
         """
         subnet_combinations = {}
-        for subnet, attributes in filtering_attributes.items():
+        for subnet, attributes in filtering_attributes['subnets'].items():
             attribute_names, attribute_combinations = generate_combinations(attributes)
             subnet_combinations[subnet] = organize_combinations(attribute_names, attribute_combinations)
 
@@ -84,12 +100,22 @@ class Generator(base.InventoryProviderBase):
         organized_combinations = organize_combinations(subnet_names, slice_profile_combinations)
         candidates = []
         for combination in organized_combinations:
-            info = Candidate.build_candidate_info(self.name(), inventory_type, 1.0, candidate_uniqueness,
-                                                  str(uuid.uuid4()))
-            candidate = SliceProfilesCandidate(info=info, subnet_requirements=combination)
-            candidates.append(candidate.convert_nested_dict_to_dict())
+            if is_valid(get_slice_requirements(combination), filtering_attributes['service_profile']):
+                info = Candidate.build_candidate_info(self.name(), inventory_type, 1.0, candidate_uniqueness,
+                                                      str(uuid.uuid4()))
+                candidate = SliceProfilesCandidate(info=info, subnet_requirements=combination,
+                                                   default_fields=default_fields)
+                converted_candidate = candidate.convert_nested_dict_to_dict()
+                candidates.append(converted_candidate)
 
         return candidates
+
+
+def is_valid(converted_candidate, service_profile):
+    for attr, attr_value in service_profile.items():
+        if not OPERATORS[attr_value['operator']](converted_candidate[attr], attr_value['value']):
+            return False
+    return True
 
 
 def generate_combinations(attributes):

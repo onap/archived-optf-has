@@ -46,13 +46,15 @@ class TestCandidates(unittest.TestCase):
                                 "ran_latency": 10,
                                 "ran_reliability": 99.99,
                                 "reliability": 99.99,
-                                "uniqueness": "true"
+                                "uniqueness": "true",
+                                "creation_cost": 0.9
                             }
         info = Candidate.build_candidate_info("generator", "slice_profiles", 1.0, "true", id)
         subnet_requirements = {"core": {"latency": 15, "reliability": 99.99},
                                "ran": {"latency": 10, "reliability": 99.99, "coverage_area_ta_list": "City: Chennai"}
                                }
 
-        candidate = SliceProfilesCandidate(info=info, subnet_requirements=subnet_requirements)
+        candidate = SliceProfilesCandidate(info=info, subnet_requirements=subnet_requirements,
+                                           default_fields={"creation_cost": 0.9})
 
         self.assertEqual(expected_candidate, candidate.convert_nested_dict_to_dict())

@@ -6,6 +6,9 @@
                 "global-customer-id": "customer-123",
                 "service-type": "TEST"
             },
+            "default_attributes": {
+                "creation_cost": 0.9
+            },
             "inventory_provider": "generator",
             "inventory_type": "nssi"
         }
@@ -13,18 +16,27 @@
     "urllc": [
         {
             "filtering_attributes": {
-                "core": {
-                    "latency": {
-                        "max": 20,
-                        "min": 15,
-                        "steps": 1
-                    },
-                    "reliability": {
-                        "values": [
-                            99.99
-                        ]
+                "service_profile": {
+                                        "latency": {"value": 20, "operator": "lte"},
+                                        "reliability": {"value": 99.99, "operator": "gte"}
+                                  },
+                "subnets": {
+                    "core": {
+                        "latency": {
+                            "max": 20,
+                            "min": 15,
+                            "steps": 1
+                        },
+                        "reliability": {
+                            "values": [
+                                99.99
+                            ]
+                        }
                     }
                 }
+            },
+            "default_attributes": {
+                "creation_cost": 0.9
             },
             "inventory_provider": "generator",
             "inventory_type": "slice_profiles",
@@ -32,30 +44,39 @@
         },
         {
             "filtering_attributes": {
-                "core": {
-                    "latency": {
-                        "max": 20,
-                        "min": 15,
-                        "steps": 1
+                "service_profile": {
+                                        "latency": {"value": 20, "operator": "lte"},
+                                        "reliability": {"value": 99.99, "operator": "gte"}
+                                  },
+                "subnets": {
+                    "core": {
+                        "latency": {
+                            "max": 20,
+                            "min": 15,
+                            "steps": 1
+                        },
+                        "reliability": {
+                            "values": [
+                                99.99
+                            ]
+                        }
                     },
-                    "reliability": {
-                        "values": [
-                            99.99
-                        ]
-                    }
-                },
-                "ran": {
-                    "latency": {
-                        "max": 20,
-                        "min": 18,
-                        "steps": 1
-                    },
-                    "reliability": {
-                        "values": [
-                            99.99
-                        ]
+                    "ran": {
+                        "latency": {
+                            "max": 20,
+                            "min": 18,
+                            "steps": 1
+                        },
+                        "reliability": {
+                            "values": [
+                                99.99
+                            ]
+                        }
                     }
                 }
+            },
+            "default_attributes": {
+                "creation_cost": 0.9
             },
             "inventory_provider": "generator",
             "inventory_type": "slice_profiles",
@@ -63,4 +84,3 @@
         }
     ]
 }
-

@@ -632,7 +632,10 @@ class DataEndpoint(object):
             demands, plan_info, triage_translator_data
         )
         if results and len(results) > 0:
-            resolved_demands = results[0]
+            if len(results) > 1:
+                resolved_demands = self.get_resolved_demands_from_result(results)
+            else:
+                resolved_demands = results[0]
             if self.triage_data_trans['plan_id']== None :
                 self.triage_data_trans['plan_name'] = triage_translator_data['plan_name']
                 self.triage_data_trans['plan_id'] = triage_translator_data['plan_id']
@@ -654,6 +657,14 @@ class DataEndpoint(object):
         return {'response': {'resolved_demands': resolved_demands,
                              'trans': self.triage_data_trans},
                 'error': error}
+
+    def get_resolved_demands_from_result(self, results):
+        resolved_demands = {de: [] for de in results[0].keys()}
+        for result in results:
+            for demand, candidates in result.items():
+                resolved_demands[demand].extend(candidates)
+        LOG.info('resolved_demands: {}'.format(str(resolved_demands)))
+        return resolved_demands
 
     def resolve_location(self, ctx, arg):
 

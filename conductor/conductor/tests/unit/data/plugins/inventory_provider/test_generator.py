@@ -39,26 +39,34 @@ class TestGenerator(unittest.TestCase):
 
         generator = Generator()
 
-        filtering_attributes = {'core': {'latency': {'min': 15, 'max': 20, 'steps': 1},
-                                         'reliability': {'values': [99.99]}},
-                                'ran': {'latency': {'min': 10, 'max': 20, 'steps': 1},
-                                        'reliability': {'values': [99.99]},
-                                        'coverage_area_ta_list': {'values': ['City: Chennai']}}}
+        filtering_attributes = {
+                                  'service_profile': {
+                                        'latency': {'value': 30, 'operator': 'lte'},
+                                        'reliability': {'value': 99.99, 'operator': 'gte'},
+                                        'coverage_area_ta_list': {'value': 'City: Chennai', 'operator': 'eq'}
+                                  },
+                                  'subnets': {
+                                     'core': {'latency': {'min': 15, 'max': 30, 'steps': 1},
+                                              'reliability': {'values': [99.99]}},
+                                     'ran': {'latency': {'min': 10, 'max': 30, 'steps': 1},
+                                             'reliability': {'values': [99.99]},
+                                             'coverage_area_ta_list': {'values': ['City: Chennai']}}
+                                  }
+                                }
 
         generated_candidates = generator.generate_candidates('slice_profiles', filtering_attributes,
-                                                             candidate_uniqueness='true')
+                                                             candidate_uniqueness='true',
+                                                             default_fields={"creation_cost": 0.9})
 
         for candidate in generated_candidates:
             self.assertIsNotNone(candidate['candidate_id'])
             del candidate['candidate_id']
 
-        for candidate in expected_candidates:
-            del candidate['candidate_id']
-
         self.assertCountEqual(expected_candidates, generated_candidates)
 
         self.assertEqual([], generator.generate_candidates('cloud', filtering_attributes,
-                                                           candidate_uniqueness='true'))
+                                                           candidate_uniqueness='true',
+                                                           default_fields={"creation_cost": 0.9}))
 
     def test_resolve_demands(self):
         demands_file = './conductor/tests/unit/data/plugins/inventory_provider/gen_demand_list.json'
@@ -69,7 +77,7 @@ class TestGenerator(unittest.TestCase):
 
         generator = Generator()
         resolved_demands = generator.resolve_demands(demands, plan_info=None, triage_translator_data=None)
-        for demand, candidate_list in resolved_demands.items():
+        for _, candidate_list in resolved_demands.items():
             for candidate in candidate_list:
                 self.assertIsNotNone(candidate['candidate_id'])
                 del candidate['candidate_id']

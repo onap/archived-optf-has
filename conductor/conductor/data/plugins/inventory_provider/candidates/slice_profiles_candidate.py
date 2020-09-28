@@ -53,31 +53,42 @@ class SliceProfilesCandidate(Candidate):
     def __init__(self, **kwargs):
         super().__init__(kwargs["info"])
         self.subnet_requirements = kwargs["subnet_requirements"]
+        if "slice_requirements" in kwargs:
+            self.slice_requirements = kwargs["slice_requirements"]
+        else:
+            self.slice_requirements = None
+        self.other = kwargs["default_fields"]
 
     def convert_nested_dict_to_dict(self):
         nested_dict = self.__dict__
 
-        slice_requirements = self.get_slice_requirements()
+        if not self.slice_requirements:
+            self.slice_requirements = get_slice_requirements(self.subnet_requirements)
 
         slice_profile_candidate = copy.deepcopy(nested_dict)
+        slice_profile_candidate.pop("slice_requirements")
         slice_profile_candidate.pop("subnet_requirements")
-        slice_profile_candidate.update(slice_requirements)
+        slice_profile_candidate.pop("other")
+        slice_profile_candidate.update(self.slice_requirements)
         for subnet, slice_profile in self.subnet_requirements.items():
             subnet_req = {f'{subnet}_{key}': value for key, value in slice_profile.items()}
             slice_profile_candidate.update(subnet_req)
 
+        slice_profile_candidate.update(self.other)
+
         return slice_profile_candidate
 
-    def get_slice_requirements(self):
-        slice_requirements_keys = set()
-        for slice_profile in self.subnet_requirements.values():
-            slice_requirements_keys.update(slice_profile.keys())
 
-        slice_profile_tuples = {}
-        for key in slice_requirements_keys:
-            attributes = []
-            for slice_profile in self.subnet_requirements.values():
-                attributes.append(slice_profile.get(key))
-            slice_profile_tuples[key] = attributes
+def get_slice_requirements(subnet_requirements):
+    slice_requirements_keys = set()
+    for slice_profile in subnet_requirements.values():
+        slice_requirements_keys.update(slice_profile.keys())
 
-        return {attr: ATTRIBUTE_AGGREGATION[attr](values) for attr, values in slice_profile_tuples.items()}
+    slice_profile_tuples = {}
+    for key in slice_requirements_keys:
+        attributes = []
+        for slice_profile in subnet_requirements.values():
+            attributes.append(slice_profile.get(key))
+        slice_profile_tuples[key] = attributes
+
+    return {attr: ATTRIBUTE_AGGREGATION[attr](values) for attr, values in slice_profile_tuples.items()}
