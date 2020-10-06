@@ -5,7 +5,7 @@
     "service-instance-name": "nsi_test_0211",
     "service-type": "embb",
     "service-role": "nsi",
-    "environment-context": "shared",
+    "service-function": "shared",
     "model-invariant-id": "51e57d4b-52ad-4d3c-a798-248b5bb9124a",
     "model-version-id": "67ea363e-e39c-4bd9-a9d5-1371c28f4d22",
     "resource-version": "1581418601616",

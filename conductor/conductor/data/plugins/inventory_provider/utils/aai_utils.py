@@ -76,6 +76,6 @@ def get_instance_info(nxi_instance):
     nxi_dict = dict()
     nxi_dict['instance_id'] = nxi_instance.get('service-instance-id')
     nxi_dict['instance_name'] = nxi_instance.get('service-instance-name')
-    if nxi_instance.get('service-function'):
-        nxi_dict['domain'] = nxi_instance.get('service-function')
+    if nxi_instance.get('workload-context'):
+        nxi_dict['domain'] = nxi_instance.get('workload-context')
     return nxi_dict

@@ -19,34 +19,34 @@
 #
 
 import collections
-
-import conductor.common.prometheus_metrics as PC
 import cotyledon
 import json
+import socket
 import time
 import traceback
-import json
-import socket
-import json
+
 from oslo_config import cfg
 from oslo_log import log
 
-from conductor.common.models import plan, region_placeholders, country_latency, group_rules, groups
+from conductor.common.models import country_latency
 from conductor.common.models import order_lock
+from conductor.common.models.order_lock import OrderLock
 from conductor.common.models import order_lock_history
+from conductor.common.models import plan
+from conductor.common.models import region_placeholders
+from conductor.common.models import triage_tool
 from conductor.common.music import api
 from conductor.common.music import messaging as music_messaging
 from conductor.common.music.model import base
-from conductor.i18n import _LE, _LI
+import conductor.common.prometheus_metrics as PC
+from conductor.common.utils import conductor_logging_util as log_util
+from conductor.i18n import _LE
+from conductor.i18n import _LI
 from conductor import messaging
 from conductor import service
 from conductor.solver.optimizer import optimizer
 from conductor.solver.request import parser
 from conductor.solver.utils import constraint_engine_interface as cei
-from conductor.common.utils import conductor_logging_util as log_util
-from conductor.common.models.order_lock import OrderLock
-from conductor.common.models import triage_tool
-from conductor.common.models.triage_tool import TriageTool
 
 # To use oslo.log in services:
 #
@@ -138,7 +138,7 @@ class SolverServiceLauncher(object):
         # Dynamically create a plan class for the specified keyspace
         self.Plan = base.create_dynamic_model(
             keyspace=conf.keyspace, baseclass=plan.Plan, classname="Plan")
-        self.OrderLock =base.create_dynamic_model(
+        self.OrderLock = base.create_dynamic_model(
             keyspace=conf.keyspace, baseclass=order_lock.OrderLock, classname="OrderLock")
         self.OrderLockHistory = base.create_dynamic_model(
             keyspace=conf.keyspace, baseclass=order_lock_history.OrderLockHistory, classname="OrderLockHistory")
@@ -147,10 +147,10 @@ class SolverServiceLauncher(object):
         self.CountryLatency = base.create_dynamic_model(
             keyspace=conf.keyspace, baseclass=country_latency.CountryLatency, classname="CountryLatency")
         self.TriageTool = base.create_dynamic_model(
-            keyspace=conf.keyspace, baseclass=triage_tool.TriageTool ,classname = "TriageTool")
-        #self.Groups = base.create_dynamic_model(
+            keyspace=conf.keyspace, baseclass=triage_tool.TriageTool, classname="TriageTool")
+        # self.Groups = base.create_dynamic_model(
         #    keyspace=conf.keyspace, baseclass=groups.Groups, classname="Groups")
-        #self.GroupRules = base.create_dynamic_model(
+        # self.GroupRules = base.create_dynamic_model(
         #    keyspace=conf.keyspace, baseclass=group_rules.GroupRules, classname="GroupRules")
 
         # Initialize Prometheus metrics Endpoint
@@ -169,10 +169,6 @@ class SolverServiceLauncher(object):
             raise
         if not self.TriageTool:
             raise
-        #if not self.Groups:
-        #    raise
-        #if not self.GroupRules:
-        #    raise
 
     def run(self):
         kwargs = {'plan_class': self.Plan,
@@ -181,8 +177,6 @@ class SolverServiceLauncher(object):
                   'region_placeholders': self.RegionPlaceholders,
                   'country_latency': self.CountryLatency,
                   'triage_tool': self.TriageTool
-                  #'groups': self.Groups,
-                  #'group_rules': self.GroupRules
                   }
         # kwargs = {'plan_class': self.Plan}
         svcmgr = cotyledon.ServiceManager()
@@ -204,7 +198,7 @@ class SolverService(cotyledon.Service):
     def __init__(self, worker_id, conf, **kwargs):
         """Initializer"""
 
-        LOG.debug("%s" % self.__class__.__name__)
+        LOG.debug({}.format(self.__class__.__name__))
         super(SolverService, self).__init__(worker_id)
         self._init(conf, **kwargs)
         self.running = True
@@ -217,13 +211,10 @@ class SolverService(cotyledon.Service):
         self.Plan = kwargs.get('plan_class')
         self.OrderLock = kwargs.get('order_locks')
         self.OrderLockHistory = kwargs.get('order_locks_history')
-        #self.OrderLock =kwargs.get('order_locks')
         self.RegionPlaceholders = kwargs.get('region_placeholders')
         self.CountryLatency = kwargs.get('country_latency')
         self.TriageTool = kwargs.get('triage_tool')
 
-        # self.Groups = kwargs.get('groups')
-        #self.GroupRules = kwargs.get('group_rules')
         # Set up the RPC service(s) we want to talk to.
         self.data_service = self.setup_rpc(conf, "data")
 
@@ -272,7 +263,7 @@ class SolverService(cotyledon.Service):
 
     def millisec_to_sec(self, millisec):
         """Convert milliseconds to seconds"""
-        return millisec/1000
+        return millisec / 1000
 
     def setup_rpc(self, conf, topic):
         """Set up the RPC Client"""
@@ -285,9 +276,8 @@ class SolverService(cotyledon.Service):
         return client
 
     def run(self):
-
         """Run"""
-        LOG.debug("%s" % self.__class__.__name__)
+        LOG.debug({}.format(self.__class__.__name__))
         # TODO(snarayanan): This is really meant to be a control loop
         # As long as self.running is true, we process another request.
 
@@ -312,7 +302,6 @@ class SolverService(cotyledon.Service):
             translated_plans = self.Plan.query.get_plan_by_col("status", self.Plan.TRANSLATED)
             solving_plans = self.Plan.query.get_plan_by_col("status", self.Plan.SOLVING)
 
-
             # combine the plans with status = 'translated' and 'solving' together
             plans = translated_plans + solving_plans
 
@@ -323,8 +312,8 @@ class SolverService(cotyledon.Service):
                     json_template = p.translation
                     found_translated_template = True
                     break
-                elif p.status == self.Plan.SOLVING and \
-                    (self.current_time_seconds() - self.millisec_to_sec(p.updated)) > self.conf.solver.timeout:
+                elif p.status == self.Plan.SOLVING and (self.current_time_seconds()
+                                                        - self.millisec_to_sec(p.updated)) > self.conf.solver.timeout:
                     p.status = self.Plan.TRANSLATED
                     p.update(condition=self.solving_status_condition)
                     break
@@ -340,8 +329,8 @@ class SolverService(cotyledon.Service):
                 continue
 
             if found_translated_template and p and p.solver_counter >= self.conf.solver.max_solver_counter:
-                message = _LE("Tried {} times. Plan {} is unable to solve")\
-                        .format(self.conf.solver.max_solver_counter, p.id)
+                message = _LE("Tried {} times. Plan {} is unable to solve").format(self.conf.solver.max_solver_counter,
+                                                                                   p.id)
                 LOG.error(message)
                 p.status = self.Plan.ERROR
                 p.message = message
@@ -363,7 +352,7 @@ class SolverService(cotyledon.Service):
                 continue
 
             LOG.info(_LI("Sovling starts, changing the template status from translated to solving, "
-                             "atomic update response from MUSIC {}").format(_is_updated))
+                         "atomic update response from MUSIC {}").format(_is_updated))
 
             LOG.info(_LI("Plan {} with request id {} is solving by machine {}. Tried to solve it for {} times.").
                      format(p.id, p.name, p.solver_owner, p.solver_counter))
@@ -378,7 +367,7 @@ class SolverService(cotyledon.Service):
             if num_solution.isdigit():
                 num_solution = int(num_solution)
 
-            #TODO(inam/larry): move this part of logic inside of parser and don't apply it to distance_between
+            # TODO(inam/larry): move this part of logic inside of parser and don't apply it to distance_between
             try:
                 # getting region placeholders from database and insert/put into regions_maps dictionary
                 region_placeholders = self.RegionPlaceholders.query.all()
@@ -396,7 +385,7 @@ class SolverService(cotyledon.Service):
 
                 if len(countries) == 0:
                     LOG.info("country is not present is country latency table, looking for * wildcard entry")
-                    countries = self.CountryLatency.query.get_plan_by_col("country_name","*")
+                    countries = self.CountryLatency.query.get_plan_by_col("country_name", "*")
                 if len(countries) != 0:
                     LOG.info("Found '*' wild card entry in country latency table")
                 else:
@@ -474,7 +463,8 @@ class SolverService(cotyledon.Service):
                         else:
                             is_rehome = "false" if resource.get("existing_placement") == 'true' else "true"
 
-                        location_id = "" if resource.get("cloud_region_version") == '2.5' else resource.get("location_id")
+                        location_id = "" if resource.get("cloud_region_version") == '2.5' \
+                                      else resource.get("location_id")
 
                         rec = {
                             # FIXME(shankar) A&AI must not be hardcoded here.
@@ -488,8 +478,7 @@ class SolverService(cotyledon.Service):
                                 "cloud_owner": resource.get("cloud_owner"),
                                 "location_type": resource.get("location_type"),
                                 "location_id": location_id,
-                                "is_rehome": is_rehome,
-                            },
+                                "is_rehome": is_rehome},
                             "attributes": {
                                 "physical-location-id":
                                     resource.get("physical_location_id"),
@@ -497,7 +486,7 @@ class SolverService(cotyledon.Service):
                                 'aic_version': resource.get("cloud_region_version")},
                         }
 
-                        if rec["candidate"]["inventory_type"] == "nssi":
+                        if rec["candidate"]["inventory_type"] in ["nssi", "nsi", "slice_profiles"]:
                             rec["candidate"] = resource
 
                         if resource.get('vim-id'):
@@ -585,8 +574,10 @@ class SolverService(cotyledon.Service):
                 '''
                 go through list of recommendations in the solution
                 for cloud candidates, check if (cloud-region-id + e2evnfkey) is in the order_locks table
-                if so, insert the row with status 'parked' in order_locks, changes plan status to 'pending' in plans table (or other status value)
-                otherwise, insert the row with status 'locked' in order_locks, and change status to 'solved' in plans table - continue reservation
+                if so, insert the row with status 'parked' in order_locks, changes plan status to 'pending' in plans
+                table (or other status value)
+                otherwise, insert the row with status 'locked' in order_locks, and change status to 'solved' in plans
+                table - continue reservation
                 '''
 
                 # clean up the data/record in order_locks table, deleting all records that failed from MSO
@@ -599,7 +590,8 @@ class SolverService(cotyledon.Service):
 
                         if plan_dict.get('status', None) == OrderLock.FAILED:
                             order_lock_record.delete()
-                            LOG.info(_LI("The order lock record {} with status {} is deleted (due to failure spinup from MSO) from order_locks table").
+                            LOG.info(_LI("The order lock record {} with status {} is deleted (due to failure"
+                                         " spinup from MSO) from order_locks table").
                                      format(order_lock_record, plan_dict.get('status')))
                             break
 
@@ -626,7 +618,8 @@ class SolverService(cotyledon.Service):
                             order_lock_record = self.OrderLock.query.get_plan_by_col("id", conflict_id)
                             if order_lock_record:
                                 is_spinup_completed = getattr(order_lock_record[0], 'is_spinup_completed')
-                                spinup_completed_timestamp = getattr(order_lock_record[0], 'spinup_completed_timestamp')
+                                spinup_completed_timestamp = getattr(order_lock_record[0],
+                                                                     'spinup_completed_timestamp')
                                 if is_spinup_completed and spinup_completed_timestamp > p.translation_begin_timestamp:
                                     is_order_translated_before_spinup = True
                                     break
@@ -691,13 +684,17 @@ class SolverService(cotyledon.Service):
 
                                     if is_spinup_completed:
                                         # persist the record in order_locks_history table
-                                        order_lock_history_record = self.OrderLockHistory(conflict_id=conflict_id, plans=plans,
-                                                                                          is_spinup_completed=is_spinup_completed,
-                                                                                          spinup_completed_timestamp=spinup_completed_timestamp)
-                                        LOG.debug("Inserting the history record with conflict id {} to order_locks_history table".format(conflict_id))
+                                        order_lock_history_record = \
+                                            self.OrderLockHistory(conflict_id=conflict_id, plans=plans,
+                                                                  is_spinup_completed=is_spinup_completed,
+                                                                  spinup_completed_timestamp=spinup_completed_timestamp
+                                                                  )
+                                        LOG.debug("Inserting the history record with conflict id {}"
+                                                  " to order_locks_history table".format(conflict_id))
                                         order_lock_history_record.insert()
                                         # remove the older record
-                                        LOG.debug("Deleting the order lock record {} from order_locks table".format(deleting_record))
+                                        LOG.debug("Deleting the order lock record {} from order_locks table"
+                                                  .format(deleting_record))
                                         deleting_record.delete()
 
                                 plan = {
@@ -729,18 +726,19 @@ class SolverService(cotyledon.Service):
 
                 elif p.status == self.Plan.SOLVING:
                     if len(inserted_order_records_dict) > 0:
-                        LOG.info(_LI("The plan with id {} is parked in order_locks table, waiting for MSO release calls").
-                                 format(p.id))
+                        LOG.info(_LI("The plan with id {} is parked in order_locks table,"
+                                     "waiting for MSO release calls").format(p.id))
                         p.status = self.Plan.WAITING_SPINUP
                     else:
                         LOG.info(_LI("The plan with id {} is inserted in order_locks table.").
                                  format(p.id))
                         p.status = self.Plan.SOLVED
 
-            while 'FAILURE' in _is_success and (self.current_time_seconds() - self.millisec_to_sec(p.updated)) <= self.conf.solver.timeout:
+            while 'FAILURE' in _is_success \
+                  and (self.current_time_seconds() - self.millisec_to_sec(p.updated)) <= self.conf.solver.timeout:
                 _is_success = p.update(condition=self.solver_owner_condition)
                 LOG.info(_LI("Plan search complete, changing the template status from solving to {}, "
-                                 "atomic update response from MUSIC {}").format(p.status, _is_success))
+                             "atomic update response from MUSIC {}").format(p.status, _is_success))
 
             LOG.info(_LI("Plan {} search complete, {} solution(s) found by machine {}").
                      format(p.id, len(solution_list), p.solver_owner))
@@ -750,14 +748,14 @@ class SolverService(cotyledon.Service):
 
     def terminate(self):
         """Terminate"""
-        LOG.debug("%s" % self.__class__.__name__)
+        LOG.debug({}.format(self.__class__.__name__))
         self.running = False
         self._gracefully_stop()
         super(SolverService, self).terminate()
 
     def reload(self):
         """Reload"""
-        LOG.debug("%s" % self.__class__.__name__)
+        LOG.debug({}.format(self.__class__.__name__))
         self._restart()
 
     def current_time_millis(self):
@@ -765,8 +763,8 @@ class SolverService(cotyledon.Service):
         return int(round(time.time() * 1000))
 
     def set_flavor_in_flavor_directives(self, flavor_map, directives):
-        '''
-        Insert the flavor name inside the flavor_map into flavor_directives
+        '''Insert the flavor name inside the flavor_map into flavor_directives
+
         :param flavor_map: flavor map get
         :param directives: All the directives get from request
         '''
