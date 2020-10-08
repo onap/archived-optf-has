@@ -198,7 +198,7 @@ class SolverService(cotyledon.Service):
     def __init__(self, worker_id, conf, **kwargs):
         """Initializer"""
 
-        LOG.debug({}.format(self.__class__.__name__))
+        LOG.debug("{}".format(self.__class__.__name__))
         super(SolverService, self).__init__(worker_id)
         self._init(conf, **kwargs)
         self.running = True
@@ -277,7 +277,7 @@ class SolverService(cotyledon.Service):
 
     def run(self):
         """Run"""
-        LOG.debug({}.format(self.__class__.__name__))
+        LOG.debug("{}".format(self.__class__.__name__))
         # TODO(snarayanan): This is really meant to be a control loop
         # As long as self.running is true, we process another request.
 
@@ -748,14 +748,14 @@ class SolverService(cotyledon.Service):
 
     def terminate(self):
         """Terminate"""
-        LOG.debug({}.format(self.__class__.__name__))
+        LOG.debug("{}".format(self.__class__.__name__))
         self.running = False
         self._gracefully_stop()
         super(SolverService, self).terminate()
 
     def reload(self):
         """Reload"""
-        LOG.debug({}.format(self.__class__.__name__))
+        LOG.debug("{}".format(self.__class__.__name__))
         self._restart()
 
     def current_time_millis(self):
