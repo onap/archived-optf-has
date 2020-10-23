@@ -1,0 +1,156 @@
+{
+  "port": 8081,
+  "protocol": "http",
+  "stubs": [{
+    "responses": [
+      { "is": { 
+           "statusCode": 200,
+           "body": {{ get_nsi_response }}
+         }
+      }
+    ],
+    "predicates": [{
+      "and": [
+        {
+          "equals": {
+            "path": "/aai/v14/nodes/service-instances",
+            "method": "GET",
+            "query": {
+               "model-version-id": "bfba363e-e39c-4bd9-a9d5-1371c28f4d22",
+               "model-invariant-id": "21d57d4b-52ad-4d3c-a798-248b5bb9124a",
+               "depth": 2
+            }
+          }
+        }
+      ]
+    }]
+  },
+  {
+    "responses": [
+      { "is": { 
+           "statusCode": 200,
+           "body": {{ get_nssi_response }}
+         }
+      }
+    ],
+    "predicates": [{
+      "and": [
+        {
+          "equals": {
+            "path": "/aai/v14/nodes/service-instances",
+            "method": "GET",
+            "query": {
+               "model-version-id": "8d770214-d3e7-43ea-b7a6-9b235dcbcd34",
+               "model-invariant-id": "c343a533-c045-4ec0-bbb6-f30eb8eb5a41",
+               "depth": 2
+            }
+          }
+        }
+      ]
+    }]
+  },
+  {
+    "responses": [
+      { "is": { 
+           "statusCode": 200,
+           "body": {{ healthcheck }}
+         }
+      }
+    ],
+    "predicates": [{
+      "and": [
+        {
+          "equals": {
+            "path": "/healthcheck",
+            "method": "GET"
+          }
+        }
+      ]
+    }]
+  },
+  {
+    "responses": [
+      { "is": { 
+           "statusCode": 200,
+           "body": {{ get_onap_regions }}
+         }
+      }
+    ],
+    "predicates": [{
+      "and": [
+        {
+          "equals": {
+            "path": "/aai/v14/cloud-infrastructure/cloud-regions/",
+            "method": "GET"
+          }
+        }
+      ]
+    }]
+  },
+  {
+    "responses": [
+      { "is": { 
+           "statusCode": 200,
+           "body": {{ get_onap_complex_DLLSTX233 }}
+         }
+      }
+    ],
+    "predicates": [{
+      "and": [
+        {
+          "equals": {
+            "path": "/aai/v14/cloud-infrastructure/complexes/complex/DLLSTX233",
+            "method": "GET"
+          }
+        }
+      ]
+    }]
+  },
+  {
+    "responses": [
+      { "is": { 
+           "statusCode": 200,
+           "body": {{ get_flavors_cloud_region_1 }}
+         }
+      }
+    ],
+    "predicates": [{
+      "and": [
+        {
+          "equals": {
+            "path": "/aai/v14/cloud-infrastructure/cloud-regions/cloud-region/HPA-cloud/cloud-region-1/flavors/",
+            "method": "GET"
+          }
+        }
+      ]
+    }]
+  },
+  {
+    "responses": [
+      { "is": { 
+           "statusCode": 200,
+           "body": {{ get_flavors_cloud_region_2 }}
+         }
+      }
+    ],
+    "predicates": [{
+      "and": [
+        {
+          "equals": {
+            "path": "/aai/v14/cloud-infrastructure/cloud-regions/cloud-region/HPA-cloud/cloud-region-2/flavors/",
+            "method": "GET"
+          }
+        }
+      ]
+    }]
+  },
+  {
+    "responses": [
+      { "is": { 
+           "statusCode": 404,
+           "body": "Not found" 
+         }
+      }
+    ]
+  }]
+}

@@ -17,5 +17,15 @@
 #
 # -------------------------------------------------------------------------
 #
-docker run -d --name aaisim -p 8081:8081  aaisim
+#docker run -d --name aaisim -p 8081:8081  aaisim
+docker run --name aaisim -p 2525:2525 -p 8081:8081 -d andyrbell/mountebank:2.3.2
 
+sleep 10
+
+#generate imposter data
+python3 imposter.py aaisim/aai_imposter.jsont aaisim/responses aai_imposter.json
+
+#Add imposter at 8081
+curl -i -X POST -H 'Content-Type: application/json' http://localhost:2525/imposters --data @aai_imposter.json
+
+rm -rf aai_imposter.json
