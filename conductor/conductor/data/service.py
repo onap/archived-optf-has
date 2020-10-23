@@ -27,6 +27,7 @@ from conductor import messaging
 # from conductor import __file__ as conductor_root
 from conductor.common.music import messaging as music_messaging
 from conductor.common.utils import conductor_logging_util as log_util
+from conductor.data.plugins.inventory_provider.base import InventoryProviderBase as Base
 from conductor.data.plugins.inventory_provider import extensions as ip_ext
 from conductor.data.plugins.service_controller import extensions as sc_ext
 from conductor.data.plugins.vim_controller import extensions as vc_ext
@@ -83,7 +84,6 @@ class DataServiceLauncher(object):
         PC._init_metrics(0)
         self.init_extension_managers(conf)
 
-
     def init_extension_managers(self, conf):
         """Initialize extension managers."""
         self.ip_ext_manager = (ip_ext.Manager(conf, 'conductor.inventory_provider.plugin'))
@@ -125,6 +125,17 @@ class DataEndpoint(object):
             'plan_name': None,
             'translator_triage': []
         }
+
+    def invoke_method(self, ctx, arg):
+        error = False
+        results = self.ip_ext_manager.map_method('invoke_method', arg)
+        if results:
+            results = list(filter(None, results))
+            results = [item for sublist in results for item in sublist]
+        else:
+            error = True
+        return {'response': results,
+                'error': error}
 
     def get_candidate_location(self, ctx, arg):
         # candidates should have lat long info already
@@ -449,130 +460,6 @@ class DataEndpoint(object):
                 candidate_list, self.ip_ext_manager.names()[0]))
         return {'response': candidate_list, 'error': False}
 
-    def get_candidates_with_hpa(self, ctx, arg):
-        '''
-        RPC for getting candidates flavor mapping for matching hpa
-        :param ctx: context
-        :param arg: contains input passed from client side for RPC call
-        :return: response candidate_list with matching label to flavor mapping
-        '''
-        error = False
-        candidate_list = arg["candidate_list"]
-        id = arg["id"]
-        type = arg["type"]
-        directives = arg["directives"]
-        attr = directives[0].get("attributes")
-        label_name = attr[0].get("attribute_name")
-        flavorProperties = arg["flavorProperties"]
-        discard_set = set()
-        for i in range(len(candidate_list)):
-            # perform this check only for cloud candidates
-            if candidate_list[i]["inventory_type"] != "cloud":
-                continue
-
-            # Check if flavor mapping for current label_name already
-            # exists. This is an invalid condition.
-            if candidate_list[i].get("directives") and attr[0].get(
-                    "attribute_value") != "":
-                LOG.error(_LE("Flavor mapping for label name {} already"
-                              "exists").format(label_name))
-                continue
-
-            # RPC call to inventory provider for matching hpa capabilities
-            results = self.ip_ext_manager.map_method(
-                'match_hpa',
-                candidate=candidate_list[i],
-                features=flavorProperties
-            )
-
-            flavor_name = None
-            if results and len(results) > 0 and results[0] is not None:
-                LOG.debug("Find results {} and results length {}".format(results, len(results)))
-                flavor_info = results[0].get("flavor_map")
-                req_directives = results[0].get("directives")
-                LOG.debug("Get directives {}".format(req_directives))
-
-            else:
-                flavor_info = None
-                LOG.info(
-                    _LW("No flavor mapping returned by "
-                        "inventory provider: {} for candidate: {}").format(
-                        self.ip_ext_manager.names()[0],
-                        candidate_list[i].get("candidate_id")))
-
-            # Metrics to Prometheus
-            m_vim_id = candidate_list[i].get("vim-id")
-            if not flavor_info:
-                discard_set.add(candidate_list[i].get("candidate_id"))
-                PC.HPA_CLOUD_REGION_UNSUCCESSFUL.labels('ONAP', 'N/A',
-                                                        m_vim_id).inc()
-            else:
-                if not flavor_info.get("flavor-name"):
-                    discard_set.add(candidate_list[i].get("candidate_id"))
-                    PC.HPA_CLOUD_REGION_UNSUCCESSFUL.labels('ONAP', 'N/A',
-                                                            m_vim_id).inc()
-                else:
-                    if not candidate_list[i].get("flavor_map"):
-                        candidate_list[i]["flavor_map"] = {}
-                    # Create flavor mapping for label_name to flavor
-                    flavor_name = flavor_info.get("flavor-name")
-                    flavor_id = flavor_info.get("flavor-id")
-                    candidate_list[i]["flavor_map"][label_name] = flavor_name
-                    candidate_list[i]["flavor_map"]["flavorId"] = flavor_id
-                    # Create directives if not exist already
-                    if not candidate_list[i].get("all_directives"):
-                        candidate_list[i]["all_directives"] = {}
-                        candidate_list[i]["all_directives"]["directives"] = []
-                    # Create flavor mapping and merge directives
-                    self.merge_directives(candidate_list, i, id, type, directives, req_directives)
-                    if not candidate_list[i].get("hpa_score"):
-                        candidate_list[i]["hpa_score"] = 0
-                    candidate_list[i]["hpa_score"] += flavor_info.get("score")
-
-                    # Metrics to Prometheus
-                    PC.HPA_CLOUD_REGION_SUCCESSFUL.labels('ONAP', 'N/A',
-                                                          m_vim_id).inc()
-
-        # return candidates not in discard set
-        candidate_list[:] = [c for c in candidate_list
-                             if c['candidate_id'] not in discard_set]
-        LOG.info(_LI(
-            "Candidates with matching hpa capabilities: {}, "
-            "inventory provider: {}").format(candidate_list,
-                                             self.ip_ext_manager.names()[0]))
-        return {'response': candidate_list, 'error': error}
-
-    def merge_directives(self, candidate_list, index, id, type, directives, feature_directives):
-        '''
-        Merge the flavor_directives with other diectives listed under hpa capabilities in the policy
-        :param candidate_list: all candidates
-        :param index: index number
-        :param id: vfc name
-        :param type: vfc type
-        :param directives: directives for each vfc
-        :param feature_directives: directives for hpa-features
-        :return:
-        '''
-        directive= {"id": id,
-                    "type": type,
-                    "directives": ""}
-        flavor_id_attributes = {"attribute_name": "flavorId", "attribute_value": ""}
-        for ele in directives:
-            if "flavor_directives" in ele.get("type"):
-                flag = True
-                if len(ele.get("attributes")) <= 1:
-                    ele.get("attributes").append(flavor_id_attributes)
-                break
-            else:
-                flag = False
-        if not flag:
-            LOG.error("No flavor directives found in {}".format(id))
-        for item in feature_directives:
-            if item and item not in directives:
-                directives.append(item)
-        directive["directives"] = directives
-        candidate_list[index]["all_directives"]["directives"].append(directive)
-
     def get_candidates_with_vim_capacity(self, ctx, arg):
         '''
         RPC for getting candidates with vim capacity
@@ -641,13 +528,8 @@ class DataEndpoint(object):
                 self.triage_data_trans['plan_id'] = triage_translator_data['plan_id']
                 self.triage_data_trans['translator_triage'].append(triage_translator_data['dropped_candidates'])
             elif not self.triage_data_trans['plan_id'] == triage_translator_data['plan_id'] :
-                self.triage_data_trans = {
-                    'plan_id': None,
-                    'plan_name': None,
-                    'translator_triage': []
-                }
-                self.triage_data_trans['plan_name']  = triage_translator_data['plan_name']
-                self.triage_data_trans['plan_id'] = triage_translator_data['plan_id']
+                self.triage_data_trans = {'plan_id': triage_translator_data['plan_id'],
+                                          'plan_name': triage_translator_data['plan_name'], 'translator_triage': []}
                 self.triage_data_trans['translator_triage'].append(triage_translator_data['dropped_candidates'])
             else:
                 self.triage_data_trans['translator_triage'].append(triage_translator_data['dropped_candidates'])
@@ -736,17 +618,3 @@ class DataEndpoint(object):
                       "{}".format(method, reserved_candidates))
             return {'response': result,
                     'error': not result}
-
-    # def do_something(self, ctx, arg):
-    #     """RPC endpoint for data messages
-    #
-    #     When another service sends a notification over the message
-    #     bus, this method receives it.
-    #     """
-    #     LOG.debug("Got a message!")
-    #
-    #     res = {
-    #         'note': 'do_something called!',
-    #         'arg': str(arg),
-    #     }
-    #     return {'response': res, 'error': False}

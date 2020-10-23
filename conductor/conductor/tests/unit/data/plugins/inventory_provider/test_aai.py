@@ -26,6 +26,7 @@ from oslo_config import cfg
 
 import conductor.data.plugins.inventory_provider.aai as aai
 from conductor.data.plugins.inventory_provider.aai import AAI
+from conductor.data.plugins.inventory_provider.hpa_utils import match_hpa
 from conductor.data.plugins.triage_translator.triage_translator import TraigeTranslator
 
 
@@ -670,7 +671,7 @@ tenant/3c6c471ada7747fe8ff7f28e100b61e8/vservers/vserver/00bddefc-126e-4e4f-a18d
                            "flavor-name": "flavor-cpu-pinning-ovsdpdk-instruction-set",
                            "score": 0}}
         self.assertEqual(flavor_map,
-                         self.aai_ep.match_hpa(candidate_json['candidate_list'][1],
+                         match_hpa(candidate_json['candidate_list'][1],
                                                feature_json[0]))
 
         flavor_map = {"flavor_map": {"flavor-id": "f5aa2b2e-3206-41b6-80d5-cf041b098c43",
@@ -678,7 +679,7 @@ tenant/3c6c471ada7747fe8ff7f28e100b61e8/vservers/vserver/00bddefc-126e-4e4f-a18d
                                      "score": 10},
                       "directives": []}
         self.assertEqual(flavor_map,
-                         self.aai_ep.match_hpa(candidate_json['candidate_list'][1],
+                         match_hpa(candidate_json['candidate_list'][1],
                                                feature_json[1]))
         flavor_map = {"flavor_map": {"flavor-id": "f5aa2b2e-3206-41b6-80d5-cf6t2b098c43",
                                      "flavor-name": "flavor-ovsdpdk-cpu-pinning-sriov-NIC-Network-set",
@@ -693,9 +694,9 @@ tenant/3c6c471ada7747fe8ff7f28e100b61e8/vservers/vserver/00bddefc-126e-4e4f-a18d
                           ]
                       }]}
         self.assertEqual(flavor_map,
-                         self.aai_ep.match_hpa(candidate_json['candidate_list'][1],
+                         match_hpa(candidate_json['candidate_list'][1],
                                                feature_json[2]))
-        self.assertEqual(None, self.aai_ep.match_hpa(candidate_json['candidate_list'][1],
+        self.assertEqual(None, match_hpa(candidate_json['candidate_list'][1],
                                                      feature_json[3]))
         flavor_map = {"flavor_map": {"flavor-id": "f5aa2b2e-3206-41b6-19d5-cf6t2b098c43",
                                      "flavor-name": "flavor-ovsdpdk-cpu-pinning-double-sriov-NIC-Network-set",
@@ -720,9 +721,9 @@ tenant/3c6c471ada7747fe8ff7f28e100b61e8/vservers/vserver/00bddefc-126e-4e4f-a18d
                               ]
                           }]
                       }
-        self.assertEqual(flavor_map, self.aai_ep.match_hpa(candidate_json['candidate_list'][1],
+        self.assertEqual(flavor_map, match_hpa(candidate_json['candidate_list'][1],
                                                            feature_json[4]))
-        self.assertEqual(None, self.aai_ep.match_hpa(candidate_json['candidate_list'][1],
+        self.assertEqual(None, match_hpa(candidate_json['candidate_list'][1],
                                                      feature_json[5]))
 
     def test_filter_nssi_candidates(self):

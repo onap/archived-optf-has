@@ -151,6 +151,10 @@ class AAI(base.InventoryProviderBase):
         """Return human-readable name."""
         return "A&AI"
 
+    def invoke_method(self, arg):
+        if arg.pop('method_name') == "get_candidates_with_hpa":
+            return hpa_utils.get_candidates_with_hpa(arg)
+
     @staticmethod
     def _get_version_from_string(string):
         """Extract version number from string"""
@@ -1858,15 +1862,6 @@ class AAI(base.InventoryProviderBase):
                                                           demand_name, triage_translator_data,
                                                           reason="excluded candidate")
         return has_candidate
-
-    def match_hpa(self, candidate, features):
-        """Match HPA features requirement with the candidate flavors """
-        hpa_provider = hpa_utils.HpaMatchProvider(candidate, features)
-        if hpa_provider.init_verify():
-            directives = hpa_provider.match_flavor()
-        else:
-            directives = None
-        return directives
 
     def get_nxi_candidates(self, filtering_attributes):
         raw_path = 'nodes/service-instances' + aai_utils.add_query_params_and_depth(filtering_attributes, "2")

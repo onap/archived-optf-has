@@ -119,33 +119,33 @@ class ConstraintEngineInterface(object):
 
     def get_candidates_with_hpa(self, id, type, directives, candidate_list,
                                 flavorProperties):
-        '''
-        Returns the candidate_list with an addition of flavor_mapping for
-        matching cloud candidates with hpa constraints.
+        """Get candidates with an addition of flavor_mapping for matching cloud candidates with hpa constraints.
+
         :param label_name: vm_label_name passed from the SO/Policy
         :param candidate_list: list of candidates to process
         :param flavorProperties: hpa features for this vm_label_name
         :return: candidate_list with hpa features and flavor mapping
-        '''
+        """
         ctxt = {}
         args = {"candidate_list": candidate_list,
                 "flavorProperties": flavorProperties,
                 "id": id,
                 "type": type,
-                "directives": directives}
+                "directives": directives,
+                "method_name": "get_candidates_with_hpa"}
         response = self.client.call(ctxt=ctxt,
-                                    method="get_candidates_with_hpa",
+                                    method="invoke_method",
                                     args=args)
         LOG.debug("get_candidates_with_hpa response: {}".format(response))
         return response
 
     def get_candidates_with_vim_capacity(self, candidate_list, vim_request):
-        '''
-        Returns the candidate_list with required vim capacity.
+        """Returns the candidate_list with required vim capacity.
+
         :param candidate_list: list of candidates to process
         :param requests: vim requests with required cpu, memory and disk
         :return: candidate_list with required vim capacity.
-        '''
+        """
         ctxt = {}
         args = {"candidate_list": candidate_list,
                 "request": vim_request}

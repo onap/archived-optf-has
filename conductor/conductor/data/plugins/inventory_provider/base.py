@@ -40,3 +40,6 @@ class InventoryProviderBase(base.DataPlugin):
     def resolve_demands(self, demands):
         """Resolve demands into inventory candidate lists"""
         pass
+
+    def invoke_method(self, arg):
+        return None

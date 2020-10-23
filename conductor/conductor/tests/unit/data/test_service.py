@@ -26,6 +26,7 @@ import mock
 import stevedore
 import yaml
 from conductor.common.utils import conductor_logging_util as log_util
+from conductor.data.plugins.inventory_provider import hpa_utils
 from conductor.data.plugins.inventory_provider import extensions as ip_ext
 from conductor.data.plugins.service_controller import extensions as sc_ext
 from conductor.data.plugins.vim_controller import extensions as vc_ext
@@ -277,7 +278,7 @@ class TestDataEndpoint(unittest.TestCase):
     @mock.patch.object(service.LOG, 'error')
     @mock.patch.object(service.LOG, 'info')
     @mock.patch.object(stevedore.ExtensionManager, 'names')
-    @mock.patch.object(stevedore.ExtensionManager, 'map_method')
+    @mock.patch.object(hpa_utils, 'match_hpa')
     def test_get_candidates_with_hpa(self, hpa_mock, ext_mock1,
                                      info_mock, error_mock):
         req_json_file = './conductor/tests/unit/data/candidate_list.json'
@@ -304,7 +305,7 @@ class TestDataEndpoint(unittest.TestCase):
                 "directives": directives
             }
         ]
-        hpa_mock.return_value = [flavor_info]
+        hpa_mock.return_value = flavor_info
         self.maxDiff = None
         args = generate_args(candidate_list, flavorProperties, id, type, directives)
         hpa_candidate_list = copy.deepcopy(candidate_list)
@@ -315,35 +316,40 @@ class TestDataEndpoint(unittest.TestCase):
         hpa_candidate_list1 = []
         hpa_candidate_list1.append(hpa_candidate_list[0])
         expected_response = {'response': hpa_candidate_list1, 'error': False}
+        args["method_name"] = "get_candidates_with_hpa"
         self.assertEqual(expected_response,
-                         self.data_ep.get_candidates_with_hpa(None, args))
+                         self.data_ep.invoke_method(None, args))
 
         hpa_candidate_list2 = list()
         hpa_candidate_list2.append(copy.deepcopy(candidate_list[0]))
         args = generate_args(candidate_list, flavorProperties, id, type, directives)
-        hpa_mock.return_value = []
+        hpa_mock.return_value = {}
         expected_response = {'response': hpa_candidate_list2, 'error': False}
+        args["method_name"] = "get_candidates_with_hpa"
         self.assertEqual(expected_response,
-                         self.data_ep.get_candidates_with_hpa(None, args))
+                         self.data_ep.invoke_method(None, args))
 
         flavor_info = {}
-        hpa_mock.return_value = [flavor_info]
+        hpa_mock.return_value = flavor_info
         expected_response = {'response': hpa_candidate_list2, 'error': False}
+        args["method_name"] = "get_candidates_with_hpa"
         self.assertEqual(expected_response,
-                         self.data_ep.get_candidates_with_hpa(None, args))
+                         self.data_ep.invoke_method(None, args))
 
         flavor_info = {"flavor-id": "vim-flavor-id1",
                        "flavor-name": ""}
-        hpa_mock.return_value = [flavor_info]
+        hpa_mock.return_value = flavor_info
+        args["method_name"] = "get_candidates_with_hpa"
         expected_response = {'response': hpa_candidate_list2, 'error': False}
         self.assertEqual(expected_response,
-                         self.data_ep.get_candidates_with_hpa(None, args))
+                         self.data_ep.invoke_method(None, args))
 
         flavor_info = {"flavor-id": "vim-flavor-id1"}
-        hpa_mock.return_value = [flavor_info]
+        hpa_mock.return_value = flavor_info
+        args["method_name"] = "get_candidates_with_hpa"
         expected_response = {'response': hpa_candidate_list2, 'error': False}
         self.assertEqual(expected_response,
-                         self.data_ep.get_candidates_with_hpa(None, args))
+                         self.data_ep.invoke_method(None, args))
 
     @mock.patch.object(service.LOG, 'warn')
     @mock.patch.object(service.LOG, 'info')

@@ -18,29 +18,30 @@
 # -------------------------------------------------------------------------
 #
 
-'''Utility functions for
-   Hardware Platform Awareness (HPA) constraint plugin'''
+"""Utility functions for
+   Hardware Platform Awareness (HPA) constraint plugin"""
 
 import operator
+import yaml
+
+from oslo_log import log
 
 import conductor.common.prometheus_metrics as PC
-# python imports
-import yaml
+from conductor.i18n import _LE
 from conductor.i18n import _LI
-# Third-party library imports
-from oslo_log import log
+from conductor.i18n import _LW
+
 
 LOG = log.getLogger(__name__)
 
 
-def  match_all_operator(big_list, small_list):
-    '''
-    Match ALL operator for HPA
-    Check if smaller list is a subset of bigger list
+def match_all_operator(big_list, small_list):
+    """Match ALL operator for HPA Check if smaller list is a subset of bigger list
+
     :param big_list: bigger list
     :param small_list: smaller list
     :return: True or False
-    '''
+    """
     if not big_list or not small_list:
         return False
 
@@ -48,6 +49,134 @@ def  match_all_operator(big_list, small_list):
     small_set = set(small_list)
 
     return small_set.issubset(big_set)
+
+
+def get_candidates_with_hpa(arg):
+    """RPC for getting candidates flavor mapping for matching hpa
+
+    :param ctx: context
+    :param arg: contains input passed from client side for RPC call
+    :return: response candidate_list with matching label to flavor mapping
+    """
+    candidate_list = arg["candidate_list"]
+    id = arg["id"]
+    type = arg["type"]
+    directives = arg["directives"]
+    attr = directives[0].get("attributes")
+    label_name = attr[0].get("attribute_name")
+    flavorProperties = arg["flavorProperties"]
+    discard_set = set()
+    for i in range(len(candidate_list)):
+        # perform this check only for cloud candidates
+        if candidate_list[i]["inventory_type"] != "cloud":
+            continue
+
+        # Check if flavor mapping for current label_name already
+        # exists. This is an invalid condition.
+        if candidate_list[i].get("directives") and attr[0].get(
+                "attribute_value") != "":
+            LOG.error(_LE("Flavor mapping for label name {} already"
+                          "exists").format(label_name))
+            continue
+
+        # RPC call to inventory provider for matching hpa capabilities
+        result = match_hpa(candidate=candidate_list[i], features=flavorProperties)
+
+        flavor_name = None
+        if result:
+            LOG.debug("Find results {}".format(result))
+            flavor_info = result.get("flavor_map")
+            req_directives = result.get("directives")
+            LOG.debug("Get directives {}".format(req_directives))
+
+        else:
+            flavor_info = None
+            LOG.info(
+                _LW("No flavor mapping returned"
+                    " for candidate: {}").format(
+                    candidate_list[i].get("candidate_id")))
+
+        # Metrics to Prometheus
+        m_vim_id = candidate_list[i].get("vim-id")
+        if not flavor_info:
+            discard_set.add(candidate_list[i].get("candidate_id"))
+            PC.HPA_CLOUD_REGION_UNSUCCESSFUL.labels('ONAP', 'N/A',
+                                                    m_vim_id).inc()
+        else:
+            if not flavor_info.get("flavor-name"):
+                discard_set.add(candidate_list[i].get("candidate_id"))
+                PC.HPA_CLOUD_REGION_UNSUCCESSFUL.labels('ONAP', 'N/A',
+                                                        m_vim_id).inc()
+            else:
+                if not candidate_list[i].get("flavor_map"):
+                    candidate_list[i]["flavor_map"] = {}
+                # Create flavor mapping for label_name to flavor
+                flavor_name = flavor_info.get("flavor-name")
+                flavor_id = flavor_info.get("flavor-id")
+                candidate_list[i]["flavor_map"][label_name] = flavor_name
+                candidate_list[i]["flavor_map"]["flavorId"] = flavor_id
+                # Create directives if not exist already
+                if not candidate_list[i].get("all_directives"):
+                    candidate_list[i]["all_directives"] = {}
+                    candidate_list[i]["all_directives"]["directives"] = []
+                # Create flavor mapping and merge directives
+                merge_directives(candidate_list, i, id, type, directives, req_directives)
+                if not candidate_list[i].get("hpa_score"):
+                    candidate_list[i]["hpa_score"] = 0
+                candidate_list[i]["hpa_score"] += flavor_info.get("score")
+
+                # Metrics to Prometheus
+                PC.HPA_CLOUD_REGION_SUCCESSFUL.labels('ONAP', 'N/A',
+                                                      m_vim_id).inc()
+
+    # return candidates not in discard set
+    candidate_list[:] = [c for c in candidate_list
+                         if c['candidate_id'] not in discard_set]
+    LOG.info(_LI(
+        "Candidates with matching hpa capabilities: {}").format(candidate_list))
+    return candidate_list
+
+
+def merge_directives(candidate_list, index, id, type, directives, feature_directives):
+    """Merge the flavor_directives with other diectives listed under hpa capabilities in the policy
+
+    :param candidate_list: all candidates
+    :param index: index number
+    :param id: vfc name
+    :param type: vfc type
+    :param directives: directives for each vfc
+    :param feature_directives: directives for hpa-features
+    :return:
+    """
+    directive = {"id": id,
+                 "type": type,
+                 "directives": ""}
+    flavor_id_attributes = {"attribute_name": "flavorId", "attribute_value": ""}
+    for ele in directives:
+        if "flavor_directives" in ele.get("type"):
+            flag = True
+            if len(ele.get("attributes")) <= 1:
+                ele.get("attributes").append(flavor_id_attributes)
+            break
+        else:
+            flag = False
+    if not flag:
+        LOG.error("No flavor directives found in {}".format(id))
+    for item in feature_directives:
+        if item and item not in directives:
+            directives.append(item)
+    directive["directives"] = directives
+    candidate_list[index]["all_directives"]["directives"].append(directive)
+
+
+def match_hpa(candidate, features):
+    """Match HPA features requirement with the candidate flavors """
+    hpa_provider = HpaMatchProvider(candidate, features)
+    if hpa_provider.init_verify():
+        directives = hpa_provider.match_flavor()
+    else:
+        directives = None
+    return directives
 
 
 class HpaMatchProvider(object):
@@ -75,7 +204,7 @@ class HpaMatchProvider(object):
         for capability in CapabilityDataParser.get_item(self.req_cap_list,
                                                         None):
             if capability.item['mandatory'].lower() == 'true':
-                hpa_list = {k: capability.item[k] \
+                hpa_list = {k: capability.item[k]
                             for k in hpa_keys if k in capability.item}
                 if hpa_list not in req_filter_list:
                     req_filter_list.append(hpa_list)
@@ -90,13 +219,13 @@ class HpaMatchProvider(object):
                 # Metrics to Prometheus
                 m_flavor_name = flavor['flavor-name']
                 PC.HPA_FLAVOR_MATCH_UNSUCCESSFUL.labels('ONAP', 'N/A', 'N/A',
-                                                      'N/A', self.m_vim_id,
-                                                      m_flavor_name).inc()
+                                                        'N/A', self.m_vim_id,
+                                                        m_flavor_name).inc()
                 continue
             for capability in CapabilityDataParser.get_item(flavor_cap_list,
                                                             'hpa-capability'):
-                hpa_list = {k: capability.item[k] \
-                               for k in hpa_keys if k in capability.item}
+                hpa_list = {k: capability.item[k]
+                            for k in hpa_keys if k in capability.item}
                 flavor_filter_list.append(hpa_list)
             # if flavor has the matching capability compare attributes
             if self._is_cap_supported(flavor_filter_list, req_filter_list):
@@ -131,7 +260,6 @@ class HpaMatchProvider(object):
                                                         self.m_vim_id,
                                                         m_flavor_name).inc()
         return directives
-
 
     def _is_cap_supported(self, flavor, cap):
         try:
@@ -174,7 +302,7 @@ class HpaMatchProvider(object):
     def _get_flavor_attribute(self, flavor_attr):
         try:
             attrib_value = yaml.load(flavor_attr['hpa-attribute-value'])
-        except:
+        except Exception:
             return None
 
         f_unit = None
@@ -210,7 +338,6 @@ class HpaMatchProvider(object):
 
         return op
 
-
     def _compare_attribute(self, flavor_attr, req_attr):
 
         req_value, req_op = self._get_req_attribute(req_attr)
@@ -240,7 +367,7 @@ class HpaMatchProvider(object):
 
         # Only integers left to compare
         if req_op in ['<', '>', '<=', '>=', '=']:
-            return  op(int(flavor_value), int(req_value))
+            return op(int(flavor_value), int(req_value))
 
         return False
 
@@ -279,11 +406,11 @@ class HpaMatchProvider(object):
                         # filter to get the attribute being compared
                         flavor_feature_attr = \
                             filter(lambda ele: ele['hpa-attribute-key'] ==
-                                               req_attr_key, flavor_cfa)
+                                   req_attr_key, flavor_cfa)
                         if not flavor_feature_attr:
                             flavor_flag = False
                         elif not self._compare_attribute(list(flavor_feature_attr)[0],
-                                                       req_feature_attr):
+                                                         req_feature_attr):
                             flavor_flag = False
                     if not flavor_flag:
                         continue
