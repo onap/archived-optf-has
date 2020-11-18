@@ -88,8 +88,8 @@ For more information on the ONAP Guilin release, please see:
 .. _`ONAP Release Downloads`: https://git.onap.org
 
 Quick Links:
-    - `OOF project page`_
-    - `Passing Badge information for OOF`_
+    - `OOF project page <https://wiki.onap.org/display/DW/Optimization+Framework+Project>`_
+    - `Passing Badge information for OOF <https://bestpractices.coreinfrastructure.org/en/projects/1720>`_
 
 
 ..      ===========================
@@ -186,8 +186,8 @@ For more information on the ONAP Frankfurt release, please see:
 .. _`ONAP Release Downloads`: https://git.onap.org
 
 Quick Links:
-    - `OOF project page`_
-    - `Passing Badge information for OOF`_
+    - `OOF project page <https://wiki.onap.org/display/DW/Optimization+Framework+Project>`_
+    - `Passing Badge information for OOF <https://bestpractices.coreinfrastructure.org/en/projects/1720>`_
 
 Version: 5.0.1
 --------------
