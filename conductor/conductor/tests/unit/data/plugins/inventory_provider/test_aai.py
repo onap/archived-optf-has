@@ -21,11 +21,13 @@ import copy
 import json
 import mock
 import unittest
+from unittest.mock import patch
 
 from oslo_config import cfg
 
 import conductor.data.plugins.inventory_provider.aai as aai
 from conductor.data.plugins.inventory_provider.aai import AAI
+from conductor.data.plugins.inventory_provider.sdc import SDC
 from conductor.data.plugins.inventory_provider.hpa_utils import match_hpa
 from conductor.data.plugins.triage_translator.triage_translator import TraigeTranslator
 
@@ -830,3 +832,61 @@ tenant/3c6c471ada7747fe8ff7f28e100b61e8/vservers/vserver/00bddefc-126e-4e4f-a18d
         self.maxDiff = None
         self.assertEqual(result, self.aai_ep.resolve_demands(demands_list, plan_info=plan_info,
                                                              triage_translator_data=triage_translator_data))
+
+
+    def test_get_nst_candidates(self):
+        nst_response_file = './conductor/tests/unit/data/plugins/inventory_provider/nst_response.json'
+        nst_response = json.loads(open(nst_response_file).read())
+
+
+
+        second_level_filter=None
+
+        default_attributes = dict()
+        default_attributes['creation_cost'] = 1
+        self.assertEqual("5d345ca8-1f8e-4f1e-aac7-6c8b33cc33e7", self.aai_ep.get_nst_candidates(nst_response, second_level_filter,
+                                                                           default_attributes, "true", "nst").__getitem__(0).__getattribute__('candidate_id'))
+
+
+    def test_resolve_demands_inventory_type_nst(self):
+        self.aai_ep.conf.HPA_enabled = True
+        TraigeTranslator.getPlanIdNAme = mock.MagicMock(return_value=None)
+        TraigeTranslator.addDemandsTriageTranslator = mock.MagicMock(return_value=None)
+
+        plan_info = {
+            'plan_name': 'name',
+            'plan_id': 'id'
+        }
+        triage_translator_data = None
+
+        demands_list_file = './conductor/tests/unit/data/plugins/inventory_provider/nst_demand_list.json'
+        demands_list = json.loads(open(demands_list_file).read())
+
+        nst_response_file = './conductor/tests/unit/data/plugins/inventory_provider/nst_response.json'
+        nst_response = json.loads(open(nst_response_file).read())
+        final_nst_candidates_file = './conductor/tests/unit/data/plugins/inventory_provider/final_nst_candidate.json'
+        final_nst_candidates = json.loads(open(final_nst_candidates_file).read())
+        result = dict()
+        result['embb_nst'] = final_nst_candidates
+
+        self.mock_get_nst_candidates = mock.patch.object(AAI, 'get_nst_response',
+                                                         return_value=nst_response)
+        self.mock_get_final_nst_candidates = mock.patch.object(SDC, 'update_candidates',
+                                                         return_value=final_nst_candidates)
+        self.mock_get_nst_candidates.start()
+        self.mock_get_final_nst_candidates.start()
+        self.maxDiff = None
+        self.assertEqual(result, self.aai_ep.resolve_demands(demands_list, plan_info=plan_info,
+                                                             triage_translator_data=triage_translator_data))
+
+    def test_get_aai_data(self):
+        nst_response_file = './conductor/tests/unit/data/plugins/inventory_provider/nst_response.json'
+        nst_response = json.loads(open(nst_response_file).read())
+        response = mock.MagicMock()
+        response.status_code = 200
+        response.ok = True
+        response.json.return_value = nst_response
+        self.mock_get_request = mock.patch.object(AAI, '_request', return_value=response)
+        self.mock_get_request.start()
+        filtering_attr={"model-role":"NST"}
+        self.assertEquals(nst_response, self.aai_ep.get_nst_response(filtering_attr))

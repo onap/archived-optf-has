@@ -1,0 +1,28 @@
+[
+   {
+
+       "candidate_id": "5d345ca8-1f8e-4f1e-aac7-6c8b33cc33e7",
+       "inventory_provider": "aai",
+       "inventory_type": "nst",
+       "uniqueness": "True",
+       "cost": 1.0,
+      "nst_info": {
+         "model_invariant_id": "f0aa2f5c-a022-4947-80bf-fc05a1502d82",
+         "model_type": "service",
+         "model_role": "NST"
+      },
+      "model_ver": {
+         "model_version_id": "5d345ca8-1f8e-4f1e-aac7-6c8b33cc33e7",
+         "model_name": "EmbbNst",
+         "model_version": "1.0",
+         "distribution_status": "DISTRIBUTION_COMPLETE_OK",
+         "model_description": "EmbbNst"
+      },
+      "default_fields": {
+         "creation_cost": 1
+      },
+      "profile_info": {
+
+      }
+   }
+]

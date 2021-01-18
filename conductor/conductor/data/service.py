@@ -66,6 +66,8 @@ DATA_OPTS = [
                  default=1.0),
     cfg.FloatOpt('nsi_candidate_cost',
                  default=1.0),
+    cfg.FloatOpt('nst_candidate_cost',
+                 default=1.0),
 ]
 
 CONF.register_opts(DATA_OPTS, group='data')

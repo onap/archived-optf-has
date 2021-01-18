@@ -19,7 +19,8 @@
 
 QUERY_PARAMS = {'service_instance': ["service-instance-id", "service-instance-name", "environment-context",
                                      "workload-context", "model-invariant-id", "model-version-id", "widget-model-id",
-                                     "widget-model-version", "service-instance-location-id", "orchestration-status"]
+                                     "widget-model-version", "service-instance-location-id", "orchestration-status"],
+                'nst': ["model-role"]
                 }
 
 
@@ -79,3 +80,18 @@ def get_instance_info(nxi_instance):
     if nxi_instance.get('workload-context'):
         nxi_dict['domain'] = nxi_instance.get('workload-context')
     return nxi_dict
+
+
+def get_nst_info(nst_instance):
+    nst_dict = {}
+    nst_dict['model_invariant_id'] = nst_instance.get('model-invariant-id')
+    nst_dict['model_type'] = nst_instance.get('model-type')
+    nst_dict['model_role'] = nst_instance.get('model-role')
+    return nst_dict
+
+
+def get_model_ver_info(model_version):
+    for key in list(model_version):
+        if "model-elements" in key:
+            del model_version["model-elements"]
+    return model_version
