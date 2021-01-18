@@ -33,11 +33,13 @@ from conductor.data.plugins import constants
 from conductor.data.plugins.inventory_provider import base
 from conductor.data.plugins.inventory_provider.candidates.candidate import Candidate
 from conductor.data.plugins.inventory_provider.candidates.cloud_candidate import Cloud
+from conductor.data.plugins.inventory_provider.candidates.nst_candidate import NST
 from conductor.data.plugins.inventory_provider.candidates.nxi_candidate import NxI
 from conductor.data.plugins.inventory_provider.candidates.service_candidate import Service
 from conductor.data.plugins.inventory_provider.candidates.transport_candidate import Transport
 from conductor.data.plugins.inventory_provider.candidates.vfmodule_candidate import VfModule
 from conductor.data.plugins.inventory_provider import hpa_utils
+from conductor.data.plugins.inventory_provider.sdc import SDC
 from conductor.data.plugins.inventory_provider.utils import aai_utils
 from conductor.data.plugins.triage_translator.triage_translator import TraigeTranslator
 from conductor.i18n import _LE
@@ -1662,6 +1664,18 @@ class AAI(base.InventoryProviderBase):
                                                                                  default_attributes,
                                                                                  candidate_uniqueness, inventory_type))
 
+                elif inventory_type == 'nst':
+                    if filtering_attributes:
+                        second_level_match = aai_utils.get_first_level_and_second_level_filter(filtering_attributes,
+                                                                                               "nst")
+                        aai_response = self.get_nst_response(filtering_attributes)
+
+                        sdc_candidates_list = self.get_nst_candidates(aai_response, second_level_match,
+                                                                      default_attributes, candidate_uniqueness,
+                                                                      inventory_type)
+                        sdc_obj = SDC()
+                        resolved_demands[name].extend(sdc_obj.get_sdc_response(sdc_candidates_list))
+
                 else:
                     LOG.error("Unknown inventory_type "
                               " {}".format(inventory_type))
@@ -1900,4 +1914,36 @@ class AAI(base.InventoryProviderBase):
                                             default_fields=aai_utils.convert_hyphen_to_under_score(default_attributes))
                         candidate = nxi_candidate.convert_nested_dict_to_dict()
                         candidates.append(candidate)
+        return candidates
+
+    def get_nst_response(self, filtering_attributes):
+        raw_path = 'service-design-and-creation/models' + aai_utils.add_query_params_and_depth(filtering_attributes,
+                                                                                               "2")
+        path = self._aai_versioned_path(raw_path)
+        aai_response = self._request('get', path, data=None)
+
+        if aai_response is None or aai_response.status_code != 200:
+            return None
+        if aai_response.json():
+            return aai_response.json()
+
+    def get_nst_candidates(self, response_body, filtering_attributes, default_attributes, candidate_uniqueness,
+                           type):
+        candidates = list()
+        if response_body is not None:
+            nst_metadatas = response_body.get("model", [])
+
+            for nst_metadata in nst_metadatas:
+                nst_info = aai_utils.get_nst_info(nst_metadata)
+                model_vers = nst_metadata.get('model-vers').get('model-ver')
+                for model_ver in model_vers:
+                    model_version_id = model_ver.get('model-version-id')
+                    cost = 1.0
+                    info = Candidate.build_candidate_info('aai', type, cost, candidate_uniqueness, model_version_id)
+                    model_version_obj = aai_utils.get_model_ver_info(model_ver)
+                    model_ver_info = aai_utils.convert_hyphen_to_under_score(model_version_obj)
+                    nst_candidate = NST(instance_info=nst_info, model_ver=model_ver_info, info=info,
+                                        default_fields=aai_utils.convert_hyphen_to_under_score(default_attributes),
+                                        profile_info=None)
+                    candidates.append(nst_candidate)
         return candidates

@@ -20,3 +20,5 @@ tempest>=11.0.0  # Apache-2.0
 pifpaf>=0.0.11
 junitxml>=0.7
 requests-mock>=1.5.2
+tosca-parser>=2.2.0
+

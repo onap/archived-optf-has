@@ -1,0 +1,16 @@
+{
+   "ueMobilityLevel":"stationary",
+   "skip_post_instantiation_configuration":true,
+   "controller_actor":"SO-REF-DATA",
+   "areaTrafficCapDL":300,
+   "maxNumberofUEs":1000000,
+   "latency":30,
+   "expDataRateUL":300,
+   "availability":0.6,
+   "plmnIdList":"39-00|39-01",
+   "sST":"embb",
+   "areaTrafficCapUL":300,
+   "expDataRateDL":1000,
+   "activityFactor":60,
+   "resourceSharingLevel":"shared"
+}
