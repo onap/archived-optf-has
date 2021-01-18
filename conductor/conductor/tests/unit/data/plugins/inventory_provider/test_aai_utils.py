@@ -93,3 +93,11 @@ class TestUtils(unittest.TestCase):
         inventory_attribute = {'service-role': 'nssi'}
         self.assertEqual(inventory_attribute, aai_utils.get_inv_values_for_second_level_filter(second_level_filter,
                                                                                                nssi_instance))
+
+    def test_get_model_ver_info(self):
+        model_ver_file = './conductor/tests/unit/data/plugins/inventory_provider/model_ver.json'
+        model_ver = json.loads(open(model_ver_file).read())
+        model_ver_res_file = './conductor/tests/unit/data/plugins/inventory_provider/model_ver_response.json'
+        model_ver_res = json.loads(open(model_ver_res_file).read())
+        self.assertEqual(model_ver_res, aai_utils.get_model_ver_info(model_ver))
+

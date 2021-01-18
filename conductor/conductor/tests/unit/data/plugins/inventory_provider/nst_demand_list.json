@@ -1,0 +1,13 @@
+{
+    "embb_nst": [{
+        "inventory_provider": "aai",
+        "inventory_type": "nst",
+        "unique": "true",
+        "filtering_attributes": {
+            "model-role": "NST"
+        },
+        "default_attributes": {
+            "creation-cost": 1
+        }
+    }]
+}
