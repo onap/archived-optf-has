@@ -1,0 +1,228 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ca7f7c29_a6619648",
+        "filename": "conductor.conf",
+        "patchSetId": 3
+      },
+      "lineNbr": 345,
+      "author": {
+        "id": 2671
+      },
+      "writtenOn": "2021-02-08T09:56:47Z",
+      "side": 1,
+      "message": "add a sample vaue to the property",
+      "range": {
+        "startLine": 345,
+        "startChar": 0,
+        "endLine": 345,
+        "endChar": 18
+      },
+      "revId": "79ec3846729a7193c6e8e4b9a5b63408d19bf4ee",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fa1725d7_18afdb4c",
+        "filename": "conductor/conductor/data/plugins/inventory_provider/aai.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 1676,
+      "author": {
+        "id": 2671
+      },
+      "writtenOn": "2021-02-08T09:56:47Z",
+      "side": 1,
+      "message": "do not obj.You can simply name it as sdc. If the object will be used only once like below. You need not assign it to a variable. You can directly use it like SDC().get_sdc_response()",
+      "range": {
+        "startLine": 1676,
+        "startChar": 24,
+        "endLine": 1676,
+        "endChar": 31
+      },
+      "revId": "79ec3846729a7193c6e8e4b9a5b63408d19bf4ee",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "83d5dea9_b12c7e3a",
+        "filename": "conductor/conductor/data/plugins/inventory_provider/aai.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 1945,
+      "author": {
+        "id": 2671
+      },
+      "writtenOn": "2021-02-08T09:56:47Z",
+      "side": 1,
+      "message": "this should be model_info",
+      "range": {
+        "startLine": 1945,
+        "startChar": 40,
+        "endLine": 1945,
+        "endChar": 48
+      },
+      "revId": "79ec3846729a7193c6e8e4b9a5b63408d19bf4ee",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "96665c68_025e121e",
+        "filename": "conductor/conductor/data/plugins/inventory_provider/candidates/nst_candidate.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 2671
+      },
+      "writtenOn": "2021-02-08T09:56:47Z",
+      "side": 1,
+      "message": "change it to model_info, since it refers to an sdc model",
+      "range": {
+        "startLine": 26,
+        "startChar": 32,
+        "endLine": 26,
+        "endChar": 40
+      },
+      "revId": "79ec3846729a7193c6e8e4b9a5b63408d19bf4ee",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "64e2383a_3ace5925",
+        "filename": "conductor/conductor/data/plugins/inventory_provider/sdc.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 85,
+      "author": {
+        "id": 2671
+      },
+      "writtenOn": "2021-02-08T09:56:47Z",
+      "side": 1,
+      "message": "pls remove this comment. This is speific to AAI",
+      "range": {
+        "startLine": 85,
+        "startChar": 8,
+        "endLine": 85,
+        "endChar": 48
+      },
+      "revId": "79ec3846729a7193c6e8e4b9a5b63408d19bf4ee",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4f0807eb_636ab8bb",
+        "filename": "conductor/conductor/data/plugins/inventory_provider/sdc.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 2671
+      },
+      "writtenOn": "2021-02-08T09:56:47Z",
+      "side": 1,
+      "message": "You can remove this, if you are not using it anywhere",
+      "range": {
+        "startLine": 97,
+        "startChar": 8,
+        "endLine": 97,
+        "endChar": 51
+      },
+      "revId": "79ec3846729a7193c6e8e4b9a5b63408d19bf4ee",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a4213e18_84a48986",
+        "filename": "conductor/conductor/data/plugins/inventory_provider/sdc.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 128,
+      "author": {
+        "id": 2671
+      },
+      "writtenOn": "2021-02-08T09:56:47Z",
+      "side": 1,
+      "message": "Change this to SDC",
+      "range": {
+        "startLine": 128,
+        "startChar": 34,
+        "endLine": 128,
+        "endChar": 38
+      },
+      "revId": "79ec3846729a7193c6e8e4b9a5b63408d19bf4ee",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d3b951d1_7a009cf2",
+        "filename": "conductor/conductor/data/plugins/inventory_provider/sdc.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 153,
+      "author": {
+        "id": 2671
+      },
+      "writtenOn": "2021-02-08T09:56:47Z",
+      "side": 1,
+      "message": "rename this method to \"update_candidates\" which will reflect the behaviour of the method",
+      "range": {
+        "startLine": 153,
+        "startChar": 8,
+        "endLine": 153,
+        "endChar": 24
+      },
+      "revId": "79ec3846729a7193c6e8e4b9a5b63408d19bf4ee",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "07ada74d_3c4edf92",
+        "filename": "conductor/conductor/data/plugins/inventory_provider/utils/aai_utils.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 86,
+      "author": {
+        "id": 2671
+      },
+      "writtenOn": "2021-02-08T09:56:47Z",
+      "side": 1,
+      "message": "use nst_dict \u003d {}\n\nThis is more time efficient than calling the method dict()",
+      "range": {
+        "startLine": 86,
+        "startChar": 15,
+        "endLine": 86,
+        "endChar": 21
+      },
+      "revId": "79ec3846729a7193c6e8e4b9a5b63408d19bf4ee",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f2690d8f_32ecb335",
+        "filename": "conductor/conductor/data/plugins/inventory_provider/utils/csar.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 2671
+      },
+      "writtenOn": "2021-02-08T09:56:47Z",
+      "side": 1,
+      "message": "This class is already present in the library right? You can directly import it instead adding the class here.",
+      "revId": "79ec3846729a7193c6e8e4b9a5b63408d19bf4ee",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
