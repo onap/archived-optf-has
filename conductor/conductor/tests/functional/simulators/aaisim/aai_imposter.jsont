@@ -27,6 +27,29 @@
   },
   {
     "responses": [
+      { "is": {
+           "statusCode": 200,
+           "body": {{ get_nst_response }}
+         }
+      }
+    ],
+    "predicates": [{
+      "and": [
+        {
+          "equals": {
+            "path": "/aai/v14/service-design-and-creation/models",
+            "method": "GET",
+            "query": {
+               "model-role": "NST",
+               "depth": 2
+            }
+          }
+        }
+      ]
+    }]
+  },
+  {
+    "responses": [
       { "is": { 
            "statusCode": 200,
            "body": {{ get_nssi_response }}
