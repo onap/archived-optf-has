@@ -95,3 +95,8 @@ def get_model_ver_info(model_version):
         if "model-elements" in key:
             del model_version["model-elements"]
     return model_version
+
+
+def get_profiles(profile_instances, profile_type):
+    profile_type_plural = profile_type + 's'
+    return [x[profile_type_plural][profile_type][0] for x in profile_instances]

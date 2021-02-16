@@ -10,55 +10,55 @@
     "resource-version": "1581418601616",
     "orchestration-status": "active",
     "relationship-list": {
-        "relationship": [
-            {
-                "related-to": "service-instance",
-                "relationship-label": "org.onap.relationships.inventory.ComposedOf",
-                "related-link": "/aai/v16/business/customers/customer/5GCustomer/service-subscriptions/service-subscription/5G/service-instances/service-instance/4115d3c8-dd59-45d6-b09d-e756dee9b518",
-                "relationship-data": [
-                    {
-                        "relationship-key": "customer.global-customer-id",
-                        "relationship-value": "5GCustomer"
-                    },
-                    {
-                        "relationship-key": "service-subscription.service-type",
-                        "relationship-value": "5G"
-                    },
-                    {
-                        "relationship-key": "service-instance.service-instance-id",
-                        "relationship-value": "4115d3c8-dd59-45d6-b09d-e756dee9b518"
-                    }
-                ],
-                "related-to-property": [
-                    {
-                        "property-key": "service-instance.service-instance-name",
-                        "property-value": "nsi_test_0211"
-                    }
-                ]
-            }
-        ]
-    },
-    "slice-profiles": {
-        "slice-profile": [
-            {
-                "profile-id": "cdad9f49-4201-4e3a-aac1-b0f27902c299",
-                "latency": 20,
-                "max-number-of-UEs": 0,
-                "coverage-area-TA-list": "[{\"province\":\"??\",\"city\":\"???\",\"county\":\"???\",\"street\":\"?????\"}]",
-                "ue-mobility-level": "stationary",
-                "resource-sharing-level": "0",
-                "exp-data-rate-UL": 100,
-                "exp-data-rate-DL": 100,
-                "activity-factor": 0,
-                "e2e-latency": 0,
-                "jitter": 0,
-                "survival-time": 0,
-                "exp-data-rate": 0,
-                "payload-size": 0,
-                "traffic-density": 0,
-                "conn-density": 0,
-                "resource-version": "1581418602494"
-            }
-        ]
-    }
+    "relationship": [{
+      "related-to": "network-route",
+      "relationship-label": "org.onap.relationships.inventory.ComposedOf",
+      "related-link": "/aai/v21/network/network-routes/network-route/c0c55aa0-1a03-4851-8b1d-7a01bc5a1e76",
+      "relationship-data": [{
+        "relationship-key": "network-route.route-id",
+        "relationship-value": "c0c55aa0-1a03-4851-8b1d-7a01bc5a1e76"
+      }]
+    }, {
+      "related-to": "service-instance",
+      "relationship-label": "org.onap.relationships.inventory.ComposedOf",
+      "related-link": "/aai/v21/business/customers/customer/5GCustomer/service-subscriptions/service-subscription/5G/service-instances/service-instance/aa5f4179-e42a-47d4-8f83-9fa1766ad51a",
+      "relationship-data": [{
+        "relationship-key": "customer.global-customer-id",
+        "relationship-value": "5GCustomer"
+      }, {
+        "relationship-key": "service-subscription.service-type",
+        "relationship-value": "5G"
+      }, {
+        "relationship-key": "service-instance.service-instance-id",
+        "relationship-value": "aa5f4179-e42a-47d4-8f83-9fa1766ad51a"
+      }],
+      "related-to-property": [{
+        "property-key": "service-instance.service-instance-name",
+        "property-value": "ns_smf_nsst_0302_b49301c0-0964-420c-99ee-acc47a93da70"
+      }]
+    }, {
+      "related-to": "allotted-resource",
+      "relationship-label": "org.onap.relationships.inventory.Uses",
+      "related-link": "/aai/v21/business/customers/customer/5GCustomer/service-subscriptions/service-subscription/5G/service-instances/service-instance/1c7046f2-a5a3-4d7f-9da8-388ee641a795/allotted-resources/allotted-resource/462e46c2-cd84-45e4-a6c1-77f4ef88328d",
+      "relationship-data": [{
+        "relationship-key": "customer.global-customer-id",
+        "relationship-value": "5GCustomer"
+      }, {
+        "relationship-key": "service-subscription.service-type",
+        "relationship-value": "5G"
+      }, {
+        "relationship-key": "service-instance.service-instance-id",
+        "relationship-value": "1c7046f2-a5a3-4d7f-9da8-388ee641a795"
+      }, {
+        "relationship-key": "allotted-resource.id",
+        "relationship-value": "462e46c2-cd84-45e4-a6c1-77f4ef88328d"
+      }],
+      "related-to-property": [{
+        "property-key": "allotted-resource.description"
+      }, {
+        "property-key": "allotted-resource.allotted-resource-name",
+        "property-value": "sliceProfile_ar_1812"
+      }]
+    }]
+  }
 }]}

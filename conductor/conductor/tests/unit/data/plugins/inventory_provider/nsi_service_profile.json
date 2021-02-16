@@ -1,0 +1,74 @@
+{
+    "allotted-resources": {
+        "allotted-resource": [
+            {
+                "allotted-resource-name": "serviceProfile_ar_1812",
+                "id": "462e46c2-cd84-45e4-a6c1-77f4ef88328d",
+                "model-invariant-id": "3a3ec7f8-425f-4801-bed5-4df697fd9c67",
+                "model-version-id": "2c8e2fda-8103-4467-b820-6952bb95ed5c",
+                "relationship-list": {
+                    "relationship": [
+                        {
+                            "related-link": "/aai/v21/business/customers/customer/5GCustomer/service-subscriptions/service-subscription/5G/service-instances/service-instance/b49301c0-0964-420c-99ee-acc47a93da70",
+                            "related-to": "service-instance",
+                            "related-to-property": [
+                                {
+                                    "property-key": "service-instance.service-instance-name",
+                                    "property-value": "nssi_embb_nsst_1812"
+                                }
+                            ],
+                            "relationship-data": [
+                                {
+                                    "relationship-key": "customer.global-customer-id",
+                                    "relationship-value": "5GCustomer"
+                                },
+                                {
+                                    "relationship-key": "service-subscription.service-type",
+                                    "relationship-value": "5G"
+                                },
+                                {
+                                    "relationship-key": "service-instance.service-instance-id",
+                                    "relationship-value": "b49301c0-0964-420c-99ee-acc47a93da70"
+                                }
+                            ],
+                            "relationship-label": "org.onap.relationships.inventory.Uses"
+                        }
+                    ]
+                },
+                "resource-version": "1612348253454",
+                "type": "Allotted Resource"
+            }
+        ]
+    },
+    "environment-context": "01-5B179BD4",
+    "model-invariant-id": "96db48e6-7d62-4007-a0dd-b7e5322032a0",
+    "model-version-id": "7fca6ef0-5eea-4d4b-9312-75770de5a3a5",
+    "orchestration-status": "activated",
+    "resource-version": "1608296844317",
+    "service-instance-id": "1c7046f2-a5a3-4d7f-9da8-388ee641a795",
+    "service-instance-name": "embb_serviceProfile_1812",
+    "service-role": "e2eserviceprofile-service",
+    "service-profiles": {
+        "service-profile": [
+            {
+                "profile-id": "89ad9f49-4201-4e3a-aac1-b0f27902c299",
+                "latency": 20,
+                "max-number-of-UEs": 10,
+                "coverage-area-TA-list": "[{\"province\":\"??\",\"city\":\"???\",\"county\":\"???\",\"street\":\"?????\"}]",
+                "ue-mobility-level": "stationary",
+                "resource-sharing-level": "0",
+                "exp-data-rate-UL": 100,
+                "exp-data-rate-DL": 100,
+                "activity-factor": 0,
+                "e2e-latency": 20,
+                "jitter": 1,
+                "survival-time": 0,
+                "exp-data-rate": 100,
+                "payload-size": 0,
+                "traffic-density": 0,
+                "conn-density": 100,
+                "resource-version": "1581418602494"
+            }
+        ]
+    }
+}
