@@ -15,7 +15,7 @@
 #
 # -------------------------------------------------------------------------
 
-FROM nexus3.onap.org:10001/onap/integration-python:7.0.1
+FROM nexus3.onap.org:10001/onap/integration-python:8.0.0
 
 
 ARG MVN_ARTIFACT_VERSION
@@ -51,6 +51,8 @@ RUN apk --update add unzip && \
 # Get, Install, cleanup and setup
 COPY onap-has-tm/optf-has-conductor-${MVN_ARTIFACT_VERSION}.zip /tmp/optf-has.zip
 RUN unzip -q -o -B /tmp/optf-has.zip -d /opt/has && rm -f /tmp/optf-has.zip
+
+ENV CRYPTOGRAPHY_DONT_BUILD_RUST "1"
 
 #PKG-INFO file must also exists in the conductor folder (i.e. besides and inside the of_has.egg-info folder). The zip file for distro above is missing it
 RUN cp /opt/has/conductor/of_has.egg-info/PKG-INFO /opt/has/conductor
