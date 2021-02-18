@@ -1,0 +1,26 @@
+[
+   {
+      "nRTAC":234,
+      "taCellsList":[
+         {
+            "cellLocalId":15709
+         }
+      ]
+   },
+   {
+      "nRTAC":123,
+      "taCellsList":[
+         {
+            "cellLocalId":15709
+         }
+      ]
+   },
+   {
+      "nRTAC":421,
+      "taCellsList":[
+         {
+            "cellLocalId":15709
+         }
+      ]
+   }
+]
