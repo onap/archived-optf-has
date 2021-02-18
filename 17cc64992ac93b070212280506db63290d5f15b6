@@ -1,0 +1,142 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7fdea07b_85e6533c",
+        "filename": "conductor/conductor/data/plugins/inventory_provider/candidates/slice_profiles_candidate.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 2671
+      },
+      "writtenOn": "2021-02-18T11:28:30Z",
+      "side": 1,
+      "message": "use coverage_area",
+      "range": {
+        "startLine": 60,
+        "startChar": 37,
+        "endLine": 60,
+        "endChar": 49
+      },
+      "revId": "17cc64992ac93b070212280506db63290d5f15b6",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "692eb7a6_669ca84c",
+        "filename": "conductor/conductor/data/plugins/inventory_provider/cps.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 2671
+      },
+      "writtenOn": "2021-02-18T11:28:30Z",
+      "side": 1,
+      "message": "This is specific to AAI hari. We don\u0027t need api version here. We can include it in the path itself",
+      "range": {
+        "startLine": 45,
+        "startChar": 4,
+        "endLine": 47,
+        "endChar": 56
+      },
+      "revId": "17cc64992ac93b070212280506db63290d5f15b6",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f75f8619_68a26f31",
+        "filename": "conductor/conductor/data/plugins/inventory_provider/cps.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 2671
+      },
+      "writtenOn": "2021-02-18T11:28:30Z",
+      "side": 1,
+      "message": "remove this empty method",
+      "range": {
+        "startLine": 94,
+        "startChar": 2,
+        "endLine": 94,
+        "endChar": 8
+      },
+      "revId": "17cc64992ac93b070212280506db63290d5f15b6",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7b02b8a0_8b6bb0c5",
+        "filename": "conductor/conductor/data/plugins/inventory_provider/cps.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 2671
+      },
+      "writtenOn": "2021-02-18T11:28:30Z",
+      "side": 1,
+      "message": "you remove the version from this too",
+      "range": {
+        "startLine": 100,
+        "startChar": 1,
+        "endLine": 102,
+        "endChar": 62
+      },
+      "revId": "17cc64992ac93b070212280506db63290d5f15b6",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ca81d2b4_9a146241",
+        "filename": "conductor/conductor/data/plugins/inventory_provider/generator.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 2671
+      },
+      "writtenOn": "2021-02-18T11:28:30Z",
+      "side": 1,
+      "message": "use coverage_area",
+      "range": {
+        "startLine": 93,
+        "startChar": 74,
+        "endLine": 93,
+        "endChar": 86
+      },
+      "revId": "17cc64992ac93b070212280506db63290d5f15b6",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "79232609_595124de",
+        "filename": "conductor/conductor/data/plugins/inventory_provider/generator.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 2671
+      },
+      "writtenOn": "2021-02-18T11:28:30Z",
+      "side": 1,
+      "message": "use coverage_area",
+      "range": {
+        "startLine": 113,
+        "startChar": 82,
+        "endLine": 113,
+        "endChar": 94
+      },
+      "revId": "17cc64992ac93b070212280506db63290d5f15b6",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
