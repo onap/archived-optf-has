@@ -18,7 +18,8 @@
             "filtering_attributes": {
                 "service_profile": {
                                         "latency": {"value": 20, "operator": "lte"},
-                                        "reliability": {"value": 99.99, "operator": "gte"}
+                                        "reliability": {"value": 99.99, "operator": "gte"},
+                                        "coverage_area": {"value": "City: Chennai-1,2,3", "operator": "eq"}
                                   },
                 "subnets": {
                     "core": {
@@ -46,7 +47,8 @@
             "filtering_attributes": {
                 "service_profile": {
                                         "latency": {"value": 20, "operator": "lte"},
-                                        "reliability": {"value": 99.99, "operator": "gte"}
+                                        "reliability": {"value": 99.99, "operator": "gte"},
+                                        "coverage_area": {"value": "City: Chennai-1,2,3", "operator": "eq"}
                                   },
                 "subnets": {
                     "core": {
@@ -71,7 +73,11 @@
                             "values": [
                                 99.99
                             ]
-                        }
+                        },
+                        "coverage_area_ta_list": {"derive_from":{"method":"get_tracking_area",
+                                                                                "args": {
+                                                                         "coverage_area": "City: Chennai-1,2,3"
+                                                                             }}}
                     }
                 }
             },

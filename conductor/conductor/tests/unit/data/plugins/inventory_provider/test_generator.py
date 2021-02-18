@@ -19,7 +19,9 @@
 
 import unittest
 import json
+import mock
 from mock import patch
+from conductor.data.plugins.inventory_provider.cps import CPS
 
 from conductor.data.plugins.inventory_provider.generator import Generator
 
@@ -36,23 +38,33 @@ class TestGenerator(unittest.TestCase):
 
         candidates_file = './conductor/tests/unit/data/plugins/inventory_provider/generated_candidates.json'
         expected_candidates = json.loads(open(candidates_file).read())
-
+        coverage_area_file='./conductor/tests/unit/data/plugins/inventory_provider/coverage_area.json'
+        coverage_area_json = json.loads(open(coverage_area_file).read())
         generator = Generator()
 
         filtering_attributes = {
                                   'service_profile': {
                                         'latency': {'value': 30, 'operator': 'lte'},
                                         'reliability': {'value': 99.99, 'operator': 'gte'},
-                                        'coverage_area_ta_list': {'value': 'City: Chennai', 'operator': 'eq'}
+                                        'coverage_area': {'value': 'City: Chennai-1,2,3', 'operator': 'eq'}
                                   },
                                   'subnets': {
                                      'core': {'latency': {'min': 15, 'max': 30, 'steps': 1},
                                               'reliability': {'values': [99.99]}},
                                      'ran': {'latency': {'min': 10, 'max': 30, 'steps': 1},
                                              'reliability': {'values': [99.99]},
-                                             'coverage_area_ta_list': {'values': ['City: Chennai']}}
+                                             'coverage_area_ta_list': {"derive_from":{"method":"get_tracking_area",
+                                                                                "args": {
+                                                                         "coverage_area": "Chennai-1,2,3"
+                                                                             }}}}
                                   }
                                 }
+        self.mock_get_coverage_area_ta = mock.patch.object(CPS, 'get_coveragearea_ta',
+                                                         return_value=coverage_area_json)
+
+        self.mock_get_coverage_area_ta.start()
+
+        self.maxDiff=None
 
         generated_candidates = generator.generate_candidates('slice_profiles', filtering_attributes,
                                                              candidate_uniqueness='true',
@@ -62,7 +74,7 @@ class TestGenerator(unittest.TestCase):
             self.assertIsNotNone(candidate['candidate_id'])
             del candidate['candidate_id']
 
-        self.assertCountEqual(expected_candidates, generated_candidates)
+        self.assertEqual(expected_candidates, generated_candidates)
 
         self.assertEqual([], generator.generate_candidates('cloud', filtering_attributes,
                                                            candidate_uniqueness='true',
@@ -71,11 +83,19 @@ class TestGenerator(unittest.TestCase):
     def test_resolve_demands(self):
         demands_file = './conductor/tests/unit/data/plugins/inventory_provider/gen_demand_list.json'
         demands = json.loads(open(demands_file).read())
+        coverage_area_file = './conductor/tests/unit/data/plugins/inventory_provider/coverage_area.json'
+        coverage_area_json = json.loads(open(coverage_area_file).read())
 
         resolved_demands_file = './conductor/tests/unit/data/plugins/inventory_provider/resolved_demands_gen.json'
         expected_resolved_demands = json.loads(open(resolved_demands_file).read())
 
         generator = Generator()
+        self.mock_get_coverage_area_ta = mock.patch.object(CPS, 'get_coveragearea_ta',
+                                                         return_value=coverage_area_json)
+
+        self.mock_get_coverage_area_ta.start()
+
+        self.maxDiff=None
         resolved_demands = generator.resolve_demands(demands, plan_info=None, triage_translator_data=None)
         for _, candidate_list in resolved_demands.items():
             for candidate in candidate_list:
