@@ -38,7 +38,7 @@ class TestCandidates(unittest.TestCase):
                                 "core_latency": 15,
                                 "core_reliability": 99.99,
                                 "cost": 1.0,
-                                "coverage_area_ta_list": "City: Chennai",
+                                "coverage_area": "City: Chennai",
                                 "inventory_provider": "generator",
                                 "inventory_type": "slice_profiles",
                                 "latency": 25,
@@ -55,6 +55,6 @@ class TestCandidates(unittest.TestCase):
                                }
 
         candidate = SliceProfilesCandidate(info=info, subnet_requirements=subnet_requirements,
-                                           default_fields={"creation_cost": 0.9})
+                                           default_fields={"creation_cost": 0.9},coverageArea="City: Chennai")
 
         self.assertEqual(expected_candidate, candidate.convert_nested_dict_to_dict())
