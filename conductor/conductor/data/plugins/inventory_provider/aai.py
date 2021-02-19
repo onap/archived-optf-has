@@ -1899,11 +1899,12 @@ class AAI(base.InventoryProviderBase):
                 if not filtering_attributes or \
                         self.match_inventory_attributes(filtering_attributes, inventory_attributes,
                                                         nxi_instance.get('service-instance-id')):
+                    profile_instances = self.get_profile_instances(nxi_instance)
                     if type == 'nssi':
-                        profiles = nxi_instance.get('slice-profiles').get('slice-profile')
+                        profiles = aai_utils.get_profiles(profile_instances, "slice-profile")
                         cost = self.conf.data.nssi_candidate_cost
                     elif type == 'nsi':
-                        profiles = nxi_instance.get('service-profiles').get('service-profile')
+                        profiles = aai_utils.get_profiles(profile_instances, "service-profile")
                         cost = self.conf.data.nsi_candidate_cost
                     for profile in profiles:
                         profile_id = profile.get('profile-id')
@@ -1914,6 +1915,20 @@ class AAI(base.InventoryProviderBase):
                         candidate = nxi_candidate.convert_nested_dict_to_dict()
                         candidates.append(candidate)
         return candidates
+
+    def get_profile_instances(self, nxi_instance):
+        related_nodes = self._get_aai_rel_link_data(nxi_instance, "allotted-resource",
+                                                    "service-instance.service-instance-id")
+        profile_instances = []
+        for node in related_nodes:
+            profile_instance_id = node["d_value"]
+            raw_path = f'nodes/service-instances/service-instance/{profile_instance_id}?depth=2'
+            path = self._aai_versioned_path(raw_path)
+            aai_response = self._request('get', path, data=None)
+            if aai_response.status_code == 200 and aai_response.json():
+                profile_instances.append(aai_response.json())
+
+        return profile_instances
 
     def get_nst_response(self, filtering_attributes):
         raw_path = 'service-design-and-creation/models' + aai_utils.add_query_params_and_depth(filtering_attributes,

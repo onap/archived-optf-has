@@ -731,8 +731,13 @@ tenant/3c6c471ada7747fe8ff7f28e100b61e8/vservers/vserver/00bddefc-126e-4e4f-a18d
     def test_filter_nssi_candidates(self):
         nssi_response_file = './conductor/tests/unit/data/plugins/inventory_provider/nssi_response.json'
         nssi_response = json.loads(open(nssi_response_file).read())
+        slice_profile_file = './conductor/tests/unit/data/plugins/inventory_provider/nssi_slice_profile.json'
+        slice_profile = json.loads(open(slice_profile_file).read())
         nssi_candidates_file = './conductor/tests/unit/data/plugins/inventory_provider/nssi_candidate.json'
         nssi_candidates = json.loads(open(nssi_candidates_file).read())
+
+        self.mock_get_profiles = mock.patch.object(AAI, 'get_profile_instances', return_value=[slice_profile])
+        self.mock_get_profiles.start()
 
         service_role = 'nssi'
         second_level_filter = dict()
@@ -774,6 +779,8 @@ tenant/3c6c471ada7747fe8ff7f28e100b61e8/vservers/vserver/00bddefc-126e-4e4f-a18d
 
         nssi_response_file = './conductor/tests/unit/data/plugins/inventory_provider/nssi_response.json'
         nssi_response = json.loads(open(nssi_response_file).read())
+        slice_profile_file = './conductor/tests/unit/data/plugins/inventory_provider/nssi_slice_profile.json'
+        slice_profile = json.loads(open(slice_profile_file).read())
         nssi_candidates_file = './conductor/tests/unit/data/plugins/inventory_provider/nssi_candidate.json'
         nssi_candidates = json.loads(open(nssi_candidates_file).read())
         result = dict()
@@ -783,6 +790,9 @@ tenant/3c6c471ada7747fe8ff7f28e100b61e8/vservers/vserver/00bddefc-126e-4e4f-a18d
                                                          return_value=nssi_response)
         self.mock_get_nxi_candidates.start()
 
+        self.mock_get_profiles = mock.patch.object(AAI, 'get_profile_instances', return_value=[slice_profile])
+        self.mock_get_profiles.start()
+
         self.assertEqual(result, self.aai_ep.resolve_demands(demands_list, plan_info=plan_info,
                                                              triage_translator_data=triage_translator_data))
 
@@ -791,6 +801,11 @@ tenant/3c6c471ada7747fe8ff7f28e100b61e8/vservers/vserver/00bddefc-126e-4e4f-a18d
         nsi_response = json.loads(open(nsi_response_file).read())
         nsi_candidates_file = './conductor/tests/unit/data/plugins/inventory_provider/nsi_candidate.json'
         nsi_candidates = json.loads(open(nsi_candidates_file).read())
+        service_profile_file = './conductor/tests/unit/data/plugins/inventory_provider/nsi_service_profile.json'
+        service_profile = json.loads(open(service_profile_file).read())
+
+        self.mock_get_profiles = mock.patch.object(AAI, 'get_profile_instances', return_value=[service_profile])
+        self.mock_get_profiles.start()
 
         service_role = 'nsi'
         second_level_filter = dict()
@@ -825,6 +840,12 @@ tenant/3c6c471ada7747fe8ff7f28e100b61e8/vservers/vserver/00bddefc-126e-4e4f-a18d
         nsi_candidates = json.loads(open(nsi_candidates_file).read())
         result = dict()
         result['embb_nst'] = nsi_candidates
+
+        service_profile_file = './conductor/tests/unit/data/plugins/inventory_provider/nsi_service_profile.json'
+        service_profile = json.loads(open(service_profile_file).read())
+
+        self.mock_get_profiles = mock.patch.object(AAI, 'get_profile_instances', return_value=[service_profile])
+        self.mock_get_profiles.start()
 
         self.mock_get_nxi_candidates = mock.patch.object(AAI, 'get_nxi_candidates',
                                                          return_value=nsi_response)
@@ -890,3 +911,18 @@ tenant/3c6c471ada7747fe8ff7f28e100b61e8/vservers/vserver/00bddefc-126e-4e4f-a18d
         self.mock_get_request.start()
         filtering_attr={"model-role":"NST"}
         self.assertEquals(nst_response, self.aai_ep.get_nst_response(filtering_attr))
+
+    def test_get_profile_instances(self):
+        nsi_response_file = './conductor/tests/unit/data/plugins/inventory_provider/nsi_response.json'
+        nsi_response = json.loads(open(nsi_response_file).read())
+        service_profile_file = './conductor/tests/unit/data/plugins/inventory_provider/nsi_service_profile.json'
+        service_profile = json.loads(open(service_profile_file).read())
+
+        response = mock.MagicMock()
+        response.status_code = 200
+        response.ok = True
+        response.json.return_value = service_profile
+        self.mock_get_profiles = mock.patch.object(AAI, '_request', return_value=response)
+        self.mock_get_profiles.start()
+
+        self.assertEquals([service_profile], self.aai_ep.get_profile_instances(nsi_response["service-instance"][0]))
