@@ -29,6 +29,7 @@ from conductor.data.plugins.inventory_provider import base
 from conductor.data.plugins.inventory_provider.candidates.candidate import Candidate
 from conductor.data.plugins.inventory_provider.candidates.slice_profiles_candidate import get_slice_requirements
 from conductor.data.plugins.inventory_provider.candidates.slice_profiles_candidate import SliceProfilesCandidate
+from conductor.data.plugins.inventory_provider.cps import CPS
 
 LOG = log.getLogger(__name__)
 
@@ -87,7 +88,11 @@ class Generator(base.InventoryProviderBase):
                                             'reliability': {'values': [99.999]}},
                                    'ran': {'latency': {'min': 10, 'max': 20, 'steps': 1},
                                            'reliability': {'values': [99.99]},
-                                           'coverage_area_ta_list': {'values': ['City: Chennai']}}}
+                                           'coverage_area_ta_list': {"derive_from":{"method":"get_tracking_area",
+                                                                                "args": {
+                                                                         "coverage_area": {"get_param": "coverageArea"}
+                                                                                          }}}}}
+
             It will generate slice profile combination from the attributes for each subnet and
             generates combination of slice profile tuples from the each subnet.
         """
@@ -103,8 +108,9 @@ class Generator(base.InventoryProviderBase):
             if is_valid(get_slice_requirements(combination), filtering_attributes['service_profile']):
                 info = Candidate.build_candidate_info(self.name(), inventory_type, 1.0, candidate_uniqueness,
                                                       str(uuid.uuid4()))
+                coverage_area = filtering_attributes['service_profile'].get("coverage_area").get("value")
                 candidate = SliceProfilesCandidate(info=info, subnet_requirements=combination,
-                                                   default_fields=default_fields)
+                                                   default_fields=default_fields, coverage_area=coverage_area)
                 converted_candidate = candidate.convert_nested_dict_to_dict()
                 candidates.append(converted_candidate)
 
@@ -113,9 +119,24 @@ class Generator(base.InventoryProviderBase):
 
 def is_valid(converted_candidate, service_profile):
     for attr, attr_value in service_profile.items():
-        if not OPERATORS[attr_value['operator']](converted_candidate[attr], attr_value['value']):
-            return False
+        if attr == "coverage_area":
+            pass
+        else:
+            if not OPERATORS[attr_value['operator']](converted_candidate[attr], attr_value['value']):
+                return False
     return True
+
+
+def get_tracking_area(args):
+    coverage_list = []
+    coverage_area_zones_list = args.split("-")
+    zone_id_list = coverage_area_zones_list[1].split(",")
+    for zone_id in zone_id_list:
+        values = CPS().get_coveragearea_ta(zone_id)
+        for x in values:
+            if not x.get("nRTAC") in coverage_list:
+                coverage_list.append(x.get("nRTAC"))
+    return coverage_list
 
 
 def generate_combinations(attributes):
@@ -125,13 +146,21 @@ def generate_combinations(attributes):
        from which the combinations are generated.
     """
     attr = dict()
+    ta_list = []
+
     for attribute, attr_params in attributes.items():
-        values = attr_params.get('values')
-        if not values:
+        if attr_params.get('values'):
+            values = attr_params.get('values')
+        elif attr_params.get('derive_from'):
+            derive_from = attr_params.get("derive_from")
+            method_name = derive_from.get("method")
+            args = derive_from.get("args").get("coverage_area")
+            ta_list = (eval(method_name)(args))
+            values = [ta_list]
+        else:
             values = range(attr_params.get('min', 1), attr_params.get('max'),
                            attr_params.get('steps', 1))
         attr[attribute] = values
-
     return get_combinations_from_dict(attr)
 
 

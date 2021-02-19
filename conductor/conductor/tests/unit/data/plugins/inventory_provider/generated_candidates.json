@@ -6,12 +6,12 @@
         "cost": 1.0,
         "latency": 25,
         "reliability": 99.99,
-        "coverage_area_ta_list": "City: Chennai",
+        "coverage_area": "City: Chennai-1,2,3",
         "core_latency": 15,
         "core_reliability": 99.99,
         "ran_latency": 10,
         "ran_reliability": 99.99,
-        "ran_coverage_area_ta_list": "City: Chennai",
+        "ran_coverage_area_ta_list": [234,123,421],
         "creation_cost": 0.9
     },
     {
@@ -21,12 +21,12 @@
         "cost": 1.0,
         "latency": 26,
         "reliability": 99.99,
-        "coverage_area_ta_list": "City: Chennai",
+        "coverage_area": "City: Chennai-1,2,3",
         "core_latency": 15,
         "core_reliability": 99.99,
         "ran_latency": 11,
         "ran_reliability": 99.99,
-        "ran_coverage_area_ta_list": "City: Chennai",
+        "ran_coverage_area_ta_list": [234,123,421],
         "creation_cost": 0.9
     },
     {
@@ -36,12 +36,12 @@
         "cost": 1.0,
         "latency": 27,
         "reliability": 99.99,
-        "coverage_area_ta_list": "City: Chennai",
+        "coverage_area": "City: Chennai-1,2,3",
         "core_latency": 15,
         "core_reliability": 99.99,
         "ran_latency": 12,
         "ran_reliability": 99.99,
-        "ran_coverage_area_ta_list": "City: Chennai",
+        "ran_coverage_area_ta_list": [234,123,421],
         "creation_cost": 0.9
     },
     {
@@ -51,12 +51,12 @@
         "cost": 1.0,
         "latency": 28,
         "reliability": 99.99,
-        "coverage_area_ta_list": "City: Chennai",
+        "coverage_area": "City: Chennai-1,2,3",
         "core_latency": 15,
         "core_reliability": 99.99,
         "ran_latency": 13,
         "ran_reliability": 99.99,
-        "ran_coverage_area_ta_list": "City: Chennai",
+        "ran_coverage_area_ta_list": [234,123,421],
         "creation_cost": 0.9
     },
     {
@@ -66,12 +66,12 @@
         "cost": 1.0,
         "latency": 29,
         "reliability": 99.99,
-        "coverage_area_ta_list": "City: Chennai",
+        "coverage_area": "City: Chennai-1,2,3",
         "core_latency": 15,
         "core_reliability": 99.99,
         "ran_latency": 14,
         "ran_reliability": 99.99,
-        "ran_coverage_area_ta_list": "City: Chennai",
+        "ran_coverage_area_ta_list": [234,123,421],
         "creation_cost": 0.9
     },
     {
@@ -81,12 +81,12 @@
         "cost": 1.0,
         "latency": 30,
         "reliability": 99.99,
-        "coverage_area_ta_list": "City: Chennai",
+        "coverage_area": "City: Chennai-1,2,3",
         "core_latency": 15,
         "core_reliability": 99.99,
         "ran_latency": 15,
         "ran_reliability": 99.99,
-        "ran_coverage_area_ta_list": "City: Chennai",
+        "ran_coverage_area_ta_list": [234,123,421],
         "creation_cost": 0.9
     },
     {
@@ -96,12 +96,12 @@
         "cost": 1.0,
         "latency": 26,
         "reliability": 99.99,
-        "coverage_area_ta_list": "City: Chennai",
+        "coverage_area": "City: Chennai-1,2,3",
         "core_latency": 16,
         "core_reliability": 99.99,
         "ran_latency": 10,
         "ran_reliability": 99.99,
-        "ran_coverage_area_ta_list": "City: Chennai",
+        "ran_coverage_area_ta_list": [234,123,421],
         "creation_cost": 0.9
     },
     {
@@ -111,12 +111,12 @@
         "cost": 1.0,
         "latency": 27,
         "reliability": 99.99,
-        "coverage_area_ta_list": "City: Chennai",
+        "coverage_area": "City: Chennai-1,2,3",
         "core_latency": 16,
         "core_reliability": 99.99,
         "ran_latency": 11,
         "ran_reliability": 99.99,
-        "ran_coverage_area_ta_list": "City: Chennai",
+        "ran_coverage_area_ta_list": [234,123,421],
         "creation_cost": 0.9
     },
     {
@@ -126,12 +126,12 @@
         "cost": 1.0,
         "latency": 28,
         "reliability": 99.99,
-        "coverage_area_ta_list": "City: Chennai",
+        "coverage_area": "City: Chennai-1,2,3",
         "core_latency": 16,
         "core_reliability": 99.99,
         "ran_latency": 12,
         "ran_reliability": 99.99,
-        "ran_coverage_area_ta_list": "City: Chennai",
+        "ran_coverage_area_ta_list": [234,123,421],
         "creation_cost": 0.9
     },
     {
@@ -141,12 +141,12 @@
         "cost": 1.0,
         "latency": 29,
         "reliability": 99.99,
-        "coverage_area_ta_list": "City: Chennai",
+        "coverage_area": "City: Chennai-1,2,3",
         "core_latency": 16,
         "core_reliability": 99.99,
         "ran_latency": 13,
         "ran_reliability": 99.99,
-        "ran_coverage_area_ta_list": "City: Chennai",
+        "ran_coverage_area_ta_list": [234,123,421],
         "creation_cost": 0.9
     },
     {
@@ -156,12 +156,12 @@
         "cost": 1.0,
         "latency": 30,
         "reliability": 99.99,
-        "coverage_area_ta_list": "City: Chennai",
+        "coverage_area": "City: Chennai-1,2,3",
         "core_latency": 16,
         "core_reliability": 99.99,
         "ran_latency": 14,
         "ran_reliability": 99.99,
-        "ran_coverage_area_ta_list": "City: Chennai",
+        "ran_coverage_area_ta_list": [234,123,421],
         "creation_cost": 0.9
     },
     {
@@ -171,12 +171,12 @@
         "cost": 1.0,
         "latency": 27,
         "reliability": 99.99,
-        "coverage_area_ta_list": "City: Chennai",
+        "coverage_area": "City: Chennai-1,2,3",
         "core_latency": 17,
         "core_reliability": 99.99,
         "ran_latency": 10,
         "ran_reliability": 99.99,
-        "ran_coverage_area_ta_list": "City: Chennai",
+        "ran_coverage_area_ta_list": [234,123,421],
         "creation_cost": 0.9
     },
     {
@@ -186,12 +186,12 @@
         "cost": 1.0,
         "latency": 28,
         "reliability": 99.99,
-        "coverage_area_ta_list": "City: Chennai",
+        "coverage_area": "City: Chennai-1,2,3",
         "core_latency": 17,
         "core_reliability": 99.99,
         "ran_latency": 11,
         "ran_reliability": 99.99,
-        "ran_coverage_area_ta_list": "City: Chennai",
+        "ran_coverage_area_ta_list": [234,123,421],
         "creation_cost": 0.9
     },
     {
@@ -201,12 +201,12 @@
         "cost": 1.0,
         "latency": 29,
         "reliability": 99.99,
-        "coverage_area_ta_list": "City: Chennai",
+        "coverage_area": "City: Chennai-1,2,3",
         "core_latency": 17,
         "core_reliability": 99.99,
         "ran_latency": 12,
         "ran_reliability": 99.99,
-        "ran_coverage_area_ta_list": "City: Chennai",
+        "ran_coverage_area_ta_list": [234,123,421],
         "creation_cost": 0.9
     },
     {
@@ -216,12 +216,12 @@
         "cost": 1.0,
         "latency": 30,
         "reliability": 99.99,
-        "coverage_area_ta_list": "City: Chennai",
+        "coverage_area": "City: Chennai-1,2,3",
         "core_latency": 17,
         "core_reliability": 99.99,
         "ran_latency": 13,
         "ran_reliability": 99.99,
-        "ran_coverage_area_ta_list": "City: Chennai",
+        "ran_coverage_area_ta_list": [234,123,421],
         "creation_cost": 0.9
     },
     {
@@ -231,12 +231,12 @@
         "cost": 1.0,
         "latency": 28,
         "reliability": 99.99,
-        "coverage_area_ta_list": "City: Chennai",
+        "coverage_area": "City: Chennai-1,2,3",
         "core_latency": 18,
         "core_reliability": 99.99,
         "ran_latency": 10,
         "ran_reliability": 99.99,
-        "ran_coverage_area_ta_list": "City: Chennai",
+        "ran_coverage_area_ta_list": [234,123,421],
         "creation_cost": 0.9
     },
     {
@@ -246,12 +246,12 @@
         "cost": 1.0,
         "latency": 29,
         "reliability": 99.99,
-        "coverage_area_ta_list": "City: Chennai",
+        "coverage_area": "City: Chennai-1,2,3",
         "core_latency": 18,
         "core_reliability": 99.99,
         "ran_latency": 11,
         "ran_reliability": 99.99,
-        "ran_coverage_area_ta_list": "City: Chennai",
+        "ran_coverage_area_ta_list": [234,123,421],
         "creation_cost": 0.9
     },
     {
@@ -261,12 +261,12 @@
         "cost": 1.0,
         "latency": 30,
         "reliability": 99.99,
-        "coverage_area_ta_list": "City: Chennai",
+        "coverage_area": "City: Chennai-1,2,3",
         "core_latency": 18,
         "core_reliability": 99.99,
         "ran_latency": 12,
         "ran_reliability": 99.99,
-        "ran_coverage_area_ta_list": "City: Chennai",
+        "ran_coverage_area_ta_list": [234,123,421],
         "creation_cost": 0.9
     },
     {
@@ -276,12 +276,12 @@
         "cost": 1.0,
         "latency": 29,
         "reliability": 99.99,
-        "coverage_area_ta_list": "City: Chennai",
+        "coverage_area": "City: Chennai-1,2,3",
         "core_latency": 19,
         "core_reliability": 99.99,
         "ran_latency": 10,
         "ran_reliability": 99.99,
-        "ran_coverage_area_ta_list": "City: Chennai",
+        "ran_coverage_area_ta_list": [234,123,421],
         "creation_cost": 0.9
     },
     {
@@ -291,12 +291,12 @@
         "cost": 1.0,
         "latency": 30,
         "reliability": 99.99,
-        "coverage_area_ta_list": "City: Chennai",
+        "coverage_area": "City: Chennai-1,2,3",
         "core_latency": 19,
         "core_reliability": 99.99,
         "ran_latency": 11,
         "ran_reliability": 99.99,
-        "ran_coverage_area_ta_list": "City: Chennai",
+        "ran_coverage_area_ta_list": [234,123,421],
         "creation_cost": 0.9
     },
     {
@@ -306,12 +306,12 @@
         "cost": 1.0,
         "latency": 30,
         "reliability": 99.99,
-        "coverage_area_ta_list": "City: Chennai",
+        "coverage_area": "City: Chennai-1,2,3",
         "core_latency": 20,
         "core_reliability": 99.99,
         "ran_latency": 10,
         "ran_reliability": 99.99,
-        "ran_coverage_area_ta_list": "City: Chennai",
+        "ran_coverage_area_ta_list": [234,123,421],
         "creation_cost": 0.9
     }
 ]

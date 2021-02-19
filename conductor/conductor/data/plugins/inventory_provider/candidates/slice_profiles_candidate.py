@@ -41,7 +41,6 @@ ATTRIBUTE_AGGREGATION = {
     "exp_data_rate_ul": min,
     "exp_data_rate_dl": min,
     "ue_mobility_level": copy_first,
-    "coverage_area_ta_list": copy_first,
     "activity_factor": copy_first,
     "survival_time": copy_first,
     "max_number_of_conns": copy_first
@@ -58,6 +57,7 @@ class SliceProfilesCandidate(Candidate):
         else:
             self.slice_requirements = None
         self.other = kwargs["default_fields"]
+        self.coverage_area = kwargs["coverage_area"]
 
     def convert_nested_dict_to_dict(self):
         nested_dict = self.__dict__
@@ -86,9 +86,12 @@ def get_slice_requirements(subnet_requirements):
 
     slice_profile_tuples = {}
     for key in slice_requirements_keys:
-        attributes = []
-        for slice_profile in subnet_requirements.values():
-            attributes.append(slice_profile.get(key))
-        slice_profile_tuples[key] = attributes
+        if key == "coverage_area_ta_list":
+            pass
+        else:
+            attributes = []
+            for slice_profile in subnet_requirements.values():
+                attributes.append(slice_profile.get(key))
+            slice_profile_tuples[key] = attributes
 
     return {attr: ATTRIBUTE_AGGREGATION[attr](values) for attr, values in slice_profile_tuples.items()}
