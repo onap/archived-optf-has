@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3dfd23a7_44717f1d",
+        "filename": "conductor/conductor/data/plugins/inventory_provider/cps.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 138,
+      "author": {
+        "id": 2671
+      },
+      "writtenOn": "2021-02-19T13:21:39Z",
+      "side": 1,
+      "message": "Still we need to append the server base url before the path. That is missing here",
+      "range": {
+        "startLine": 138,
+        "startChar": 8,
+        "endLine": 138,
+        "endChar": 44
+      },
+      "revId": "6f3d47ff7727d754ef28eb55dd994a9aa3439318",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
