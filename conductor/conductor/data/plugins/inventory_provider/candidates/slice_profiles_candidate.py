@@ -57,7 +57,8 @@ class SliceProfilesCandidate(Candidate):
         else:
             self.slice_requirements = None
         self.other = kwargs["default_fields"]
-        self.coverage_area = kwargs["coverage_area"]
+        if "coverage_area" in kwargs:
+            self.coverage_area = kwargs["coverage_area"]
 
     def convert_nested_dict_to_dict(self):
         nested_dict = self.__dict__
