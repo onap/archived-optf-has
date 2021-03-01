@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "a93230d0_64e0fdc8",
+        "filename": "conductor/conductor/data/plugins/inventory_provider/generator.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 112,
+      "author": {
+        "id": 2671
+      },
+      "writtenOn": "2021-03-01T09:30:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e4691bcf_924ddd12",
+      "range": {
+        "startLine": 112,
+        "startChar": 32,
+        "endLine": 112,
+        "endChar": 35
+      },
+      "revId": "107f3004c6f94fa8c0603055bf8ccdd9041350d8",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "8b20afff_72119630",
         "filename": "conductor/conductor/data/plugins/inventory_provider/generator.py",
         "patchSetId": 1
@@ -45,6 +69,30 @@
       "revId": "107f3004c6f94fa8c0603055bf8ccdd9041350d8",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "408a2964_97762146",
+        "filename": "conductor/conductor/data/plugins/inventory_provider/generator.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 2671
+      },
+      "writtenOn": "2021-03-01T09:30:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8b20afff_72119630",
+      "range": {
+        "startLine": 115,
+        "startChar": 16,
+        "endLine": 116,
+        "endChar": 97
+      },
+      "revId": "107f3004c6f94fa8c0603055bf8ccdd9041350d8",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
     }
   ]
 }
