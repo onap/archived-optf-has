@@ -108,7 +108,10 @@ class Generator(base.InventoryProviderBase):
             if is_valid(get_slice_requirements(combination), filtering_attributes['service_profile']):
                 info = Candidate.build_candidate_info(self.name(), inventory_type, 1.0, candidate_uniqueness,
                                                       str(uuid.uuid4()))
-                coverage_area = filtering_attributes['service_profile'].get("coverage_area").get("value")
+                service_profile_attr = filtering_attributes['service_profile']
+                coverage_area = " "
+                if "coverage_area" in service_profile_attr:
+                    coverage_area = filtering_attributes['service_profile'].get("coverage_area").get("value")
                 candidate = SliceProfilesCandidate(info=info, subnet_requirements=combination,
                                                    default_fields=default_fields, coverage_area=coverage_area)
                 converted_candidate = candidate.convert_nested_dict_to_dict()
