@@ -27,6 +27,50 @@
   },
   {
     "responses": [
+      { "is": { 
+           "statusCode": 200,
+           "body": {{ get_service_profile_response }}
+         }
+      }
+    ],
+    "predicates": [{
+      "and": [
+        {
+          "equals": {
+            "path": "/aai/v14/nodes/service-instances/service-instance/1c7046f2-a5a3-4d7f-9da8-388ee641a795",
+            "method": "GET",
+            "query": {
+               "depth": 2
+            }
+          }
+        }
+      ]
+    }]
+  },
+  {
+    "responses": [
+      { "is": { 
+           "statusCode": 200,
+           "body": {{ get_slice_profile_response }}
+         }
+      }
+    ],
+    "predicates": [{
+      "and": [
+        {
+          "equals": {
+            "path": "/aai/v14/nodes/service-instances/service-instance/8be299a9-ec8a-4321-8529-545f14e89808",
+            "method": "GET",
+            "query": {
+               "depth": 2
+            }
+          }
+        }
+      ]
+    }]
+  },
+  {
+    "responses": [
       { "is": {
            "statusCode": 200,
            "body": {{ get_nst_response }}

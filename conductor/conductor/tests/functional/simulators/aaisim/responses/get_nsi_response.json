@@ -34,50 +34,30 @@
                         "property-value": "csi_test_0211"
                     }
                 ]
-            }
-        ]
-    },
-    "service-profiles": {
-        "service-profile": [
-            {
-                "profile-id": "cdad9f49-4201-4e3a-aac1-b0f27902c299",
-                "latency": 20,
-                "max-number-of-UEs": 0,
-                "coverage-area-TA-list": "Chennai",
-                "ue-mobility-level": "stationary",
-                "resource-sharing-level": "0",
-                "exp-data-rate-UL": 100,
-                "exp-data-rate-DL": 100,
-                "activity-factor": 0,
-                "e2e-latency": 0,
-                "jitter": 0,
-                "survival-time": 0,
-                "exp-data-rate": 0,
-                "payload-size": 0,
-                "traffic-density": 0,
-                "conn-density": 0,
-                "reliability": 99.999,
-                "resource-version": "1581418602494"
             },
             {
-                "profile-id": "fe579f49-4201-4e3a-aac1-b0f27902c276",
-                "latency": 17,
-                "max-number-of-UEs": 0,
-                "coverage-area-TA-list": "Chennai",
-                "ue-mobility-level": "stationary",
-                "resource-sharing-level": "0",
-                "exp-data-rate-UL": 100,
-                "exp-data-rate-DL": 100,
-                "activity-factor": 0,
-                "e2e-latency": 0,
-                "jitter": 0,
-                "survival-time": 0,
-                "exp-data-rate": 0,
-                "payload-size": 0,
-                "traffic-density": 0,
-                "conn-density": 0,
-                "reliability": 99.999,
-                "resource-version": "1581418602494"
+                "related-to": "allotted-resource",
+                "relationship-label": "org.onap.relationships.inventory.Uses",
+                "related-link": "/aai/v21/business/customers/customer/5GCustomer/service-subscriptions/service-subscription/5G/service-instances/service-instance/1c7046f2-a5a3-4d7f-9da8-388ee641a795/allotted-resources/allotted-resource/462e46c2-cd84-45e4-a6c1-77f4ef88328d",
+                "relationship-data": [{
+                    "relationship-key": "customer.global-customer-id",
+                    "relationship-value": "5GCustomer"
+                }, {
+                    "relationship-key": "service-subscription.service-type",
+                    "relationship-value": "5G"
+                }, {
+                    "relationship-key": "service-instance.service-instance-id",
+                    "relationship-value": "1c7046f2-a5a3-4d7f-9da8-388ee641a795"
+                }, {
+                    "relationship-key": "allotted-resource.id",
+                    "relationship-value": "462e46c2-cd84-45e4-a6c1-77f4ef88328d"
+                }],
+                  "related-to-property": [{
+                    "property-key": "allotted-resource.description"
+                }, {
+                    "property-key": "allotted-resource.allotted-resource-name",
+                    "property-value": "serviceProfile_ar_1812"
+                }]
             }
         ]
     }
