@@ -18,9 +18,9 @@
 #
 
 import base64
+from Cryptodome.Cipher import AES
+from Cryptodome import Random
 import hashlib
-from Crypto import Random
-from Crypto.Cipher import AES
 from oslo_config import cfg
 
 CONF = cfg.CONF
@@ -38,9 +38,9 @@ class AESCipher(object):
     __instance = None
 
     @staticmethod
-    def get_instance(key = None):
+    def get_instance(key=None):
         if AESCipher.__instance is None:
-            print ('Creating the singleton instance')
+            print('Creating the singleton instance')
             AESCipher(key)
         return AESCipher.__instance
 
@@ -52,8 +52,8 @@ class AESCipher(object):
 
         self.bs = 32
         if key is None:
-            key = CONF.auth.appkey # ---> python3.8 Code version code
-           # key= CONF.auth.appkey.encode() ---> Python 2.7 version code
+            key = CONF.auth.appkey  # ---> python3.8 Code version code
+            # key= CONF.auth.appkey.encode() ---> Python 2.7 version code
         # in Python 3+ key is already a b'' type so no need to encode it again.
 
         self.key = hashlib.sha256(key.encode()).digest()
@@ -75,5 +75,4 @@ class AESCipher(object):
 
     @staticmethod
     def _unpad(s):
-        return s[:-ord(s[len(s)-1:])]
-
+        return s[:-ord(s[len(s) - 1:])]
