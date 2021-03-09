@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dfd1ee16_3faa3a2f",
+        "filename": "conductor/conductor/data/plugins/inventory_provider/sdc.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 120,
+      "author": {
+        "id": 2671
+      },
+      "writtenOn": "2021-03-09T08:50:31Z",
+      "side": 1,
+      "message": "This should be application/octet-stream. If it is showing in pylint, use double quotes instead",
+      "range": {
+        "startLine": 120,
+        "startChar": 28,
+        "endLine": 120,
+        "endChar": 58
+      },
+      "revId": "4dfd25dff59ac1446377048e16edee35a0c94457",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
