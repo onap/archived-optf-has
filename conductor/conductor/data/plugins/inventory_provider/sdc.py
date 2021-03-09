@@ -57,7 +57,7 @@ SDC_OPTS = [
                default='certificate_key.pem',
                help='Private Certificate Key file in pem format.'),
     cfg.StrOpt('certificate_authority_bundle_file',
-               default='certificate_authority_bundle.pem',
+               default='',
                help='Certificate Authority Bundle file in pem format. '
                     'Must contain the appropriate trust chain for the '
                     'Certificate file.'),
@@ -108,14 +108,16 @@ class SDC(object):
                  context=None, value=None):
         """Performs HTTP request."""
         headers = {
-            'X-FromAppId': 'CONDUCTOR',
+            'X-FromAppId': 'AAI',
             'X-TransactionId': str(uuid.uuid4()),
+            'X-ECOMP-InstanceID': 'AAI',
         }
         kwargs = {
             "method": method,
             "path": path,
             "headers": headers,
             "data": data,
+            "content_type": 'application / octet - stream'
         }
 
         # TODO(jdandrea): Move timing/response logging into the rest helper?
@@ -144,6 +146,7 @@ class SDC(object):
             "username": self.username,
             "password": self.password,
             "read_timeout": self.timeout,
+            "ca_bundle_file": self.verify,
         }
         self.rest = rest.REST(**kwargs)
 
