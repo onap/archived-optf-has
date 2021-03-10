@@ -1,0 +1,8 @@
+distribution_type: 'container'
+container_release_tag: '2.1.4'
+project: 'optf-has'
+log_dir: 'optf-has-maven-docker-stage-master/522/'
+ref: 7caca923b07e60ba17b8d499668c0314e98789e5
+containers:
+  - name: 'optf-has'
+    version: '2.1.4-STAGING-20210310T044903Z'
