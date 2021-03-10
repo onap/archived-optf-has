@@ -61,13 +61,13 @@ class AESCipher(object):
     def encrypt(self, raw):
         raw = self._pad(raw)
         iv = Random.new().read(AES.block_size)
-        cipher = AES.new(self.key, AES.MODE_CBC, iv)
+        cipher = AES.new(self.key, AES.MODE_GCM, iv)
         return base64.b64encode(iv + cipher.encrypt(raw))
 
     def decrypt(self, enc):
         enc = base64.b64decode(enc)
         iv = enc[:AES.block_size]
-        cipher = AES.new(self.key, AES.MODE_CBC, iv)
+        cipher = AES.new(self.key, AES.MODE_GCM, iv)
         return self._unpad(cipher.decrypt(enc[AES.block_size:])).decode('utf-8')
 
     def _pad(self, s):
