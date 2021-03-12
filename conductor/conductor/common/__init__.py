@@ -21,7 +21,11 @@
 
 from oslo_log import log as logging
 
+import conductor.api.controllers.v1.plans
 from conductor.common.music import api
+import conductor.data.plugins.inventory_provider.aai
+import conductor.data.plugins.service_controller.sdnc
+
 
 LOG = logging.getLogger(__name__)
 
