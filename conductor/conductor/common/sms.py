@@ -18,13 +18,17 @@
 #
 
 '''Secret Management Service Integration'''
-from conductor.common import config_loader
 from onapsmsclient import Client
 from oslo_config import cfg
 from oslo_log import log
 
-
+import conductor.api.controllers.v1.plans
+from conductor.common import config_loader
+import conductor.common.music.api
 from conductor.common.utils import cipherUtils
+import conductor.data.plugins.inventory_provider.aai
+import conductor.data.plugins.service_controller.sdnc
+
 
 LOG = log.getLogger(__name__)
 
