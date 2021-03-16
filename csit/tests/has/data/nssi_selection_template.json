@@ -1,0 +1,75 @@
+{
+   "files": {},
+   "limit": 10,
+   "name": "urllc_sample",
+   "num_solution": "1",
+   "timeout": 1200,
+   "template": {
+      "homing_template_version": "2020-08-13",
+      "parameters": {
+         "latency": 30,
+         "reliability": 99.9
+      },
+      "demands": {
+         "URLLC_core": [
+            {
+               "default_attributes": {
+                  "creation_cost": 0.1
+               },
+               "filtering_attributes": {
+                  "service-function": "shared",
+                  "model-invariant-id": "c343a533-c045-4ec0-bbb6-f30eb8eb5a41",
+                  "model-version-id": "8d770214-d3e7-43ea-b7a6-9b235dcbcd34",
+                  "service-role": "nssi"
+               },
+               "inventory_provider": "aai",
+               "inventory_type": "nssi",
+               "unique": "true"
+            }
+         ]
+      },
+      "constraints": {
+         "URLLC_Threshold": {
+            "demands": [
+               "URLLC_core"
+            ],
+            "properties": {
+               "evaluate": [
+                  {
+                     "attribute": "latency",
+                     "operator": "lte",
+                     "threshold": {
+                        "get_param": "latency"
+                     },
+                     "unit": "ms"
+                  },
+                  {
+                     "attribute": "reliability",
+                     "operator": "gte",
+                     "threshold": {
+                        "get_param": "reliability"
+                     },
+                     "unit": ""
+                  }
+               ]
+            },
+            "type": "threshold"
+         }
+      },
+      "optimization": {
+         "goal": "minimize",
+         "operation_function": {
+            "operands": [
+               {
+                  "function": "attribute",
+                  "params": {
+                     "attribute": "latency",
+                     "demand": "URLLC_core"
+                  }
+               }
+            ],
+            "operator": "sum"
+         }
+      }
+   }
+}

@@ -1,0 +1,635 @@
+[DEFAULT]
+
+#
+# From conductor
+#
+
+# Configuration file for WSGI definition of API. (string value)
+api_paste_config = /usr/local/etc/conductor/api_paste.ini
+
+# Music keyspace for content (string value)
+#keyspace = conductor
+
+# Delay time (Seconds) for MUSIC requests. Set it to 2 seconds by default.
+# (integer value)
+#delay_time = 2
+
+# (boolean value)
+#HPA_enabled = true
+
+#
+# From oslo.log
+#
+
+# If set to true, the logging level will be set to DEBUG instead of the default
+# INFO level. (boolean value)
+# Note: This option can be changed without restarting.
+debug = true
+
+# The name of a logging configuration file. This file is appended to any
+# existing logging configuration files. For details about logging configuration
+# files, see the Python logging module documentation. Note that when logging
+# configuration files are used then all logging configuration is set in the
+# configuration file and other logging configuration options are ignored (for
+# example, logging_context_format_string). (string value)
+# Note: This option can be changed without restarting.
+# Deprecated group/name - [DEFAULT]/log_config
+log_config_append = /usr/local/bin/log.conf
+
+# Defines the format string for %%(asctime)s in log records. Default:
+# %(default)s . This option is ignored if log_config_append is set. (string
+# value)
+#log_date_format = %Y-%m-%d %H:%M:%S
+
+# (Optional) Name of log file to send logging output to. If no default is set,
+# logging will go to stderr as defined by use_stderr. This option is ignored if
+# log_config_append is set. (string value)
+# Deprecated group/name - [DEFAULT]/logfile
+#log_file = application.log
+
+# (Optional) The base directory used for relative log_file  paths. This option
+# is ignored if log_config_append is set. (string value)
+# Deprecated group/name - [DEFAULT]/logdir
+log_dir = /var/log
+
+# Uses logging handler designed to watch file system. When log file is moved or
+# removed this handler will open a new log file with specified path
+# instantaneously. It makes sense only if log_file option is specified and
+# Linux platform is used. This option is ignored if log_config_append is set.
+# (boolean value)
+#watch_log_file = false
+
+# Use syslog for logging. Existing syslog format is DEPRECATED and will be
+# changed later to honor RFC5424. This option is ignored if log_config_append
+# is set. (boolean value)
+#use_syslog = false
+
+# Enable journald for logging. If running in a systemd environment you may wish
+# to enable journal support. Doing so will use the journal native protocol
+# which includes structured metadata in addition to log messages.This option is
+# ignored if log_config_append is set. (boolean value)
+#use_journal = false
+
+# Syslog facility to receive log lines. This option is ignored if
+# log_config_append is set. (string value)
+#syslog_log_facility = LOG_USER
+
+# Use JSON formatting for logging. This option is ignored if log_config_append
+# is set. (boolean value)
+#use_json = false
+
+# Log output to standard error. This option is ignored if log_config_append is
+# set. (boolean value)
+#use_stderr = false
+
+# Format string to use for log messages with context. (string value)
+#logging_context_format_string = %(asctime)s.%(msecs)03d %(process)d %(levelname)s %(name)s [%(request_id)s %(user_identity)s] %(instance)s%(message)s
+
+# Format string to use for log messages when context is undefined. (string
+# value)
+#logging_default_format_string = %(asctime)s.%(msecs)03d %(process)d %(levelname)s %(name)s [-] %(instance)s%(message)s
+
+# Additional data to append to log message when logging level for the message
+# is DEBUG. (string value)
+#logging_debug_format_suffix = %(funcName)s %(pathname)s:%(lineno)d
+
+# Prefix each line of exception output with this format. (string value)
+#logging_exception_prefix = %(asctime)s.%(msecs)03d %(process)d ERROR %(name)s %(instance)s
+
+# Defines the format string for %(user_identity)s that is used in
+# logging_context_format_string. (string value)
+#logging_user_identity_format = %(user)s %(tenant)s %(domain)s %(user_domain)s %(project_domain)s
+
+# List of package logging levels in logger=LEVEL pairs. This option is ignored
+# if log_config_append is set. (list value)
+#default_log_levels = amqp=WARN,amqplib=WARN,boto=WARN,qpid=WARN,sqlalchemy=WARN,suds=INFO,oslo.messaging=INFO,oslo_messaging=INFO,iso8601=WARN,requests.packages.urllib3.connectionpool=WARN,urllib3.connectionpool=WARN,websocket=WARN,requests.packages.urllib3.util.retry=WARN,urllib3.util.retry=WARN,keystonemiddleware=WARN,routes.middleware=WARN,stevedore=WARN,taskflow=WARN,keystoneauth=WARN,oslo.cache=INFO,dogpile.core.dogpile=INFO
+
+# Enables or disables publication of error events. (boolean value)
+#publish_errors = false
+
+# The format for an instance that is passed with the log message. (string
+# value)
+#instance_format = "[instance: %(uuid)s] "
+
+# The format for an instance UUID that is passed with the log message. (string
+# value)
+#instance_uuid_format = "[instance: %(uuid)s] "
+
+# Interval, number of seconds, of log rate limiting. (integer value)
+#rate_limit_interval = 0
+
+# Maximum number of logged messages per rate_limit_interval. (integer value)
+#rate_limit_burst = 0
+
+# Log level name used by rate limiting: CRITICAL, ERROR, INFO, WARNING, DEBUG
+# or empty string. Logs with level greater or equal to rate_limit_except_level
+# are not filtered. An empty string means that all levels are filtered. (string
+# value)
+#rate_limit_except_level = CRITICAL
+
+# Enables or disables fatal status of deprecations. (boolean value)
+#fatal_deprecations = false
+
+
+[auth]
+# appkey = h@ss3crtky400fdntc#001
+appkey =
+
+[aaf_api]
+
+#
+# From conductor
+#
+
+# is_aaf_enabled. (boolean value)
+#is_aaf_enabled = true
+
+# aaf_cache_expiry_hrs. (integer value)
+#aaf_cache_expiry_hrs = 3
+
+# aaf_url. (string value)
+aaf_url = http://localhost:8100/authz/perms/user/
+
+# aaf_cert_file. (string value)
+#aaf_cert_file = <None>
+
+# aaf_cert_key_file. (string value)
+#aaf_cert_key_file = <None>
+
+# aaf_ca_bundle_file. (string value)
+#aaf_ca_bundle_file =
+aaf_ca_bundle_file = /usr/local/bin/AAF_RootCA.cer
+
+# aaf_retries. (integer value)
+#aaf_retries = 3
+
+# aaf_timeout. (integer value)
+#aaf_timeout = 100
+
+# aaf_user_roles. (list value)
+#aaf_permissions = {"type": "org.onap.oof.access","instance": "*","action": "*"}
+
+
+[aaf_sms]
+
+#
+# From conductor
+#
+
+# Is Secret Management service enabled (boolean value)
+#is_enabled = true
+
+# Base URL for SMS, up to and not including the version, and without a trailing
+# slash. (string value)
+aaf_sms_url = http://aaf-sms.onap:10443
+
+# Timeout for SMS API Call (integer value)
+#aaf_sms_timeout = 30
+
+# Path to the cacert that will be used to verify If this is None, verify will
+# be False and the server certis not verified by the client. (string value)
+#aaf_ca_certs = AAF_RootCA.cer
+aaf_ca_certs = /usr/local/bin/AAF_RootCA.cer
+
+# Domain Name for HAS (string value)
+#secret_domain = has
+
+
+[aai]
+
+#
+# From conductor
+#
+
+# Interval with which to refresh the local cache, in minutes. (integer value)
+#cache_refresh_interval = 1440
+cache_refresh_interval = 1
+
+# Interval with which to refresh the local complex cache, in minutes. (integer
+# value)
+#complex_cache_refresh_interval = 1440
+complex_cache_refresh_interval = 60
+
+# Data Store table prefix. (string value)
+#table_prefix = aai
+
+# Base URL for A&AI, up to and not including the version, and without a
+# trailing slash. (string value)
+#server_url = https://controller:8443/aai
+server_url = http://localhost:8081/aai/
+
+# Timeout for A&AI Rest Call (string value)
+#aai_rest_timeout = 30
+
+# Number of retry for A&AI Rest Call (string value)
+#aai_retries = 3
+
+# The version of A&AI in v# format. (string value)
+server_url_version = v14
+
+# SSL/TLS certificate file in pem format. This certificate must be registered
+# with the A&AI endpoint. (string value)
+#certificate_file = certificate.pem
+certificate_file =
+
+# Private Certificate Key file in pem format. (string value)
+#certificate_key_file = certificate_key.pem
+certificate_key_file =
+
+# Certificate Authority Bundle file in pem format. Must contain the appropriate
+# trust chain for the Certificate file. (string value)
+#certificate_authority_bundle_file = certificate_authority_bundle.pem
+certificate_authority_bundle_file = /usr/local/bin/AAF_RootCA.cer
+
+[api]
+
+#
+# From conductor
+#
+
+# Toggle Pecan Debug Middleware. (boolean value)
+#pecan_debug = false
+
+# Default maximum number of items returned by API request. (integer value)
+# Minimum value: 1
+#default_api_return_limit = 100
+
+
+[conductor_api]
+
+#
+# From conductor
+#
+
+# Base URL for plans. (string value)
+#server_url =
+
+# auth toggling. (boolean value)
+basic_auth_secure = false
+
+
+[controller]
+
+#
+# From conductor
+#
+
+# Timeout for planning requests. Default value is 10. (integer value)
+# Minimum value: 1
+#timeout = 10
+
+# Maximum number of result sets to return. Default value is 1. (integer value)
+# Minimum value: 1
+#limit = 1
+
+# Number of workers for controller service. Default value is 1. (integer value)
+# Minimum value: 1
+#workers = 1
+
+# Set to True when controller will run in active-active mode. When set to
+# False, controller will flush any abandoned messages at startup. The
+# controller always restarts abandoned template translations at startup.
+# (boolean value)
+#concurrent = false
+concurrent = true
+
+# Time between checking for new plans. Default value is 1. (integer value)
+# Minimum value: 1
+#polling_interval = 1
+opt_schema_file = /opt/has/conductor/etc/conductor/opt_schema.json
+
+# (integer value)
+# Minimum value: 1
+#max_translation_counter = 1
+
+
+[data]
+
+#
+# From conductor
+#
+
+# Number of workers for data service. Default value is 1. (integer value)
+# Minimum value: 1
+#workers = 1
+
+# Set to True when data will run in active-active mode. When set to False, data
+# will flush any abandoned messages at startup. (boolean value)
+#concurrent = false
+concurrent = true
+
+# Default value is -8000, which is the diameter of the earth. The distance
+# cannot larger than this value (floating point value)
+#existing_placement_cost = -8000.0
+
+# (floating point value)
+#cloud_candidate_cost = 2.0
+
+# (floating point value)
+#service_candidate_cost = 1.0
+
+
+[inventory_provider]
+
+#
+# From conductor
+#
+
+# Extensions list to use (list value)
+extensions = aai,generator
+
+
+[messaging_server]
+
+#
+# From conductor
+#
+
+# Music keyspace for messages (string value)
+#keyspace = conductor_rpc
+
+# Wait interval while checking for a message response. Default value is 1
+# second. (integer value)
+# Minimum value: 1
+#check_interval = 1
+
+# Overall message response timeout. Default value is 120 seconds. (integer
+# value)
+# Minimum value: 1
+#response_timeout = 120
+
+# Timeout for detecting a VM is down, and other VMs can pick the plan up.
+# Default value is 5 minutes. (integer value) (integer value)
+# Minimum value: 1
+#timeout = 300
+
+# Number of workers for messaging service. Default value is 1. (integer value)
+# Minimum value: 1
+#workers = 1
+
+# Time between checking for new messages. Default value is 1. (integer value)
+# Minimum value: 1
+#polling_interval = 1
+
+# Log debug messages. Default value is False. (boolean value)
+#debug = false
+
+
+[multicloud]
+
+#
+# From conductor
+#
+
+# Base URL for Multicloud without a trailing slash. (string value)
+server_url = http://msb.onap.org:8082/api/multicloud
+
+# Timeout for Multicloud Rest Call (string value)
+#multicloud_rest_timeout = 30
+
+# Number of retry for Multicloud Rest Call (string value)
+#multicloud_retries = 3
+
+# The version of Multicloud API. (string value)
+#server_url_version = v0
+
+# Certificate Authority Bundle file in pem format. Must contain the appropriate
+# trust chain for the Certificate file. (string value)
+#certificate_authority_bundle_file = certificate_authority_bundle.pem
+certificate_authority_bundle_file = /usr/local/bin/AAF_RootCA.cer
+
+# Enabling HTTPs mode (boolean value)
+# enable_https_mode = <None>
+enable_https_mode = True
+[music_api]
+
+#
+# From conductor
+#
+
+# Base URL for Music REST API without a trailing slash. (string value)
+server_url = http://localhost:8080/MUSIC/rest/v2
+version = v2
+
+# DEPRECATED: List of hostnames (round-robin access) (list value)
+# This option is deprecated for removal.
+# Its value may be silently ignored in the future.
+# Reason: Use server_url instead
+#hostnames = <None>
+
+# DEPRECATED: Port (integer value)
+# This option is deprecated for removal.
+# Its value may be silently ignored in the future.
+# Reason: Use server_url instead
+#port = <None>
+
+# DEPRECATED: Path (string value)
+# This option is deprecated for removal.
+# Its value may be silently ignored in the future.
+# Reason: Use server_url instead
+#path = <None>
+
+# Socket connection timeout (floating point value)
+#connect_timeout = 3.05
+
+# Socket read timeout (floating point value)
+#read_timeout = 12.05
+
+# Lock timeout (integer value)
+#lock_timeout = 10
+
+# Replication factor (integer value)
+#replication_factor = 1
+
+# Use mock API (boolean value)
+#mock = false
+
+# (string value)
+#music_topology = SimpleStrategy
+
+# Name of the first data center (string value)
+#first_datacenter_name = <None>
+
+# Number of replicas in first data center (integer value)
+#first_datacenter_replicas = <None>
+
+# Name of the second data center (string value)
+#second_datacenter_name = <None>
+
+# Number of replicas in second data center (integer value)
+#second_datacenter_replicas = <None>
+
+# Name of the third data center (string value)
+#third_datacenter_name = <None>
+
+# Number of replicas in third data center (integer value)
+#third_datacenter_replicas = <None>
+
+# new or old version (boolean value)
+#music_new_version = <None>
+music_new_version = True
+
+# for version (string value)
+#music_version = <None>
+music_version = "3.0.21"
+
+[prometheus]
+
+#
+# From conductor
+#
+
+# Prometheus Metrics Endpoint (list value)
+#metrics_port = 8000,8001,8002,8003,8004
+
+
+[reservation]
+
+#
+# From conductor
+#
+
+# Number of workers for reservation service. Default value is 1. (integer
+# value)
+# Minimum value: 1
+#workers = 1
+
+# Number of times reservation/release should be attempted. (integer value)
+#reserve_retries = 1
+
+# Timeout for detecting a VM is down, and other VMs can pick the plan up and
+# resereve. Default value is 600 seconds. (integer value) (integer value)
+# Minimum value: 1
+#timeout = 600
+
+# Set to True when reservation will run in active-active mode. When set to
+# False, reservation will restart any orphaned reserving requests at startup.
+# (boolean value)
+#concurrent = false
+concurrent = true
+
+# (integer value)
+# Minimum value: 1
+#max_reservation_counter = 1
+
+
+[sdnc]
+
+#
+# From conductor
+#
+
+# Interval with which to refresh the local cache, in minutes. (integer value)
+#cache_refresh_interval = 1440
+
+# Data Store table prefix. (string value)
+#table_prefix = sdnc
+
+# Base URL for SDN-C, up to and including the version. (string value)
+#server_url = https://controller:8443/restconf/
+server_url = http://localhost:8083/restconf/
+
+# Timeout for SDNC Rest Call (string value)
+#sdnc_rest_timeout = 30
+
+# Retry Numbers for SDNC Rest Call (string value)
+#sdnc_retries = 3
+
+
+[service_controller]
+
+#
+# From conductor
+#
+
+# Extensions list to use (list value)
+#extensions = sdnc
+
+
+[solver]
+
+#
+# From conductor
+#
+
+# Number of workers for solver service. Default value is 1. (integer value)
+# Minimum value: 1
+#workers = 1
+
+# The timeout value for solver service. Default value is 480 seconds. (integer
+# value)
+# Minimum value: 1
+#solver_timeout = 480
+
+# Set to True when solver will run in active-active mode. When set to False,
+# solver will restart any orphaned solving requests at startup. (boolean value)
+#concurrent = false
+concurrent = true
+
+# Timeout for detecting a VM is down, and other VMs can pick the plan up. This
+# value should be larger than solver_timeoutDefault value is 10 minutes.
+# (integer value) (integer value)
+# Minimum value: 1
+#timeout = 600
+
+# (integer value)
+# Minimum value: 1
+#max_solver_counter = 1
+
+
+[vim_controller]
+
+#
+# From conductor
+#
+
+# Extensions list to use (list value)
+#extensions = multicloud
+
+
+[sdc]
+
+#
+# From conductor
+#
+
+
+# Data Store table prefix. (string value)
+#table_prefix = sdc
+
+# Base URL for SDC, up to and not including the version, and without a
+# trailing slash. (string value)
+#server_url = https://controller:8443/sdc
+server_url = http://localhost:9595/sdc
+
+# Timeout for SDC Rest Call (string value)
+#sdc_rest_timeout = 30
+
+# Number of retry for SDC Rest Call (string value)
+#sdc_retries = 3
+
+# The version of A&AI in v# format. (string value)
+server_url_version = v1
+
+# SSL/TLS certificate file in pem format. This certificate must be registered
+# with the SDC endpoint. (string value)
+#certificate_file = certificate.pem
+certificate_file =
+
+# Private Certificate Key file in pem format. (string value)
+#certificate_key_file = certificate_key.pem
+certificate_key_file =
+
+# Certificate Authority Bundle file in pem format. Must contain the appropriate
+# trust chain for the Certificate file. (string value)
+#certificate_authority_bundle_file = certificate_authority_bundle.pem
+certificate_authority_bundle_file = /usr/local/bin/AAF_RootCA.cer
+
+# Username for SDC. (string value)
+#username =
+
+# Password for SDC. (string value)
+#password =
+
+temp_path = "/tmp/nsttemplates"
+
