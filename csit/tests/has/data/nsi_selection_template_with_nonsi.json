@@ -1,0 +1,151 @@
+{
+    "files": {},
+    "limit": 10,
+    "name": "urllc_sample",
+    "num_solution": "1",
+    "template": {
+        "constraints": {
+            "URLLC_Threshold": {
+                "demands": [
+                    "URLLC"
+                ],
+                "properties": {
+                    "evaluate": [
+                        {
+                            "attribute": "latency",
+                            "operator": "lte",
+                            "threshold": {
+                                "get_param": "latency"
+                            },
+                            "unit": "ms"
+                        },
+                        {
+                            "attribute": "reliability",
+                            "operator": "gte",
+                            "threshold": {
+                                "get_param": "reliability"
+                            },
+                            "unit": ""
+                        }
+                    ]
+                },
+                "type": "threshold"
+            }
+        },
+        "demands": {
+            "URLLC": [
+                {
+                    "default_attributes": {
+                        "creation_cost": 0.1
+                    },
+                    "filtering_attributes": {
+                        "service-function": "shared",
+                        "model-invariant-id": "21d57d4b-52ad-4d3c-a798-248b5bb9124a",
+                        "model-version-id": "637762da-0764-43cc-8b9a-535085770821",
+                        "service-role": "nsi"
+                    },
+                    "inventory_provider": "aai",
+                    "inventory_type": "nsi",
+                    "unique": "true"
+                },
+                {
+                    "default_attributes": {
+                        "creation_cost": 0.9
+                    },
+                    "filtering_attributes": {
+                        "service_profile": {
+                                        "latency": {"value": {"get_param": "latency"}, "operator": "lte"},
+                                        "reliability": {"value": {"get_param": "reliability"}, "operator": "gte"}
+                                  },
+                        "subnets":{
+                        "core": {
+                            "latency": {
+                                "max": {
+                                    "get_param": "latency"
+                                },
+                                "min": {
+                                    "get_param": "core_latency"
+                                },
+                                "steps": 1
+                            },
+                            "reliability": {
+                                "values": [
+                                    {
+                                        "get_param": "core_reliability"
+                                    }
+                                ]
+                            }
+                        },
+                        "ran": {
+                            "latency": {
+                                "max": {
+                                    "get_param": "latency"
+                                },
+                                "min": {
+                                    "get_param": "ran_latency"
+                                },
+                                "steps": 1
+                            },
+                            "reliability": {
+                                "values": [
+                                    {
+                                        "get_param": "ran_reliability"
+                                    }
+                                ]
+                            }
+                        },
+                        "transport": {
+                            "latency": {
+                                "max": {
+                                    "get_param": "latency"
+                                },
+                                "min": {
+                                    "get_param": "tn_latency"
+                                },
+                                "steps": 1
+                            },
+                            "reliability": {
+                                "values": [
+                                    {
+                                        "get_param": "tn_reliability"
+                                    }
+                                ]
+                            }
+                        }
+                        }
+                    },
+                    "inventory_provider": "generator",
+                    "inventory_type": "slice_profiles",
+                    "unique": "true"
+                }
+            ]
+        },
+        "homing_template_version": "2020-08-13",
+        "optimization": {
+            "goal": "minimize",
+            "operation_function": {
+                "operands": [
+                    {
+                        "function": "attribute",
+                        "params": {
+                            "attribute": "creation_cost",
+                            "demand": "URLLC"
+                        }
+                    }
+                ],
+                "operator": "sum"
+            }
+        },
+        "parameters": {
+            "core_latency": 10,
+            "core_reliability": 99.9,
+            "latency": 30,
+            "ran_latency": 7,
+            "ran_reliability": 99.9,
+            "reliability": 99.9,
+            "tn_latency": 10,
+            "tn_reliability": 99.9
+        }
+    },
+    "timeout": 1200
+}
