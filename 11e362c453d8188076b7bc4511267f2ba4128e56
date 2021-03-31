@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a53e2359_b4e1c24a",
+        "filename": "csit/run-csit.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 3949
+      },
+      "writtenOn": "2021-03-31T13:37:40Z",
+      "side": 1,
+      "message": "This isn\u0027t really accurate, is it?",
+      "range": {
+        "startLine": 21,
+        "startChar": 2,
+        "endLine": 21,
+        "endChar": 66
+      },
+      "revId": "11e362c453d8188076b7bc4511267f2ba4128e56",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "becded63_37c1d2ae",
+        "filename": "csit/run-project-csit.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 3949
+      },
+      "writtenOn": "2021-03-31T13:37:40Z",
+      "side": 1,
+      "message": "Fix this as well",
+      "range": {
+        "startLine": 18,
+        "startChar": 2,
+        "endLine": 18,
+        "endChar": 66
+      },
+      "revId": "11e362c453d8188076b7bc4511267f2ba4128e56",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
