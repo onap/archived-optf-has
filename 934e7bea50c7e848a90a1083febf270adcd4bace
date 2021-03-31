@@ -22,6 +22,30 @@
       "revId": "934e7bea50c7e848a90a1083febf270adcd4bace",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bb830f4c_26af3d14",
+        "filename": "csit/scripts/has_script.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 2671
+      },
+      "writtenOn": "2021-03-31T09:27:41Z",
+      "side": 1,
+      "message": "No. This is the image name which is compiled by the previous steps. The mvn build by default is creating the image with the repo name.",
+      "parentUuid": "da638134_2dece1db",
+      "range": {
+        "startLine": 33,
+        "startChar": 0,
+        "endLine": 33,
+        "endChar": 46
+      },
+      "revId": "934e7bea50c7e848a90a1083febf270adcd4bace",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
     }
   ]
 }
