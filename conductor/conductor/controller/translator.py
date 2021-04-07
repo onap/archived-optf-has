@@ -297,6 +297,8 @@ class Translator(object):
 
     def parse_demands(self, demands):
         """Validate/prepare demands for use by the solver."""
+        if not demands:
+            raise TranslatorException("demand is not provided in the template")
         if type(demands) is not dict:
             raise TranslatorException("Demands must be provided in "
                                       "dictionary form")
