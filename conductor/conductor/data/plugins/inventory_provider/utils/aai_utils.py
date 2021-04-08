@@ -99,4 +99,4 @@ def get_model_ver_info(model_version):
 
 def get_profiles(profile_instances, profile_type):
     profile_type_plural = profile_type + 's'
-    return [x[profile_type_plural][profile_type][0] for x in profile_instances]
+    return [x[profile_type_plural][profile_type][0] for x in profile_instances if x.get(profile_type_plural)]

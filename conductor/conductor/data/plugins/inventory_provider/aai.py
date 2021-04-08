@@ -1917,7 +1917,9 @@ class AAI(base.InventoryProviderBase):
         return candidates
 
     def get_profile_instances(self, nxi_instance):
-        related_nodes = self._get_aai_rel_link_data(nxi_instance, "allotted-resource",
+        slice_role = nxi_instance['service-role']
+        related_key = "allotted-resource" if slice_role == 'nsi' else 'service-instance'
+        related_nodes = self._get_aai_rel_link_data(nxi_instance, related_key,
                                                     "service-instance.service-instance-id")
         profile_instances = []
         for node in related_nodes:
