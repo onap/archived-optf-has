@@ -36,7 +36,7 @@
                     }
                 ]
             }, {
-      "related-to": "allotted-resource",
+      "related-to": "service-instance",
       "relationship-label": "org.onap.relationships.inventory.Uses",
       "related-link": "/aai/v21/business/customers/customer/5GCustomer/service-subscriptions/service-subscription/5G/service-instances/service-instance/1c7046f2-a5a3-4d7f-9da8-388ee641a795/allotted-resources/allotted-resource/462e46c2-cd84-45e4-a6c1-77f4ef88328d",
       "relationship-data": [{
