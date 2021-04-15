@@ -39,20 +39,17 @@ RUN mkdir -p /etc/nginx/ssl && \
     mkdir -p /run/conductor
 
 # Install the required libraries
-RUN apk --update add unzip && \
-    apk add curl && \
-    apk add wget && \
-    apk add fcgiwrap && \
-    apk add bash vim && \
-    pip install --no-cache-dir --upgrade pip && \
+RUN pip install --no-cache-dir --upgrade pip && \
     apk add --virtual build-dependencies build-base linux-headers pcre-dev libffi-dev libxslt-dev openssl-dev && \
     pip install --no-cache-dir uwsgi
 
-# Get, Install, cleanup and setup
-COPY onap-has-tm/optf-has-conductor-${MVN_ARTIFACT_VERSION}.zip /tmp/optf-has.zip
-RUN unzip -q -o -B /tmp/optf-has.zip -d /opt/has && rm -f /tmp/optf-has.zip
-
 ENV CRYPTOGRAPHY_DONT_BUILD_RUST "1"
+
+COPY onap-has-tm/optf-has-conductor-${MVN_ARTIFACT_VERSION}/conductor/requirements.txt /tmp
+RUN pip install --no-cache-dir -r /tmp/requirements.txt
+
+# Get, Install, cleanup and setup
+COPY onap-has-tm/optf-has-conductor-${MVN_ARTIFACT_VERSION} /opt/has
 
 #PKG-INFO file must also exists in the conductor folder (i.e. besides and inside the of_has.egg-info folder). The zip file for distro above is missing it
 RUN cp /opt/has/conductor/of_has.egg-info/PKG-INFO /opt/has/conductor

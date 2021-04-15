@@ -46,7 +46,7 @@
 	<fileSets>
 		<fileSet>
 			<includes>
-				<include>${project.build.finalName}.zip</include>
+                <include>${project.build.finalName}/**</include>
 			</includes>
 			<directory>${project.build.directory}</directory>
 			<outputDirectory>/</outputDirectory>
