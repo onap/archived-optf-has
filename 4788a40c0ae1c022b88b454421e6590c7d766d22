@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5f306242_701ba31c",
+        "filename": "docs/sections/example.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 359,
+      "author": {
+        "id": 2671
+      },
+      "writtenOn": "2021-04-16T07:35:25Z",
+      "side": 1,
+      "message": "Remove the trailing whitespaces",
+      "range": {
+        "startLine": 359,
+        "startChar": 10,
+        "endLine": 359,
+        "endChar": 16
+      },
+      "revId": "4788a40c0ae1c022b88b454421e6590c7d766d22",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "793ee4b0_099ae50e",
+        "filename": "docs/sections/homingspecification.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 254,
+      "author": {
+        "id": 2671
+      },
+      "writtenOn": "2021-04-16T07:35:25Z",
+      "side": 1,
+      "message": "This should be aligned like a table",
+      "range": {
+        "startLine": 254,
+        "startChar": 0,
+        "endLine": 254,
+        "endChar": 83
+      },
+      "revId": "4788a40c0ae1c022b88b454421e6590c7d766d22",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
