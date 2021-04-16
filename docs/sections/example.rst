@@ -312,6 +312,73 @@ constraint specifies that the latency of the the subnets must be less
 than a particular threshold.
 
 
+Example 4
+---------
+
+.. code:: json
+
+	{
+		"name":"urllc_sample",
+		"files":{
+ 
+		},
+		"limit":10,
+		"num_solution":"1",
+		"timeout":1200,
+		"template":{
+			"homing_template_version":"2020-08-13",
+			"demands":{
+			"nst_demand":[
+				{
+               "inventory_provider":"aai",
+               "inventory_type":"nst",
+               "unique":"true",
+               "region":"RegionOne",
+               "filtering_attributes":{
+                  "model-role":"nst"
+					}
+				}
+			]
+		},
+		"constraints":{
+			"nst_Threshold":{
+            "type":"threshold",
+            "demands":[
+               "nst_demand"
+            ],
+            "properties":{
+               "evaluate":[
+                  {
+                     "attribute":"latency",
+                     "operator":"lte",
+                     "threshold":30,
+                     "unit":"ms"
+                  }
+               ]
+             }
+           }
+	    },
+		"optimization":{
+			"goal": "minimize",
+			"operation_function": {
+				"operator": "sum",
+				"operands": [{
+				"function": "attribute",
+				"params": {
+                  "demand": "nst_demand",
+                  "attribute": "latency"
+				}
+				}]
+			}
+	    }
+	  }
+	}
+
+This template is for the selecting the NST templates for Network
+Slicing use case. The demand here is the slice templates and the threshold
+constraint specifies that the latency of the the templates must be less
+than a particular threshold.
+
 Contact
 -------
 
