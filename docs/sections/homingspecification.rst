@@ -249,8 +249,9 @@ Demand criteria is dependent upon the inventory provider in use.
 |                             | existing service instances),       |
 |                             | ``vfmodule`` (for vf instances),   |
 |                             | ``nssi`` (for slice subnet         |
-|                             | instances). Exactly one inventory  |
-|                             | type may be specified.             |
+|                             | instances), ``nst`` (for slice     | 
+|                             | templates). Exactly one            |
+|							  |	inventory type may be specified.   |                                   
 +-----------------------------+------------------------------------+
 | ``filtering_attributes``    | A list of key-value pairs, that is |
 | (Optional)                  | used to select inventory           |
@@ -328,8 +329,9 @@ for ONAP.
 |                             | existing service instances),       |
 |                             | ``vfmodule`` (for vf instances),   |
 |                             | ``nssi`` (for slice subnet         |
-|                             | instances). Exactly one inventory  |
-|                             | type may be specified.             |
+|                             | instances), ``nst`` (for slice     |
+|                             | templates). Exactly one            |
+|							  |	inventory type may be specified.   |
 +-----------------------------+------------------------------------+
 | ``filtering attributes``    | A list of key-value pairs to match |
 |  (Optional)                 | against inventory when drawing     |
