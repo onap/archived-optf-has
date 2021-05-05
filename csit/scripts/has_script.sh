@@ -43,13 +43,14 @@ cp ${WORKSPACE}/scripts/has-properties/AAF_RootCA.cer /tmp/conductor/properties/
 cp ${WORKSPACE}/scripts/has-properties/has.json /tmp/sms/properties/has.json
 #chmod -R 777 /tmp/conductor/properties
 
-MUSIC_IP=`docker inspect --format '{{ .NetworkSettings.Networks.bridge.IPAddress}}' music-tomcat`
-echo "MUSIC_IP=${MUSIC_IP}"
+ETCD_IP=`docker inspect --format '{{ .NetworkSettings.Networks.bridge.IPAddress}}' etcd`
+echo "ETCD_IP=${ETCD_IP}"
+
 SMS_IP=`${WORKSPACE}/scripts/get-instance-ip.sh sms`
 echo "SMS_IP=${SMS_IP}"
 
-# change MUSIC reference to the local instance
-sed  -i -e "s%localhost:8080/MUSIC%${MUSIC_IP}:8080/MUSIC%g" /tmp/conductor/properties/conductor.conf
+# change ETCD reference to the local instance
+sed  -i -e "s%etcd_ip%${ETCD_IP}%g" /tmp/conductor/properties/conductor.conf
 
 AAISIM_IP=`docker inspect --format '{{ .NetworkSettings.Networks.bridge.IPAddress}}' aaisim`
 echo "AAISIM_IP=${AAISIM_IP}"
@@ -85,11 +86,11 @@ docker exec --user root -i sms /bin/sh -c "/sms/bin/preload -cacert /sms/certs/a
 docker logs vault
 
 #onboard conductor into music
-echo "Query MUSIC to check for reachability. Query Version"
-curl -vvvvv --noproxy "*" --request GET http://${MUSIC_IP}:8080/MUSIC/rest/v2/version -H "Content-Type: application/json"
+# echo "Query MUSIC to check for reachability. Query Version"
+# curl -vvvvv --noproxy "*" --request GET http://${MUSIC_IP}:8080/MUSIC/rest/v2/version -H "Content-Type: application/json"
 
-echo "Onboard conductor into music"
-curl -vvvvv --noproxy "*" --request POST http://${MUSIC_IP}:8080/MUSIC/rest/v2/admin/onboardAppWithMusic -H "Content-Type: application/json" -H "Authorization: Basic Y29uZHVjdG9yOmMwbmR1Y3Qwcg==" --data @${WORKSPACE}/tests/has/data/onboard.json
+# echo "Onboard conductor into music"
+# curl -vvvvv --noproxy "*" --request POST http://${MUSIC_IP}:8080/MUSIC/rest/v2/admin/onboardAppWithMusic -H "Content-Type: application/json" -H "Authorization: Basic Y29uZHVjdG9yOmMwbmR1Y3Qwcg==" --data @${WORKSPACE}/tests/has/data/onboard.json
 
 docker run -d --name cond-cont --user root -v ${COND_CONF}:/usr/local/bin/conductor.conf -v ${LOG_CONF}:/usr/local/bin/log.conf -v ${BUNDLE}:/usr/local/bin/AAF_RootCA.cer ${IMAGE_NAME}:${IMAGE_VER} python /usr/local/bin/conductor-controller --config-file=/usr/local/bin/conductor.conf
 sleep 15
@@ -112,7 +113,7 @@ docker inspect cond-api
 docker inspect cond-solv
 docker inspect cond-resv
 
-echo "dump music content just after conductor is started"
-docker exec music-db /usr/bin/nodetool status
-docker exec music-db /usr/bin/cqlsh -unelson24 -pwinman123 -e 'SELECT * FROM system_schema.keyspaces'
-docker exec music-db /usr/bin/cqlsh -unelson24 -pwinman123 -e 'SELECT * FROM admin.keyspace_master'
+# echo "dump music content just after conductor is started"
+# docker exec music-db /usr/bin/nodetool status
+# docker exec music-db /usr/bin/cqlsh -unelson24 -pwinman123 -e 'SELECT * FROM system_schema.keyspaces'
+# docker exec music-db /usr/bin/cqlsh -unelson24 -pwinman123 -e 'SELECT * FROM admin.keyspace_master'

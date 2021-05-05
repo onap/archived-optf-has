@@ -18,11 +18,10 @@ echo "# aaf-sms setup.sh script";
 source ${WORKSPACE}/scripts/setup-sms.sh
 
 #
-# add here eventual scripts needed for music
+# Script for setting up etcd3
 #
-echo "# music scripts calling";
-source ${WORKSPACE}/scripts/music_script.sh
-
+echo "# etcd scripts calling";
+source ${WORKSPACE}/scripts/etcd_script.sh
 
 #
 echo "# simulator scripts calling";
@@ -49,9 +48,8 @@ echo "# optf/has configuration step";
 #
 echo "# optf/has robot variables settings";
 echo "conductor ip = ${COND_IP}"
-echo "music ip = ${TOMCAT_IP}"
 
-ROBOT_VARIABLES="-v MUSIC_HOSTNAME:http://${TOMCAT_IP} -v MUSIC_PORT:8080 -v COND_HOSTNAME:http://${COND_IP} -v COND_PORT:8091"
+ROBOT_VARIABLES="-v COND_HOSTNAME:http://${COND_IP} -v COND_PORT:8091"
 
 echo ${ROBOT_VARIABLES}
 

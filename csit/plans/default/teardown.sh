@@ -38,8 +38,8 @@ source ${WORKSPACE}/scripts/has_teardown_script.sh
 echo "# optf/has simulator scripts calling";
 source ${WORKSPACE}/scripts/simulator_teardown_script.sh
 
-echo "# optf/has music scripts calling";
-source ${WORKSPACE}/scripts/music_teardown_script.sh
+echo "# optf/has etcd scripts calling";
+source ${WORKSPACE}/scripts/etcd_teardown_script.sh
 
 echo "# aaf-sms teardown.sh script";
 #kill-instance.sh sms
