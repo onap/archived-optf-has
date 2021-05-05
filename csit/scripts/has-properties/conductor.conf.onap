@@ -351,7 +351,7 @@ extensions = aai,generator
 # Wait interval while checking for a message response. Default value is 1
 # second. (integer value)
 # Minimum value: 1
-#check_interval = 1
+check_interval = 1
 
 # Overall message response timeout. Default value is 120 seconds. (integer
 # value)
@@ -369,7 +369,7 @@ extensions = aai,generator
 
 # Time between checking for new messages. Default value is 1. (integer value)
 # Minimum value: 1
-#polling_interval = 1
+polling_interval = 1
 
 # Log debug messages. Default value is False. (boolean value)
 #debug = false
@@ -401,6 +401,32 @@ certificate_authority_bundle_file = /usr/local/bin/AAF_RootCA.cer
 # Enabling HTTPs mode (boolean value)
 # enable_https_mode = <None>
 enable_https_mode = True
+
+
+[db_options]
+
+# db_backend to use
+db_backend = etcd
+
+# Use music mock api
+music_mock = False
+
+
+[etcd_api]
+
+# host/ip address of etcd server
+host = etcd_ip
+
+# port of etcd server
+port = 2379
+
+# username for etcd authentication
+username = conductor
+
+# password for etcd authentication
+password = conductor
+
+
 [music_api]
 
 #
