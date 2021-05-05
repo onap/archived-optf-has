@@ -86,6 +86,8 @@ class ControllerServiceLauncher(object):
         if not self.OrderLock:
             raise
 
+        self.insert_healthcheck_plan()
+
     def run(self):
         transport = messaging.get_transport(self.conf)
         if transport:
@@ -108,3 +110,19 @@ class ControllerServiceLauncher(object):
                        workers=self.conf.controller.workers,
                        args=(self.conf,), kwargs=kwargs)
             svcmgr.run()
+
+    def insert_healthcheck_plan(self):
+        healthcheck_plan = {
+            "id": "healthcheck",
+            "created": 1479482603641,
+            "message": "",
+            "name": "foo",
+            "recommend_max": "1",
+            "solution": "{\"healthcheck\": \" healthcheck\"}",
+            "status": "solved",
+            "template": "{\"healthcheck\": \"healthcheck\"}",
+            "timeout": 3600,
+            "translation": "{\"healthcheck\": \" healthcheck\"}",
+            "updated": 1484324150629
+        }
+        self.music.row_create(self.conf.keyspace, "plans", "id", "healthcheck", healthcheck_plan)
