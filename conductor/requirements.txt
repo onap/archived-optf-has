@@ -29,3 +29,4 @@ prometheus-client>=0.3.1
 pycryptodomex==3.10.1
 jsonschema>=3.2.0
 tosca-parser>=2.2.0
+etcd3==0.12.0

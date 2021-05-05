@@ -45,6 +45,13 @@
                     "password": "demo123456!",
                     "aaf_conductor_user": "oof@oof.onap.org"
                 }
+            },
+            {
+                "name": "etcd_api",
+                "values": {
+                    "username": "conductor",
+                    "password": "conductor"
+                }
             }
         ]
     }
