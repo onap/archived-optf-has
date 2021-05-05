@@ -21,6 +21,7 @@
 
 from oslo_log import log as logging
 
+from conductor.common import db_backend
 from conductor.common.music import api
 
 LOG = logging.getLogger(__name__)
@@ -36,7 +37,7 @@ def music_api(configuration):
         'version': configuration.get('version'),
         'replication_factor': configuration.get('replication_factor'),
     }
-    api_instance = api.API(**kwargs)
+    api_instance = db_backend.get_client(**kwargs)
 
     # Create the keyspace if necessary
     # TODO(jdandrea): Use oslo.config with a [music] section

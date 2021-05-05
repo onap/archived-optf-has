@@ -21,7 +21,7 @@ import time
 
 from oslo_config import cfg
 
-from conductor.common.music import api
+from conductor.common import db_backend
 from conductor import service
 
 CONF = cfg.CONF
@@ -38,7 +38,7 @@ def main():
     CONF.set_override('debug', True, 'music_api')
     CONF.set_override('mock', True, 'music_api')
     CONF.set_override('hostnames', ['music2'], 'music_api')
-    music = api.API()
+    music = db_backend.get_client()
     print("Music version %s" % music.version())
 
     # Randomize the name so that we don't step on each other.

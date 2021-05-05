@@ -17,22 +17,23 @@
 # -------------------------------------------------------------------------
 #
 
-import cotyledon
-import json
-import time
 import socket
+import time
+
+import cotyledon
 from oslo_config import cfg
 from oslo_log import log
 
+from conductor.common import db_backend
+from conductor.common.models import order_lock
 from conductor.common.models import plan
-from conductor.common.music import api
 from conductor.common.music import messaging as music_messaging
 from conductor.common.music.model import base
-from conductor.i18n import _LE, _LI
+from conductor.common.utils import conductor_logging_util as log_util
+from conductor.i18n import _LE
+from conductor.i18n import _LI
 from conductor import messaging
 from conductor import service
-from conductor.common.utils import conductor_logging_util as log_util
-from conductor.common.models import order_lock
 
 LOG = log.getLogger(__name__)
 
@@ -77,7 +78,7 @@ class ReservationServiceLauncher(object):
         self.conf = conf
 
         # Set up Music access.
-        self.music = api.API()
+        self.music = db_backend.get_client()
         self.music.keyspace_create(keyspace=conf.keyspace)
 
         # Dynamically create a plan class for the specified keyspace
@@ -93,7 +94,7 @@ class ReservationServiceLauncher(object):
 
     def run(self):
         kwargs = {'plan_class': self.Plan,
-                      'order_locks': self.OrderLock}
+                  'order_locks': self.OrderLock}
         svcmgr = cotyledon.ServiceManager()
         svcmgr.add(ReservationService,
                    workers=self.conf.reservation.workers,
@@ -124,7 +125,6 @@ class ReservationService(cotyledon.Service):
             "status": self.Plan.RESERVING
         }
 
-
     def _init(self, conf, **kwargs):
         """Set up the necessary ingredients."""
         self.conf = conf
@@ -137,7 +137,7 @@ class ReservationService(cotyledon.Service):
         self.data_service = self.setup_rpc(conf, "data")
 
         # Set up Music access.
-        self.music = api.API()
+        self.music = db_backend.get_client()
 
         # Number of retries for reservation/release
         self.reservation_retries = self.conf.reservation.reserve_retries
@@ -155,7 +155,7 @@ class ReservationService(cotyledon.Service):
 
     def millisec_to_sec(self, millisec):
         """Convert milliseconds to seconds"""
-        return millisec/1000
+        return millisec / 1000
 
     def _reset_reserving_status(self):
         """Reset plans being reserved so they can be reserved again.
@@ -272,7 +272,8 @@ class ReservationService(cotyledon.Service):
             for p in plans:
                 # when a plan is in RESERVING status more than timeout value
                 if p.status == self.Plan.RESERVING and \
-                (self.current_time_seconds() - self.millisec_to_sec(p.updated)) > self.conf.reservation.timeout:
+                        (self.current_time_seconds() - self.millisec_to_sec(
+                            p.updated)) > self.conf.reservation.timeout:
                     # change the plan status to SOLVED for another VM to reserve
                     p.status = self.Plan.SOLVED
                     p.update(condition=self.reservating_status_condition)
@@ -370,7 +371,7 @@ class ReservationService(cotyledon.Service):
                                                 candidates.append(candidate)
                                                 sdwan_candidate_list.append(candidate)
 
-                    #TODO(larry) combine the two reservation logic as one, make the code service independent
+                    # TODO(larry) combine the two reservation logic as one, make the code service independent
                     if service_model == "ADIOD":
                         is_success = self.try_reservation_call(
                             method="reserve",
@@ -400,7 +401,7 @@ class ReservationService(cotyledon.Service):
                             # order_lock spin-up rollback
                             for decision in solution.get('recommendations'):
 
-                                candidate = list(decision.values())[0].get('candidate')   # Python 3 Conversion -- dict object to list object
+                                candidate = list(decision.values())[0].get('candidate')
                                 if candidate.get('inventory_type') == 'cloud':
                                     # TODO(larry) change the code to get('conflict_id') instead of 'location_id'
                                     conflict_id = candidate.get('conflict_id')
@@ -413,7 +414,8 @@ class ReservationService(cotyledon.Service):
                                 # move plan to translated
                                 if p.reservation_counter >= self.conf.reservation.max_reservation_counter:
                                     p.status = self.Plan.ERROR
-                                    p.message = _LE("Tried {} times. Plan {} is unable to reserve").format(self.conf.reservation.max_reservation_counter, p.id)
+                                    p.message = _LE("Tried {} times. Plan {} is unable to reserve") \
+                                        .format(self.conf.reservation.max_reservation_counter, p.id)
                                     LOG.error(p.message)
                                 else:
                                     p.status = self.Plan.TRANSLATED
@@ -430,8 +432,8 @@ class ReservationService(cotyledon.Service):
                                 # TODO(larry): Should be replaced by the new api from MUSIC
                                 while 'FAILURE' in _is_success:
                                     _is_success = p.update(condition=self.reservation_owner_condition)
-                                    LOG.info(_LI("Rollback Failed, Changing the template status from reserving to error, "
-                                                 "atomic update response from MUSIC {}").format(_is_success))
+                                    LOG.info(_LI("Rollback Failed, Changing the template status from reserving to "
+                                                 "error. atomic update response from MUSIC {}").format(_is_success))
                             break  # reservation failed
 
                     continue
@@ -446,13 +448,13 @@ class ReservationService(cotyledon.Service):
                         controller=controller,
                         request=request,
                         reservation_name=None
-                        )
+                    )
 
                     if not is_success:
                         # order_lock spin-up rollback
                         for decision in solution.get('recommendations'):
 
-                            candidate = list(decision.values())[0].get('candidate')   # Python 3 Conversion -- dict object to list object
+                            candidate = list(decision.values())[0].get('candidate')
                             if candidate.get('inventory_type') == 'cloud':
                                 conflict_id = candidate.get('conflict_id')
                                 order_record = self.OrderLock.query.get_plan_by_col("id", conflict_id)[0]
@@ -482,7 +484,8 @@ class ReservationService(cotyledon.Service):
                 LOG.debug("Plan {} Reservation complete".format(p.id))
                 p.status = self.Plan.DONE
 
-                while 'FAILURE' in _is_success and (self.current_time_seconds() - self.millisec_to_sec(p.updated)) <= self.conf.reservation.timeout:
+                while 'FAILURE' in _is_success and (self.current_time_seconds() - self.millisec_to_sec(p.updated)) \
+                        <= self.conf.reservation.timeout:
                     _is_success = p.update(condition=self.reservation_owner_condition)
                     LOG.info(_LI("Reservation is complete, changing the template status from reserving to done, "
                                  "atomic update response from MUSIC {}").format(_is_success))

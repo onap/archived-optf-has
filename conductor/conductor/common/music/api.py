@@ -20,8 +20,8 @@
 """Music Data Store API"""
 
 import copy
-import logging
 import json
+import logging
 import time
 
 from oslo_config import cfg
@@ -29,14 +29,12 @@ from oslo_log import log
 
 from conductor.common import rest
 from conductor.common.utils import basic_auth_util
-from conductor.i18n import _LE, _LI  # pylint: disable=W0212
-from conductor.common.utils import cipherUtils
+from conductor.i18n import _LE  # pylint: disable=W0212
+from conductor.i18n import _LI
 
 LOG = log.getLogger(__name__)
 
 CONF = cfg.CONF
-
-global MUSIC_API
 
 MUSIC_API_OPTS = [
     cfg.StrOpt('server_url',
@@ -71,7 +69,7 @@ MUSIC_API_OPTS = [
                 help='Use mock API'),
     cfg.StrOpt('music_topology',
                default='SimpleStrategy'),
-    #TODO(larry); make the config inputs more generic
+    # TODO(larry); make the config inputs more generic
     cfg.StrOpt('first_datacenter_name',
                help='Name of the first data center'),
     cfg.IntOpt('first_datacenter_replicas',
@@ -111,7 +109,6 @@ class MusicAPI(object):
 
     def __init__(self):
         """Initializer."""
-        global MUSIC_API
 
         # set the urllib log level to ERROR
         logging.getLogger('urllib3').setLevel(logging.ERROR)
@@ -129,8 +126,8 @@ class MusicAPI(object):
             port = CONF.music_api.port or 8080
             path = CONF.music_api.path or '/MUSIC/rest'
             version = CONF.version
-            server_url = 'http://{}:{}/{}'.format(
-                host, port, version, path.rstrip('/').lstrip('/'))
+            server_url = 'http://{}:{}/{}/{}'.format(
+                host, port, path.rstrip('/').lstrip('/'), version)
 
         kwargs = {
             'server_url': server_url,
@@ -172,8 +169,6 @@ class MusicAPI(object):
         self.second_datacenter_replicas = CONF.music_api.second_datacenter_replicas
         self.third_datacenter_name = CONF.music_api.third_datacenter_name
         self.third_datacenter_replicas = CONF.music_api.third_datacenter_replicas
-
-        MUSIC_API = self
 
     def __del__(self):
         """Deletion."""
@@ -242,23 +237,22 @@ class MusicAPI(object):
         Supports atomic operations,
         Returns a payload of data and lock_name (if any).
         """
-        #if atomic:
+        # if atomic:
         #    lock_name = self.lock_create(keyspace, table, pk_value)
-        #else:
+        # else:
         #    lock_name = None
 
-        #lock_id = self.lock_ids.get(lock_name)
+        # lock_id = self.lock_ids.get(lock_name)
         data = {
             'consistencyInfo': {
                 'type': 'atomic',
             }
         }
 
-
         if condition:
             data['conditions'] = condition
 
-        #, 'lock_name': lock_name
+        # , 'lock_name': lock_name
         return {'data': data}
 
     def payload_delete(self, payload):
@@ -385,7 +379,7 @@ class MusicAPI(object):
             LOG.debug("Updating row with pk_value {} in table "
                       "{}, keyspace {}".format(pk_value, table, keyspace))
         response = self.rest.request(method='put', path=path, data=data)
-        #self.payload_delete(payload)
+        # self.payload_delete(payload)
         if response is not None and CONF.music_api.music_new_version:
             response_json = json.loads(response.content)
             response_status = response_json.get("status")
@@ -437,29 +431,29 @@ class MusicAPI(object):
         common_values = copy.deepcopy(values_when_id_non_exist)
         common_values.pop('status', None)
 
-        if (CONF.music_api.music_new_version):
+        if CONF.music_api.music_new_version:
             #  Conditional Insert request body sends to new version of MUSIC (2.5.5 and lator)
             data = {
-               "primaryKey": pk_name,
-               "primaryKeyValue": pk_value,
+                "primaryKey": pk_name,
+                "primaryKeyValue": pk_value,
 
-               "casscadeColumnName": "plans",
-               "tableValues": {
-                   "id": pk_value,
-                   "is_spinup_completed": values.get('is_spinup_completed')
-               },
-               "casscadeColumnData": {
-                   "key": plan_id,
-                   "value": common_values
-               },
-               "conditions": {
-                   "exists": {
-                       "status": values_when_id_exist.get('status')
-                   },
-                   "nonexists": {
-                       "status": values_when_id_non_exist.get('status')
-                   }
-               }
+                "casscadeColumnName": "plans",
+                "tableValues": {
+                    "id": pk_value,
+                    "is_spinup_completed": values.get('is_spinup_completed')
+                },
+                "casscadeColumnData": {
+                    "key": plan_id,
+                    "value": common_values
+                },
+                "conditions": {
+                    "exists": {
+                        "status": values_when_id_exist.get('status')
+                    },
+                    "nonexists": {
+                        "status": values_when_id_non_exist.get('status')
+                    }
+                }
             }
 
         else:
@@ -468,7 +462,7 @@ class MusicAPI(object):
                 "primaryKeyValue": pk_value,
                 "cascadeColumnKey": plan_id,
                 "cascadeColumnName": "plans",
-                "values":{
+                "values": {
                     "id": pk_value,
                     "is_spinup_completed": values.get('is_spinup_completed')
                 },
@@ -480,7 +474,7 @@ class MusicAPI(object):
                 }
             }
 
-        #conditional/update/keyspaces/conductor_order_locks/tables/order_locks
+        # conditional/update/keyspaces/conductor_order_locks/tables/order_locks
         path = '/conditional/insert/keyspaces/%(keyspace)s/tables/%(table)s' % {
             'keyspace': keyspace,
             'table': table,
@@ -502,7 +496,7 @@ class MusicAPI(object):
 
     def row_complex_field_update(self, keyspace, table, pk_name, pk_value, plan_id, updated_fields, values):
 
-        if (CONF.music_api.music_new_version):
+        if CONF.music_api.music_new_version:
             # new version of MUSIC
             data = {
                 "primaryKey": pk_name,
@@ -532,7 +526,6 @@ class MusicAPI(object):
         LOG.debug("Updated the order {} status to {} for conflict_id {} in "
                   "order_locks table, response from MUSIC {}".format(plan_id, updated_fields, pk_value, response))
         return response and response.ok
-
 
     @staticmethod
     def _table_path_generate(keyspace, table):
@@ -587,11 +580,7 @@ class MockAPI(object):
         """Initializer."""
         LOG.info(_LI("Initializing Music Mock API"))
 
-        global MUSIC_API
-
         self.music['keyspaces'] = {}
-
-        MUSIC_API = self
 
     @property
     def _keyspaces(self):
@@ -701,12 +690,3 @@ class MockAPI(object):
         if CONF.music_api.debug:
             LOG.debug("Requesting version info")
         return "v1-mock"
-
-
-def API():
-    """Wrapper for Music and Music Mock API"""
-
-    # FIXME(jdandrea): Follow more formal practices for defining/using mocks
-    if CONF.music_api.mock:
-        return MockAPI()
-    return MusicAPI()

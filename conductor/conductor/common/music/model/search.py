@@ -24,7 +24,7 @@ import inspect
 from oslo_config import cfg
 from oslo_log import log as logging
 
-from conductor.common.music import api
+from conductor.common import db_backend
 
 # FIXME(jdandrea): Keep for the __init__
 # from conductor.common.classes import get_class
@@ -59,7 +59,7 @@ class Query(object):
         """Convert query response rows to objects"""
         results = []
         pk_name = self.model.pk_name()  # pylint: disable=E1101
-        for row_id, row in rows.items():# pylint: disable=W0612
+        for row_id, row in rows.items():  # pylint: disable=W0612
             the_id = row.pop(pk_name)
             result = self.model(_insert=False, **row)
             setattr(result, pk_name, the_id)
@@ -70,21 +70,21 @@ class Query(object):
         """Return object with pk_name matching pk_value"""
         pk_name = self.model.pk_name()
         kwargs = self.__kwargs()
-        rows = api.MUSIC_API.row_read(
+        rows = db_backend.DB_API.row_read(
             pk_name=pk_name, pk_value=pk_value, **kwargs)
         return (self.__rows_to_objects(rows).first())
 
     def all(self):
         """Return all objects"""
         kwargs = self.__kwargs()
-        rows = api.MUSIC_API.row_read(**kwargs)
+        rows = db_backend.DB_API.row_read(**kwargs)
         return self.__rows_to_objects(rows)
 
     def get_plan_by_col(self, pk_name, pk_value):
         # Before using this method, create an index the column (except the primary key)
         # you want to filter by.
         kwargs = self.__kwargs()
-        rows = api.MUSIC_API.row_read(
+        rows = db_backend.DB_API.row_read(
             pk_name=pk_name, pk_value=pk_value, **kwargs)
         return self.__rows_to_objects(rows)
 

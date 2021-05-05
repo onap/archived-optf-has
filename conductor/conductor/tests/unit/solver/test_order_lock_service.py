@@ -22,8 +22,8 @@ import mock
 import unittest
 import uuid
 
+from conductor.common import db_backend
 from conductor.common.models.order_lock import OrderLock
-from conductor.common.music import api
 from conductor.solver.orders_lock.orders_lock_service import OrdersLockingService
 from oslo_config import cfg
 
@@ -32,7 +32,7 @@ class TestOrdersLockingService(unittest.TestCase):
     def setUp(self):
         # Initialize music API
         cfg.CONF.set_override('certificate_authority_bundle_file', '../AAF_RootCA.cer', 'music_api')
-        music = api.API()
+        music = db_backend.get_client()
         cfg.CONF.set_override('keyspace', 'conductor')
         music.keyspace_create(keyspace=cfg.CONF.keyspace)
         self.order_lock_svc = OrdersLockingService()

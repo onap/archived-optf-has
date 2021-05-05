@@ -21,7 +21,6 @@
 
 import json
 import time
-import os
 
 from conductor.common.models import validate_uuid4
 from conductor.common.music.model import base
@@ -67,7 +66,7 @@ class Plan(base.Base):
 
     # Status
     TEMPLATE = "template"  # Template ready for translation
-    TRANSLATING = "translating" # Translating the template
+    TRANSLATING = "translating"  # Translating the template
     TRANSLATED = "translated"  # Translation ready for solving
     SOLVING = "solving"  # Search for solutions in progress
     # Search complete, solution with n>0 recommendations found
@@ -220,7 +219,7 @@ class Plan(base.Base):
         self.updated = updated or current_time_millis()
         self.name = name
         self.timeout = timeout
-        self.recommend_max = recommend_max
+        self.recommend_max = str(recommend_max)
         self.message = message or ""
         # owners should be empty when the plan is created
         self.translation_owner = translation_owner or {}

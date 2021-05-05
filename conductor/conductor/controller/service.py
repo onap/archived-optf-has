@@ -19,9 +19,9 @@
 
 import cotyledon
 
-from conductor.common.models import plan
+from conductor.common import db_backend
 from conductor.common.models import order_lock
-from conductor.common.music import api
+from conductor.common.models import plan
 from conductor.common.music import messaging as music_messaging
 from conductor.common.music.model import base
 from conductor.controller import rpc
@@ -72,7 +72,7 @@ class ControllerServiceLauncher(object):
         self.conf = conf
 
         # Set up Music access.
-        self.music = api.API()
+        self.music = db_backend.get_client()
         self.music.keyspace_create(keyspace=conf.keyspace)
 
         # Dynamically create a plan class for the specified keyspace

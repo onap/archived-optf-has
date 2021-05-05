@@ -17,12 +17,11 @@
 # -------------------------------------------------------------------------
 #
 
+from conductor.common import db_backend
 from conductor.common.music.model import base
-from conductor.common.music import api
 
 
 class RegionPlaceholders(base.Base):
-
 
     __tablename__ = "region_placeholders"
     __keyspace__ = None
@@ -43,7 +42,7 @@ class RegionPlaceholders(base.Base):
         """Return schema."""
         schema = {
             'id': 'text',
-            'region_name':'text',
+            'region_name': 'text',
             'countries': 'map<text,text>',
             'PRIMARY KEY': '(id)'
         }
@@ -75,13 +74,12 @@ class RegionPlaceholders(base.Base):
 
     def delete(self, region_id):
         """Update country latency"""
-        return api.MUSIC_API.row_delete(self.__keyspace__, self.__tablename__, self.pk_name(),
-            region_id, True)
-
+        return db_backend.DB_API.row_delete(self.__keyspace__, self.__tablename__, self.pk_name(),
+                                            region_id, True)
 
     def update(self, region_name, updated_fields):
         """Update country latency"""
-        api.MUSIC_API.row_complex_field_update(
+        db_backend.DB_API.row_complex_field_update(
             self.__keyspace__, self.__tablename__, self.pk_name(),
             self.pk_value(), region_name, updated_fields)
 

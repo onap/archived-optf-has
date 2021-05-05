@@ -17,8 +17,8 @@
 # -------------------------------------------------------------------------
 #
 
+from conductor.common import db_backend
 from conductor.common.music.model import base
-from conductor.common.music import api
 
 
 class CountryLatency(base.Base):
@@ -28,7 +28,7 @@ class CountryLatency(base.Base):
 
     id = None
     country_name = None
-    groups = None  # type: List[Any] #
+    groups = None
 
     # Status
     PARKED = "parked"
@@ -42,7 +42,7 @@ class CountryLatency(base.Base):
         """Return schema."""
         schema = {
             'id': 'text',
-            'country_name':'text',
+            'country_name': 'text',
             'groups': 'list<text>',
             'PRIMARY KEY': '(id)'
         }
@@ -65,31 +65,31 @@ class CountryLatency(base.Base):
     def values(self):
         """Valu-es"""
         value_dict = {
-            #'id': self.id,
+            # 'id': self.id,
             'country_name': self.country_name,
-            'groups':self.groups
+            'groups': self.groups
         }
         return value_dict
 
     def delete(self, country_id):
         """Update country latency"""
-        return api.MUSIC_API.row_delete(
+        return db_backend.DB_API.row_delete(
             self.__keyspace__, self.__tablename__, self.pk_name(),
             country_id, True)
 
     def update(self, country_name, updated_fields):
         """Update country latency"""
-        api.MUSIC_API.row_complex_field_update(
+        db_backend.DB_API.row_complex_field_update(
             self.__keyspace__, self.__tablename__, self.pk_name(),
             self.pk_value(), country_name, updated_fields)
 
-    #def insert(self):
+    # def insert(self):
     #    return \
-    #        api.MUSIC_API.row_insert_by_condition(
+    #        DB_API.row_insert_by_condition(
     #        self.__keyspace__, self.__tablename__, self.pk_name(),
     #        self.pk_value(), self.values(), self.PARKED)
 
-    def __init__(self, country_name=None,groups=None,_insert=False):
+    def __init__(self, country_name=None, groups=None, _insert=False):
         """Initializer"""
         super(CountryLatency, self).__init__()
 

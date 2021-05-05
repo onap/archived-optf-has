@@ -28,6 +28,7 @@ import traceback
 from oslo_config import cfg
 from oslo_log import log
 
+from conductor.common import db_backend
 from conductor.common.models import country_latency
 from conductor.common.models import order_lock
 from conductor.common.models.order_lock import OrderLock
@@ -35,7 +36,6 @@ from conductor.common.models import order_lock_history
 from conductor.common.models import plan
 from conductor.common.models import region_placeholders
 from conductor.common.models import triage_tool
-from conductor.common.music import api
 from conductor.common.music import messaging as music_messaging
 from conductor.common.music.model import base
 import conductor.common.prometheus_metrics as PC
@@ -132,7 +132,7 @@ class SolverServiceLauncher(object):
         self.conf = conf
 
         # Set up Music access.
-        self.music = api.API()
+        self.music = db_backend.get_client()
         self.music.keyspace_create(keyspace=conf.keyspace)
 
         # Dynamically create a plan class for the specified keyspace
@@ -223,7 +223,7 @@ class SolverService(cotyledon.Service):
         # self.optimizer = optimizer.Optimizer(conf)
 
         # Set up Music access.
-        self.music = api.API()
+        self.music = db_backend.get_client()
         self.solver_owner_condition = {
             "solver_owner": socket.gethostname()
         }

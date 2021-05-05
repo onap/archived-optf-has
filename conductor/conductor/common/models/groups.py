@@ -17,12 +17,11 @@
 # -------------------------------------------------------------------------
 #
 
+from conductor.common import db_backend
 from conductor.common.music.model import base
-from conductor.common.music import api
 
 
 class Groups(base.Base):
-
 
     __tablename__ = "groups"
     __keyspace__ = None
@@ -43,7 +42,7 @@ class Groups(base.Base):
         """Return schema."""
         schema = {
             'id': 'text',
-            'group':'text',
+            'group': 'text',
             'countries': 'map<text,text>',
             'PRIMARY KEY': '(id)'
         }
@@ -73,13 +72,13 @@ class Groups(base.Base):
 
     def update(self, group, updated_fields):
         """Update country latency"""
-        api.MUSIC_API.row_complex_field_update(
+        db_backend.DB_API.row_complex_field_update(
             self.__keyspace__, self.__tablename__, self.pk_name(),
             self.pk_value(), group, updated_fields)
 
     def insert(self):
         return \
-            api.MUSIC_API.row_insert_by_condition(
+            db_backend.DB_API.row_insert_by_condition(
                 self.__keyspace__, self.__tablename__, self.pk_name(),
                 self.pk_value(), self.values(), self.PARKED)
 

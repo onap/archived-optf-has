@@ -27,7 +27,7 @@ from oslo_config import cfg
 from oslo_log import log
 
 from conductor.common.config_loader import load_config_file
-from conductor.common.music import api
+from conductor.common import db_backend
 from conductor.common.music import messaging as music_messaging
 from conductor.common.utils import conductor_logging_util as log_util
 from conductor.controller.generic_objective_translator import GenericObjectiveTranslator
@@ -88,7 +88,7 @@ class TranslatorService(cotyledon.Service):
         self.data_service = self.setup_rpc(conf, "data")
 
         # Set up Music access.
-        self.music = api.API()
+        self.music = db_backend.get_client()
 
         self.translation_owner_condition = {
             "translation_owner": socket.gethostname()

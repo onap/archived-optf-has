@@ -19,7 +19,7 @@
 
 from oslo_config import cfg
 
-from conductor.common import music
+from conductor.common import db_backend
 from conductor.common.music.messaging import component
 
 DEFAULT_URL = "__default__"
@@ -52,7 +52,7 @@ def get_transport(conf, url=None, optional=False, cache=True):
             # Yes, we know an API is not a transport. Cognitive dissonance FTW!
             # TODO(jdandrea): try/except to catch problems
             keyspace = conf.messaging_server.keyspace
-            transport = music.api.API()
+            transport = db_backend.get_client()
             transport.keyspace_create(keyspace=keyspace)
         except Exception:
             if not optional or url:

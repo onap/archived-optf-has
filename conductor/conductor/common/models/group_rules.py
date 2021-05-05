@@ -17,8 +17,8 @@
 # -------------------------------------------------------------------------
 #
 
+from conductor.common import db_backend
 from conductor.common.music.model import base
-from conductor.common.music import api
 
 
 class GroupRules(base.Base):
@@ -28,7 +28,7 @@ class GroupRules(base.Base):
 
     id = None
     group = None
-    rule = None  # type: List[Any] #
+    rule = None
 
     # Status
     PARKED = "parked"
@@ -42,7 +42,7 @@ class GroupRules(base.Base):
         """Return schema."""
         schema = {
             'id': 'text',
-            'group':'text',
+            'group': 'text',
             'rule': 'map<text,text>',
             'PRIMARY KEY': '(id)'
         }
@@ -72,17 +72,18 @@ class GroupRules(base.Base):
 
     def update(self, group, updated_fields):
         """Update country latency"""
-        api.MUSIC_API.row_complex_field_update(
+        db_backend.DB_API.row_complex_field_update(
             self.__keyspace__, self.__tablename__, self.pk_name(),
             self.pk_value(), group, updated_fields)
 
     def insert(self):
         return \
-            api.MUSIC_API.row_insert_by_condition(
-            self.__keyspace__, self.__tablename__, self.pk_name(),
-            self.pk_value(),self.values(), self.PARKED)
+            db_backend.DB_API.row_insert_by_condition(
+                self.__keyspace__, self.__tablename__, self.pk_name(),
+                self.pk_value(), self.values(), self.PARKED
+            )
 
-    def __init__(self, id=None, group=None,rule=None,_insert=False):
+    def __init__(self, id=None, group=None, rule=None, _insert=False):
         """Initializer"""
         super(GroupRules, self).__init__()
 

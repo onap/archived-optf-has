@@ -17,11 +17,9 @@
 # -------------------------------------------------------------------------
 #
 
-import json
-import time
-from conductor.common.models import validate_uuid4
+from conductor.common import db_backend
 from conductor.common.music.model import base
-from conductor.common.music import api
+
 
 class OrderLock(base.Base):
 
@@ -70,9 +68,9 @@ class OrderLock(base.Base):
         return self.id
 
     def values(self):
-        """Valu-es"""
+        """Values"""
         value_dict = {
-            'id' : self.id,
+            'id': self.id,
             'plans': self.plans,
             'is_spinup_completed': self.is_spinup_completed,
             'spinup_completed_timestamp': self.spinup_completed_timestamp
@@ -81,20 +79,20 @@ class OrderLock(base.Base):
 
     def update(self, plan_id, updated_fields, values=None):
         """Update order lock"""
-        api.MUSIC_API.row_complex_field_update(
+        db_backend.DB_API.row_complex_field_update(
             self.__keyspace__, self.__tablename__, self.pk_name(),
             self.pk_value(), plan_id, updated_fields, values)
 
     def insert(self):
         return \
-            api.MUSIC_API.row_insert_by_condition(
-            self.__keyspace__, self.__tablename__, self.pk_name(),
-            self.pk_value(), self.values(), self.PARKED)
+            db_backend.DB_API.row_insert_by_condition(
+                self.__keyspace__, self.__tablename__, self.pk_name(),
+                self.pk_value(), self.values(), self.PARKED)
 
     def __init__(self, id=None, plans=None, is_spinup_completed=False, spinup_completed_timestamp=None, _insert=False):
         """Initializer"""
         super(OrderLock, self).__init__()
-        # Breaking here with errot: Can't set attribute (TODO: Ikram/Rupali)
+        # Breaking here with error: Can't set attribute
         self.id = id
         self.plans = plans
         self.is_spinup_completed = is_spinup_completed

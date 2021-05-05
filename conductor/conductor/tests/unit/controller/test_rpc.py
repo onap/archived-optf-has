@@ -21,17 +21,17 @@
 import unittest
 import uuid
 
+from conductor.common import db_backend
 from conductor.controller.rpc import ControllerRPCEndpoint as rpc
 from conductor import service
 from conductor.common.models import plan
 from conductor.common.music.model import base
-from conductor.common.music import api
 from oslo_config import cfg
 from mock import patch
 
 
 def plan_prepare(conf):
-    music = api.API()
+    music = db_backend.get_client()
     music.keyspace_create(keyspace=conf.keyspace)
     plan_tmp = base.create_dynamic_model(
         keyspace=conf.keyspace, baseclass=plan.Plan, classname="Plan")

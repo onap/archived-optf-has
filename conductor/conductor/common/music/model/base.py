@@ -29,7 +29,7 @@ import six
 
 from conductor.common.classes import abstractclassmethod
 from conductor.common.classes import classproperty
-from conductor.common.music import api
+from conductor.common import db_backend
 from conductor.common.music.model import search
 
 LOG = logging.getLogger(__name__)
@@ -67,14 +67,14 @@ class Base(object):
         """Create table"""
         kwargs = cls.__kwargs()
         kwargs['schema'] = cls.schema()
-        api.MUSIC_API.table_create(**kwargs)
+        db_backend.DB_API.table_create(**kwargs)
 
         # Create indexes for the table
         del kwargs['schema']
         if cls.indexes():
             for index in cls.indexes():
                 kwargs['index'] = index
-                api.MUSIC_API.index_create(**kwargs)
+                db_backend.DB_API.index_create(**kwargs)
 
     @abstractclassmethod
     def atomic(cls):
@@ -123,7 +123,7 @@ class Base(object):
             setattr(self, pk_name, the_id)
         else:
             kwargs['pk_value'] = kwargs['values'][pk_name]
-        response = api.MUSIC_API.row_create(**kwargs)
+        response = db_backend.DB_API.row_create(**kwargs)
         return response
 
     def update(self, condition=None):
@@ -141,7 +141,7 @@ class Base(object):
         if kwargs['table'] != ('order_locks'):
             if pk_name in kwargs['values']:
                 kwargs['values'].pop(pk_name)
-        return api.MUSIC_API.row_update(**kwargs)
+        return db_backend.DB_API.row_update(**kwargs)
 
     def delete(self):
         """Delete row"""
@@ -149,7 +149,7 @@ class Base(object):
         kwargs['pk_name'] = self.pk_name()
         kwargs['pk_value'] = self.pk_value()
         kwargs['atomic'] = self.atomic()
-        api.MUSIC_API.row_delete(**kwargs)
+        db_backend.DB_API.row_delete(**kwargs)
 
     @classmethod
     def filter_by(cls, **kwargs):

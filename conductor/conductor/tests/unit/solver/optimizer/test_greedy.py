@@ -20,7 +20,8 @@
 """Test class for optimizer greedy.py"""
 
 import unittest
-from conductor.common.music import api
+
+from conductor.common import db_backend
 from conductor.solver.optimizer.greedy import Greedy
 from oslo_config import cfg
 from mock import patch
@@ -32,7 +33,7 @@ class TestGreedy(unittest.TestCase):
     @patch('conductor.common.music.model.base.Base.table_create')
     @patch('conductor.common.music.model.base.Base.insert')
     def setUp(self, conf, _requests=None, _begin_time=None):
-        self.music = api.API()
+        self.music = db_backend.get_client()
         self.conf = cfg.CONF
         self.greedy = Greedy(self.conf)
         self._objective = None

@@ -20,19 +20,20 @@
 """Test class for reservation service"""
 
 import unittest
+
+from conductor.common import db_backend
 from conductor.reservation.service import ReservationServiceLauncher as ReservationServiceLauncher
 from conductor.reservation.service import ReservationService
 from conductor.common.models import plan
 from conductor.common.music.model import base
 from oslo_config import cfg
-from conductor.common.music import api
 import uuid
 from mock import patch
 import json
 
 def plan_prepare(conf):
     cfg.CONF.set_override('certificate_authority_bundle_file', '../AAF_RootCA.cer', 'music_api')
-    music = api.API()
+    music = db_backend.get_client()
     music.keyspace_create(keyspace=conf.keyspace)
     plan_tmp = base.create_dynamic_model(
         keyspace=conf.keyspace, baseclass=plan.Plan, classname="Plan")
