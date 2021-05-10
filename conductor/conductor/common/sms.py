@@ -24,7 +24,6 @@ from oslo_log import log
 
 import conductor.api.controllers.v1.plans
 from conductor.common import config_loader
-import conductor.common.etcd.api
 import conductor.common.music.api
 from conductor.common.utils import cipherUtils
 import conductor.data.plugins.inventory_provider.aai
@@ -120,8 +119,6 @@ def load_secrets():
     config.set_override('aaf_conductor_user', secret_dict['aaf_api']['aaf_conductor_user'], 'aaf_api')
     config.set_override('username', secret_dict['sdc']['username'], 'sdc')
     config.set_override('password', decrypt_pass(secret_dict['sdc']['password']), 'sdc')
-    config.set_override('username', secret_dict['etcd_api']['username'], 'etcd_api')
-    config.set_override('password', decrypt_pass(secret_dict['etcd_api']['password']), 'etcd_api')
 
 
 def decrypt_pass(passwd):
