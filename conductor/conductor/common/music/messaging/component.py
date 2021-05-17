@@ -17,21 +17,19 @@
 # -------------------------------------------------------------------------
 #
 
-import inspect
-import json
-import sys
-import time
-import socket
-
 import cotyledon
+from conductor.conductor.common.music.messaging import message
+from conductor.conductor.common.music.model import base
+from conductor.conductor.i18n import _LE, _LI  # pylint: disable=W0212
 import futurist
+import inspect
 from oslo_config import cfg
 from oslo_log import log
 from oslo_messaging._drivers import common as rpc_common
+import socket
+import sys
+import time
 
-from conductor.common.music.messaging import message
-from conductor.common.music.model import base
-from conductor.i18n import _LE, _LI  # pylint: disable=W0212
 
 LOG = log.getLogger(__name__)
 
@@ -105,8 +103,7 @@ class Target(object):
             baseclass=message.Message, classname=self.topic)
 
         if not self._topic_class:
-            RuntimeError("Error setting the topic class "
-                         "for the messaging layer.")
+            raise RuntimeError("Error setting the topic class for the messaging layer.")
 
     @property
     def topic(self):

@@ -21,7 +21,7 @@
 
 from oslo_log import log as logging
 
-from conductor.common.music import api
+from conductor.conductor.common.music import api
 
 LOG = logging.getLogger(__name__)
 
