@@ -45,7 +45,7 @@ class LatencyDataLoader(object):
 
         kwargs = {'keyspace': 'conductor_inam', 'table': 'region_placeholders', 'pk_name': 'id'}
         for row in enumerate(datamap):
-            kwargs['pk_value'] = id()
+            kwargs['pk_value'] = id(row)
             kwargs['values'] = {'region_name': row['group'], 'countries': row['countries']}
             music.row_create(**kwargs)
 
@@ -66,7 +66,7 @@ class LatencyDataLoader(object):
 
         kwargs = {'keyspace': 'conductor_inam', 'table': 'country_latency', 'pk_name': 'id'}
         for row in enumerate(datamap):
-            kwargs['pk_value'] = id()
+            kwargs['pk_value'] = id(row)
             kwargs['values'] = {'country_name': row['country_name'], 'groups': row['groups']}
             music.row_create(**kwargs)
 

@@ -17,21 +17,20 @@
 # -------------------------------------------------------------------------
 #
 
-import inspect
-import json
-import sys
-import time
-import socket
-
-import cotyledon
-import futurist
-from oslo_config import cfg
-from oslo_log import log
-from oslo_messaging._drivers import common as rpc_common
 
 from conductor.common.music.messaging import message
 from conductor.common.music.model import base
-from conductor.i18n import _LE, _LI  # pylint: disable=W0212
+from conductor.i18n import _LE  # pylint: disable=W0212
+from conductor.i18n import _LI  # pylint: disable=W0212
+import cotyledon
+import futurist
+import inspect
+from oslo_config import cfg
+from oslo_log import log
+from oslo_messaging._drivers import common as rpc_common
+import socket
+import sys
+import time
 
 LOG = log.getLogger(__name__)
 
@@ -105,8 +104,7 @@ class Target(object):
             baseclass=message.Message, classname=self.topic)
 
         if not self._topic_class:
-            RuntimeError("Error setting the topic class "
-                         "for the messaging layer.")
+            raise RuntimeError("Error setting the topic class for the messaging layer.")
 
     @property
     def topic(self):
@@ -158,7 +156,7 @@ class RPCClient(object):
         """Asynchronous Call"""
         rpc = self.RPC(action=self.RPC.CAST,
                        ctxt=ctxt, method=method, args=args)
-        assert(rpc.enqueued)
+        assert (rpc.enqueued)
 
         rpc_id = rpc.id
         topic = self.target.topic
@@ -196,7 +194,7 @@ class RPCClient(object):
                        ctxt=ctxt, method=method, args=args)
 
         # TODO(jdandrea): Do something if the assert fails.
-        assert(rpc.enqueued)
+        assert (rpc.enqueued)
 
         rpc_id = rpc.id
         topic = self.target.topic
@@ -300,9 +298,9 @@ class RPCService(cotyledon.Service):
         msgs = self.RPC.query.all()
         for msg in msgs:
             if msg.enqueued:
-                if 'plan_name' in list(msg.ctxt.keys()):   # Python 3 Conversion -- dict object to list object
+                if 'plan_name' in list(msg.ctxt.keys()):  # Python 3 Conversion -- dict object to list object
                     LOG.info('Plan name: {}'.format(msg.ctxt['plan_name']))
-                elif 'plan_name' in list(msg.args.keys()):    # Python 3 Conversion -- dict object to list object
+                elif 'plan_name' in list(msg.args.keys()):  # Python 3 Conversion -- dict object to list object
                     LOG.info('Plan name: {}'.format(msg.args['plan_name']))
                 msg.delete()
 
@@ -345,16 +343,16 @@ class RPCService(cotyledon.Service):
             # Find the first msg marked as enqueued.
 
             if msg.working and \
-                    (self.current_time_seconds() - self.millisec_to_sec(msg.updated))\
+                    (self.current_time_seconds() - self.millisec_to_sec(msg.updated)) \
                     > self.conf.messaging_server.response_timeout:
                 msg.status = message.Message.ENQUEUED
                 msg.update(condition=self.working_status_condition)
 
             if not msg.enqueued:
                 continue
-            if 'plan_name' in list(msg.ctxt.keys()):   # Python 3 Conversion -- dict object to list object
+            if 'plan_name' in list(msg.ctxt.keys()):  # Python 3 Conversion -- dict object to list object
                 LOG.info('Plan name: {}'.format(msg.ctxt['plan_name']))
-            elif 'plan_name' in list(msg.args.keys()):    # Python 3 Conversion -- dict object to list object
+            elif 'plan_name' in list(msg.args.keys()):  # Python 3 Conversion -- dict object to list object
                 LOG.info('Plan name: {}'.format(msg.args['plan_name']))
 
             # Change the status to WORKING (operation with a lock)
@@ -441,7 +439,8 @@ class RPCService(cotyledon.Service):
                         msg.id, msg.method, msg.response))
 
                 _is_success = 'FAILURE'
-                while 'FAILURE' in _is_success and (self.current_time_seconds() - self.millisec_to_sec(msg.updated)) <= self.conf.messaging_server.response_timeout:
+                while 'FAILURE' in _is_success and (self.current_time_seconds() - self.millisec_to_sec(msg.updated)) \
+                        <= self.conf.messaging_server.response_timeout:
                     _is_success = msg.update()
                     LOG.info(_LI("updating the message status from working to {}, "
                                  "atomic update response from MUSIC {}").format(msg.status, _is_success))
