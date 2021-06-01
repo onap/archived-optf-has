@@ -39,7 +39,7 @@ sample homing template has been drawn up for residential vCPE Homing Use Case.
 HAS Architecture (R2)
 ----------------------
 
-.. image:: ./diagrams/HAS_SeedCode_Architecture_R2.jpg
+.. image:: ./diagrams/HAS_SeedCode_Architecture_R9.jpg
 
 Lifecycle of a Homing request in HAS
 --------------------------------------------
@@ -59,3 +59,58 @@ A sample heuristic greedy algorithm of HAS (using a vCPE as example)
 ------------------------------------------------------------------------
 
 .. image:: ./diagrams/HASHeuristicGreedyAlgorithm.jpg
+
+Components
+----------
+
+Conductor consists of five services that work together:
+
+-  **``conductor-api``**: An HTTP REST API
+-  **``conductor-controller``**: Validation, translation, and
+   status/results
+-  **``conductor-data``**: Inventory provider and service controller
+   gateway
+-  **``conductor-solver``**: Processing and solution calculation
+-  **``conductor-reservation``**: Reserves the suggested solution solved
+   by Solver component.
+
+Workflow
+--------
+
+-  Deployment **plans** are created, viewed, and deleted via
+   ``conductor-api`` and its `REST API <doc/api/README.md>`__.
+-  Included within each ``conductor-api`` plan request is a `Homing
+   Template <doc/template/README.md>`__.
+-  Homing Templates describe a set of inventory demands and constraints
+   to be solved against.
+-  ``conductor-api`` hands off all API requests to
+   ``conductor-controller`` for handling.
+-  All deployment plans are assigned a unique identifier (UUID-4), which
+   can be used to check for solution status asynchronously. (Conductor
+   does not support callbacks at this time.)
+-  ``conductor-controller`` ensures templates are well-formed and valid.
+   Errors and remediation are made visible through ``conductor-api``.
+   When running in debug mode, the API will also include a python
+   traceback in the response body, if available.
+-  ``conductor-controller`` uses ``conductor-data`` to resolve demands
+   against a particular **inventory provider** (e.g., A&AI).
+-  ``conductor-controller`` translates the template into a format
+   suitable for solving.
+-  As each template is translated, ``conductor-solver`` begins working
+   on it.
+-  ``conductor-solver`` uses ``conductor-data`` to resolve constraints
+   against a particular **service controller** (e.g., SDN-C).
+-  ``conductor-solver`` determines the most suitable inventory to
+   recommend.
+-  ``conductor-reservation`` attempts to reserve the solved solution in
+   SDN-GC
+
+**NOTE**: There is no Command Line Interface or Python API Library at
+this time.
+
+DB Backend
+----------
+
+All Conductor services use a DB backend for data storage/persistence and/or
+as a RPC transport mechanism. The current implementation supports two services which can be used as backend - `Music <https://github.com/att/music>`__ and
+`ETCD <https://github.com/etcd-io/etcd>`__.

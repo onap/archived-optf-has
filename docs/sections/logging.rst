@@ -14,3 +14,23 @@ Timestamp|RequestId|ServiceInstanceId|ThreadId|Virtual Server Name|ServiceName|I
 The logger util module can be found at: 
 
 <>/has/conductor/conductor/common/utils/conductor_logging_util.py
+
+Log File Rotation
+-----------------
+
+Sample ``logrotate.d`` configuration files have been provided in the
+repository.
+
+To install, place all Conductor `logrotate
+files </examples/distribution/ubuntu/logrotate.d>`__ in
+``/etc/logrotate.d``.
+
+Set file ownership and permissions:
+
+.. code:: bash
+
+    $ sudo chown root:root /etc/logrotate.d/conductor*
+    $ sudo chmod 644 /etc/logrotate.d/conductor*
+
+``logrotate.d`` automatically recognizes new files at the next log
+rotation opportunity and does not require restarting.
