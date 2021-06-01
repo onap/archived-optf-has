@@ -42,6 +42,8 @@ is an orchestration service, or Nova is a compute service.
    ./sections/offeredapis.rst
    ./sections/consumedapis.rst
    ./sections/installation.rst
+   ./sections/configuration.rst
+   ./sections/installation-advanced.rst
    ./sections/logging.rst
    ./sections/homingspecification.rst
    Example Homing Templates <./sections/example.rst>
