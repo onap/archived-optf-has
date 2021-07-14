@@ -62,6 +62,8 @@ class EtcdAPI(object):
                                 grpc_options={
                                     'grpc.http2.true_binary': 1,
                                     'grpc.http2.max_pings_without_data': 0,
+                                    'grpc.max_send_message_length': 50 * 1024 * 1024,
+                                    'grpc.max_receive_message_length': 50 * 1024 * 1024,
                                 }.items())
         except RpcError as rpc_error:
             raise EtcdClientException("Failed to establish connection with ETCD. GRPC {}".format(rpc_error.code()))
