@@ -763,7 +763,8 @@ class AAI(base.InventoryProviderBase):
 
             if match_type == 'any':
                 if attribute_key not in inventory_attributes or \
-                        (len(attribute_values) > 0 and inventory_attributes[attribute_key] not in attribute_values):
+                        (len(attribute_values) > 0 and inventory_attributes[attribute_key] and
+                            inventory_attributes[attribute_key] not in attribute_values):
                     return False
             elif match_type == 'not':
                 # drop the candidate when
