@@ -1,0 +1,9 @@
+{
+    "cafile": "auth/selfsignedca.pem",
+    "servercert": "auth/server.cert",
+    "serverkey":  "auth/server.key",
+
+    "smsdbaddress":     "http://172.17.0.2:8200",
+    "vaulttoken":       "aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee",
+    "disable_tls": true
+}

@@ -39,6 +39,7 @@ class TestCandidates(unittest.TestCase):
                                 "core_reliability": 99.99,
                                 "cost": 1.0,
                                 "coverage_area": "City: Chennai",
+                                "coverage_area_ta_list": "City: Chennai",
                                 "inventory_provider": "generator",
                                 "inventory_type": "slice_profiles",
                                 "latency": 25,

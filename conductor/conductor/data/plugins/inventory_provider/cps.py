@@ -137,9 +137,11 @@ class CPS(object):
     def get_cps_response(self, args):
         path = self.conf.cps.get_ta_list_url
         data = {}
-        data['input'] = {'zone_id': args}
+        data['inputParameters'] = {'zone_id': args}
         cps_response = self._request('post', path, data=data)
         if cps_response is None or cps_response.status_code != 200:
+            LOG.debug("Response code {}".format(cps_response.status_code))
             return None
         if cps_response:
-            return cps_response.json()
+            LOG.debug("cps_response {}".format(cps_response.json()))
+            return cps_response.json().get('coverageAreaTAList')
