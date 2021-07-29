@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5baccb59_02e58c72",
+        "filename": "releases/2.2.1-container.yaml",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 2671
+      },
+      "writtenOn": "2021-07-29T12:34:01Z",
+      "side": 1,
+      "message": "correct the yaml formatting",
+      "range": {
+        "startLine": 7,
+        "startChar": 9,
+        "endLine": 9,
+        "endChar": 0
+      },
+      "revId": "2551e1ba5d4249c8f33658b69ca5a5b5b034754c",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
