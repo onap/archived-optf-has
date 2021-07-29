@@ -33,17 +33,23 @@ ATTRIBUTE_AGGREGATION = {
     "latency": sum,
     "resource_sharing_level": copy_first,
     "s_nssai": copy_first,
+    "s_nssai_list": copy_first,
     "plmn_id_list": copy_first,
     "availability": copy_first,
     "throughput": min,
     "reliability": copy_first,
     "max_number_of_ues": copy_first,
-    "exp_data_rate_ul": min,
-    "exp_data_rate_dl": min,
+    "exp_data_rate_ul": copy_first,
+    "exp_data_rate_dl": copy_first,
     "ue_mobility_level": copy_first,
     "activity_factor": copy_first,
     "survival_time": copy_first,
-    "max_number_of_conns": copy_first
+    "max_number_of_conns": copy_first,
+    "max_number_of_pdu_session": copy_first,
+    "max_throughput": copy_first,
+    "coverage_area_ta_list": copy_first,
+    "perf_req":copy_first,
+    "terminal_density": copy_first
 }
 
 
