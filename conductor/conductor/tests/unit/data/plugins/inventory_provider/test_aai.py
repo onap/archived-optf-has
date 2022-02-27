@@ -28,6 +28,7 @@ from oslo_config import cfg
 import conductor.data.plugins.inventory_provider.aai as aai
 from conductor.data.plugins.inventory_provider.aai import AAI
 from conductor.data.plugins.inventory_provider.sdc import SDC
+from conductor.data.plugins.inventory_provider.dcae import DCAE
 from conductor.data.plugins.inventory_provider.hpa_utils import match_hpa
 from conductor.data.plugins.triage_translator.triage_translator import TraigeTranslator
 
@@ -735,6 +736,8 @@ tenant/3c6c471ada7747fe8ff7f28e100b61e8/vservers/vserver/00bddefc-126e-4e4f-a18d
         slice_profile = json.loads(open(slice_profile_file).read())
         nssi_candidates_file = './conductor/tests/unit/data/plugins/inventory_provider/nssi_candidate.json'
         nssi_candidates = json.loads(open(nssi_candidates_file).read())
+        nssi_candidates_updated_file = './conductor/tests/unit/data/plugins/inventory_provider/nssi_candidate_updated.json'
+        nssi_candidates_updated = json.loads(open(nssi_candidates_updated_file).read())
 
         self.mock_get_profiles = mock.patch.object(AAI, 'get_profile_instances', return_value=[slice_profile])
         self.mock_get_profiles.start()
@@ -743,8 +746,12 @@ tenant/3c6c471ada7747fe8ff7f28e100b61e8/vservers/vserver/00bddefc-126e-4e4f-a18d
         second_level_filter = dict()
         second_level_filter['service-role'] = service_role
         default_attributes = dict()
-        default_attributes['creation_cost'] =1
-        self.assertEqual(nssi_candidates, self.aai_ep.filter_nxi_candidates(nssi_response, second_level_filter,
+        default_attributes['creation_cost'] = 1
+
+        self.mock_get_difference = mock.patch.object(DCAE, 'capacity_filter', return_value=[nssi_candidates_updated])
+        self.mock_get_difference.start()
+
+        self.assertEqual(nssi_candidates_updated, self.aai_ep.filter_nxi_candidates(nssi_response, second_level_filter,
                                                                             default_attributes, "true", service_role))
 
         nssi_response['service-instance'][0]['service-role'] = 'service'
@@ -757,10 +764,10 @@ tenant/3c6c471ada7747fe8ff7f28e100b61e8/vservers/vserver/00bddefc-126e-4e4f-a18d
 
         self.assertEqual([], self.aai_ep.filter_nxi_candidates(None, None, default_attributes, "true", service_role))
 
-        self.assertEqual(nssi_candidates, self.aai_ep.filter_nxi_candidates(nssi_response, None, default_attributes,
+        self.assertEqual(nssi_candidates_updated, self.aai_ep.filter_nxi_candidates(nssi_response, None, default_attributes,
                                                                             "true", service_role))
         del nssi_candidates[0]['creation_cost']
-        self.assertEqual(nssi_candidates, self.aai_ep.filter_nxi_candidates(nssi_response, None, None, "true",
+        self.assertEqual(nssi_candidates_updated, self.aai_ep.filter_nxi_candidates(nssi_response, None, None, "true",
                                                                             service_role))
 
     def test_resolve_demands_inventory_type_nssi(self):
@@ -783,12 +790,17 @@ tenant/3c6c471ada7747fe8ff7f28e100b61e8/vservers/vserver/00bddefc-126e-4e4f-a18d
         slice_profile = json.loads(open(slice_profile_file).read())
         nssi_candidates_file = './conductor/tests/unit/data/plugins/inventory_provider/nssi_candidate.json'
         nssi_candidates = json.loads(open(nssi_candidates_file).read())
+        nssi_candidates_updated_file = './conductor/tests/unit/data/plugins/inventory_provider/nssi_candidate_updated.json'
+        nssi_candidates_updated = json.loads(open(nssi_candidates_updated_file).read())
         result = dict()
-        result['embb_cn'] = nssi_candidates
+        result['embb_cn'] = nssi_candidates_updated
 
         self.mock_get_nxi_candidates = mock.patch.object(AAI, 'get_nxi_candidates',
                                                          return_value=nssi_response)
         self.mock_get_nxi_candidates.start()
+
+        self.mock_get_difference = mock.patch.object(DCAE, 'capacity_filter', return_value=nssi_candidates_updated)
+        self.mock_get_difference.start()
 
         self.mock_get_profiles = mock.patch.object(AAI, 'get_profile_instances', return_value=[slice_profile])
         self.mock_get_profiles.start()
@@ -803,6 +815,8 @@ tenant/3c6c471ada7747fe8ff7f28e100b61e8/vservers/vserver/00bddefc-126e-4e4f-a18d
         nsi_candidates = json.loads(open(nsi_candidates_file).read())
         service_profile_file = './conductor/tests/unit/data/plugins/inventory_provider/nsi_service_profile.json'
         service_profile = json.loads(open(service_profile_file).read())
+        nsi_candidates_updated_file = './conductor/tests/unit/data/plugins/inventory_provider/nsi_candidate_updated.json'
+        nsi_candidates_updated = json.loads(open(nsi_candidates_updated_file).read())
 
         self.mock_get_profiles = mock.patch.object(AAI, 'get_profile_instances', return_value=[service_profile])
         self.mock_get_profiles.start()
@@ -813,7 +827,10 @@ tenant/3c6c471ada7747fe8ff7f28e100b61e8/vservers/vserver/00bddefc-126e-4e4f-a18d
         default_attributes = dict()
         default_attributes['creation_cost'] = 1
 
-        self.assertEqual(nsi_candidates, self.aai_ep.filter_nxi_candidates(nsi_response, second_level_filter,
+        self.mock_get_profiles = mock.patch.object(DCAE, 'capacity_filter', return_value=[nsi_candidates_updated])
+        self.mock_get_profiles.start()
+
+        self.assertEqual(nsi_candidates_updated, self.aai_ep.filter_nxi_candidates(nsi_response, second_level_filter,
                                                                            default_attributes, "true", service_role))
         nsi_response['service-instance'][0]['service-role'] = 'service'
 
@@ -838,14 +855,19 @@ tenant/3c6c471ada7747fe8ff7f28e100b61e8/vservers/vserver/00bddefc-126e-4e4f-a18d
         nsi_response = json.loads(open(nsi_response_file).read())
         nsi_candidates_file = './conductor/tests/unit/data/plugins/inventory_provider/nsi_candidate.json'
         nsi_candidates = json.loads(open(nsi_candidates_file).read())
+        nsi_candidates_updated_file = './conductor/tests/unit/data/plugins/inventory_provider/nsi_candidate_updated.json'
+        nsi_candidates_updated = json.loads(open(nsi_candidates_updated_file).read())
         result = dict()
-        result['embb_nst'] = nsi_candidates
+        result['embb_nst'] = nsi_candidates_updated
 
         service_profile_file = './conductor/tests/unit/data/plugins/inventory_provider/nsi_service_profile.json'
         service_profile = json.loads(open(service_profile_file).read())
 
         self.mock_get_profiles = mock.patch.object(AAI, 'get_profile_instances', return_value=[service_profile])
         self.mock_get_profiles.start()
+
+        self.mock_get_difference = mock.patch.object(DCAE, 'capacity_filter', return_value=nsi_candidates_updated)
+        self.mock_get_difference.start()
 
         self.mock_get_nxi_candidates = mock.patch.object(AAI, 'get_nxi_candidates',
                                                          return_value=nsi_response)
