@@ -1,0 +1,34 @@
+[
+	{
+		"candidate_id":"cdad9f49-4201-4e3a-aac1-b0f27902c299",
+		"inventory_type":"nssi",
+		"uniqueness": "true",
+		"cost":1.0,
+		"inventory_provider": "aai",
+		"instance_name": "nssi_test_0211",
+		"instance_id": "1a636c4d-5e76-427e-bfd6-241a947224b0",
+		"domain": "cn",
+		"creation_cost": 1,
+
+	
+		"profile_id": "cdad9f49-4201-4e3a-aac1-b0f27902c299",
+		"latency": 20,
+		"max_number_of_ues": 0,
+		"coverage_area_ta_list": "[{\"province\":\"??\",\"city\":\"???\",\"county\":\"???\",\"street\":\"?????\"}]",
+		"ue_mobility_level": "stationary",
+		"resource_sharing_level": "0",
+		"exp_data_rate_ul": 100,
+		"exp_data_rate_dl": 100,
+		"activity_factor": 0,
+		"e2e_latency": 0,
+		"jitter": 0,
+		"survival_time": 0,
+		"exp_data_rate": 0,
+		"payload_size": 0,
+		"traffic_density": 0,
+		"conn_density": 0,
+		"uLThpt_difference": 70,
+		"dLThpt_difference": 70
+	}
+
+]
