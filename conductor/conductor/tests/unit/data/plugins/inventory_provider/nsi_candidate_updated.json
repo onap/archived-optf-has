@@ -1,0 +1,31 @@
+[
+   {
+      "candidate_id":"89ad9f49-4201-4e3a-aac1-b0f27902c299",
+      "inventory_type":"nsi",
+      "uniqueness": "true",
+      "cost":1.0,
+      "inventory_provider": "aai",
+      "instance_name": "nsi_test_0211",
+      "instance_id": "4115d3c8-dd59-45d6-b09d-e756dee9b518",
+      "creation_cost": 1,
+
+      "profile_id": "89ad9f49-4201-4e3a-aac1-b0f27902c299",
+      "latency": 20,
+      "max_number_of_ues": 10,
+      "coverage_area_ta_list": "[{\"province\":\"??\",\"city\":\"???\",\"county\":\"???\",\"street\":\"?????\"}]",
+      "ue_mobility_level": "stationary",
+      "resource_sharing_level": "0",
+      "exp_data_rate_ul": 100,
+      "exp_data_rate_dl": 100,
+      "activity_factor": 0,
+      "e2e_latency": 20,
+      "jitter": 1,
+      "survival_time": 0,
+      "exp_data_rate": 100,
+      "payload_size": 0,
+      "traffic_density": 0,
+      "conn_density": 100,
+      "uLThpt_difference": 70,
+      "dLThpt_difference": 70
+   }
+]
