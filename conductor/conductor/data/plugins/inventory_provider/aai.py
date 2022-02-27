@@ -38,6 +38,7 @@ from conductor.data.plugins.inventory_provider.candidates.nxi_candidate import N
 from conductor.data.plugins.inventory_provider.candidates.service_candidate import Service
 from conductor.data.plugins.inventory_provider.candidates.transport_candidate import Transport
 from conductor.data.plugins.inventory_provider.candidates.vfmodule_candidate import VfModule
+from conductor.data.plugins.inventory_provider.dcae import DCAE
 from conductor.data.plugins.inventory_provider import hpa_utils
 from conductor.data.plugins.inventory_provider.sdc import SDC
 from conductor.data.plugins.inventory_provider.utils import aai_utils
@@ -1661,7 +1662,7 @@ class AAI(base.InventoryProviderBase):
                         second_level_match = aai_utils.get_first_level_and_second_level_filter(filtering_attributes,
                                                                                                "service_instance")
                         aai_response = self.get_nxi_candidates(filtering_attributes)
-                        resolved_demands[name].extend(self.filter_nxi_candidates(aai_response, second_level_match,
+                        resolved_demands[name].append(self.filter_nxi_candidates(aai_response, second_level_match,
                                                                                  default_attributes,
                                                                                  candidate_uniqueness, inventory_type))
 
@@ -1889,6 +1890,7 @@ class AAI(base.InventoryProviderBase):
 
     def filter_nxi_candidates(self, response_body, filtering_attributes, default_attributes, candidate_uniqueness,
                               type):
+        required_candidates = list()
         candidates = list()
         if response_body is not None:
             nxi_instances = response_body.get("service-instance", [])
@@ -1915,7 +1917,11 @@ class AAI(base.InventoryProviderBase):
                                             default_fields=aai_utils.convert_hyphen_to_under_score(default_attributes))
                         candidate = nxi_candidate.convert_nested_dict_to_dict()
                         candidates.append(candidate)
-        return candidates
+                        print("AAI candidates before adding capacity attributes", candidates)
+                        capacity_filtered_candidates = DCAE().capacity_filter(candidates)
+                        required_candidates = capacity_filtered_candidates[0]
+                        print("updated candidate from DCAE class", required_candidates)
+        return required_candidates
 
     def get_profile_instances(self, nxi_instance):
         slice_role = nxi_instance['service-role']
