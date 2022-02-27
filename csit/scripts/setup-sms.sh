@@ -23,7 +23,7 @@ CONFIG_FILE=$(pwd)/config/smsconfig.json
 mkdir -p $(pwd)/config
 
 docker login -u docker -p docker nexus3.onap.org:10001
-docker pull nexus3.onap.org:10001/onap/aaf/sms
+docker pull nexus3.onap.org:10001/onap/aaf/sms:4.0.0
 docker pull docker.io/vault:1.3.3
 
 #
@@ -50,7 +50,7 @@ EOF
 cat $CONFIG_FILE
 
 docker run --workdir /sms -v $CONFIG_FILE:/sms/smsconfig.json \
-           --name sms -d -p 10443:10443 --user root nexus3.onap.org:10001/onap/aaf/sms
+           --name sms -d -p 10443:10443 --user root nexus3.onap.org:10001/onap/aaf/sms:4.0.0
 
 SMS_IP=$(docker inspect --format='{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' sms)
 
