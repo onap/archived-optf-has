@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "eabf88ab_0bb352d9",
+        "filename": "conductor/conductor/data/plugins/inventory_provider/aai.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 1665,
+      "author": {
+        "id": 7661
+      },
+      "writtenOn": "2022-03-03T03:20:28Z",
+      "side": 1,
+      "message": "Extend was throwing error in the testcases, so replaced it with append.",
+      "parentUuid": "0296097e_bc78b545",
+      "range": {
+        "startLine": 1665,
+        "startChar": 47,
+        "endLine": 1665,
+        "endChar": 53
+      },
+      "revId": "6cbdd869aa301c79b17373f641ed3686158daf98",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "4a98e7f0_f083e68c",
         "filename": "conductor/conductor/data/plugins/inventory_provider/aai.py",
         "patchSetId": 4
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "2cf508cd_ef17b013",
+        "filename": "conductor/conductor/data/plugins/inventory_provider/aai.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 1920,
+      "author": {
+        "id": 7661
+      },
+      "writtenOn": "2022-03-03T03:20:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4a98e7f0_f083e68c",
+      "range": {
+        "startLine": 1920,
+        "startChar": 24,
+        "endLine": 1920,
+        "endChar": 93
+      },
+      "revId": "6cbdd869aa301c79b17373f641ed3686158daf98",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f544a010_1ab90d98",
         "filename": "conductor/conductor/data/plugins/inventory_provider/aai.py",
         "patchSetId": 4
@@ -59,6 +107,30 @@
       "writtenOn": "2022-03-02T05:49:50Z",
       "side": 1,
       "message": "Why is it this way? Why pick only one candidate",
+      "range": {
+        "startLine": 1922,
+        "startChar": 24,
+        "endLine": 1922,
+        "endChar": 77
+      },
+      "revId": "6cbdd869aa301c79b17373f641ed3686158daf98",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "28e0c2ef_5da9b994",
+        "filename": "conductor/conductor/data/plugins/inventory_provider/aai.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 1922,
+      "author": {
+        "id": 7661
+      },
+      "writtenOn": "2022-03-03T03:20:28Z",
+      "side": 1,
+      "message": "The candidate list was enclosed in an extra pair of square bracket, so to remove that I\u0027m accessing it like an array element.",
+      "parentUuid": "f544a010_1ab90d98",
       "range": {
         "startLine": 1922,
         "startChar": 24,
