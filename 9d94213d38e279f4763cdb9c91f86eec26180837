@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "17a0e29f_0c842bfc",
+        "filename": "conductor/conductor/data/plugins/inventory_provider/aai.py",
+        "patchSetId": 9
+      },
+      "lineNbr": 1665,
+      "author": {
+        "id": 2671
+      },
+      "writtenOn": "2022-03-29T06:55:00Z",
+      "side": 1,
+      "message": "this needs to extend, not append. The return type of the calling method should be a list",
+      "range": {
+        "startLine": 1665,
+        "startChar": 47,
+        "endLine": 1665,
+        "endChar": 53
+      },
+      "revId": "9d94213d38e279f4763cdb9c91f86eec26180837",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "72987a79_cf97bc12",
+        "filename": "conductor/conductor/data/plugins/inventory_provider/aai.py",
+        "patchSetId": 9
+      },
+      "lineNbr": 1922,
+      "author": {
+        "id": 2671
+      },
+      "writtenOn": "2022-03-29T06:55:00Z",
+      "side": 1,
+      "message": "Why reject rest of the candidates? Return all the candidates as a list",
+      "range": {
+        "startLine": 1922,
+        "startChar": 24,
+        "endLine": 1922,
+        "endChar": 77
+      },
+      "revId": "9d94213d38e279f4763cdb9c91f86eec26180837",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
