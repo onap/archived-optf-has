@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "9022658f_5a1838ff",
+        "filename": "conductor/conductor/data/plugins/inventory_provider/aai.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 1665,
+      "author": {
+        "id": 2671
+      },
+      "writtenOn": "2022-03-30T07:39:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "eabf88ab_0bb352d9",
+      "range": {
+        "startLine": 1665,
+        "startChar": 47,
+        "endLine": 1665,
+        "endChar": 53
+      },
+      "revId": "6cbdd869aa301c79b17373f641ed3686158daf98",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "4a98e7f0_f083e68c",
         "filename": "conductor/conductor/data/plugins/inventory_provider/aai.py",
         "patchSetId": 4
@@ -140,6 +164,30 @@
       "revId": "6cbdd869aa301c79b17373f641ed3686158daf98",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "abaa7f2d_8f5e1823",
+        "filename": "conductor/conductor/data/plugins/inventory_provider/aai.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 1922,
+      "author": {
+        "id": 2671
+      },
+      "writtenOn": "2022-03-30T07:39:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "28e0c2ef_5da9b994",
+      "range": {
+        "startLine": 1922,
+        "startChar": 24,
+        "endLine": 1922,
+        "endChar": 77
+      },
+      "revId": "6cbdd869aa301c79b17373f641ed3686158daf98",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
     }
   ]
 }
