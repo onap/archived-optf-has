@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "050d60f3_59157dba",
+        "filename": "releases/2.3.0-container.yaml",
+        "patchSetId": 2
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 2671
+      },
+      "writtenOn": "2022-03-31T03:23:44Z",
+      "side": 1,
+      "message": "reference is somewhat old. Please check and correct",
+      "range": {
+        "startLine": 5,
+        "startChar": 5,
+        "endLine": 5,
+        "endChar": 45
+      },
+      "revId": "89b1de207c707c828e680f02595c36389eb6061f",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
