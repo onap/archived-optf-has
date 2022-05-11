@@ -6,6 +6,94 @@
 Release Notes
 =============
 
+
+
+..      ===========================
+..      * * *   JAKARTA  * * *
+..      ===========================
+
+Abstract
+========
+
+This document provides the release notes for the JAKARTA release.
+
+Summary
+=======
+
+
+Release Data
+============
+
+
++--------------------------------------+--------------------------------------+
+| **OOF Project**                      |                                      |
+|                                      |                                      |
++--------------------------------------+--------------------------------------+
+| **Docker images**                    |   optf-has 2.3.0                     |
+|                                      |                                      |
+|                                      |                                      |
++--------------------------------------+--------------------------------------+
+| **Release designation**              | 10.0.0 jakarta                       |
+|                                      |                                      |
++--------------------------------------+--------------------------------------+
+| **Release date**                     | 02/06/2022 (TBD)                     |
+|                                      |                                      |
++--------------------------------------+--------------------------------------+
+
+
+New features
+------------
+
+- Enhancements to support capacity based NSI/NSSI Selection for the Slicing usecase
+
+
+Bug Fixes
+---------
+
+OPTFRA-1064 - Fix bug in fetching capacity attributes from DCAE
+
+
+Known Limitations, Issues and Workarounds
+=========================================
+
+
+System Limitations
+------------------
+
+
+Known Vulnerabilities
+---------------------
+
+
+Workarounds
+-----------
+
+
+Security Notes
+--------------
+
+
+References
+==========
+
+For more information on the ONAP Jakarta release, please see:
+
+#. `ONAP Home Page`_
+#. `ONAP Documentation`_
+#. `ONAP Release Downloads`_
+#. `ONAP Wiki Page`_
+
+
+.. _`ONAP Home Page`: https://www.onap.org
+.. _`ONAP Wiki Page`: https://wiki.onap.org
+.. _`ONAP Documentation`: https://docs.onap.org
+.. _`ONAP Release Downloads`: https://git.onap.org
+
+Quick Links:
+- `OOF project page <https://wiki.onap.org/display/DW/Optimization+Framework+Project>`_
+- `Passing Badge information for OOF <https://bestpractices.coreinfrastructure.org/en/projects/1720>`_
+
+
 ..      ===========================
 ..      * * *    ISTANBUL    * * *
 ..      ===========================
@@ -30,7 +118,7 @@ Release Data
 | **Docker images**                    | - optf-has 2.2.1                     |
 |                                      |                                      |
 +--------------------------------------+--------------------------------------+
-| **Release designation**              | 8.0.0 istanbul                       |
+| **Release designation**              | 9.0.0 istanbul                       |
 |                                      |                                      |
 +--------------------------------------+--------------------------------------+
 | **Release date**                     | 28/10/2021 (TBD)                     |
