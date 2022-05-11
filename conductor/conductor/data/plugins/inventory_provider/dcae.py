@@ -21,13 +21,23 @@
 
 from conductor.common import rest
 from conductor.i18n import _LE
+from http.client import HTTPConnection
 import json
+import logging
 from oslo_config import cfg
 from oslo_log import log
 import time
 import uuid
 
 LOG = log.getLogger(__name__)
+
+logging.basicConfig(level=logging.DEBUG)
+log = logging.getLogger('urllib3')
+log.setLevel(logging.DEBUG)
+ch = logging.StreamHandler()
+ch.setLevel(logging.DEBUG)
+log.addHandler(ch)
+HTTPConnection.debuglevel = 1
 
 CONF = cfg.CONF
 
@@ -129,35 +139,44 @@ class DCAE(object):
         LOG.debug("from AAI ", candidates)
         for candidate in candidates:
             inventory_type = candidate.get('inventory_type')
-            candidate_id = candidate.get('candidate_id')
-            domain = candidate.get('domain')
-            response = self.get_dcae_response()
-            # max_no_of_connections = self.get_max_no_of_connections(response)
-            dLThpt = self.get_dLThpt(response, candidate_id)
-            uLThpt = self.get_uLThpt(response, candidate_id)
-            # max_no_of_pdu_sessions = self.get_max_no_of_pdu_sessions()
             if inventory_type == 'nsi':
-                uLThpt_ServiceProfile = candidate.get('uLThptPerSlice')
-                dLThpt_ServiceProfile = candidate.get('dLThptPerSlice')
-                uLThpt_difference = self.get_difference(uLThpt_ServiceProfile, uLThpt)
-                dLThpt_difference = self.get_difference(dLThpt_ServiceProfile, dLThpt)
-                candidate['uLThpt_difference'] = uLThpt_difference
-                candidate['dLThpt_difference'] = dLThpt_difference
-            elif inventory_type == 'nssi' and (domain != 'tn_fh' and domain != 'tn_mh'):
-                uLThpt_SliceProfile = candidate.get('exp_data_rate_ul')
-                dLThpt_SliceProfile = candidate.get('exp_data_rate_dl')
-                uLThpt_difference = self.get_difference(uLThpt_SliceProfile, uLThpt)
-                dLThpt_difference = self.get_difference(dLThpt_SliceProfile, dLThpt)
-                candidate['uLThpt_difference'] = uLThpt_difference
-                candidate['dLThpt_difference'] = dLThpt_difference
-                # connections_difference = self.get_difference(max_no_of_pdu_sessions, max_no_of_connections)
-            elif inventory_type == 'nssi' and (domain == 'tn_fh' and domain == 'tn_mh'):
-                uLThpt_difference = 10
-                dLThpt_difference = 10
-                candidate['uLThpt_difference'] = uLThpt_difference
-                candidate['dLThpt_difference'] = dLThpt_difference
+                candidate_id = candidate.get('instance_id')
+            elif inventory_type == 'nssi':
+                candidate_id = candidate.get('instance_id')
             else:
-                LOG.debug("No difference attribute was added to the candidate")
+                LOG.debug("No candidate_id found")
+            domain = candidate.get('domain')
+            response = self.get_dcae_response(candidate_id)
+            # max_no_of_connections = self.get_max_no_of_connections(response)
+            if response != None:
+                dLThpt = self.get_dLThpt(response, candidate_id)
+                uLThpt = self.get_uLThpt(response, candidate_id)
+                # max_no_of_pdu_sessions = self.get_max_no_of_pdu_sessions()
+                if inventory_type == 'nsi':
+                   uLThpt_ServiceProfile = candidate.get('ul_thpt_per_slice')
+                   dLThpt_ServiceProfile = candidate.get('dl_thpt_per_slice')
+                   uLThpt_difference = self.get_difference(uLThpt_ServiceProfile, uLThpt)
+                   dLThpt_difference = self.get_difference(dLThpt_ServiceProfile, dLThpt)
+                   candidate['uLThpt_difference'] = uLThpt_difference
+                   candidate['dLThpt_difference'] = dLThpt_difference
+                elif inventory_type == 'nssi' and (domain != 'TN_FH' and domain != 'TN_MH'):
+                   uLThpt_SliceProfile = candidate.get('exp_data_rate_ul')
+                   dLThpt_SliceProfile = candidate.get('exp_data_rate_dl')
+                   uLThpt_difference = self.get_difference(uLThpt_SliceProfile, uLThpt)
+                   dLThpt_difference = self.get_difference(dLThpt_SliceProfile, dLThpt)
+                   candidate['uLThpt_difference'] = uLThpt_difference
+                   candidate['dLThpt_difference'] = dLThpt_difference
+                   # connections_difference = self.get_difference(max_no_of_pdu_sessions, max_no_of_connections)
+                elif inventory_type == 'nssi' and (domain == 'TN_FH' and domain == 'TN_MH'):
+                   uLThpt_difference = 10
+                   dLThpt_difference = 10
+                   candidate['uLThpt_difference'] = uLThpt_difference
+                   candidate['dLThpt_difference'] = dLThpt_difference
+                else:
+                   LOG.debug("No difference attribute was added to the candidate")
+            else:
+                candidate = candidate
+                LOG.debug("Returning original candidate list")
             candidatesList.update(candidate)
             LOG.debug("capacity filter ", candidatesList)
             updated_candidateList.append(candidatesList)
@@ -175,6 +194,7 @@ class DCAE(object):
             if configDetails[i]["sliceIdentifier"] == candidate_id:
                 aggregatedConfig = configDetails[i]['aggregatedConfig']
                 uLThpt = aggregatedConfig.get("uLThptPerSlice")
+                LOG.debug(" uLthpt from DCAE is : ", uLThpt)
         return uLThpt
 
     def get_dLThpt(self, response, candidate_id):
@@ -184,6 +204,7 @@ class DCAE(object):
             if configDetails[i]["sliceIdentifier"] == candidate_id:
                 aggregatedConfig = configDetails[i]['aggregatedConfig']
                 dLThpt = aggregatedConfig.get("dLThptPerSlice")
+                LOG.debug(" dLthpt from DCAE is : ", dLThpt)
         return dLThpt
 
     def get_difference(self, attribute1, attribute2):
@@ -218,10 +239,20 @@ class DCAE(object):
                           "link: {}{}").format(context, value, response.status_code, response.reason, self.base, path))
         return response
 
-    def get_dcae_response(self):
+    def get_dcae_response(self,candidate_id):
         path = self.conf.dcae.get_slice_config_url
-        dcae_response = self._request('get', path, data=None)
+        data = {"sliceIdentifiers": [candidate_id], "configParams": ["dLThptPerSlice","uLThptPerSlice","maxNumberOfConns"]}
+        try:
+            sli_response = self._request('get', path, data=data)
+            responseJson = json.loads(sli_response)
+            if not 'sliceConfigDetails' in responseJson or len(responseJson['sliceConfigDetails']) == 0:
+                dcae_response = None
+            else:
+                dcae_response = sli_response
+        except:
+            dcae_response = None
         if dcae_response is None or dcae_response.status_code != 200:
             return None
         if dcae_response:
+            LOG.debug("DCAE response is : ", dcae_response)
             return dcae_response
