@@ -1,17 +1,17 @@
 {
 	"sliceConfigDetails": [{
-	 	"sliceIdentifier": "cdad9f49-4201-4e3a-aac1-b0f27902c299",
+	 	"sliceIdentifiers": "cdad9f49-4201-4e3a-aac1-b0f27902c299",
 		"aggregatedConfig": {
-			"dLThptPerSlice":27,
-			"uLThptPerSlice":30,
+			"dlthptPerSlice":27,
+			"ulthptPerSlice":30,
 			"maxNumberOfConns":300
 		}
 	},
 	{
-		"sliceIdentifier": "e316f4b2-01fa-479a-8522-64fe9c0c2971",
+		"sliceIdentifiers": "e316f4b2-01fa-479a-8522-64fe9c0c2971",
 		"aggregatedConfig": {
-			"dLThptPerSlice":40,
-			"uLThptPerSlice":25,
+			"dlthptPerSlice":40,
+			"ulthptPerSlice":25,
 			"maxNumberOfConns":400
 		}
 	}]
