@@ -1,0 +1,8 @@
+Verified+1: ONAP Jobbuilder <onap-jobbuilder@jenkins.onap.org>
+Code-Review+1: Eric Debeau <eric.debeau@orange.com>
+Code-Review+2: krishna moorthy <krishnamoorthy.manoharan@stl.tech>
+Submitted-by: krishna moorthy <krishnamoorthy.manoharan@stl.tech>
+Submitted-at: Fri, 13 May 2022 05:49:13 +0000
+Reviewed-on: https://gerrit.onap.org/r/c/optf/has/+/129254
+Project: optf/has
+Branch: refs/heads/master
