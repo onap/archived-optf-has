@@ -186,7 +186,8 @@ class DCAE(object):
                 else:
                     LOG.debug("No difference attribute was added to the candidate")
             else:
-                candidate = candidate
+                candidate["ulthpt_difference"] = 2
+                candidate["dlthpt_difference"] = 2
                 LOG.debug("Returning original candidate list")
             candidatesList.update(candidate)
             LOG.debug("capacity filter ", candidatesList)
@@ -257,12 +258,12 @@ class DCAE(object):
         dcae_response = self._request('get', path, data=data)
         LOG.debug(self._request('get', path, data=data))
         LOG.debug(" DCAE response : ", dcae_response)
-        LOG.debug("DCAE json response is : ", json.dumps(dcae_response.json()))
-        dcae_response2 = json.dumps(dcae_response.json())
-        LOG.debug(" processed DCAE response is ", dcae_response2)
-        if dcae_response2 is None or dcae_response.status_code != 200:
+        if dcae_response is None or dcae_response.status_code != 200:
             return None
-        if dcae_response2:
+        if dcae_response:
+            LOG.debug("DCAE json response is : ", json.dumps(dcae_response.json()))
+            dcae_response2 = json.dumps(dcae_response.json())
+            LOG.debug(" processed DCAE response is ", dcae_response2)
             responseJson = json.loads(dcae_response2)
             LOG.debug("response json from DCAE is :", responseJson)
             if 'sliceConfigDetails' not in responseJson or len(responseJson['sliceConfigDetails']) == 0:
