@@ -135,7 +135,7 @@ class DCAE(object):
     def capacity_filter(self, candidates):
         candidatesList = {}
         updated_candidateList = []
-        LOG.debug("from AAI ", candidates)
+        LOG.debug("from AAI: {}".format(candidates))
         for candidate in candidates:
             inventory_type = candidate.get('inventory_type')
             if inventory_type == 'nsi':
@@ -145,36 +145,36 @@ class DCAE(object):
             else:
                 LOG.debug("No candidate_id found")
             domain = candidate.get('domain')
-            LOG.debug("domain from the candidate list is ", domain)
+            LOG.debug("domain from the candidate list is: {}".format(domain))
             response = self.get_dcae_response(candidate_id)
-            LOG.debug(" DCAE response in capacity_filter() : ", response)
+            LOG.debug("DCAE response in capacity_filter(): {}".format(response))
             # max_no_of_connections = self.get_max_no_of_connections(response)
             if response is not None:
                 dLThpt = self.get_dLThpt(response, candidate_id)
-                LOG.debug("dLThpt fetched from dcae response is", dLThpt)
+                LOG.debug("dLThpt fetched from dcae response is: {}".format(dLThpt))
                 uLThpt = self.get_uLThpt(response, candidate_id)
-                LOG.debug("uLThpt fetched from dcae response is", uLThpt)
+                LOG.debug("uLThpt fetched from dcae response is: {}".format(uLThpt))
                 # max_no_of_pdu_sessions = self.get_max_no_of_pdu_sessions()
                 if inventory_type == 'nsi':
                     uLThpt_ServiceProfile = candidate.get('ul_thpt_per_slice')
-                    LOG.debug("uLThpt fetched from service profile is", uLThpt_ServiceProfile)
+                    LOG.debug("uLThpt fetched from service profile is: {}".format(uLThpt_ServiceProfile))
                     dLThpt_ServiceProfile = candidate.get('dl_thpt_per_slice')
-                    LOG.debug("dLThpt fetched from service profile is", dLThpt_ServiceProfile)
+                    LOG.debug("dLThpt fetched from service profile is: {}".format(dLThpt_ServiceProfile))
                     uLThpt_difference = self.get_difference(uLThpt_ServiceProfile, uLThpt)
-                    LOG.debug(" uLThpt_difference for nsi is ", uLThpt_difference)
+                    LOG.debug("uLThpt_difference for nsi is: {}".format(uLThpt_difference))
                     dLThpt_difference = self.get_difference(dLThpt_ServiceProfile, dLThpt)
-                    LOG.debug(" dLThpt_difference for nsi is ", dLThpt_difference)
+                    LOG.debug("dLThpt_difference for nsi is: {}".format(dLThpt_difference))
                     candidate['uLThpt_difference'] = uLThpt_difference
                     candidate['dLThpt_difference'] = dLThpt_difference
                 elif inventory_type == 'nssi' and (domain != 'TN_FH' and domain != 'TN_MH'):
                     uLThpt_SliceProfile = candidate.get('exp_data_rate_ul')
-                    LOG.debug("uLThpt fetched from slice profile is", uLThpt_SliceProfile)
+                    LOG.debug("uLThpt fetched from slice profile is: {}".format(uLThpt_SliceProfile))
                     dLThpt_SliceProfile = candidate.get('exp_data_rate_dl')
-                    LOG.debug("dLThpt fetched from slice profile is", dLThpt_SliceProfile)
+                    LOG.debug("dLThpt fetched from slice profile is: {}".format(dLThpt_SliceProfile))
                     uLThpt_difference = self.get_difference(uLThpt_SliceProfile, uLThpt)
-                    LOG.debug(" uLThpt_difference for nssi is ", uLThpt_difference)
+                    LOG.debug("uLThpt_difference for nssi is: {}".format(uLThpt_difference))
                     dLThpt_difference = self.get_difference(dLThpt_SliceProfile, dLThpt)
-                    LOG.debug(" dLThpt_difference for nssi is ", dLThpt_difference)
+                    LOG.debug("dLThpt_difference for nssi is: {}".format(dLThpt_difference))
                     candidate['uLThpt_difference'] = uLThpt_difference
                     candidate['dLThpt_difference'] = dLThpt_difference
                     # connections_difference = self.get_difference(max_no_of_pdu_sessions, max_no_of_connections)
@@ -190,9 +190,9 @@ class DCAE(object):
                 candidate["dlthpt_difference"] = 2
                 LOG.debug("Returning original candidate list")
             candidatesList.update(candidate)
-            LOG.debug("capacity filter ", candidatesList)
+            LOG.debug("capacity filter: {}".format(candidatesList))
             updated_candidateList.append(candidatesList)
-            LOG.debug("updated candidate list ", updated_candidateList)
+            LOG.debug("updated candidate list: {}".format(updated_candidateList))
         return updated_candidateList
         # def get_max_no_of_connections(self, response, candidate_id)
         #   responseJson = json.loads(response)
@@ -206,7 +206,7 @@ class DCAE(object):
             if configDetails[i]["sliceIdentifiers"] == candidate_id:
                 aggregatedConfig = configDetails[i]['aggregatedConfig']
                 uLThpt = aggregatedConfig.get("ulthptPerSlice")
-                LOG.debug(" uLthpt from DCAE is : ", uLThpt)
+                LOG.debug("uLthpt from DCAE is: {}".format(uLThpt))
         return uLThpt
 
     def get_dLThpt(self, response, candidate_id):
@@ -216,7 +216,7 @@ class DCAE(object):
             if configDetails[i]["sliceIdentifiers"] == candidate_id:
                 aggregatedConfig = configDetails[i]['aggregatedConfig']
                 dLThpt = aggregatedConfig.get("dlthptPerSlice")
-                LOG.debug(" dLthpt from DCAE is : ", dLThpt)
+                LOG.debug("dLthpt from DCAE is: {}".format(dLThpt))
         return dLThpt
 
     def get_difference(self, attribute1, attribute2):
@@ -257,17 +257,17 @@ class DCAE(object):
                 "uLThptPerSlice", "maxNumberOfConns"]}
         dcae_response = self._request('get', path, data=data)
         LOG.debug(self._request('get', path, data=data))
-        LOG.debug(" DCAE response : ", dcae_response)
+        LOG.debug("DCAE response: {}".format(dcae_response))
         if dcae_response is None or dcae_response.status_code != 200:
             return None
         if dcae_response:
-            LOG.debug("DCAE json response is : ", json.dumps(dcae_response.json()))
+            LOG.debug("DCAE json response is: {}".format(json.dumps(dcae_response.json())))
             dcae_response2 = json.dumps(dcae_response.json())
-            LOG.debug(" processed DCAE response is ", dcae_response2)
+            LOG.debug("processed DCAE response is: {}".format(dcae_response2))
             responseJson = json.loads(dcae_response2)
-            LOG.debug("response json from DCAE is :", responseJson)
+            LOG.debug("response json from DCAE is: {}".format(responseJson))
             if 'sliceConfigDetails' not in responseJson or len(responseJson['sliceConfigDetails']) == 0:
-                LOG.debug(" Returning None to capacity_filter()")
+                LOG.debug("Returning None to capacity_filter()")
                 return None
             else:
                 LOG.debug("returning DCAE response to capacity_filter() from get_dcae_response()")
