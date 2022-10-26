@@ -161,9 +161,9 @@ class DCAE(object):
                     dLThpt_ServiceProfile = candidate.get('dl_thpt_per_slice')
                     LOG.debug("dLThpt fetched from service profile is: {}".format(dLThpt_ServiceProfile))
                     uLThpt_difference = self.get_difference(uLThpt_ServiceProfile, uLThpt)
-                    LOG.debug("uLThpt_difference for nsi is :{}".format( uLThpt_difference))
+                    LOG.debug("uLThpt_difference for nsi is: {}".format(uLThpt_difference))
                     dLThpt_difference = self.get_difference(dLThpt_ServiceProfile, dLThpt)
-                    LOG.debug("dLThpt_difference for nsi is :{}".format( dLThpt_difference))
+                    LOG.debug("dLThpt_difference for nsi is: {}".format(dLThpt_difference))
                     candidate['uLThpt_difference'] = uLThpt_difference
                     candidate['dLThpt_difference'] = dLThpt_difference
                 elif inventory_type == 'nssi' and (domain != 'TN_FH' and domain != 'TN_MH'):
@@ -172,9 +172,9 @@ class DCAE(object):
                     dLThpt_SliceProfile = candidate.get('exp_data_rate_dl')
                     LOG.debug("dLThpt fetched from slice profile is: {}".format(dLThpt_SliceProfile))
                     uLThpt_difference = self.get_difference(uLThpt_SliceProfile, uLThpt)
-                    LOG.debug("uLThpt_difference for nssi is: {}".format( uLThpt_difference))
+                    LOG.debug("uLThpt_difference for nssi is: {}".format(uLThpt_difference))
                     dLThpt_difference = self.get_difference(dLThpt_SliceProfile, dLThpt)
-                    LOG.debug("dLThpt_difference for nssi is: {}".format( dLThpt_difference))
+                    LOG.debug("dLThpt_difference for nssi is: {}".format(dLThpt_difference))
                     candidate['uLThpt_difference'] = uLThpt_difference
                     candidate['dLThpt_difference'] = dLThpt_difference
                     # connections_difference = self.get_difference(max_no_of_pdu_sessions, max_no_of_connections)
