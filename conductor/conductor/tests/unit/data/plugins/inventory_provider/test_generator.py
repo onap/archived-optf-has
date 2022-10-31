@@ -39,7 +39,7 @@ class TestGenerator(unittest.TestCase):
         candidates_file = './conductor/tests/unit/data/plugins/inventory_provider/generated_candidates.json'
         expected_candidates = json.loads(open(candidates_file).read())
         for candidate in expected_candidates:
-            candidate['coverage_area_ta_list'] = [234,123,421]
+            candidate['coverage_area_ta_list'] = '[234, 123, 421]'
         coverage_area_file='./conductor/tests/unit/data/plugins/inventory_provider/coverage_area.json'
         coverage_area_json = json.loads(open(coverage_area_file).read())
         generator = Generator()
