@@ -18,6 +18,7 @@
 #
 
 import itertools
+import json
 from operator import eq
 from operator import ge
 from operator import le
@@ -141,7 +142,8 @@ def get_tracking_area(args):
         for x in values:
             if not x.get("nRTAC") in coverage_list:
                 coverage_list.append(x.get("nRTAC"))
-    return coverage_list
+    coverageJson = json.dumps(coverage_list)
+    return coverageJson
 
 
 def generate_combinations(attributes):
