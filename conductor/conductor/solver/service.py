@@ -486,7 +486,7 @@ class SolverService(cotyledon.Service):
                                 'aic_version': resource.get("cloud_region_version")},
                         }
 
-                        if rec["candidate"]["inventory_type"] in ["nssi", "nsi", "slice_profiles", "nst"]:
+                        if rec["candidate"]["inventory_type"] in ["nssi", "nsi", "slice_profiles", "nst", "nsst"]:
                             rec["candidate"] = resource
 
                         if resource.get('vim-id'):

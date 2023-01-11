@@ -20,7 +20,7 @@
 QUERY_PARAMS = {'service_instance': ["service-instance-id", "service-instance-name", "environment-context",
                                      "workload-context", "model-invariant-id", "model-version-id", "widget-model-id",
                                      "widget-model-version", "service-instance-location-id", "orchestration-status"],
-                'nst': ["model-role"]
+                'nst': ["model-role"], 'nsst': ["model-role"]
                 }
 
 
@@ -89,6 +89,12 @@ def get_nst_info(nst_instance):
     nst_dict['model_role'] = nst_instance.get('model-role')
     return nst_dict
 
+def get_nsst_info(nsst_instance):
+    nsst_dict = {}
+    nsst_dict['model_invariant_id'] = nsst_instance.get('model-invariant-id')
+    nsst_dict['model_type'] = nsst_instance.get('model-type')
+    nsst_dict['model_role'] = nsst_instance.get('model-role')
+    return nsst_dict
 
 def get_model_ver_info(model_version):
     for key in list(model_version):
