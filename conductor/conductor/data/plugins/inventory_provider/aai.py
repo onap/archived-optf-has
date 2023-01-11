@@ -1677,6 +1677,17 @@ class AAI(base.InventoryProviderBase):
                                                                       inventory_type)
                         resolved_demands[name].extend(SDC().update_candidates(sdc_candidates_list))
 
+                elif inventory_type == 'nsst':
+                    if filtering_attributes:
+                        second_level_match = aai_utils.get_first_level_and_second_level_filter(filtering_attributes,
+                                                                                               "nsst")
+                        aai_response = self.get_nsst_response(filtering_attributes)
+
+                        sdc_candidates_list = self.get_nsst_candidates(aai_response, second_level_match,
+                                                                      default_attributes, candidate_uniqueness,
+                                                                      inventory_type)
+                        resolved_demands[name].extend(SDC().update_candidates_nsst(sdc_candidates_list))
+
                 else:
                     LOG.error("Unknown inventory_type "
                               " {}".format(inventory_type))
@@ -1950,6 +1961,17 @@ class AAI(base.InventoryProviderBase):
         if aai_response.json():
             return aai_response.json()
 
+    def get_nsst_response(self, filtering_attributes):
+        raw_path = 'service-design-and-creation/models' + aai_utils.add_query_params_and_depth(filtering_attributes,
+                                                                                               "2")
+        path = self._aai_versioned_path(raw_path)
+        aai_response = self._request('get', path, data=None)
+
+        if aai_response is None or aai_response.status_code != 200:
+            return None
+        if aai_response.json():
+            return aai_response.json()
+
     def get_nst_candidates(self, response_body, filtering_attributes, default_attributes, candidate_uniqueness,
                            type):
         candidates = list()
@@ -1970,3 +1992,25 @@ class AAI(base.InventoryProviderBase):
                                         profile_info=None)
                     candidates.append(nst_candidate)
         return candidates
+
+    def get_nsst_candidates(self, response_body, filtering_attributes, default_attributes, candidate_uniqueness,
+                           type):
+        candidates = list()
+        if response_body is not None:
+            nsst_metadatas = response_body.get("model", [])
+
+            for nsst_metadata in nsst_metadatas:
+                nsst_info = aai_utils.get_nsst_info(nsst_metadata)
+                model_vers = nsst_metadata.get('model-vers').get('model-ver')
+                for model_ver in model_vers:
+                    model_version_id = model_ver.get('model-version-id')
+                    cost = self.conf.data.nsst_candidate_cost
+                    info = Candidate.build_candidate_info('aai', type, cost, candidate_uniqueness, model_version_id)
+                    model_version_obj = aai_utils.get_model_ver_info(model_ver)
+                    model_ver_info = aai_utils.convert_hyphen_to_under_score(model_version_obj)
+                    nst_candidate = NST(model_info=nsst_info, model_ver=model_ver_info, info=info,
+                                        default_fields=aai_utils.convert_hyphen_to_under_score(default_attributes),
+                                        profile_info=None)
+                    candidates.append(nst_candidate)
+        return candidates
+
