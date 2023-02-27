@@ -172,6 +172,28 @@ class SDC(object):
             candidateslist.append(finalcandidate)
         return candidateslist
 
+    def update_candidates_nsst(self, candidates):
+        absfilepath = self.conf.sdc.temp_path
+        candidateslist = []
+        for candidate in candidates:
+            model_ver_obj = candidate.model_ver_info
+            model_name = model_ver_obj['model_name']
+            self.model_version_id = candidate.candidate_id
+            response = self.get_nsst_template(self.model_version_id)
+            filepath = os.path.join(absfilepath, "{}.csar".format(self.model_version_id))
+            if not os.path.exists(absfilepath):
+                os.makedirs(absfilepath)
+            f = open(filepath, "wb")
+            file_res = response.content
+            f.write(file_res)
+            obj = csar.SDCCSAR(filepath, model_name)
+            nsst_temp_prop = obj.validate()
+            nsst_properties = self.get_nsst_prop_dict(nsst_temp_prop)
+            candidate.profile_info = nsst_properties
+            finalcandidate = candidate.convert_nested_dict_to_dict()
+            candidateslist.append(finalcandidate)
+        return candidateslist
+
     def get_nst_prop_dict(self, nst_properties):
         properties_dict = dict()
         for key in list(nst_properties):
@@ -181,7 +203,25 @@ class SDC(object):
                     properties_dict[key] = temp_dict[temp_key]
         return properties_dict
 
+    def get_nsst_prop_dict(self, nsst_properties):
+        properties_dict = dict()
+        for key in list(nsst_properties):
+            temp_dict = nsst_properties[key]
+            for temp_key in list(temp_dict):
+                if "default" in temp_key:
+                    properties_dict[key] = temp_dict[temp_key]
+        return properties_dict
+
     def get_nst_template(self, ver_id):
+        raw_path = "/catalog/services/{}/toscaModel".format(ver_id)
+        path = self._sdc_versioned_path(raw_path)
+        sdc_response = self._request('get', path, data=None)
+        if sdc_response is None or sdc_response.status_code != 200:
+            return None
+        if sdc_response:
+            return sdc_response
+
+    def get_nsst_template(self, ver_id):
         raw_path = "/catalog/services/{}/toscaModel".format(ver_id)
         path = self._sdc_versioned_path(raw_path)
         sdc_response = self._request('get', path, data=None)

@@ -1,5 +1,3 @@
-
-
 #    Licensed under the Apache License, Version 2.0 (the "License"); you may
 #    not use this file except in compliance with the License. You may obtain
 #    a copy of the License at
@@ -21,7 +19,6 @@ from toscaparser.utils.gettextutils import _
 from toscaparser.utils.urlutils import UrlUtils
 from toscaparser.utils import yamlparser
 import zipfile
-
 
 try:  # Python 2.x
     from BytesIO import BytesIO
@@ -82,6 +79,12 @@ class SDCCSAR(CSAR):
             print("nst properties", nst_properies_res)
         return nst_properies_res
 
+        if is_validated:
+            main_tpl = self._read_template_yaml(self.main_template_file_name)
+            nsst_properies_res = self.get_nsst_properties(main_tpl)
+            print("nsst properties", nsst_properies_res)
+        return nsst_properies_res
+
     def get_nst_properties(self, main_tpl):
         importsarr = main_tpl.get('imports')
         for imports in importsarr:
@@ -96,3 +99,18 @@ class SDCCSAR(CSAR):
                 nodedata = node_types[key]
         nst_properties = nodedata.get("properties")
         return nst_properties
+
+    def get_nsst_properties(self, main_tpl):
+        importsarr = main_tpl.get('imports')
+        for imports in importsarr:
+            for key in imports:
+                if "service-{}-interface".format(self.model_name) in key:
+                    val = imports[key]
+        filename = val.get("file")
+        datanew = self._read_template_yaml("Definitions/" + filename)
+        node_types = datanew.get("node_types")
+        for key in list(node_types):
+            if "org.openecomp" in key:
+                nodedata = node_types[key]
+        nsst_properties = nodedata.get("properties")
+        return nsst_properties
