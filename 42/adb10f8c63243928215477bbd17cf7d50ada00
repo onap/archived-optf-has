@@ -1,0 +1,9 @@
+Verified+1: ONAP Jobbuilder <onap-jobbuilder@jenkins.onap.org>
+Code-Review+1: Kevin Sandi <ksandi@contractor.linuxfoundation.org>
+Code-Review+1: Tony Hansen <tony@att.com>
+Code-Review+2: Lukasz Rajewski <lukasz.rajewski@t-mobile.pl>
+Submitted-by: Lukasz Rajewski <lukasz.rajewski@t-mobile.pl>
+Submitted-at: Wed, 08 Mar 2023 07:47:01 +0000
+Reviewed-on: https://gerrit.onap.org/r/c/optf/has/+/131831
+Project: optf/has
+Branch: refs/heads/master
