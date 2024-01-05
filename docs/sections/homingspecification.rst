@@ -159,8 +159,8 @@ Placemark
 An address expressed in geographic region-agnostic terms (referred to as
 a *placemark*).
 
-*This is an example as of Frankfurt release. Support for this schema is
- deferred to subsequent release.*
+This is an example as of Frankfurt release. Support for this schema is deferred
+to subsequent release.
 
 +-----------------------------------+----------------------------------+
 | Key                               | Value                            |
@@ -1837,7 +1837,7 @@ The constraint is applied between each pairwise combination of demands.
 For this reason, at least two demands must be specified, implicitly or
 explicitly.
 
-.. code:: yaml
+.. code::
 
     constraints:
       network_requirements:
@@ -1878,7 +1878,7 @@ malformed request.
 The constraint is applied between each demand and the referenced
 location, not across all pairwise combinations of Demands.
 
-.. code:: yaml
+.. code::
 
     constraints:
       my_access_network_constraint:

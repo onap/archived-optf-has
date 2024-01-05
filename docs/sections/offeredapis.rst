@@ -35,7 +35,7 @@ State Diagram
 mode (the default), it will reset any plans found waiting and stuck in
 the ``solving`` state back to ``translated``.
 
-.. code:: json
+.. code::
 
     {
       "name": "PLAN_NAME",
@@ -43,7 +43,7 @@ the ``solving`` state back to ``translated``.
       "limit": 3
     }
 
-.. code:: json
+.. code::
 
     {
       "plan": {

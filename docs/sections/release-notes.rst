@@ -645,6 +645,7 @@ OPTFRA code has been formally scanned during build time using NexusIQ and no Cri
     - `OPTFRA project page <https://wiki.onap.org/display/DW/Optimization+Framework+Project>`_
     - `Passing Badge information for OPTFRA <https://bestpractices.coreinfrastructure.org/en/projects/1720>`_
     - `Project Vulnerability Review Table for OPTF <https://wiki.onap.org/pages/viewpage.action?pageId=64005463>`_
+
 **Upgrade Notes**
 To upgrade, run docker container or install from source, See Distribution page
 
